@@ -247,7 +247,7 @@ abstract class Controller
     }
     public function getSettingValue($slug){
         $generalSetting     = GeneralSetting::select('value')->where('slug', '=', $slug)->first();
-        return $generalSetting ;
+        return (($generalSetting)?$generalSetting->value:'');
     }
     // currency converter
     public function convertCurrency($amount, $from, $to)
