@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserActivity;
 class BaseApiController extends Controller
 {
-    protected $member_role_id;
     function __construct() {
-        $this->member_role_id = env('MEMBER_ROLE_ID');
+        //
     }
     /**
      * success response method.
@@ -27,7 +26,7 @@ class BaseApiController extends Controller
             'data'    => $result
         ];
 
-        UserActivity::create([
+        /* UserActivity::create([
                 'user_email'        => Auth::check() ? auth()->user()->email : '',
                 'user_name'         => Auth::check() ? auth()->user()->name : '',
                 'user_type'         => 'USER',
@@ -35,7 +34,7 @@ class BaseApiController extends Controller
                 'activity_type'     => 1,
                 'activity_details'  => $message,
                 'platform_type'     => 'MOBILE',
-            ]);
+            ]); */
 
         return response()->json($response, Response::HTTP_OK);
     }
@@ -56,7 +55,7 @@ class BaseApiController extends Controller
         /* if(!empty($errorMessages)){
             $response['data'] = $errorMessages;
         } */
-        UserActivity::create([
+        /* UserActivity::create([
                 'user_email'        => Auth::check() ? auth()->user()->email : 'unauthenticated',
                 'user_name'         => Auth::check() ? auth()->user()->name : 'unauthenticated',
                 'user_type'         => 'USER',
@@ -64,7 +63,7 @@ class BaseApiController extends Controller
                 'activity_type'     => 1,
                 'activity_details'  => json_encode($errorMessages),
                 'platform_type'     => 'MOBILE',
-            ]);
+            ]); */
 
         return response()->json($response, $code);
     }
