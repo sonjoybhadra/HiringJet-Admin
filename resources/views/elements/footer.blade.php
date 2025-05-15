@@ -2,7 +2,7 @@
   <div
     class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
     <div class="text-body">
-      © <script>document.write(new Date().getFullYear())</script> | developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
+      © <script>document.write(new Date().getFullYear())</script> | Developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
     </div>
     <!-- <div class="d-none d-lg-inline-block">
       <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank"

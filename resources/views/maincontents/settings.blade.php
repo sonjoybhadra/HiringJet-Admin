@@ -4,7 +4,7 @@ $user_type = session('type');
 ?>
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
-      <h4><?=$page_header?></h4>
+      <h5><?=$page_header?></h5>
       <h6 class="py-3 breadcrumb-wrapper mb-4">
          <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span> <?=$page_header?>
       </h6>
@@ -19,7 +19,7 @@ $user_type = session('type');
          <?php }?>
          <?php if(session('error_message')){?>
             <div class="alert alert-danger alert-dismissible autohide" role="alert">
-               <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-store align-top me-2"></i>Danger!</h6>
+               <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-store align-top me-2"></i>Error!</h6>
                <span><?=session('error_message')?></span>
                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                </button>
@@ -56,7 +56,7 @@ $user_type = session('type');
          </ul>
          <div class="tab-content">
             <div class="tab-pane fade show active" id="navs-pills-justified-profile" role="tabpanel">
-               <h4>Profile Settings</h4>
+               <h5>Profile Settings</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('profile-settings')?>" method="POST" enctype="multipart/form-data">
@@ -123,7 +123,7 @@ $user_type = session('type');
                </div> -->
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-general" role="tabpanel">
-               <h4>General Settings</h4>
+               <h5>General Settings</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('general-settings')?>" method="POST" enctype="multipart/form-data">
@@ -286,7 +286,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-password" role="tabpanel">
-               <h4>Change Password</h4>
+               <h5>Change Password</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('change-password')?>" method="POST" enctype="multipart/form-data">
@@ -315,7 +315,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-email" role="tabpanel">
-               <h4>Email Configuration</h4>
+               <h5>Email Configuration</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('email-settings')?>" method="POST" enctype="multipart/form-data">
@@ -357,7 +357,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-email-template" role="tabpanel">
-               <h4>Email Templates</h4>
+               <h5>Email Templates</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('email-template')?>" method="POST" enctype="multipart/form-data">
@@ -394,7 +394,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-payment" role="tabpanel">
-               <h4>Payment Configuration</h4>
+               <h5>Payment Configuration</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('payment-settings')?>" method="POST" enctype="multipart/form-data">
@@ -435,7 +435,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-sms" role="tabpanel">
-               <h4>SMS Configuration</h4>
+               <h5>SMS Configuration</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('sms-settings')?>" method="POST" enctype="multipart/form-data">
@@ -464,7 +464,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-footer" role="tabpanel">
-               <h4>Footer Settings</h4>
+               <h5>Footer Settings</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('footer-settings')?>" method="POST" enctype="multipart/form-data">
@@ -485,7 +485,7 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-seo" role="tabpanel">
-               <h4>SEO Settings</h4>
+               <h5>SEO Settings</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <form id="formAccountSettings" action="<?=url('seo-settings')?>" method="POST" enctype="multipart/form-data">

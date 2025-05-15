@@ -25,9 +25,9 @@ use App\Helpers\Helper;
   rel="stylesheet" />
 
 <!-- Icons -->
-<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/fonts/fontawesome.css" />
+<!-- <link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/fonts/fontawesome.css" />
 <link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/fonts/tabler-icons.css" />
-<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/fonts/flag-icons.css" />
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/fonts/flag-icons.css" /> -->
 
 <!-- Core CSS -->
 
@@ -56,3 +56,19 @@ use App\Helpers\Helper;
 
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/config.js"></script>
+
+<style>
+  .pagination{
+    float: right;
+  }
+  .pagination .page-btn{
+    margin-right: 5px;
+    border: 1px solid #7367f0;
+    background-color: #7367f0;
+    color: #FFF;
+  }
+  tbody tr td {
+    font-size: 12px;
+    padding: 5px;
+  }
+</style>

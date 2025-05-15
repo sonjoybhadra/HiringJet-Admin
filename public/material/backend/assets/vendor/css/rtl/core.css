@@ -736,7 +736,7 @@ progress {
   max-width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
   padding-left: calc(var(--bs-gutter-x) * 0.5);
-  margin-top: var(--bs-gutter-y);
+  /* margin-top: var(--bs-gutter-y); */
 }
 
 .col {
@@ -2263,7 +2263,7 @@ progress {
   border-color: var(--bs-table-border-color);
 }
 .table > :not(caption) > * > * {
-  padding: 0.782rem 1.25rem;
+  padding: 0.192rem 1.0rem;
   color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
   background-color: var(--bs-table-bg);
   border-bottom-width: var(--bs-border-width);
@@ -7598,7 +7598,7 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
 }
 .table th {
   text-transform: uppercase;
-  font-size: 0.8125rem;
+  font-size: 0.6125rem;
   letter-spacing: 0.2px;
   color: #444050;
 }

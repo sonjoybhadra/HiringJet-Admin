@@ -433,7 +433,7 @@
         </li>
         <li>
           <a class="dropdown-item" href="<?=url('settings')?>">
-            <i class="ti ti-settings me-3 ti-md"></i><span class="align-middle">Settings</span>
+            <i class="fa-solid fa-gear me-3"></i><span class="align-middle">Settings</span>
           </a>
         </li>
         <li>
@@ -443,7 +443,7 @@
           <div class="d-grid px-2 pt-2 pb-1">
             <a class="btn btn-sm btn-danger d-flex" href="<?=url('logout')?>">
               <small class="align-middle">Logout</small>
-              <i class="ti ti-logout ms-2 ti-14px"></i>
+              <i class="fa-solid fa-arrow-right-from-bracket ms-2"></i>
             </a>
           </div>
         </li>

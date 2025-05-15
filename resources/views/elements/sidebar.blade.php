@@ -54,6 +54,24 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Dashboard">Dashboard</div>
     </a>
   </li>
+  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation')?'open':'')?>">
+    <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <i class="menu-icon fa-solid fa-database"></i>
+      <div data-i18n="Masters">Masters</div>
+    </a>
+    <ul class="menu-sub">
+      <li class="menu-item <?=(($pageSegment == 'industry')?'active':'')?>">
+        <a href="<?=url('/industry/list')?>" class="menu-link">
+          <div data-i18n="Industry"><i class="fa-solid fa-arrow-right"></i> Industry</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'designation')?'active':'')?>">
+        <a href="<?=url('/designation/list')?>" class="menu-link">
+          <div data-i18n="Designation"><i class="fa-solid fa-arrow-right"></i> Designation</div>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li class="menu-item active <?=(($pageSegment == 'faq-category' || $pageSegment == 'faq')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-circle-question"></i>
@@ -62,12 +80,12 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     <ul class="menu-sub">
       <li class="menu-item <?=(($pageSegment == 'faq-category')?'active':'')?>">
         <a href="<?=url('/faq-category/list')?>" class="menu-link">
-          <div data-i18n="FAQ Categories">FAQ Categories</div>
+          <div data-i18n="FAQ Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Categories</div>
         </a>
       </li>
       <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">
         <a href="<?=url('/faq/list')?>" class="menu-link">
-          <div data-i18n="FAQs">FAQs</div>
+          <div data-i18n="FAQs"><i class="fa-solid fa-arrow-right"></i> FAQs</div>
         </a>
       </li>
     </ul>
@@ -90,8 +108,8 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Login Logs">Login Logs</div>
     </a>
   </li>
-  <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
-    <a href="<?=url('/login-logs')?>" class="menu-link">
+  <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
+    <a href="<?=url('/user-activity-logs')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-chart-line"></i>
       <div data-i18n="User Activity Logs">User Activity Logs</div>
     </a>

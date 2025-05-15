@@ -34,6 +34,7 @@ use App\Helpers\Helper;
         <span class="input-group-text cursor-pointer"><i class="fa-solid fa-eye-slash"></i></span>
       </div>
     </div>
+    <button type="submit" class="btn btn-primary d-grid w-100">Sign in</button>
     <div class="my-8">
       <div class="d-flex justify-content-between">
         <div class="form-check mb-0 ms-2">
@@ -45,7 +46,6 @@ use App\Helpers\Helper;
         </a>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary d-grid w-100">Sign in</button>
   </form>
   <div class="mb-2 mb-md-0">
     © <script>document.write(new Date().getFullYear())</script>, developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>

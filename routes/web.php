@@ -1,6 +1,13 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Common\TableController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\RoleController;
+// use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\FaqCategoryController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\PackageController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -13,12 +20,16 @@ Route::match(['get','post'],'/validate-otp/{id}', [UserController::class, 'valid
 Route::match(['get','post'],'/resend-otp/{id}', [UserController::class, 'resendOtp']);
 Route::match(['get','post'],'/reset-password/{id}', [UserController::class, 'resetPassword']);
 
+Route::get('/table/fetch', [TableController::class, 'fetch']);
+Route::get('/table/export', [TableController::class, 'export']);
+
 Route::middleware(['auth'])->group(function () {
 	Route::get('dashboard', [UserController::class, 'dashboard']);
 	Route::get('logout', [UserController::class, 'logout']);
 	Route::get('email-logs', [UserController::class, 'emailLogs']);
     Route::match(['get','post'],'/email-logs/details/{email}', [UserController::class, 'emailLogsDetails']);
     Route::get('login-logs', [UserController::class, 'loginLogs']);
+    Route::get('user-activity-logs', [UserController::class, 'userActivityLogs']);
     Route::match(['get','post'], '/common-delete-image/{id1}/{id2}/{id3}/{id4}/{id5}', [UserController::class, 'commonDeleteImage']);
     /* setting */
         Route::get('settings', [UserController::class, 'settings']);
@@ -49,11 +60,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('role/change-status/{id}', [RoleController::class, 'change_status']);
         /* roles */
         /* admin users */
-            Route::get('admin-users/list', [AdminUserController::class, 'list']);
-            Route::match(['get', 'post'], 'admin-users/add', [AdminUserController::class, 'add']);
-            Route::match(['get', 'post'], 'admin-users/edit/{id}', [AdminUserController::class, 'edit']);
-            Route::get('admin-users/delete/{id}', [AdminUserController::class, 'delete']);
-            Route::get('admin-users/change-status/{id}', [AdminUserController::class, 'change_status']);
+            // Route::get('admin-users/list', [AdminUserController::class, 'list']);
+            // Route::match(['get', 'post'], 'admin-users/add', [AdminUserController::class, 'add']);
+            // Route::match(['get', 'post'], 'admin-users/edit/{id}', [AdminUserController::class, 'edit']);
+            // Route::get('admin-users/delete/{id}', [AdminUserController::class, 'delete']);
+            // Route::get('admin-users/change-status/{id}', [AdminUserController::class, 'change_status']);
         /* admin users */
     /* access & permission */
     /* FAQs */
@@ -79,11 +90,5 @@ Route::middleware(['auth'])->group(function () {
         Route::get('package/delete/{id}', [PackageController::class, 'delete']);
         Route::get('package/change-status/{id}', [PackageController::class, 'change_status']);
     /* package */
-    /* package */
-        Route::get('page/list', [PackageController::class, 'list']);
-        Route::match(['get', 'post'], 'page/add', [PackageController::class, 'add']);
-        Route::match(['get', 'post'], 'page/edit/{id}', [PackageController::class, 'edit']);
-        Route::get('page/delete/{id}', [PackageController::class, 'delete']);
-        Route::get('page/change-status/{id}', [PackageController::class, 'change_status']);
-    /* package */
+
 });
