@@ -4,15 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "aae51e3f2911cff2200187436906054d",
-=======
-<<<<<<< Updated upstream
-    "content-hash": "88970a0117c062eed55fa8728fc43833",
-=======
+
     "content-hash": "bffab72b2a4db61b5bb83a50b3339757",
->>>>>>> Stashed changes
->>>>>>> sonjoy-dev
+
     "packages": [
         {
             "name": "brick/math",
