@@ -54,7 +54,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Dashboard">Dashboard</div>
     </a>
   </li>
-  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation')?'open':'')?>">
+  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-database"></i>
       <div data-i18n="Masters">Masters</div>
@@ -68,6 +68,74 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <li class="menu-item <?=(($pageSegment == 'designation')?'active':'')?>">
         <a href="<?=url('/designation/list')?>" class="menu-link">
           <div data-i18n="Designation"><i class="fa-solid fa-arrow-right"></i> Designation</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'keyskill')?'active':'')?>">
+        <a href="<?=url('/keyskill/list')?>" class="menu-link">
+          <div data-i18n="Keyskill"><i class="fa-solid fa-arrow-right"></i> Keyskill</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'benefit')?'active':'')?>">
+        <a href="<?=url('/benefit/list')?>" class="menu-link">
+          <div data-i18n="Perk & Benefit"><i class="fa-solid fa-arrow-right"></i> Perk & Benefit</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'availability')?'active':'')?>">
+        <a href="<?=url('/availability/list')?>" class="menu-link">
+          <div data-i18n="Availability To Join"><i class="fa-solid fa-arrow-right"></i> Availability To Join</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'current-work-level')?'active':'')?>">
+        <a href="<?=url('/current-work-level/list')?>" class="menu-link">
+          <div data-i18n="Current Work Level"><i class="fa-solid fa-arrow-right"></i> Current Work Level</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'qualification')?'active':'')?>">
+        <a href="<?=url('/qualification/list')?>" class="menu-link">
+          <div data-i18n="Qualification"><i class="fa-solid fa-arrow-right"></i> Qualification</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'university')?'active':'')?>">
+        <a href="<?=url('/university/list')?>" class="menu-link">
+          <div data-i18n="University"><i class="fa-solid fa-arrow-right"></i> University</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'most-common-email')?'active':'')?>">
+        <a href="<?=url('/most-common-email/list')?>" class="menu-link">
+          <div data-i18n="Most Common Emails"><i class="fa-solid fa-arrow-right"></i> Most Common Emails</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'language')?'active':'')?>">
+        <a href="<?=url('/language/list')?>" class="menu-link">
+          <div data-i18n="Language Known"><i class="fa-solid fa-arrow-right"></i> Language Known</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'religion')?'active':'')?>">
+        <a href="<?=url('/religion/list')?>" class="menu-link">
+          <div data-i18n="Religion"><i class="fa-solid fa-arrow-right"></i> Religion</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'visa-status')?'active':'')?>">
+        <a href="<?=url('/visa-status/list')?>" class="menu-link">
+          <div data-i18n="Visa Status"><i class="fa-solid fa-arrow-right"></i> Visa Status</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'marital-status')?'active':'')?>">
+        <a href="<?=url('/marital-status/list')?>" class="menu-link">
+          <div data-i18n="Marital Status"><i class="fa-solid fa-arrow-right"></i> Marital Status</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'profile-complete')?'active':'')?>">
+        <a href="<?=url('/profile-complete/list')?>" class="menu-link">
+          <div data-i18n="Profile Complete Percentage"><i class="fa-solid fa-arrow-right"></i> Profile Complete Percentage</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'nationality')?'active':'')?>">
+        <a href="<?=url('/nationality/list')?>" class="menu-link">
+          <div data-i18n="Nationality"><i class="fa-solid fa-arrow-right"></i> Nationality</div>
         </a>
       </li>
     </ul>
