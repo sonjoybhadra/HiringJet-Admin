@@ -25,9 +25,6 @@ Route::group([
 
 });
 
-
-
-
 Route::post('/parse-resume', [ResumeParserController::class, 'parse']);
 
 
