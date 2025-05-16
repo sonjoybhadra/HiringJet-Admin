@@ -200,7 +200,7 @@ class Helper{
     public static function getSettingValue($slug){
         $generalSetting     = GeneralSetting::select('value')->where('slug', '=', $slug)->first();
         // echo '<pre>';print_r($generalSetting);die;
-        return $generalSetting->value;
+        return (($generalSetting)?$generalSetting->value:'');
     }
 }
 ?>

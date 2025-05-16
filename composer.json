@@ -8,8 +8,10 @@
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.9",
+        "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "maatwebsite/excel": "^3.1",
         "phpmailer/phpmailer": "^6.10",
         "tymon/jwt-auth": "^2.2"
     },

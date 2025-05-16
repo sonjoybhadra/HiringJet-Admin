@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\FaqCategory;
+use App\Models\UserActivity;
 use App\Helpers\Helper;
 use Auth;
 use Session;
 use Hash;
+use DB;
 
 class FaqCategoryController extends Controller
 {
@@ -21,6 +23,7 @@ class FaqCategoryController extends Controller
             'controller'        => 'FaqCategoryController',
             'controller_route'  => 'faq-category',
             'primary_key'       => 'id',
+            'table_name'        => 'faq_categories',
         );
     }
     /* list */
@@ -41,8 +44,21 @@ class FaqCategoryController extends Controller
                     'name'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
                     $fields = [
-                        'name'         => strip_tags($postData['name']),
+                        'name'              => strip_tags($postData['name']),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     FaqCategory::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -63,8 +79,7 @@ class FaqCategoryController extends Controller
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
             $page_name                      = 'faq-category.add-edit';
-            $data['row']                    = FaqCategory::where($this->data['primary_key'], '=', $id)->first();
-
+            $data['row']                    = FaqCategory::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
@@ -72,9 +87,22 @@ class FaqCategoryController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
-                        'name'                  => strip_tags($postData['name'])
+                        'name'              => strip_tags($postData['name']),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -86,11 +114,24 @@ class FaqCategoryController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
+            $model                          = FaqCategory::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
             FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
         }
     /* delete */
@@ -102,9 +143,33 @@ class FaqCategoryController extends Controller
             {
                 $model->status  = 0;
                 $msg            = 'Deactivated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
             } else {
                 $model->status  = 1;
                 $msg            = 'Activated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
             }            
             $model->save();
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
