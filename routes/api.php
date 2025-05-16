@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ForgotpasswordController;
+
 use App\Http\Controllers\Api\ResumeParserController;
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -23,12 +25,8 @@ Route::group([
 
 });
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 Route::post('/parse-resume', [ResumeParserController::class, 'parse']);
+
 
 /* Route::get('/user', function (Request $request) {
     return $request->user();
