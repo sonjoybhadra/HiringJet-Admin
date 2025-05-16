@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class FaqCategory extends Model
 {
     use SoftDeletes;
-
     /**
      * Get the details associated with the user.
     */

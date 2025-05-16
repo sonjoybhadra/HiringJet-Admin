@@ -12,7 +12,7 @@
 }
 
 .bg-menu-theme .menu-sub > .menu-item > .menu-link:before {
-  content: "\ea6b";
+  content: "";
   font-family: "tabler-icons";
   position: absolute;
   font-size: 0.75rem;
@@ -359,8 +359,8 @@ button.list-group-item-primary.active {
 
 .btn-primary {
   color: #fff;
-  background-color: #7367f0;
-  border-color: #7367f0;
+  background-color: #3c6df0;
+  border-color: #3c6df0;
 }
 .btn-primary.btn[class*=btn-]:not([class*=btn-label-]):not([class*=btn-outline-]):not([class*=btn-text-]):not(.btn-icon):not(:disabled):not(.disabled) {
   box-shadow: 0 0.125rem 0.375rem 0 rgba(115, 103, 240, 0.3);

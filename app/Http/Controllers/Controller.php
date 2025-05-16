@@ -123,12 +123,13 @@ abstract class Controller
                 $temp = $tempFile;
             }
             if($uploadedpath == '') {
-                $upload_path = 'public/uploads/';
+                $upload_path = public_path('uploads/');
             } else {
-                $upload_path = 'public/uploads/'.$uploadedpath.'/';
+                $upload_path = public_path('uploads/'.$uploadedpath.'/');
             }
             if($status) {
-                move_uploaded_file($temp, $upload_path.$newFilename);
+                // move_uploaded_file($temp, $upload_path.$newFilename);
+                move_uploaded_file($temp, $upload_path . $newFilename);
                 $return_array = array('status' => 1, 'message' => $message, 'newFilename' => $newFilename);
             } else {
                 $return_array = array('status' => 0, 'message' => $message, 'newFilename' => '');
@@ -247,6 +248,7 @@ abstract class Controller
     }
     public function getSettingValue($slug){
         $generalSetting     = GeneralSetting::select('value')->where('slug', '=', $slug)->first();
+        // Helper::pr($generalSetting);
         return (($generalSetting)?$generalSetting->value:'');
     }
     // currency converter

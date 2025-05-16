@@ -40,14 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
         'user' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
         'api' => [
-            'driver' => 'jwt',
+            'driver' => 'jwt', // Ensure this line exists and is set to 'jwt'
             'provider' => 'users',
         ],
     ],

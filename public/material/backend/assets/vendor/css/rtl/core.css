@@ -736,7 +736,7 @@ progress {
   max-width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
   padding-left: calc(var(--bs-gutter-x) * 0.5);
-  margin-top: var(--bs-gutter-y);
+  /* margin-top: var(--bs-gutter-y); */
 }
 
 .col {
@@ -2263,7 +2263,7 @@ progress {
   border-color: var(--bs-table-border-color);
 }
 .table > :not(caption) > * > * {
-  padding: 0.782rem 1.25rem;
+  padding: 0.192rem 1.0rem;
   color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
   background-color: var(--bs-table-bg);
   border-bottom-width: var(--bs-border-width);
@@ -7598,7 +7598,7 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
 }
 .table th {
   text-transform: uppercase;
-  font-size: 0.8125rem;
+  font-size: 0.6125rem;
   letter-spacing: 0.2px;
   color: #444050;
 }
@@ -27969,7 +27969,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   flex-shrink: 0;
   margin-right: 0.5rem;
   line-height: 1;
-  font-size: 1.375rem;
+  font-size: 0.975rem;
 }
 .menu:not(.menu-no-animation) .menu-icon {
   transition: margin-right 0.3s ease;
@@ -28026,7 +28026,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   transform: translateY(-50%);
 }
 html:not([dir=rtl]) .menu-toggle::after {
-  content: "\ea61";
+/*  content: "\ea61";*/
 }
 [dir=rtl] .menu-toggle::after {
   content: "\ea60";
@@ -28074,7 +28074,7 @@ html:not([dir=rtl]) .menu-toggle::after {
   padding: 0.5rem 0.75rem;
 }
 .menu-vertical .menu-item .menu-link {
-  font-size: 0.9375rem;
+  font-size: 0.7375rem;
   min-height: 38px;
 }
 .menu-vertical .menu-item .menu-link > div:not(.badge) {
