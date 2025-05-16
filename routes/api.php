@@ -23,8 +23,11 @@ Route::group([
 
 });
 
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 Route::post('/parse-resume', [ResumeParserController::class, 'parse']);
 
 /* Route::get('/user', function (Request $request) {
