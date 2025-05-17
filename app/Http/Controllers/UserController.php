@@ -23,7 +23,6 @@ class UserController extends Controller
         public function login(Request $request){
             if($request->isMethod('post')){
                 $postData = $request->all();
-                // Helper::pr($postData);
 
                 $credentials = $request->validate([
                     'email'     => ['required', 'email'],
@@ -41,12 +40,12 @@ class UserController extends Controller
                     $user = Auth::user();
                     session([
                             'user_data'     => [
-                            'user_id'       => $user->id,
-                            'name'          => $user->name,
-                            'email'         => $user->email,
-                            'role_id'       => $user->role_id,
-                            'is_user_login' => 1,
-                        ]
+                                'user_id'       => $user->id,
+                                'name'          => $user->name,
+                                'email'         => $user->email,
+                                'role_id'       => $user->role_id,
+                                'is_user_login' => 1,
+                            ]
                     ]);
                     /* user activity */
                         $activityData = [
@@ -60,12 +59,11 @@ class UserController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
-                    // return redirect()->intended('dashboard');
                     return redirect('dashboard/')->with('success_message', 'Sign-in successfull');
                 }
                 /* user activity */
                     $activityData = [
-                        'user_email'        => '',
+                        'user_email'        => $postData['email'],
                         'user_name'         => 'Master Admin',
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
@@ -75,16 +73,13 @@ class UserController extends Controller
                     ];
                     UserActivity::insert($activityData);
                 /* user activity */
-                // return back()->withErrors([
-                //     'email' => 'Invalid credentials or access denied.',
-                // ]);
                 return redirect()->back()->with('error_message', 'Invalid credentials or access denied.');
             }
 
             $data                           = [];
             $title                          = 'Sign In';
             $page_name                      = 'signin';
-            echo $this->admin_before_login_layout($title,$page_name,$data);
+            return $this->admin_before_login_layout($title,$page_name,$data);
         }
         public function forgotPassword(Request $request){
             if($request->isMethod('post')){
@@ -212,8 +207,8 @@ class UserController extends Controller
             echo $this->admin_before_login_layout($title,$page_name,$data);
         }
         public function logout(Request $request){
-            $user_email                             = $request->session()->get('email');
-            $user_name                              = $request->session()->get('name');
+            $user_email                             = session('user_data')['email'];
+            $user_name                              = session('user_data')['name'];
             /* user activity */
                 $activityData = [
                     'user_email'        => $user_email,
@@ -226,8 +221,7 @@ class UserController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            $request->session()->forget(['user_id', 'name', 'email']);
-            // Helper::pr(session()->all());die;
+            $request->session()->forget(['user_data']);
             Auth::guard('user')->logout();
             return redirect('/')->with('success_message', 'You Are Successfully Logged Out');
         }
@@ -271,7 +265,7 @@ class UserController extends Controller
     /* dashboard */
     /* settings */
         public function settings(Request $request){
-            $uId                            = $request->session()->get('user_id');
+            $uId                            = session('user_data')['user_id'];
             $data['setting']                = GeneralSetting::where('id', '=', 1)->first();
             $data['user']                   = User::where('id', '=', $uId)->first();
             $title                          = 'Settings';
@@ -279,7 +273,7 @@ class UserController extends Controller
             echo $this->admin_after_login_layout($title,$page_name,$data);
         }
         public function profile_settings(Request $request){
-            $uId        = $request->session()->get('user_id');
+            $uId        = session('user_data')['user_id'];
             $row        = User::where('id', '=', $uId)->first();
             $postData   = $request->all();
             $rules      = [
@@ -393,7 +387,7 @@ class UserController extends Controller
             }
         }
         public function change_password(Request $request){
-            $uId        = $request->session()->get('user_id');
+            $uId        = session('user_data')['user_id'];
             $adminData  = User::where('id', '=', $uId)->first();
             $postData   = $request->all();
             $rules      = [
@@ -685,6 +679,14 @@ class UserController extends Controller
             echo $this->admin_after_login_layout($title,$page_name,$data);
         }
     /* login logs */
+    /* User Activity Logs */
+        public function userActivityLogs(){
+            $data['rows']                   = UserActivity::where('activity_type', '=', 3)->orderBy('id', 'DESC')->get();
+            $title                          = 'User Activity Logs';
+            $page_name                      = 'user-activity-logs';
+            echo $this->admin_after_login_layout($title,$page_name,$data);
+        }
+    /* User Activity Logs */
     /* image gallery */
         public function imageGallery(Request $request){
             $title                          = 'Image Gallery';

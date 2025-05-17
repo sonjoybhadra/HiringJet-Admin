@@ -45,6 +45,6 @@ use App\Helpers\Helper;
     </div>
   </form>
   <div class="mb-2 mb-md-0">
-    © <script>document.write(new Date().getFullYear())</script>, developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
+    © <script>document.write(new Date().getFullYear())</script>, Developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
   </div>
 </div>

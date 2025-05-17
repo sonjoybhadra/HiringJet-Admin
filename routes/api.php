@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ForgotpasswordController;
 
+use App\Http\Controllers\Api\ResumeParserController;
+
+
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/forgot-password', [ForgotpasswordController::class, 'forgot_password']);
@@ -21,6 +24,9 @@ Route::group([
     Route::post('/update-profile', [AuthController::class, 'update_profile']);
 
 });
+
+Route::post('/parse-resume', [ResumeParserController::class, 'parse']);
+
 
 /* Route::get('/user', function (Request $request) {
     return $request->user();
