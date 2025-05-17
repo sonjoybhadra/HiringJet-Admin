@@ -79,7 +79,7 @@ class UserController extends Controller
             $data                           = [];
             $title                          = 'Sign In';
             $page_name                      = 'signin';
-            echo $this->admin_before_login_layout($title,$page_name,$data);
+            return $this->admin_before_login_layout($title,$page_name,$data);
         }
         public function forgotPassword(Request $request){
             if($request->isMethod('post')){
