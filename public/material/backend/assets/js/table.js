@@ -18,7 +18,8 @@ function loadTable(config) {
                 search: search,
                 orderBy: config.orderBy,
                 orderType: config.orderType,
-                conditions: JSON.stringify(config.conditions || [])
+                conditions: JSON.stringify(config.conditions || []),
+                joins: JSON.stringify(config.joins || []) // ✅ added
             },
             success: function (res) {
                 renderTable(res.data, res.page, res.perPage);
@@ -34,70 +35,7 @@ function loadTable(config) {
             }
         });
     }
-
-    // function renderTable(data, currentPage = 1, perPage = 20) {
-    //     let html = '<table class="table table-striped"><thead><tr>';
-
-    //     config.headers.forEach(header => {
-    //         html += `<th>${header}</th>`;
-    //     });
-
-    //     html += '</tr></thead><tbody>';
-
-    //     if(data.length <= 0){
-    //         html += '<tr>';
-    //             var colsCount = (config.columns.length + 2);
-    //             html += '<td style="color:red; text-align:center;" colspan="' + colsCount + '">No records available</td>';
-    //         html += '</tr>';
-    //     }
-        
-    //     data.forEach((row, index) => {
-    //         html += '<tr>';
-
-    //         // Sl. No.
-    //         const slno = ((currentPage - 1) * perPage) + index + 1;
-    //         html += `<td>${slno}</td>`;
-
-    //         // Data columns
-    //         const visibleCols = config.visibleColumns ?? config.columns;
-    //         // Now use:
-    //         visibleCols.forEach(col => {
-    //             html += `<td>${row[col] ?? ''}</td>`;
-    //         });
-
-    //         // Actions
-    //         if (config.showActions) {
-    //             const status = row[config.statusColumn];
-    //             const encodedId = row.encoded_id;
-    //             const base = '/' + config.routePrefix;
-                
-    //             html += `<td>
-    //                 <a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
-    //                     <i class="fas fa-edit"></i>
-    //                 </a>`;
-
-    //             if (status == 1) {
-    //                 html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-success me-1" title="Deactivate">
-    //                     <i class="fa-solid fa-check"></i>
-    //                 </a>`;
-    //             } else {
-    //                 html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-warning me-1" title="Activate">
-    //                     <i class="fas fa-times"></i>
-    //                 </a>`;
-    //             }
-
-    //             html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
-    //                 <i class="fa-solid fa-trash"></i>
-    //             </a></td>`;
-    //         }
-
-    //         html += '</tr>';
-    //     });
-
-    //     html += '</tbody></table>';
-
-    //     $(config.container).html(html);
-    // }
+    
     function renderTable(data, currentPage = 1, perPage = 20) {
         let html = '<table class="table table-striped"><thead><tr>';
 

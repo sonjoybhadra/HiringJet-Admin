@@ -45,7 +45,8 @@
             routePrefix: '{{ $routePrefix ?? '' }}',
             showActions: {{ $showActions ?? true ? 'true' : 'false' }},
             statusColumn: '{{ $statusColumn ?? 'is_active' }}',
-            imageColumns: @json($imageColumns ?? []) // ✅ Must be included
+            imageColumns: @json($imageColumns ?? []), // ✅ Must be included
+            joins: @json($joins ?? [])
         });
     });
 </script>

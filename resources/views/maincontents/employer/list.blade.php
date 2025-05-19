@@ -34,21 +34,30 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'industries',
-                'columns' => ['name', 'created_at', 'status'],
-                'visibleColumns' => ['name', 'created_at'],    // used for rendering
-                'headers' => ['#', 'Name', 'Created At', 'Actions'],
-                'filename' => "Industry",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
-                ],
-                'routePrefix' => 'industry',
-                'showActions' => true, // set to false to hide actions
-                'statusColumn' => 'status' // optional, defaults to 'is_active'
+                  'containerId' => 'table1',
+                  'searchId' => 'search1',
+                  'table' => 'employers',
+                  'columns' => ['name', 'description', 'no_of_employee', 'industry_id', 'logo', 'created_at', 'employers.status'],
+                  'visibleColumns' => ['name', 'description', 'no_of_employee', 'industry_name', 'logo', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Name', 'Description', 'No. Of Employee', 'Industry', 'Logo', 'Created At', 'Actions'],
+                  'filename' => "Employer",
+                  'orderBy' => 'id',
+                  'orderType' => 'desc',
+                  'conditions' => [
+                    ['column' => 'employers.status', 'operator' => '!=', 'value' => 3]
+                  ],
+                  'routePrefix' => 'employer',
+                  'showActions' => true, // set to false to hide actions
+                  'statusColumn' => 'status', // optional, defaults to 'is_active',
+                  'imageColumns' => ['logo'],
+                  'joins' => [
+                     [
+                           'table' => 'industries',
+                           'localKey' => 'industry_id',
+                           'foreignKey' => 'id',
+                           'select' => ['name as industry_name']
+                     ]
+                  ]
                 ])
             </div>
         </div>
