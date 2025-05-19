@@ -37,7 +37,7 @@ use App\Helpers\Helper;
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
-            <?=$maincontent?>
+              <?=$maincontent?>
             <!-- / Content -->
 
             <!-- Footer -->
@@ -87,9 +87,24 @@ use App\Helpers\Helper;
     <!-- Page JS -->
     <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/dashboards-analytics.js"></script>
     <script type="text/javascript">
-       $(function(){
-          $('.autohide').delay(5000).fadeOut('slow');
-       });
+      $(function(){
+        $('.autohide').delay(5000).fadeOut('slow');
+      });
+      let dotInterval;
+      function startDotAnimation() {
+        const dotElement = document.getElementById('dot-animation');
+        let dotCount = 1;
+
+        dotInterval = setInterval(() => {
+            dotCount = (dotCount % 3) + 1;
+            dotElement.textContent = '.'.repeat(dotCount);
+        }, 500);
+      }
+
+      function stopDotAnimation() {
+        clearInterval(dotInterval);
+        document.getElementById('dot-animation').textContent = '.'; // reset
+      }
     </script>
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css" />
     <script type="importmap">
@@ -168,5 +183,6 @@ use App\Helpers\Helper;
           .catch( /* ... */ );
       }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
   </body>
 </html>

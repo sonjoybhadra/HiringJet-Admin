@@ -41,6 +41,9 @@ $user_type = session('type');
                <h5>Success Login</h5>
                <div class="card mb-4">
                   <div class="card-body">
+                     <div id="table-overlay-loader" class="text-loader">
+                        Fetching data. Please wait <span id="dot-animation">.</span>
+                     </div>
                      @include('components.table', [
                         'containerId' => 'table1',
                         'searchId' => 'search1',
@@ -65,6 +68,9 @@ $user_type = session('type');
                <h5>Failed Login</h5>
                <div class="card mb-4">
                   <div class="card-body">
+                     <div id="table-overlay-loader" class="text-loader">
+                        Fetching data. Please wait <span id="dot-animation">.</span>
+                     </div>
                      @include('components.table', [
                         'containerId' => 'table2',
                         'searchId' => 'search2',
@@ -89,6 +95,9 @@ $user_type = session('type');
                <h5>Log Out</h5>
                <div class="card mb-4">
                   <div class="card-body">
+                     <div id="table-overlay-loader" class="text-loader">
+                        Fetching data. Please wait <span id="dot-animation">.</span>
+                     </div>
                      @include('components.table', [
                         'containerId' => 'table3',
                         'searchId' => 'search3',
