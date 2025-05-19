@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('user_educations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('education_id')->constrained('educations');
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('specialization_id')->constrained('specializations');
             $table->foreignId('location_id')->constrained('cities')->comment('belongs to cities');
-            $table->string('university')->nullable();
+            $table->string('university_id')->nullable();
             $table->integer('passing_year')->nullable();
+            $table->float('percentage', 8,2)->nullable();
+            $table->string('grade', 10)->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

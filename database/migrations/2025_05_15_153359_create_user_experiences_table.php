@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('job_title')->nullable();
+            $table->text('job_description')->nullable();
             $table->foreignId('company_id')->constrained('companys');
             $table->foreignId('industry_id')->constrained('industrys');
             $table->foreignId('country_id')->constrained('countries')->nullable();
             $table->foreignId('city_id')->constrained('cities')->nullable();
-            $table->string('job_title')->nullable();
             $table->date('start_date');
             $table->date('end_date')->nullable();
-            $table->text('job_description')->nullable();
             $table->boolean('is_current')->default(true);
             $table->boolean('is_active')->default(true);
             $table->softDeletes();

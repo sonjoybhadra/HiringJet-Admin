@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone', 15)->unique();
             $table->string('profile_image')->nullable();
             $table->string('password');
-            $table->tinyInteger('status')->default(1);//[0->inactive, 2->profile not verified, 1->verified]
+            $table->tinyInteger('status')->default(1);//[0->inactive, 2->signup completed, 3->setup completed , 1->verified]
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->softDeletes();
