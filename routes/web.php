@@ -23,6 +23,11 @@ use App\Http\Controllers\ProfileCompleteController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\CurrentWorkLevelController;
 use App\Http\Controllers\QualificationController;
+use App\Http\Controllers\OnlineProfileController;
+use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\CurrencyController;
 
 
 // Route::get('/', function () {
@@ -98,6 +103,34 @@ Route::middleware(['auth'])->group(function () {
             Route::get('designation/delete/{id}', [DesignationController::class, 'delete']);
             Route::get('designation/change-status/{id}', [DesignationController::class, 'change_status']);
         /* designation */
+        /* employer */
+            Route::get('employer/list', [EmployerController::class, 'list']);
+            Route::match(['get', 'post'], 'employer/add', [EmployerController::class, 'add']);
+            Route::match(['get', 'post'], 'employer/edit/{id}', [EmployerController::class, 'edit']);
+            Route::get('employer/delete/{id}', [EmployerController::class, 'delete']);
+            Route::get('employer/change-status/{id}', [EmployerController::class, 'change_status']);
+        /* employer */
+        /* country */
+            Route::get('country/list', [CountryController::class, 'list']);
+            Route::match(['get', 'post'], 'country/add', [CountryController::class, 'add']);
+            Route::match(['get', 'post'], 'country/edit/{id}', [CountryController::class, 'edit']);
+            Route::get('country/delete/{id}', [CountryController::class, 'delete']);
+            Route::get('country/change-status/{id}', [CountryController::class, 'change_status']);
+        /* country */
+        /* city */
+            Route::get('city/list', [CityController::class, 'list']);
+            Route::match(['get', 'post'], 'city/add', [CityController::class, 'add']);
+            Route::match(['get', 'post'], 'city/edit/{id}', [CityController::class, 'edit']);
+            Route::get('city/delete/{id}', [CityController::class, 'delete']);
+            Route::get('city/change-status/{id}', [CityController::class, 'change_status']);
+        /* city */
+        /* currency */
+            Route::get('currency/list', [CurrencyController::class, 'list']);
+            Route::match(['get', 'post'], 'currency/add', [CurrencyController::class, 'add']);
+            Route::match(['get', 'post'], 'currency/edit/{id}', [CurrencyController::class, 'edit']);
+            Route::get('currency/delete/{id}', [CurrencyController::class, 'delete']);
+            Route::get('currency/change-status/{id}', [CurrencyController::class, 'change_status']);
+        /* currency */
         /* keyskill */
             Route::get('keyskill/list', [KeyskillController::class, 'list']);
             Route::match(['get', 'post'], 'keyskill/add', [KeyskillController::class, 'add']);
@@ -182,6 +215,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('current-work-level/delete/{id}', [CurrentWorkLevelController::class, 'delete']);
             Route::get('current-work-level/change-status/{id}', [CurrentWorkLevelController::class, 'change_status']);
         /* current work level */
+        /* online profile */
+            Route::get('online-profile/list', [OnlineProfileController::class, 'list']);
+            Route::match(['get', 'post'], 'online-profile/add', [OnlineProfileController::class, 'add']);
+            Route::match(['get', 'post'], 'online-profile/edit/{id}', [OnlineProfileController::class, 'edit']);
+            Route::get('online-profile/delete/{id}', [OnlineProfileController::class, 'delete']);
+            Route::get('online-profile/change-status/{id}', [OnlineProfileController::class, 'change_status']);
+        /* online profile */
         /* qualification */
             Route::get('qualification/list', [QualificationController::class, 'list']);
             Route::match(['get', 'post'], 'qualification/add', [QualificationController::class, 'add']);

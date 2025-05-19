@@ -1,11 +1,11 @@
 <?php
 use App\Helpers\Helper;
-$user_type = session('type');
+$controllerRoute = $module['controller_route'];
 ?>
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
       <h4><?=$page_header?></h4>
-      <h6 class="py-3 breadcrumb-wrapper mb-4">
+      <h6 class="breadcrumb-wrapper">
          <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span> <?=$page_header?>
       </h6>
       <div class="nav-align-top mb-4">
@@ -26,26 +26,38 @@ $user_type = session('type');
             </div>
          <?php }?>
          <div class="card mb-4">
+            <div class="card-header">
+                <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
+            </div>
             <div class="card-body">
                <div id="table-overlay-loader" class="text-loader">
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'user_activities',
-                'columns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
-                'visibleColumns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
-                'headers' => ['#', 'User Type', 'Name', 'Email', 'IP Address', 'Activity Details', 'Activity Date', 'Platform'],
-                'filename' => "User_Activity_Logs",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'activity_type', 'operator' => '=', 'value' => 3]
-                ],
-                'routePrefix' => 'user-activity-logs',
-                'showActions' => false, // set to false to hide actions
-                'statusColumn' => 'activity_type' // optional, defaults to 'is_active'
+                  'containerId' => 'table1',
+                  'searchId' => 'search1',
+                  'table' => 'employers',
+                  'columns' => ['name', 'description', 'no_of_employee', 'industry_id', 'logo', 'created_at', 'employers.status'],
+                  'visibleColumns' => ['name', 'description', 'no_of_employee', 'industry_name', 'logo', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Name', 'Description', 'No. Of Employee', 'Industry', 'Logo', 'Created At', 'Actions'],
+                  'filename' => "Employer",
+                  'orderBy' => 'id',
+                  'orderType' => 'desc',
+                  'conditions' => [
+                    ['column' => 'employers.status', 'operator' => '!=', 'value' => 3]
+                  ],
+                  'routePrefix' => 'employer',
+                  'showActions' => true, // set to false to hide actions
+                  'statusColumn' => 'status', // optional, defaults to 'is_active',
+                  'imageColumns' => ['logo'],
+                  'joins' => [
+                     [
+                           'table' => 'industries',
+                           'localKey' => 'industry_id',
+                           'foreignKey' => 'id',
+                           'select' => ['name as industry_name']
+                     ]
+                  ]
                 ])
             </div>
         </div>

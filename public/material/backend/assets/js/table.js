@@ -5,20 +5,37 @@ function loadTable(config) {
     let currentPage = 1;
 
     function fetchData(page = 1, search = '') {
-        $.get('/table/fetch', {
-            table: config.table,
-            columns: config.columns.join(','),
-            page: page,
-            search: search,
-            orderBy: config.orderBy,
-            orderType: config.orderType,
-            conditions: JSON.stringify(config.conditions || [])
-        }, function (res) {
-            renderTable(res.data, res.page, res.perPage);
-            renderPagination(res.pages, res.page);
+        $('#table-overlay-loader').fadeIn(); // ⏳ Show loader before request
+        startDotAnimation();
+
+        $.ajax({
+            url: '/table/fetch',
+            method: 'GET',
+            data: {
+                table: config.table,
+                columns: config.columns.join(','),
+                page: page,
+                search: search,
+                orderBy: config.orderBy,
+                orderType: config.orderType,
+                conditions: JSON.stringify(config.conditions || []),
+                joins: JSON.stringify(config.joins || []) // ✅ added
+            },
+            success: function (res) {
+                renderTable(res.data, res.page, res.perPage);
+                renderPagination(res.pages, res.page);
+            },
+            error: function (err) {
+                console.error('Fetch failed:', err);
+                // Optionally show an error message
+            },
+            complete: function () {
+                stopDotAnimation();
+                $('#table-overlay-loader').fadeOut(); // ✅ Hide loader after response
+            }
         });
     }
-
+    
     function renderTable(data, currentPage = 1, perPage = 20) {
         let html = '<table class="table table-striped"><thead><tr>';
 
@@ -26,15 +43,17 @@ function loadTable(config) {
             html += `<th>${header}</th>`;
         });
 
+        if (config.showActions) {
+            html += '<th>Actions</th>';
+        }
+
         html += '</tr></thead><tbody>';
 
-        if(data.length <= 0){
-            html += '<tr>';
-                var colsCount = (config.columns.length + 2);
-                html += '<td style="color:red; text-align:center;" colspan="' + colsCount + '">No records available</td>';
-            html += '</tr>';
+        if (data.length <= 0) {
+            const colsCount = (config.columns.length + (config.showActions ? 2 : 1));
+            html += `<tr><td style="color:red; text-align:center;" colspan="${colsCount}">No records available</td></tr>`;
         }
-        
+
         data.forEach((row, index) => {
             html += '<tr>';
 
@@ -44,9 +63,29 @@ function loadTable(config) {
 
             // Data columns
             const visibleCols = config.visibleColumns ?? config.columns;
-            // Now use:
+
             visibleCols.forEach(col => {
-                html += `<td>${row[col] ?? ''}</td>`;
+                const val = row[col] ?? '';
+
+                if (config.imageColumns && config.imageColumns.includes(col)) {
+                    if (val) {
+                        const imageUrl = `${val}`;
+                        // html += `<td><img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" height="50" width="100"></td>`;
+                        html += `<td>
+                                    <a href="${imageUrl}" data-lightbox="table-images" data-title="${row.name ?? ''}">
+                                        <img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" style="width: 75px; height: 50px;cursor: zoom-in;">
+                                    </a>
+                                </td>`;
+                    } else {
+                        html += `<td>
+                                    <a href="https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg" data-lightbox="table-images">
+                                        <img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg" alt="Image" class="img-thumbnail mt-3" style="width: 50px; height: 50px;cursor: zoom-in;">
+                                    </a>
+                                </td>`;
+                    }
+                } else {
+                    html += `<td>${val}</td>`;
+                }
             });
 
             // Actions
@@ -54,7 +93,7 @@ function loadTable(config) {
                 const status = row[config.statusColumn];
                 const encodedId = row.encoded_id;
                 const base = '/' + config.routePrefix;
-                
+
                 html += `<td>
                     <a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
                         <i class="fas fa-edit"></i>
