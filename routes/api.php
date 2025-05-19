@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ForgotpasswordController;
 
 use App\Http\Controllers\Api\ResumeParserController;
+use App\Http\Controllers\Api\CVParserController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -25,9 +26,13 @@ Route::group([
 
 });
 
-Route::post('/parse-resume', [ResumeParserController::class, 'parse']);
 
 
+Route::prefix('cv')->group(function () {
+    Route::post('/parse-deepseek', [ResumeParserController::class, 'parse']);
+    Route::post('/parse', [CVParserController::class, 'parse']);
+    Route::get('/formats', [CVParserController::class, 'supportedFormats']);
+});
 /* Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum'); */

@@ -1,4 +1,5 @@
-FROM php:8.3-fpm
+# Base PHP-FPM image
+FROM php:8.2-fpm
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
@@ -6,16 +7,24 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     zip \
+    poppler-utils \
     libpq-dev \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_pgsql zip
+    && docker-php-ext-install \
+        gd \
+        pdo \
+        pdo_pgsql \
+        zip
 
-# Install Composer
+# Install Composer (latest stable version)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /var/www
+
+# Start PHP-FPM (this is optional as it's default in php-fpm images)
+CMD ["php-fpm"]
