@@ -30,6 +30,9 @@ $controllerRoute = $module['controller_route'];
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
             </div>
             <div class="card-body">
+               <div id="table-overlay-loader" class="text-loader">
+                  Fetching data. Please wait <span id="dot-animation">.</span>
+               </div>
                 @include('components.table', [
                 'containerId' => 'table1',
                 'searchId' => 'search1',

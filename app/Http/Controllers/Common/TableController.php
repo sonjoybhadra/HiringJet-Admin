@@ -13,42 +13,59 @@ class TableController extends Controller
         $table = $request->input('table');
         $orderBy = $request->input('orderBy', 'id');
         $orderType = $request->input('orderType', 'desc');
-        $columns = explode(',', $request->input('columns'));
+        $rawColumns = explode(',', $request->input('columns'));
         $search = $request->input('search');
         $page = $request->input('page', 1);
         $limit = 50;
 
-        // Make sure 'id' is always selected for encoding
-        if (!in_array('id', $columns)) {
-            $columns[] = 'id';
+        if (!in_array('id', $rawColumns)) {
+            $rawColumns[] = 'id';
         }
 
-        $query = DB::table($table)->select($columns);
+        // Start query
+        $query = DB::table($table);
+
+        // JOINs (PostgreSQL-safe with CAST)
+        if ($table === 'employers') {
+            $query->leftJoin('industries', DB::raw("CAST($table.industry_id AS TEXT)"), '=', DB::raw("CAST(industries.id AS TEXT)"));
+        }
+
+        // Aliased select columns
+        $columns = array_map(function ($col) use ($table) {
+            if ($table === 'employers' && $col === 'industry_id') {
+                return 'industries.name as industry_name';
+            }
+            return str_contains($col, '.') ? $col : "$table.$col";
+        }, $rawColumns);
+
+        $query->select($columns);
 
         // Apply conditions
         $conditions = json_decode(urldecode($request->input('conditions', '[]')), true);
         if (!empty($conditions)) {
             foreach ($conditions as $condition) {
                 if (isset($condition['column'], $condition['operator'], $condition['value'])) {
-                    $query->where($condition['column'], $condition['operator'], $condition['value']);
+                    $column = str_contains($condition['column'], '.') ? $condition['column'] : "$table.{$condition['column']}";
+                    $query->where($column, $condition['operator'], $condition['value']);
                 }
             }
         }
 
-        // Apply search filter
+        // Search
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
                 foreach ($columns as $col) {
-                    $q->orWhere($col, 'like', '%' . $search . '%');
+                    $baseCol = explode(' as ', $col)[0];
+                    $q->orWhere($baseCol, 'ILIKE', "%{$search}%");
                 }
             });
         }
 
-        // Get total count before pagination
-        $total = $query->count();
+        // Count before pagination
+        $total = (clone $query)->count();
 
-        // Get paginated data
-        $data = $query->orderBy($orderBy, $orderType)
+        // Paginate
+        $data = $query->orderBy("$table.$orderBy", $orderType)
             ->offset(($page - 1) * $limit)
             ->limit($limit)
             ->get()

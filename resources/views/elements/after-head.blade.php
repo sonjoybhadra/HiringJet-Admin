@@ -57,6 +57,8 @@ use App\Helpers\Helper;
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/config.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css" rel="stylesheet">
+
 <style>
   .pagination{
     float: right;
@@ -70,5 +72,22 @@ use App\Helpers\Helper;
   tbody tr td {
     font-size: 12px;
     padding: 5px;
+  }
+  .text-loader {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    font-weight: bold;
+    backdrop-filter: blur(3px);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    font-family: 'Segoe UI', sans-serif;
   }
 </style>
