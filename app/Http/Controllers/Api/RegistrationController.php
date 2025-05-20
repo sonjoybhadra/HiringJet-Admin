@@ -9,6 +9,7 @@ use Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserEducation;
@@ -16,6 +17,9 @@ use App\Models\UserSkill;
 
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
+use App\Models\City;
+use App\Models\Designation;
+use App\Models\Industry;
 
 class RegistrationController extends BaseApiController
 {
@@ -40,6 +44,7 @@ class RegistrationController extends BaseApiController
             'phone' => 'required|max:15|unique:users',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
+            'currently_employed' => 'required|boolean',//yes/no
             'resume' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
         ]);
 
@@ -50,6 +55,19 @@ class RegistrationController extends BaseApiController
         try{
             $otp = mt_rand(1111, 9999);
             $otp_mail_hash = base64_encode($otp);
+
+            $user = User::where('email', $request->email)->where('status', 0)->first();
+            if($user){
+                $otp_mail_hash = base64_encode($otp);
+
+                $user->remember_token = $otp_mail_hash;
+                $user->email_verified_at = date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes'));
+                $user->save();
+
+                $full_name = $user->first_name.' '.$user->last_name;
+                $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
+                Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
+            }
 
             $image_path = "";
             /* if (request()->hasFile('resume')) {
@@ -73,6 +91,16 @@ class RegistrationController extends BaseApiController
             ]);
 
             if($user_id){
+                UserProfile::insert([
+                    'user_id'=> $user->id,
+                    'first_name'=> $user->first_name,
+                    'last_name'=> $user->last_name,
+                    'email'=> $user->email,
+                    'country_code'=> $user->country_code,
+                    'phone' => $user->phone,
+                    'currently_employed'=> $request->currently_employed,
+                ]);
+
                 $full_name = $request->first_name.' '.$request->last_name;
                 $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
                 Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
@@ -82,7 +110,7 @@ class RegistrationController extends BaseApiController
                 return $this->sendError('Error', 'Sorry!! Unable to signup.');
             }
         } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to signup.');
+            return $this->sendError('Error', $e->getMessage());
         }
     }
 
@@ -145,9 +173,13 @@ class RegistrationController extends BaseApiController
         }
 
         $current_dt = date('Y-m-d H:i:s');
-        // if($current_dt > $user->email_verified_at ){
-        //     return $this->sendError('Warning', 'OTP validation time expired.', Response::HTTP_UNAUTHORIZED);
-        // }
+        if($current_dt > $user->email_verified_at ){
+            return $this->sendError('Warning', 'OTP validation time expired.', Response::HTTP_UNAUTHORIZED);
+        }
+
+        $token = JWTAuth::fromUser($user);
+        // Set guard to "api" for the current request
+        auth()->setUser($user);
 
         $user_obj = User::find($user->id);
         $user_obj->status = 1;
@@ -155,58 +187,52 @@ class RegistrationController extends BaseApiController
         $user_obj->email_verified_at = date('Y-m-d H:i:s');
         $user_obj->save();
 
-        /* $credentials = [];
-        if (! $token = auth('api')->attempt($credentials)) {
-            return $this->sendError('Unauthorized', 'Email or Password not matched.', Response::HTTP_UNAUTHORIZED);
-        }
-        auth()->shouldUse('api');
-        if(auth()->user()->status == 0){
-            return $this->sendError('Unauthorized', 'Your account is not active. Please contact to the admin.', Response::HTTP_UNAUTHORIZED);
-        } */
 
         $full_name = $user->first_name.' '.$user->last_name;
         $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
         Mail::to($user->email)->send(new RegistrationSuccess($user->email, $full_name, $message));
 
-        return $this->sendResponse($user_obj, 'Your account verification has successfully done. Now you can continue and complete your profile.');
+        return $this->sendResponse([
+            'token_type' => 'bearer',
+            'token' => $token,
+            'user' => $user,
+            'expires_in' => config('jwt.ttl') * 60
+        ], 'Your account verification has successfully done. Now you can continue and complete your profile.');
     }
 
-    public function setup_profile(Request $request, $user)
+    public function setup_profile(Request $request, User $user)
     {
-        /* $validator = Validator::make($request->all(), [
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'resume_headline' => 'required|string|max:255',
-            'currently_employed' => 'required|boolean',//yes/no
-            'total_experience_years' => 'required|integer',
-            'total_experience_months' => 'required|integer',
-            'last_designation' => 'required|string',
-            'last_employer_name' => 'required|string',
-            'last_employer_location' => 'required|string',
-            'working_since_from_year' => 'required|integer',
-            'working_since_from_month' => 'required|integer',
-            'working_since_to_year' => 'required|integer',
-            'working_since_to_month' => 'required|integer',
-            'current_salary' => 'required|integer',
-            'current_salary_currency' => 'required|integer',
-            'employer_country' => 'required|integer',
-            'employer_city' => 'required|integer',
+        $validator = Validator::make($request->all(), [
+            // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            // 'resume_headline' => 'required|string|max:255',
+            'currently_employed' => 'required|in:1,0',//yes/no
+            'total_experience_years' => 'required_if:currently_employed,1|integer',
+            'total_experience_months' => 'required_if:currently_employed,1|integer',
+            'last_designation' => 'required_if:currently_employed,1|string',
+            'last_employer_name' => 'required_if:currently_employed,1|string',
+            'last_employer_location' => 'required_if:currently_employed,1|string',
+            'working_since_from_year' => 'required_if:currently_employed,1|integer',
+            'working_since_from_month' => 'required_if:currently_employed,1|integer',
+            'working_since_to_year' => 'required_if:currently_employed,1|integer',
+            'working_since_to_month' => 'required_if:currently_employed,1|integer',
+            'current_salary_currency' => 'required_if:currently_employed,1|integer',
+            'current_salary' => 'required_if:currently_employed,1|integer',
 
-            'keyskills'=> 'nullable|required|array',
+            // 'employer_country' => 'required_if:currently_employed,1|integer',
+            // 'employer_city' => 'required_if:currently_employed,1|integer',
+            // 'keyskills'=> 'nullable|required|array',
 
-            'gender'=> 'required|string|in:male,female,other',
+            'gender'=> 'nullable|string|in:male,female,other',
             'location'=> 'nullable|integer',
             'nationality'=> 'nullable|integer',
-            'pasport_country'=> 'nullable|integer',
-            // 'nationality'=> 'nullable|integer'
+            'pasport_country'=> 'nullable|integer'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        } */
+        }
 
         try{
-            // $user = User::findOrFail($user_id);
-
             $image_path = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
@@ -215,14 +241,7 @@ class RegistrationController extends BaseApiController
                 $image_path = 'storage/uploads/profile_image/'.$fileName;
             }
 
-            UserProfile::insert([
-                'user_id'=> $user->id,
-                'first_name'=> $user->first_name,
-                'last_name'=> $user->last_name,
-                'email'=> $user->email,
-                'country_code'=> $user->country_code,
-                'phone' => $user->phone,
-
+            UserProfile::where('user_id', $user->id)->update([
                 'profile_image'=> $image_path,
                 'gender'=> $request->gender?ucfirst($request->gender):NULL,
                 'nationality_id'=> $request->nationality,
@@ -260,58 +279,78 @@ class RegistrationController extends BaseApiController
                 }
             }
 
-            /* $user->status = 3;
-            $user->save(); */
-
             return $this->sendResponse([], 'Setup profile has done. Please complete your profile now.');
 
         } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to signup.');
+            return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
         }
     }
 
-    public function complete_profile(Request $request, $user)
+    public function complete_profile(Request $request, User $user)
     {
         /* $validator = Validator::make($request->all(), [
             'profile_summery' => 'required|string',// Max:5MB
-            'education' => 'required|integer',
+            'preferred_designation' => 'nullable|array',
+            'preferred_location' => 'nullable|array',
+            'preferred_industry' => 'nullable|array',
+        ]); */
+        if(!empty($request->qualification)){
+            $validator = Validator::make($request->all(), [
+            'qualification' => 'required|integer',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
             'university' => 'required|integer',
             'passing_year' => 'required|integer',
-            'location' => 'required|integer',
-            'preferred_designation' => 'nullable|array',
-            'preferred_location' => 'nullable|array',
-            'preferred_industry' => 'nullable|array',
+            'location' => 'required|integer'
         ]);
-
+        }
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        } */
+        }
 
         try{
-            // $user = User::findOrFail($user_id);
-
+            $preferred_designation = $preferred_location = $preferred_industry = [];
+            if(!empty($request->preferred_designation)){
+                $designations = Designation::whereIn('id', $request->preferred_designation)->get();
+                if($designations->count() > 0){
+                    foreach($designations as $designation){
+                        $preferred_designation[] = ['id'=> $designation->id, 'name'=> $designation->name];
+                    }
+                }
+            }
+            if(!empty($request->preferred_location)){
+                $locations = City::whereIn('id', $request->preferred_location)->get();
+                if($locations->count() > 0){
+                    foreach($locations as $location){
+                        $preferred_location[] = ['id'=> $location->id, 'name'=> $location->name];
+                    }
+                }
+            }
+            if(!empty($request->preferred_industry)){
+                $industrys = Industry::whereIn('id', $request->preferred_industry)->get();
+                if($industrys->count() > 0){
+                    foreach($industrys as $industry){
+                        $preferred_industry[] = ['id'=> $industry->id, 'name'=> $industry->name];
+                    }
+                }
+            }
             UserProfile::where('user_id', $user->id)
                                     ->update([
                                         'profile_summery'=> $request->profile_summery,
-                                        'preferred_designation' => [],
-                                        'preferred_location' => [],
-                                        'preferred_industry' => []
+                                        'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
+                                        'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,
+                                        'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL
                                     ]);
 
             UserEducation::insertGetId([
                 'user_id'=> $user->id,
-                'education_id'=> $request->education,
+                'qualification_id'=> $request->qualification,
                 'course_id'=> $request->course,
                 'specialization_id'=> $request->specialization,
                 'location_id' => $request->location,
                 'university_id'=> $request->university,
                 'passing_year'=> $request->passing_year
             ]);
-
-            /* $user->status = 1;
-            $user->save(); */
 
             return $this->sendResponse([], 'Your profile completed successfully.');
 

@@ -94,6 +94,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserEducation::class, 'user_id')->orderBy('created_at', 'asc');
     }
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_skills(): HasMany
+    {
+        return $this->hasMany(UserSkill::class, 'user_id')->orderBy('created_at', 'asc');
+    }
 
 
 

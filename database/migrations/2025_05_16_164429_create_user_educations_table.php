@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_educations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('education_id')->constrained('educations');
+            $table->foreignId('qualification_id')->constrained('qualifications');
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('specialization_id')->constrained('specializations');
             $table->foreignId('location_id')->constrained('cities')->comment('belongs to cities');

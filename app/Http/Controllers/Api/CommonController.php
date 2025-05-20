@@ -33,7 +33,15 @@ class CommonController extends BaseApiController
     public function get_country()
     {
         return $this->sendResponse(
-            Country::select('id', 'name', 'country_code')->where('status', 1)->get(),
+            Country::select('id', 'name', 'country_code', 'country_flag')->where('status', 1)->get(),
+            'List'
+        );
+    }
+
+    public function get_country_code()
+    {
+        return $this->sendResponse(
+            Country::select('country_code', 'country_flag')->where('status', 1)->distinct('country_code')->get(),
             'List'
         );
     }
