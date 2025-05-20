@@ -34,21 +34,29 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'keyskills',
-                'columns' => ['name', 'created_at', 'status'],
-                'visibleColumns' => ['name', 'created_at'],    // used for rendering
-                'headers' => ['#', 'Name', 'Created At'],
-                'filename' => "Keyskill",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
-                ],
-                'routePrefix' => 'keyskill',
-                'showActions' => true, // set to false to hide actions
-                'statusColumn' => 'status' // optional, defaults to 'is_active'
+                  'containerId' => 'table1',
+                  'searchId' => 'search1',
+                  'table' => 'courses',
+                  'columns' => ['qualification_id', 'name', 'created_at', 'courses.status'],
+                  'visibleColumns' => ['qualification_name', 'name', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Qualification Name', 'Course Name', 'Created At'],
+                  'filename' => "Course",
+                  'orderBy' => 'id',
+                  'orderType' => 'desc',
+                  'conditions' => [
+                    ['column' => 'courses.status', 'operator' => '!=', 'value' => 3]
+                  ],
+                  'routePrefix' => 'course',
+                  'showActions' => true, // set to false to hide actions
+                  'statusColumn' => 'status', // optional, defaults to 'is_active',
+                  'joins' => [
+                     [
+                           'table' => 'qualifications',
+                           'localKey' => 'qualification_id',
+                           'foreignKey' => 'id',
+                           'select' => ['name as qualification_name']
+                     ]
+                  ]
                 ])
             </div>
         </div>
