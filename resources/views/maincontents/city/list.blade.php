@@ -34,21 +34,29 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'keyskills',
-                'columns' => ['name', 'created_at', 'status'],
-                'visibleColumns' => ['name', 'created_at'],    // used for rendering
-                'headers' => ['#', 'Name', 'Created At'],
-                'filename' => "Keyskill",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
-                ],
-                'routePrefix' => 'keyskill',
-                'showActions' => true, // set to false to hide actions
-                'statusColumn' => 'status' // optional, defaults to 'is_active'
+                  'containerId' => 'table1',
+                  'searchId' => 'search1',
+                  'table' => 'cities',
+                  'columns' => ['country_id', 'name', 'created_at', 'cities.status'],
+                  'visibleColumns' => ['country_name', 'name', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Country Name', 'City Name', 'Created At'],
+                  'filename' => "City",
+                  'orderBy' => 'id',
+                  'orderType' => 'desc',
+                  'conditions' => [
+                    ['column' => 'cities.status', 'operator' => '!=', 'value' => 3]
+                  ],
+                  'routePrefix' => 'city',
+                  'showActions' => true, // set to false to hide actions
+                  'statusColumn' => 'status', // optional, defaults to 'is_active',
+                  'joins' => [
+                     [
+                           'table' => 'country',
+                           'localKey' => 'country_id',
+                           'foreignKey' => 'id',
+                           'select' => ['name as country_name']
+                     ]
+                  ]
                 ])
             </div>
         </div>

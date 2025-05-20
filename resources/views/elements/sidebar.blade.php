@@ -54,7 +54,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Dashboard">Dashboard</div>
     </a>
   </li>
-  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency')?'open':'')?>">
+  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-database"></i>
       <div data-i18n="Masters">Masters</div>
@@ -120,7 +120,11 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
           <div data-i18n="Qualification"><i class="fa-solid fa-arrow-right"></i> Qualification</div>
         </a>
       </li>
-
+      <li class="menu-item <?=(($pageSegment == 'course')?'active':'')?>">
+        <a href="<?=url('/course/list')?>" class="menu-link">
+          <div data-i18n="Course"><i class="fa-solid fa-arrow-right"></i> Course</div>
+        </a>
+      </li>
       <li class="menu-item <?=(($pageSegment == 'university')?'active':'')?>">
         <a href="<?=url('/university/list')?>" class="menu-link">
           <div data-i18n="University"><i class="fa-solid fa-arrow-right"></i> University</div>

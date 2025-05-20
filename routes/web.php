@@ -27,6 +27,7 @@ use App\Http\Controllers\OnlineProfileController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CurrencyController;
 
 
@@ -228,6 +229,13 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], 'qualification/edit/{id}', [QualificationController::class, 'edit']);
             Route::get('qualification/delete/{id}', [QualificationController::class, 'delete']);
             Route::get('qualification/change-status/{id}', [QualificationController::class, 'change_status']);
+        /* qualification */
+        /* course */
+            Route::get('course/list', [CourseController::class, 'list']);
+            Route::match(['get', 'post'], 'course/add', [CourseController::class, 'add']);
+            Route::match(['get', 'post'], 'course/edit/{id}', [CourseController::class, 'edit']);
+            Route::get('course/delete/{id}', [CourseController::class, 'delete']);
+            Route::get('course/change-status/{id}', [CourseController::class, 'change_status']);
         /* qualification */
     /* masters */
     /* FAQs */

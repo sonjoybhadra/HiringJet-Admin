@@ -29,11 +29,35 @@ class TableController extends Controller
         if ($table === 'employers') {
             $query->leftJoin('industries', DB::raw("CAST($table.industry_id AS TEXT)"), '=', DB::raw("CAST(industries.id AS TEXT)"));
         }
+        if ($table === 'faqs') {
+            $query->leftJoin('faq_categories', DB::raw("CAST($table.faq_category_id AS TEXT)"), '=', DB::raw("CAST(faq_categories.id AS TEXT)"));
+        }
+        if ($table === 'cities') {
+            $query->leftJoin('countries', DB::raw("CAST($table.country_id AS TEXT)"), '=', DB::raw("CAST(countries.id AS TEXT)"));
+        }
+        if ($table === 'currencies') {
+            $query->leftJoin('countries', DB::raw("CAST($table.country_id AS TEXT)"), '=', DB::raw("CAST(countries.id AS TEXT)"));
+        }
+        if ($table === 'courses') {
+            $query->leftJoin('qualifications', DB::raw("CAST($table.qualification_id AS TEXT)"), '=', DB::raw("CAST(qualifications.id AS TEXT)"));
+        }
 
         // Aliased select columns
         $columns = array_map(function ($col) use ($table) {
             if ($table === 'employers' && $col === 'industry_id') {
                 return 'industries.name as industry_name';
+            }
+            if ($table === 'faqs' && $col === 'faq_category_id') {
+                return 'faq_categories.name as faq_category_name';
+            }
+            if ($table === 'cities' && $col === 'country_id') {
+                return 'countries.name as country_name';
+            }
+            if ($table === 'currencies' && $col === 'country_id') {
+                return 'countries.name as country_name';
+            }
+            if ($table === 'courses' && $col === 'qualification_id') {
+                return 'qualifications.name as qualification_name';
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);
