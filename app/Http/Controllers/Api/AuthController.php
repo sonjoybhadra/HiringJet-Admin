@@ -85,11 +85,13 @@ class AuthController extends BaseApiController
         try {
             return $this->sendResponse(
                 User::where('id', auth()->user()->id)
-                                // ->with('user_details')
+                                ->with('user_profile')
+                                // ->with('user_education')
+                                ->with('user_skills')
                                 ->first()
             );
         } catch (JWTException $exception) {
-            return $this->sendError('Error', 'Sorry, the user cannot be logged out.',  Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError('Error', 'Sorry, something went wrong, unable to fetch user details.',  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -17,12 +17,22 @@ class UserSeeder extends Seeder
         User::insert([
             [
                 'role_id'=> 1,
-                'parent_id'=> 0,
-                'name' => 'Admin User',
+                'first_name' => 'Admin',
+                'last_name' => 'User',
                 'email' => 'admin@hiringjet.com',
                 'password' => Hash::make('admin123'),
                 'country_code' => '+971',
                 'phone' => '0000000000',
+                'status'    => 1
+            ],
+            [
+                'role_id'=> 3,
+                'first_name' => 'User',
+                'last_name' => 'Jobseeker',
+                'email' => 'demoJobseeker@hiringjet.com',
+                'password' => Hash::make('demo123'),
+                'country_code' => '+971',
+                'phone' => '1111111111',
                 'status'    => 1
             ]
         ]);

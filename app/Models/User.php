@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -67,4 +70,38 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * Get the role details of associated user.
+    */
+    public function user_role(): BelongsTo
+    {
+        return $this->BelongsTo(Role::class, 'role_id');
+    }
+
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_profile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
+    }
+
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_education(): HasMany
+    {
+        return $this->hasMany(UserEducation::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_skills(): HasMany
+    {
+        return $this->hasMany(UserSkill::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+
+
 }
