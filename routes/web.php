@@ -29,6 +29,9 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ArticleController;
 
 
 // Route::get('/', function () {
@@ -236,7 +239,14 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], 'course/edit/{id}', [CourseController::class, 'edit']);
             Route::get('course/delete/{id}', [CourseController::class, 'delete']);
             Route::get('course/change-status/{id}', [CourseController::class, 'change_status']);
-        /* qualification */
+        /* course */
+        /* specialization */
+            Route::get('specialization/list', [SpecializationController::class, 'list']);
+            Route::match(['get', 'post'], 'specialization/add', [SpecializationController::class, 'add']);
+            Route::match(['get', 'post'], 'specialization/edit/{id}', [SpecializationController::class, 'edit']);
+            Route::get('specialization/delete/{id}', [SpecializationController::class, 'delete']);
+            Route::get('specialization/change-status/{id}', [SpecializationController::class, 'change_status']);
+        /* specialization */
     /* masters */
     /* FAQs */
         /* faq category */
@@ -261,5 +271,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('package/delete/{id}', [PackageController::class, 'delete']);
         Route::get('package/change-status/{id}', [PackageController::class, 'change_status']);
     /* package */
-
+    /* page */
+        Route::get('page/list', [PageController::class, 'list']);
+        Route::match(['get', 'post'], 'page/add', [PageController::class, 'add']);
+        Route::match(['get', 'post'], 'page/edit/{id}', [PageController::class, 'edit']);
+        Route::get('page/delete/{id}', [PageController::class, 'delete']);
+        Route::get('page/change-status/{id}', [PageController::class, 'change_status']);
+    /* page */
+    /* article */
+        Route::get('article/list', [ArticleController::class, 'list']);
+        Route::match(['get', 'post'], 'article/add', [ArticleController::class, 'add']);
+        Route::match(['get', 'post'], 'article/edit/{id}', [ArticleController::class, 'edit']);
+        Route::get('article/delete/{id}', [ArticleController::class, 'delete']);
+        Route::get('article/change-status/{id}', [ArticleController::class, 'change_status']);
+    /* article */
 });
