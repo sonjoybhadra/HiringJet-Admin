@@ -41,7 +41,7 @@ class UserController extends Controller
                     session([
                             'user_data'     => [
                                 'user_id'       => $user->id,
-                                'name'          => $user->name,
+                                'name'          => $user->first_name . ' ' . $user->last_name,
                                 'email'         => $user->email,
                                 'role_id'       => $user->role_id,
                                 'is_user_login' => 1,
@@ -50,7 +50,7 @@ class UserController extends Controller
                     /* user activity */
                         $activityData = [
                             'user_email'        => $user->email,
-                            'user_name'         => $user->name,
+                            'user_name'         => $user->first_name . ' ' . $user->last_name,
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 1,
@@ -277,7 +277,8 @@ class UserController extends Controller
             $row        = User::where('id', '=', $uId)->first();
             $postData   = $request->all();
             $rules      = [
-                'name'              => 'required',
+                'first_name'        => 'required',
+                'last_name'         => 'required',
                 'phone'             => 'required',
                 'email'             => 'required',
             ];
@@ -297,7 +298,8 @@ class UserController extends Controller
                 }
                 /* profile image */
                 $fields = [
-                    'name'                  => strip_tags($postData['name']),
+                    'first_name'            => strip_tags($postData['first_name']),
+                    'last_name'             => strip_tags($postData['last_name']),
                     'phone'                 => strip_tags($postData['phone']),
                     'email'                 => strip_tags($postData['email']),
                     'profile_image'         => $profile_image

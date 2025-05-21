@@ -54,7 +54,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Dashboard">Dashboard</div>
     </a>
   </li>
-  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course')?'open':'')?>">
+  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-database"></i>
       <div data-i18n="Masters">Masters</div>
@@ -125,9 +125,14 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
           <div data-i18n="Course"><i class="fa-solid fa-arrow-right"></i> Course</div>
         </a>
       </li>
+      <li class="menu-item <?=(($pageSegment == 'specialization')?'active':'')?>">
+        <a href="<?=url('/specialization/list')?>" class="menu-link">
+          <div data-i18n="Specialization"><i class="fa-solid fa-arrow-right"></i> Specialization</div>
+        </a>
+      </li>
       <li class="menu-item <?=(($pageSegment == 'university')?'active':'')?>">
         <a href="<?=url('/university/list')?>" class="menu-link">
-          <div data-i18n="University"><i class="fa-solid fa-arrow-right"></i> University</div>
+          <div data-i18n="University / Institute"><i class="fa-solid fa-arrow-right"></i> University / Institute</div>
         </a>
       </li>
       <li class="menu-item <?=(($pageSegment == 'most-common-email')?'active':'')?>">
@@ -189,6 +194,12 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     <a href="<?=url('/page/list')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-file-lines"></i>
       <div data-i18n="CMS Pages">CMS Pages</div>
+    </a>
+  </li>
+  <li class="menu-item <?=(($pageSegment == 'article')?'active':'')?>">
+    <a href="<?=url('/article/list')?>" class="menu-link">
+      <i class="menu-icon fa-solid fa-file-lines"></i>
+      <div data-i18n="Articles">Articles</div>
     </a>
   </li>
   <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">

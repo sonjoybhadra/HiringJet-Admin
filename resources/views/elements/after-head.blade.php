@@ -65,8 +65,8 @@ use App\Helpers\Helper;
   }
   .pagination .page-btn{
     margin-right: 5px;
-    border: 1px solid #7367f0;
-    background-color: #7367f0;
+    border: 1px solid #092b61;
+    background-color: #092b61;
     color: #FFF;
   }
   tbody tr td {

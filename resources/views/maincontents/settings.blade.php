@@ -63,8 +63,12 @@ $user_type = session('type');
                         @csrf
                         <div class="row">
                            <div class="mb-3 col-md-4">
-                              <label for="name" class="form-label">Name</label>
-                              <input class="form-control" type="text" id="name" name="name" value="<?=(($user)?$user->name:'')?>" required autofocus />
+                              <label for="first_name" class="form-label">First Name</label>
+                              <input class="form-control" type="text" id="first_name" name="first_name" value="<?=(($user)?$user->first_name:'')?>" required autofocus />
+                           </div>
+                           <div class="mb-3 col-md-4">
+                              <label for="last_name" class="form-label">Last Name</label>
+                              <input class="form-control" type="text" id="last_name" name="last_name" value="<?=(($user)?$user->last_name:'')?>" required autofocus />
                            </div>
                            <div class="mb-3 col-md-4">
                               <label for="email" class="form-label">Email</label>

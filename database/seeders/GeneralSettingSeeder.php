@@ -29,7 +29,7 @@ class GeneralSettingSeeder extends Seeder
             [
                 'key'=> 'site_phone2',
                 'slug' => 'site_phone2',
-                'value' => '',
+                'value' => '9876543210',
                 'is_active' => 1
             ],
             [
