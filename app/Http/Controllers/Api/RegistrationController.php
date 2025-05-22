@@ -92,13 +92,15 @@ class RegistrationController extends BaseApiController
 
             if($user_id){
                 UserProfile::insert([
-                    'user_id'=> $user->id,
-                    'first_name'=> $user->first_name,
-                    'last_name'=> $user->last_name,
-                    'email'=> $user->email,
-                    'country_code'=> $user->country_code,
-                    'phone' => $user->phone,
+                    'user_id'=> $user_id,
+                    'first_name'=> $request->first_name,
+                    'last_name'=> $request->last_name,
+                    'email'=> $request->email,
+                    'country_code'=> $request->country_code,
+                    'phone' => $request->phone,
                     'currently_employed'=> $request->currently_employed,
+                    // 'total_experience_years'=> $request->total_experience_years,
+                    // 'total_experience_months'=> $request->total_experience_months,
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
@@ -166,6 +168,7 @@ class RegistrationController extends BaseApiController
         $user = User::where('email', $request->email)
                         ->where('status',  0)
                         ->where('remember_token',  base64_encode($request->otp))
+                        ->with('user_profile')
                         ->first();
 
         if(!$user){
@@ -186,7 +189,6 @@ class RegistrationController extends BaseApiController
         $user_obj->remember_token = '';
         $user_obj->email_verified_at = date('Y-m-d H:i:s');
         $user_obj->save();
-
 
         $full_name = $user->first_name.' '.$user->last_name;
         $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
@@ -279,7 +281,11 @@ class RegistrationController extends BaseApiController
                 }
             }
 
-            return $this->sendResponse([], 'Setup profile has done. Please complete your profile now.');
+            return $this->sendResponse([
+                'user'=> User::where('id', $user->id)
+                                        ->with('user_profile')
+                                        ->first()
+            ], 'Setup profile has done. Please complete your profile now.');
 
         } catch (\Exception $e) {
             return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
@@ -308,7 +314,7 @@ class RegistrationController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
+        //try{
             $preferred_designation = $preferred_location = $preferred_industry = [];
             if(!empty($request->preferred_designation)){
                 $designations = Designation::whereIn('id', $request->preferred_designation)->get();
@@ -352,11 +358,16 @@ class RegistrationController extends BaseApiController
                 'passing_year'=> $request->passing_year
             ]);
 
-            return $this->sendResponse([], 'Your profile completed successfully.');
+            return $this->sendResponse([
+                'user'=> User::where('id', $user->id)
+                                        ->with('user_profile')
+                                        ->with('user_education')
+                                        ->first()
+            ], 'Your profile completed successfully.');
 
-        } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to signup.');
-        }
+        // } catch (\Exception $e) {
+        //     return $this->sendError('Error', 'Sorry!! Unable to complete profile.'.$e->getMessage());
+        // }
     }
 
 }
