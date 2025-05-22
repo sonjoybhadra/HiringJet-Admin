@@ -54,12 +54,17 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Dashboard">Dashboard</div>
     </a>
   </li>
-  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization')?'open':'')?>">
+  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization' || $pageSegment == 'job-category' || $pageSegment == 'functional-area')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-database"></i>
       <div data-i18n="Masters">Masters</div>
     </a>
     <ul class="menu-sub">
+      <li class="menu-item <?=(($pageSegment == 'job-category')?'active':'')?>">
+        <a href="<?=url('/job-category/list')?>" class="menu-link">
+          <div data-i18n="Job Category"><i class="fa-solid fa-arrow-right"></i> Job Category</div>
+        </a>
+      </li>
       <li class="menu-item <?=(($pageSegment == 'industry')?'active':'')?>">
         <a href="<?=url('/industry/list')?>" class="menu-link">
           <div data-i18n="Industry"><i class="fa-solid fa-arrow-right"></i> Industry</div>
@@ -108,6 +113,11 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <li class="menu-item <?=(($pageSegment == 'current-work-level')?'active':'')?>">
         <a href="<?=url('/current-work-level/list')?>" class="menu-link">
           <div data-i18n="Current Work Level"><i class="fa-solid fa-arrow-right"></i> Current Work Level</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'functional-area')?'active':'')?>">
+        <a href="<?=url('/functional-area/list')?>" class="menu-link">
+          <div data-i18n="Functional Area"><i class="fa-solid fa-arrow-right"></i> Functional Area</div>
         </a>
       </li>
       <li class="menu-item <?=(($pageSegment == 'online-profile')?'active':'')?>">

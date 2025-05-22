@@ -32,7 +32,8 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ArticleController;
-
+use App\Http\Controllers\JobCategoryController;
+use App\Http\Controllers\FunctionalAreaController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -93,6 +94,13 @@ Route::middleware(['auth'])->group(function () {
         /* admin users */
     /* access & permission */
     /* masters */
+        /* job category */
+            Route::get('job-category/list', [JobCategoryController::class, 'list']);
+            Route::match(['get', 'post'], 'job-category/add', [JobCategoryController::class, 'add']);
+            Route::match(['get', 'post'], 'job-category/edit/{id}', [JobCategoryController::class, 'edit']);
+            Route::get('job-category/delete/{id}', [JobCategoryController::class, 'delete']);
+            Route::get('job-category/change-status/{id}', [JobCategoryController::class, 'change_status']);
+        /* job category */
         /* industry */
             Route::get('industry/list', [IndustryController::class, 'list']);
             Route::match(['get', 'post'], 'industry/add', [IndustryController::class, 'add']);
@@ -219,6 +227,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('current-work-level/delete/{id}', [CurrentWorkLevelController::class, 'delete']);
             Route::get('current-work-level/change-status/{id}', [CurrentWorkLevelController::class, 'change_status']);
         /* current work level */
+        /* functional area */
+            Route::get('functional-area/list', [FunctionalAreaController::class, 'list']);
+            Route::match(['get', 'post'], 'functional-area/add', [FunctionalAreaController::class, 'add']);
+            Route::match(['get', 'post'], 'functional-area/edit/{id}', [FunctionalAreaController::class, 'edit']);
+            Route::get('functional-area/delete/{id}', [FunctionalAreaController::class, 'delete']);
+            Route::get('functional-area/change-status/{id}', [FunctionalAreaController::class, 'change_status']);
+        /* functional area */
         /* online profile */
             Route::get('online-profile/list', [OnlineProfileController::class, 'list']);
             Route::match(['get', 'post'], 'online-profile/add', [OnlineProfileController::class, 'add']);
