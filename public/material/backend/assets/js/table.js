@@ -4,9 +4,11 @@ function loadTable(config) {
     const exportBtns = $(config.exportButtons);
     let currentPage = 1;
 
-    function fetchData(page = 1, search = '') {
-        $('#table-overlay-loader').fadeIn(); // ⏳ Show loader before request
+    function fetchData(page = 1, search = '', perPageOverride = null) {
+        $('#table-overlay-loader').fadeIn();
         startDotAnimation();
+
+        const perPage = perPageOverride || $(`select[id$='-perPage']`).val() || 50;
 
         $.ajax({
             url: '/table/fetch',
@@ -15,27 +17,27 @@ function loadTable(config) {
                 table: config.table,
                 columns: config.columns.join(','),
                 page: page,
+                perPage: perPage,
                 search: search,
                 orderBy: config.orderBy,
                 orderType: config.orderType,
                 conditions: JSON.stringify(config.conditions || []),
-                joins: JSON.stringify(config.joins || []) // ✅ added
+                joins: JSON.stringify(config.joins || [])
             },
             success: function (res) {
-                renderTable(res.data, res.page, res.perPage);
+                renderTable(res.data, res.page, perPage);
                 renderPagination(res.pages, res.page);
             },
             error: function (err) {
                 console.error('Fetch failed:', err);
-                // Optionally show an error message
             },
             complete: function () {
                 stopDotAnimation();
-                $('#table-overlay-loader').fadeOut(); // ✅ Hide loader after response
+                $('#table-overlay-loader').fadeOut();
             }
         });
     }
-    
+
     function renderTable(data, currentPage = 1, perPage = 20) {
         let html = '<table class="table table-striped"><thead><tr>';
 
@@ -57,38 +59,25 @@ function loadTable(config) {
         data.forEach((row, index) => {
             html += '<tr>';
 
-            // Sl. No.
             const slno = ((currentPage - 1) * perPage) + index + 1;
             html += `<td>${slno}</td>`;
 
-            // Data columns
             const visibleCols = config.visibleColumns ?? config.columns;
-
             visibleCols.forEach(col => {
                 const val = row[col] ?? '';
 
                 if (config.imageColumns && config.imageColumns.includes(col)) {
-                    if (val) {
-                        const imageUrl = `${val}`;
-                        // html += `<td><img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" height="50" width="100"></td>`;
-                        html += `<td>
-                                    <a href="${imageUrl}" data-lightbox="table-images" data-title="${row.name ?? ''}">
-                                        <img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" style="width: 75px; height: 50px;cursor: zoom-in;">
-                                    </a>
-                                </td>`;
-                    } else {
-                        html += `<td>
-                                    <a href="https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg" data-lightbox="table-images">
-                                        <img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg" alt="Image" class="img-thumbnail mt-3" style="width: 50px; height: 50px;cursor: zoom-in;">
-                                    </a>
-                                </td>`;
-                    }
+                    const imageUrl = val || 'https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg';
+                    html += `<td>
+                        <a href="${imageUrl}" data-lightbox="table-images" data-title="${row.name ?? ''}">
+                            <img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" style="width: 75px; height: 50px; cursor: zoom-in;">
+                        </a>
+                    </td>`;
                 } else {
                     html += `<td>${val}</td>`;
                 }
             });
 
-            // Actions
             if (config.showActions) {
                 const status = row[config.statusColumn];
                 const encodedId = row.encoded_id;
@@ -118,15 +107,47 @@ function loadTable(config) {
         });
 
         html += '</tbody></table>';
-
-        $(config.container).html(html);
+        container.html(html);
     }
 
     function renderPagination(totalPages, current) {
-        let html = '<div class="pagination">';
-        for (let i = 1; i <= totalPages; i++) {
-            html += `<button class="btn btn-sm page-btn" data-page="${i}">${i}</button>`;
+        let html = '<div class="d-flex flex-wrap align-items-center gap-2 mt-3" style="float:right;">';
+
+        if (totalPages > 1) {
+            if (current > 1) {
+                html += `<button class="btn btn-sm btn-light page-btn" data-page="1" style="background-color: #092b61;color: #FFF;">First</button>`;
+                html += `<button class="btn btn-sm btn-light page-btn" data-page="${current - 1}" style="background-color: #092b61;color: #FFF;">&laquo; Prev</button>`;
+            }
+
+            const pageWindow = 3;
+            let start = Math.max(1, current - 1);
+            let end = Math.min(totalPages, start + pageWindow - 1);
+
+            if (start > 1) {
+                html += `<span class="mx-1">...</span>`;
+            }
+
+            for (let i = start; i <= end; i++) {
+                html += `<button class="btn btn-sm page-btn ${i === current ? 'btn-primary' : 'btn-light'}" data-page="${i}" style="background-color: #092b61;color: #FFF;">${i}</button>`;
+            }
+
+            if (end < totalPages) {
+                html += `<span class="mx-1">...</span>`;
+            }
+
+            if (current < totalPages) {
+                html += `<button class="btn btn-sm btn-light page-btn" data-page="${current + 1}" style="background-color: #092b61;color: #FFF;">Next &raquo;</button>`;
+                html += `<button class="btn btn-sm btn-light page-btn" data-page="${totalPages}" style="background-color: #092b61;color: #FFF;">Last</button>`;
+            }
         }
+
+        // Jump to input
+        html += `
+            <span class="ms-2">Jump to page:</span>
+            <input type="number" id="jumpPage" min="1" max="${totalPages}" style="width: 60px;" class="form-control form-control-sm d-inline-block">
+            <button id="jumpPageBtn" class="btn btn-sm btn-secondary">Go</button>
+        `;
+
         html += '</div>';
         container.append(html);
     }
@@ -136,10 +157,23 @@ function loadTable(config) {
         fetchData(currentPage, searchInput.val());
     });
 
+    container.on('click', '#jumpPageBtn', function () {
+        const page = parseInt($('#jumpPage').val());
+        if (page > 0) {
+            fetchData(page, searchInput.val());
+        }
+    });
+
     searchInput.on('keyup', function () {
         fetchData(1, $(this).val());
     });
-    
+
+    $(document).on('change', `select[id$='-perPage']`, function () {
+        const newPerPage = this.value;
+        console.log('PerPage dropdown changed to:', newPerPage);
+        fetchData(1, searchInput.val(), newPerPage);
+    });
+
     exportBtns.on('click', function () {
         const format = $(this).data('format');
         const url = new URL('/table/export', window.location.origin);
@@ -148,14 +182,13 @@ function loadTable(config) {
         url.searchParams.set('format', format);
         url.searchParams.set('search', $(config.searchInput).val());
 
-        // ✅ NEW: Get conditions from button’s data attribute
         let conditionsRaw = $(this).data('conditions');
         let conditions = [];
 
         if (conditionsRaw) {
             try {
-                conditions = typeof conditionsRaw === 'string' 
-                    ? JSON.parse(conditionsRaw) 
+                conditions = typeof conditionsRaw === 'string'
+                    ? JSON.parse(conditionsRaw)
                     : conditionsRaw;
             } catch (e) {
                 console.error('Invalid conditions JSON', e);

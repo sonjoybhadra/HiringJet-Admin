@@ -10,13 +10,15 @@ class TableController extends Controller
 {
     public function fetch(Request $request)
     {
+        // Helper::pr($request->all());
         $table = $request->input('table');
         $orderBy = $request->input('orderBy', 'id');
         $orderType = $request->input('orderType', 'desc');
         $rawColumns = explode(',', $request->input('columns'));
         $search = $request->input('search');
         $page = $request->input('page', 1);
-        $limit = 50;
+        // $limit = 50;
+        $limit = $request->input('perPage', 50); // Default to 50
 
         if (!in_array('id', $rawColumns)) {
             $rawColumns[] = 'id';

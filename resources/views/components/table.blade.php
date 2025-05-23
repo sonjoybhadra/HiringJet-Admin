@@ -23,7 +23,23 @@
     <i class="fa-solid fa-file-pdf"></i>&nbsp;Export PDF
 </button>
 
-<input type="text" id="{{ $searchId }}" placeholder="Search..." style="float:right;padding: 3px;margin-bottom: 10px;width: 30%;">
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+        <label for="{{ $containerId }}-perPage" class="form-label me-2">Show</label>
+        <select id="{{ $containerId }}-perPage" class="form-select d-inline-block w-auto">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="500">500</option>
+        </select>
+        <span>entries</span>
+    </div>
+    <input type="text" id="{{ $searchId }}" placeholder="Search..." style="float:right;padding: 3px;margin-bottom: 10px;width: 30%;">
+</div>
+
+
 
 <div class="mt-3" id="{{ $containerId }}"></div>
 
