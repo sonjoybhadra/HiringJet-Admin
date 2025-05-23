@@ -107,7 +107,10 @@ class RegistrationController extends BaseApiController
                 $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
                 Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
 
-                return $this->sendResponse(['otp'=> $otp], 'Registration step 1 has done. Please verify OTP already send in your registered email.');
+                return $this->sendResponse([
+                    'otp'=> $otp,
+                    'email'=> $request->email
+                ], 'Registration step 1 has done. Please verify OTP already send in your registered email.');
             }else{
                 return $this->sendError('Error', 'Sorry!! Unable to signup.');
             }
@@ -146,7 +149,10 @@ class RegistrationController extends BaseApiController
         $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
         Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
 
-        return $this->sendResponse(['otp'=> $otp], 'OTP resend successfully. Please verify OTP already send in your registered email.');
+        return $this->sendResponse([
+            'otp'=> $otp,
+            'email'=> $request->email
+        ], 'OTP resend successfully. Please verify OTP already send in your registered email.');
     }
 
     /**
