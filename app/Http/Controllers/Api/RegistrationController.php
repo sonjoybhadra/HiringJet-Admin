@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\UserResume;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
 
@@ -70,12 +71,12 @@ class RegistrationController extends BaseApiController
             }
 
             $image_path = "";
-            /* if (request()->hasFile('resume')) {
+            if (request()->hasFile('resume')) {
                 $file = request()->file('resume');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                 Storage::disk('public')->put('uploads/user/profile_resume'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/user/'.$fileName;
-            } */
+                $image_path = 'storage/uploads/user/profile_resume/'.$fileName;
+            }
 
             $user_id = User::insertGetId([
                 'role_id'=> $this->job_seeker_role,
@@ -91,6 +92,17 @@ class RegistrationController extends BaseApiController
             ]);
 
             if($user_id){
+                $profile_completed_percentage = 0;
+                if($image_path != ""){
+                    UserResume::insert([
+                        'user_id' => $user_id,
+                        'resume' => $image_path,
+                        'is_default' => 1
+                    ]);
+
+                    $profile_completed_percentage = 9;
+                }
+
                 UserProfile::insert([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
@@ -99,6 +111,7 @@ class RegistrationController extends BaseApiController
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
                     'currently_employed'=> $request->currently_employed,
+                    'profile_completed_percentage'=> $profile_completed_percentage
                     // 'total_experience_years'=> $request->total_experience_years,
                     // 'total_experience_months'=> $request->total_experience_months,
                 ]);
@@ -208,6 +221,37 @@ class RegistrationController extends BaseApiController
         ], 'Your account verification has successfully done. Now you can continue and complete your profile.');
     }
 
+    private function calculate_profile_completed_percentage($user_id, $request){
+        $profile_data = UserProfile::select('profile_completed_percentage')
+                                                        ->where('user_id', $user_id)
+                                                        ->first();
+        $profile_completed_percentage = $profile_data->profile_completed_percentage;
+        if(!empty($request['profile_image'])){
+            $profile_completed_percentage += 4;
+        }
+        if(isset($request['profile_summery']) && !empty($request['profile_summery'])){
+            $profile_completed_percentage += 1;
+        }
+        if(isset($request['qualification']) && !empty($request['qualification'])){
+            $profile_completed_percentage += 7;
+        }
+        if(isset($request['currently_employed']) && !empty($request['currently_employed'])){
+            $profile_completed_percentage += 18;
+        }
+        if(isset($request['keyskills']) && !empty($request['keyskills'])){
+            $profile_completed_percentage += 8;
+        }
+        if(isset($request['resume_headline']) && !empty($request['resume_headline'])){
+            $profile_completed_percentage += 4;
+        }
+        if(isset($request['preferred_designation']) && !empty($request['preferred_designation'])){
+            $profile_completed_percentage += 3;
+        }
+
+
+        return $profile_completed_percentage;
+    }
+
     public function setup_profile(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
@@ -241,6 +285,7 @@ class RegistrationController extends BaseApiController
         }
 
         try{
+            $profile_data = $request->all();
             $image_path = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
@@ -248,6 +293,7 @@ class RegistrationController extends BaseApiController
                 Storage::disk('public')->put('uploads/user/profile_image'.$fileName, file_get_contents($file));
                 $image_path = 'storage/uploads/profile_image/'.$fileName;
             }
+            $profile_data['profile_image'] = $image_path;
 
             UserProfile::where('user_id', $user->id)->update([
                 'profile_image'=> $image_path,
@@ -274,6 +320,7 @@ class RegistrationController extends BaseApiController
                 'working_since_to_month'=> $request->working_since_to_month,
                 'current_salary'=> $request->current_salary,
                 'current_salary_currency_id'=> $request->current_salary_currency,
+                'profile_completed_percentage'=> $this->calculate_profile_completed_percentage($user->id, $profile_data)
             ]);
 
             if(!empty($request->keyskills)){
@@ -320,7 +367,7 @@ class RegistrationController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        //try{
+        try{
             $preferred_designation = $preferred_location = $preferred_industry = [];
             if(!empty($request->preferred_designation)){
                 $designations = Designation::whereIn('id', $request->preferred_designation)->get();
@@ -346,12 +393,16 @@ class RegistrationController extends BaseApiController
                     }
                 }
             }
+
+            $profile_data = $request->all();
+
             UserProfile::where('user_id', $user->id)
                                     ->update([
                                         'profile_summery'=> $request->profile_summery,
                                         'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
                                         'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,
-                                        'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL
+                                        'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL,
+                                        'profile_completed_percentage'=> $this->calculate_profile_completed_percentage($user->id, $profile_data)
                                     ]);
 
             UserEducation::insertGetId([
@@ -371,9 +422,9 @@ class RegistrationController extends BaseApiController
                                         ->first()
             ], 'Your profile completed successfully.');
 
-        // } catch (\Exception $e) {
-        //     return $this->sendError('Error', 'Sorry!! Unable to complete profile.'.$e->getMessage());
-        // }
+        } catch (\Exception $e) {
+            return $this->sendError('Error', 'Sorry!! Unable to complete profile.'.$e->getMessage());
+        }
     }
 
 }

@@ -28,6 +28,7 @@ Route::post('/signup/complete-profile/{user}', [RegistrationController::class, '
 /**
  * Common master data
 */
+Route::get('/get-masters', [CommonController::class, 'get_masters_by_params']);
 Route::get('/get-jobcategory', [CommonController::class, 'get_jobcategory']);
 Route::get('/get-industry', [CommonController::class, 'get_industry']);
 Route::get('/get-designation', [CommonController::class, 'get_designation']);

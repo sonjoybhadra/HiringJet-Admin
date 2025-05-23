@@ -36,47 +36,106 @@ use App\Models\Nationality;
 class CommonController extends BaseApiController
 {
     //
-    public function get_jobcategory()
-    {
+    public function get_masters_by_params(Request $request){
+        $result_array = [];
+        $common_resource_array = [
+            'jobcategory'=> $this->get_jobcategory(1),
+            'industry'=> $this->get_industry(1),
+            'designation'=> $this->get_designation(1),
+            'employer'=> $this->get_employer(1),
+            'country'=> $this->get_country(1),
+            'country_code'=> $this->get_country_code(1),
+            'currency'=> $this->get_currency(1),
+            'keyskill'=> $this->get_keyskill(1),
+            'perkbenefit'=> $this->get_perkbenefit(1),
+            'availability'=> $this->get_availability(1),
+            'currentworklevel'=> $this->get_currentworklevel(1),
+            'functionalarea'=> $this->get_functionalarea(1),
+            'onlineprofile'=> $this->get_onlineprofile(1),
+            'qualification'=> $this->get_qualification(1),
+            'course'=> $this->get_course(1),
+            'specialization'=> $this->get_specialization(1),
+            'nationality'=> $this->get_nationality(1),
+            'religion'=> $this->get_religion(1),
+            'university'=> $this->get_university(1),
+            'mostcommonemail'=> $this->get_mostcommonemail(1),
+            'language'=> $this->get_language(1),
+            'maritalstatus'=> $this->get_maritalstatus(1),
+            'proficiency_level'=> $this->get_proficiency_level(1),
+        ];
+        if(!empty($request->params )){
+            $params = explode(',', $request->params);
+            foreach($params as $param){
+                $result_array[][$param] = $common_resource_array[$param];
+            }
+        }
         return $this->sendResponse(
-            JobCategory::select('id', 'name')->where('status', 1)->get(),
-            'List'
+            $result_array,
+            'Data List'
         );
     }
 
-    public function get_industry()
+    public function get_jobcategory($res = '')
     {
-        return $this->sendResponse(
-            Industry::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = JobCategory::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_designation()
+    public function get_industry($res = '')
     {
-        return $this->sendResponse(
-            Designation::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Industry::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_employer()
+    public function get_designation($res = '')
     {
-        return $this->sendResponse(
-            Employer::select('id', 'name', 'logo', 'description', 'no_of_employee')
+        $list = Designation::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
+    }
+
+    public function get_employer($res = '')
+    {
+        $list = Employer::select('id', 'name', 'logo', 'description', 'no_of_employee')
                         ->where('status', 1)
                         ->with('industry')
-                        ->get(),
-            'List'
-        );
+                        ->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_country()
+    public function get_country($res = '')
     {
-        return $this->sendResponse(
-            Country::select('id', 'name', 'country_code', 'country_flag')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Country::select('id', 'name', 'country_code', 'country_flag')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
     public function get_city($country_id)
@@ -87,158 +146,228 @@ class CommonController extends BaseApiController
         );
     }
 
-    public function get_country_code()
+    public function get_country_code($res = '')
     {
-        return $this->sendResponse(
-            Country::select('country_code', 'country_flag')->where('status', 1)->distinct('country_code')->get(),
-            'List'
-        );
+        $list = Country::select('country_code', 'country_flag')->where('status', 1)->distinct('country_code')->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_currency()
+    public function get_currency($res = '')
     {
-        return $this->sendResponse(
-            Currency::select('country_code', 'country_flag')
+        $list = Currency::select('name')
                         ->where('status', 1)
-                        ->distinct('country_code')
                         ->with('country')
-                        ->get(),
-            'List'
-        );
+                        ->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_keyskill()
+    public function get_keyskill($res = '')
     {
-        return $this->sendResponse(
-            Keyskill::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Keyskill::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_perkbenefit()
+    public function get_perkbenefit($res = '')
     {
-        return $this->sendResponse(
-            PerkBenefit::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = PerkBenefit::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_availability()
+    public function get_availability($res = '')
     {
-        return $this->sendResponse(
-            Availability::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Availability::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_currentworklevel()
+    public function get_currentworklevel($res = '')
     {
-        return $this->sendResponse(
-            CurrentWorkLevel::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = CurrentWorkLevel::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_functionalarea()
+    public function get_functionalarea($res = '')
     {
-        return $this->sendResponse(
-            FunctionalArea::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = FunctionalArea::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_onlineprofile()
+    public function get_onlineprofile($res = '')
     {
-        return $this->sendResponse(
-            OnlineProfile::select('id', 'name', 'logo')->where('status', 1)->get(),
-            'List'
-        );
+        $list = OnlineProfile::select('id', 'name', 'logo')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_qualification()
+    public function get_qualification($res = '')
     {
-        return $this->sendResponse(
-            Qualification::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Qualification::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_course()
+    public function get_course($res = '')
     {
-        return $this->sendResponse(
-            Course::select('id', 'name')->where('status', 1)
+        $list = Course::select('id', 'name')->where('status', 1)
                     ->with('qualification')
-                    ->get(),
-            'List'
-        );
+                    ->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_specialization()
+    public function get_specialization($res = '')
     {
-        return $this->sendResponse(
-            Specialization::select('id', 'name')->where('status', 1)
+        $list = Specialization::select('id', 'name')->where('status', 1)
                             ->with('qualification')
                             ->with('course')
-                            ->get(),
-            'List'
-        );
+                            ->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_nationality()
+    public function get_nationality($res = '')
     {
-        return $this->sendResponse(
-            Nationality::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Nationality::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_religion()
+    public function get_religion($res = '')
     {
-        return $this->sendResponse(
-            Religion::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Religion::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_university()
+    public function get_university($res = '')
     {
-        return $this->sendResponse(
-            University::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = University::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_mostcommonemail()
+    public function get_mostcommonemail($res = '')
     {
-        return $this->sendResponse(
-            MostCommonEmail::select('id', 'emailid_domain')->where('status', 1)->get(),
-            'List'
-        );
+        $list = MostCommonEmail::select('id', 'emailid_domain')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_language()
+    public function get_language($res = '')
     {
-        return $this->sendResponse(
-            Language::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = Language::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_maritalstatus()
+    public function get_maritalstatus($res = '')
     {
-        return $this->sendResponse(
-            MaritalStatus::select('id', 'name')->where('status', 1)->get(),
-            'List'
-        );
+        $list = MaritalStatus::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
 
-    public function get_proficiency_level()
+    public function get_proficiency_level($res = '')
     {
-        return $this->sendResponse(
-            ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
-            'List'
-        );
+        $list = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
     }
-
 
 }
