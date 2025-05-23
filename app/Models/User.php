@@ -101,7 +101,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserSkill::class, 'user_id')->orderBy('created_at', 'asc');
     }
-
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_profile_completed_percentages(): HasMany
+    {
+        return $this->hasMany(ProfileComplete::class, 'user_id')->orderBy('created_at', 'asc');
+    }
 
 
 }

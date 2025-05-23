@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('first_name', 100);
-            $table->string('last_name', 10, 1000);
+            $table->string('last_name', 100);
             $table->string('email', 100);
             $table->string('country_code', 10);
             $table->string('phone', 20);
@@ -46,6 +46,7 @@ return new class extends Migration
             $table->text('preferred_designation')->nullable();
             $table->text('preferred_location')->nullable();
             $table->text('preferred_industry')->nullable();
+            $table->integer('profile_completed_percentage')->default(0);
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
