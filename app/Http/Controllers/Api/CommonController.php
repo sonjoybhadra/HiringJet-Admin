@@ -66,7 +66,7 @@ class CommonController extends BaseApiController
         if(!empty($request->params )){
             $params = explode(',', $request->params);
             foreach($params as $param){
-                $result_array[][$param] = $common_resource_array[$param];
+                $result_array[$param] = $common_resource_array[$param];
             }
         }
         return $this->sendResponse(
