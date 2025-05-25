@@ -59,6 +59,7 @@ class ProfileCompleteController extends Controller
                     /* user activity */
                     $fields = [
                         'name'                      => strip_tags($postData['name']),
+                        'slug'                      => Helper::clean($postData['name']),
                         'percentage'                => strip_tags($postData['percentage']),
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
@@ -91,8 +92,9 @@ class ProfileCompleteController extends Controller
                 if($this->validate($request, $rules)){
                     $fields = [
                         'name'                      => strip_tags($postData['name']),
+                        'slug'                      => Helper::clean($postData['name']),
                         'percentage'                => strip_tags($postData['percentage']),
-                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                        'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     ProfileComplete::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
