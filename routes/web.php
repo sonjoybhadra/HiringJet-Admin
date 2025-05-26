@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Common\TableController;
 use App\Http\Controllers\ModuleController;
@@ -39,8 +40,9 @@ use App\Http\Controllers\FunctionalAreaController;
 //     return view('welcome');
 // });
 
-Route::get('/', [UserController::class, 'login'])->name('login');
-Route::post('signin', [UserController::class, 'login'])->name('signin');
+Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+Route::post('signin', [AuthController::class, 'login'])->name('signin');
+
 Route::match(['get','post'],'/forgot-password', [UserController::class, 'forgotPassword']);
 Route::match(['get','post'],'/validate-otp/{id}', [UserController::class, 'validateOtp']);
 Route::match(['get','post'],'/resend-otp/{id}', [UserController::class, 'resendOtp']);
@@ -50,8 +52,8 @@ Route::get('/table/fetch', [TableController::class, 'fetch']);
 Route::get('/table/export', [TableController::class, 'export']);
 
 Route::middleware(['auth'])->group(function () {
-	Route::get('dashboard', [UserController::class, 'dashboard']);
-	Route::get('logout', [UserController::class, 'logout']);
+	Route::get('dashboard', [AuthController::class, 'dashboard']);
+	Route::get('logout', [AuthController::class, 'logout']);
 	Route::get('email-logs', [UserController::class, 'emailLogs']);
     Route::match(['get','post'],'/email-logs/details/{email}', [UserController::class, 'emailLogsDetails']);
     Route::get('login-logs', [UserController::class, 'loginLogs']);

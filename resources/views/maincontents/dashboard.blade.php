@@ -1,6 +1,10 @@
+
 <?php
 use App\Helpers\Helper;
 ?>
+@extends('layouts.main')
+@section('title', 'Dashboard')
+@section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="row g-6">
     <!-- Website Analytics -->
@@ -846,3 +850,6 @@ use App\Helpers\Helper;
     <!--/ Projects table -->
   </div>
 </div>
+<!-- / Content -->
+ @endsection
+

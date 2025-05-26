@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\JobCategory;
 use App\Models\UserActivity;
+use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
@@ -16,8 +17,10 @@ use DB;
 
 class JobCategoryController extends Controller
 {
+    protected $siteAuthService;
     public function __construct()
-    {        
+    {
+        $this->siteAuthService = new SiteAuthService();
         $this->data = array(
             'title'             => 'Job Category',
             'controller'        => 'JobCategoryController',
@@ -32,7 +35,10 @@ class JobCategoryController extends Controller
             $title                          = $this->data['title'].' List';
             $page_name                      = 'job-category.list';
             $data['rows']                   = JobCategory::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data =   $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+
+            return view('maincontents.job-category.list', $data);
+
         }
     /* list */
     /* add */
@@ -170,7 +176,7 @@ class JobCategoryController extends Controller
                     ];
                     UserActivity::insert($activityData);
                 /* user activity */
-            }            
+            }
             $model->save();
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }

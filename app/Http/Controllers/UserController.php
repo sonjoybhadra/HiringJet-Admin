@@ -74,6 +74,7 @@ class UserController extends Controller
                     UserActivity::insert($activityData);
                 /* user activity */
                 return redirect()->back()->with('error_message', 'Invalid credentials or access denied.');
+
             }
 
             $data                           = [];

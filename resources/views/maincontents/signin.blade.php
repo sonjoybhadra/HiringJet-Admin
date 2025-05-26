@@ -1,3 +1,6 @@
+@extends('layouts.auth')
+@section('title', 'Sign In')
+@section('content')
 <?php
 use App\Helpers\Helper;
 ?>
@@ -41,7 +44,7 @@ use App\Helpers\Helper;
           <!-- <input class="form-check-input" type="checkbox" id="remember-me" />
           <label class="form-check-label" for="remember-me"> Remember Me </label> -->
         </div>
-        <a href="<?=url('forgot-password')?>">
+        <a href="{{url('forgot-password')}}">
           <p class="mb-0">Forgot Password?</p>
         </a>
       </div>
@@ -50,32 +53,5 @@ use App\Helpers\Helper;
   <div class="mb-2 mb-md-0">
     © <script>document.write(new Date().getFullYear())</script>, Developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
   </div>
-  <!-- <p class="text-center">
-    <span>New on our platform?</span>
-    <a href="auth-register-cover.html">
-      <span>Create an account</span>
-    </a>
-  </p>
-
-  <div class="divider my-6">
-    <div class="divider-text">or</div>
-  </div>
-
-  <div class="d-flex justify-content-center">
-    <a href="<?=Helper::getSettingValue('facebook_profile')?>" target="_blank" class="btn btn-sm btn-icon rounded-pill btn-text-facebook me-1_5">
-      <i class="tf-icons fa-brands fa-facebook-f"></i>
-    </a>
-
-    <a href="<?=Helper::getSettingValue('twitter_profile')?>" target="_blank" class="btn btn-sm btn-icon rounded-pill btn-text-twitter me-1_5">
-      <i class="tf-icons fa-brands fa-twitter"></i>
-    </a>
-
-    <a href="<?=Helper::getSettingValue('instagram_profile')?>" target="_blank" class="btn btn-sm btn-icon rounded-pill btn-text-github me-1_5">
-      <i class="tf-icons fa-brands fa-github"></i>
-    </a>
-
-    <a href="<?=Helper::getSettingValue('youtube_profile')?>" target="_blank" class="btn btn-sm btn-icon rounded-pill btn-text-google-plus">
-      <i class="tf-icons fa-brands fa-youtube"></i>
-    </a>
-  </div> -->
 </div>
+@endsection

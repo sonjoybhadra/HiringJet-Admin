@@ -11,7 +11,7 @@ use App\Helpers\Helper;
   data-template="vertical-menu-template-no-customizer"
   data-style="light">
   <head>
-    <?=$head?>
+    @include('elements/before-head')
   </head>
   <body>
     <!-- Content -->
@@ -70,7 +70,7 @@ use App\Helpers\Helper;
 
           <!-- Login -->
           <div class="d-flex col-12 col-lg-4 align-items-center authentication-bg p-sm-12 p-6">
-            <?=$maincontent?>
+            @yield('content')
           </div>
           <!-- /Login -->
         </div>

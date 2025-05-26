@@ -2,6 +2,9 @@
 use App\Helpers\Helper;
 $controllerRoute = $module['controller_route'];
 ?>
+@extends('layouts.main')
+
+@section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
       <h4><?=$page_header?></h4>
@@ -55,4 +58,8 @@ $controllerRoute = $module['controller_route'];
       </div>
    </div>
 </div>
-<script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/table.js"></script>
+
+@endsection
+@section('scripts')
+ <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/table.js"></script>
+@endsection
