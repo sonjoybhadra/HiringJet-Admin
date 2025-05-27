@@ -9,6 +9,7 @@ use App\Models\GeneralSetting;
 use App\Models\Employer;
 use App\Models\Industry;
 use App\Models\UserActivity;
+use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
@@ -17,8 +18,10 @@ use DB;
 
 class EmployerController extends Controller
 {
+    protected $siteAuthService;
     public function __construct()
-    {        
+    {
+        $this->siteAuthService = new SiteAuthService();
         $this->data = array(
             'title'             => 'Employer',
             'controller'        => 'EmployerController',
@@ -32,8 +35,8 @@ class EmployerController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'employer.list';
-            $data['rows']                   = Employer::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* list */
     /* add */
@@ -95,7 +98,8 @@ class EmployerController extends Controller
             $page_name                      = 'employer.add-edit';
             $data['row']                    = [];
             $data['industries']             = Industry::where('status', '=', 1)->get();
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* add */
     /* edit */
@@ -158,7 +162,8 @@ class EmployerController extends Controller
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* edit */
     /* delete */

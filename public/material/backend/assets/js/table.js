@@ -142,11 +142,11 @@ function loadTable(config) {
         }
 
         // Jump to input
-        html += `
-            <span class="ms-2">Jump to page:</span>
-            <input type="number" id="jumpPage" min="1" max="${totalPages}" style="width: 60px;" class="form-control form-control-sm d-inline-block">
-            <button id="jumpPageBtn" class="btn btn-sm btn-secondary">Go</button>
-        `;
+        // html += `
+        //     <span class="ms-2">Jump to page:</span>
+        //     <input type="number" id="jumpPage" min="1" max="${totalPages}" style="width: 60px;" class="form-control form-control-sm d-inline-block">
+        //     <button id="jumpPageBtn" class="btn btn-sm btn-secondary">Go</button>
+        // `;
 
         html += '</div>';
         container.append(html);

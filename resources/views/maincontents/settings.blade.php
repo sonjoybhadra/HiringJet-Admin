@@ -2,6 +2,8 @@
 use App\Helpers\Helper;
 $user_type = session('type');
 ?>
+@extends('layouts.main')
+@section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
       <h5><?=$page_header?></h5>
@@ -521,3 +523,4 @@ $user_type = session('type');
       </div>
    </div>
 </div>
+@endsection

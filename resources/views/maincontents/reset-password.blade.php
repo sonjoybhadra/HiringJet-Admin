@@ -1,3 +1,6 @@
+@extends('layouts.auth')
+@section('title', 'Sign In')
+@section('content')
 <?php
 use App\Helpers\Helper;
 ?>
@@ -22,7 +25,7 @@ use App\Helpers\Helper;
   <p class="mb-6">
     <span class="fw-medium">Your new password must be different from previously used passwords</span>
   </p>
-  <form id="formAuthentication" class="mb-6" action="" method="POST">
+  <form id="formAuthentication" class="mb-6" action="{{ route('resetpassword') }}" method="POST">
   	@csrf
     <div class="mb-6 form-password-toggle">
       <label class="form-label" for="password">New Password</label>
@@ -50,3 +53,4 @@ use App\Helpers\Helper;
     © <script>document.write(new Date().getFullYear())</script>, Developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
   </div>
 </div>
+@endsection

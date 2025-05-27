@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\Nationality;
 use App\Models\UserActivity;
+use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
@@ -16,8 +17,10 @@ use DB;
 
 class NationalityController extends Controller
 {
+    protected $siteAuthService;
     public function __construct()
-    {        
+    {
+        $this->siteAuthService = new SiteAuthService();
         $this->data = array(
             'title'             => 'Nationality',
             'controller'        => 'NationalityController',
@@ -31,8 +34,8 @@ class NationalityController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'nationality.list';
-            $data['rows']                   = Nationality::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* list */
     /* add */
@@ -70,7 +73,8 @@ class NationalityController extends Controller
             $title                          = $this->data['title'].' Add';
             $page_name                      = 'nationality.add-edit';
             $data['row']                    = [];
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* add */
     /* edit */
@@ -108,7 +112,8 @@ class NationalityController extends Controller
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* edit */
     /* delete */
