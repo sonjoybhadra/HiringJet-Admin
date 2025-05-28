@@ -42,11 +42,10 @@ use App\Http\Controllers\FunctionalAreaController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('signin', [AuthController::class, 'login'])->name('signin');
-
-Route::match(['get','post'],'/forgot-password', [UserController::class, 'forgotPassword']);
-Route::match(['get','post'],'/validate-otp/{id}', [UserController::class, 'validateOtp']);
-Route::match(['get','post'],'/resend-otp/{id}', [UserController::class, 'resendOtp']);
-Route::match(['get','post'],'/reset-password/{id}', [UserController::class, 'resetPassword']);
+Route::match(['get','post'],'/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotpassword');
+Route::match(['get','post'],'/validate-otp/{id}', [AuthController::class, 'validateOtp'])->name('validateotp');
+Route::match(['get','post'],'/resend-otp/{id}', [AuthController::class, 'resendOtp']);
+Route::match(['get','post'],'/reset-password/{id}', [AuthController::class, 'resetPassword'])->name('resetpassword');
 
 Route::get('/table/fetch', [TableController::class, 'fetch']);
 Route::get('/table/export', [TableController::class, 'export']);
@@ -54,23 +53,23 @@ Route::get('/table/export', [TableController::class, 'export']);
 Route::middleware(['auth'])->group(function () {
 	Route::get('dashboard', [AuthController::class, 'dashboard']);
 	Route::get('logout', [AuthController::class, 'logout']);
-	Route::get('email-logs', [UserController::class, 'emailLogs']);
-    Route::match(['get','post'],'/email-logs/details/{email}', [UserController::class, 'emailLogsDetails']);
-    Route::get('login-logs', [UserController::class, 'loginLogs']);
-    Route::get('user-activity-logs', [UserController::class, 'userActivityLogs']);
-    Route::match(['get','post'], '/common-delete-image/{id1}/{id2}/{id3}/{id4}/{id5}', [UserController::class, 'commonDeleteImage']);
+	Route::get('email-logs', [AuthController::class, 'emailLogs']);
+    Route::match(['get','post'],'/email-logs/details/{email}', [AuthController::class, 'emailLogsDetails']);
+    Route::get('login-logs', [AuthController::class, 'loginLogs']);
+    Route::get('user-activity-logs', [AuthController::class, 'userActivityLogs']);
+    Route::match(['get','post'], '/common-delete-image/{id1}/{id2}/{id3}/{id4}/{id5}', [AuthController::class, 'commonDeleteImage']);
     /* setting */
-        Route::get('settings', [UserController::class, 'settings']);
-        Route::post('profile-settings', [UserController::class, 'profile_settings']);
-        Route::post('general-settings', [UserController::class, 'general_settings']);
-        Route::post('change-password', [UserController::class, 'change_password']);
-        Route::post('email-settings', [UserController::class, 'email_settings']);
-        Route::get('test-email', [UserController::class, 'testEmail']);
-        Route::post('email-template', [UserController::class, 'email_template']);
-        Route::post('sms-settings', [UserController::class, 'sms_settings']);
-        Route::post('footer-settings', [UserController::class, 'footer_settings']);
-        Route::post('seo-settings', [UserController::class, 'seo_settings']);
-        Route::post('payment-settings', [UserController::class, 'payment_settings']);
+        Route::get('settings', [AuthController::class, 'settings']);
+        Route::post('profile-settings', [AuthController::class, 'profile_settings']);
+        Route::post('general-settings', [AuthController::class, 'general_settings']);
+        Route::post('change-password', [AuthController::class, 'change_password']);
+        Route::post('email-settings', [AuthController::class, 'email_settings']);
+        Route::get('test-email', [AuthController::class, 'testEmail']);
+        Route::post('email-template', [AuthController::class, 'email_template']);
+        Route::post('sms-settings', [AuthController::class, 'sms_settings']);
+        Route::post('footer-settings', [AuthController::class, 'footer_settings']);
+        Route::post('seo-settings', [AuthController::class, 'seo_settings']);
+        Route::post('payment-settings', [AuthController::class, 'payment_settings']);
     /* setting */
     /* access & permission */
         /* modules */

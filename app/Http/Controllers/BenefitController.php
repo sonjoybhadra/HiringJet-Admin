@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\PerkBenefit;
 use App\Models\UserActivity;
+use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
@@ -16,8 +17,10 @@ use DB;
 
 class BenefitController extends Controller
 {
+    protected $siteAuthService;
     public function __construct()
-    {        
+    {
+        $this->siteAuthService = new SiteAuthService();
         $this->data = array(
             'title'             => 'Perk & Benefits',
             'controller'        => 'BenefitController',
@@ -31,7 +34,6 @@ class BenefitController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'benefit.list';
-            $data['rows']                   = PerkBenefit::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
             echo $this->admin_after_login_layout($title,$page_name,$data);
         }
     /* list */
