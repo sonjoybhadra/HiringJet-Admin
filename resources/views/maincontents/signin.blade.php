@@ -23,7 +23,6 @@ use App\Helpers\Helper;
   <?php }?>
   <h4 class="mb-1">Welcome to <?=Helper::getSettingValue('site_name')?>! 👋</h4>
   <p class="mb-6">Please sign-in to your account and start the adventure</p>
-
   <form class="mb-6" action="{{ route('signin') }}" method="POST">
     @csrf
     <div class="mb-6">

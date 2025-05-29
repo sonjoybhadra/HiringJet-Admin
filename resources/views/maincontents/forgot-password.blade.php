@@ -1,3 +1,6 @@
+@extends('layouts.auth')
+@section('title', 'Sign In')
+@section('content')
 <?php
 use App\Helpers\Helper;
 ?>
@@ -20,7 +23,7 @@ use App\Helpers\Helper;
   <?php }?>
   <h4 class="mb-1"><?=$page_header?>? 🔒</h4>
   <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
-  <form id="formAuthentication" class="mb-6" action="" method="POST">
+  <form id="formAuthentication" class="mb-6" action="{{ route('forgotpassword') }}" method="POST">
   	@csrf
     <div class="mb-6">
       <label for="email" class="form-label">Email</label>
@@ -38,3 +41,4 @@ use App\Helpers\Helper;
     </a>
   </div>
 </div>
+@endsection

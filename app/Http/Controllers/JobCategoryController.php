@@ -34,16 +34,18 @@ class JobCategoryController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'job-category.list';
-            $data['rows']                   = JobCategory::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
-            $data =   $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-
-            return view('maincontents.job-category.list', $data);
-
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* list */
     /* add */
         public function add(Request $request){
-            $data['module']           = $this->data;
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Add';
+            $page_name                      = 'job-category.add-edit';
+            $data['row']                    = [];
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
@@ -72,11 +74,6 @@ class JobCategoryController extends Controller
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-            $data['module']                 = $this->data;
-            $title                          = $this->data['title'].' Add';
-            $page_name                      = 'job-category.add-edit';
-            $data['row']                    = [];
-            echo $this->admin_after_login_layout($title,$page_name,$data);
         }
     /* add */
     /* edit */
@@ -114,7 +111,8 @@ class JobCategoryController extends Controller
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* edit */
     /* delete */
