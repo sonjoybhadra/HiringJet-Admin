@@ -60,7 +60,6 @@ class RegistrationController extends BaseApiController
             $user = User::where('email', $request->email)->where('status', 0)->first();
             if($user){
                 $otp_mail_hash = base64_encode($otp);
-
                 $user->remember_token = $otp_mail_hash;
                 $user->email_verified_at = date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes'));
                 $user->save();
