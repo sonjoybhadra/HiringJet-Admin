@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserProfileCompletedPercentage extends Model
 {
+    protected $fillable = ['user_id', 'profile_completes_id', 'slug', 'percentage', 'perticulars'];
     /**
      * Get the role details of associated user.
     */

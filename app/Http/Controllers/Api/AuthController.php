@@ -7,11 +7,12 @@ use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Validator;
-use JWTAuth;
+// use JWTAuth;
 use App\Models\User;
 use App\Models\UserDetails;
 
@@ -59,7 +60,7 @@ class AuthController extends BaseApiController
             return $this->sendResponse([
                                         'token_type' => 'bearer',
                                         'token' => $token,
-                                        'user' => auth()->user(),
+                                        'user' => $this->getUserDetails(),
                                         'expires_in' => config('jwt.ttl') * 60,
                                     ], 'Login successfully done.');
         } catch (JWTException $e) {
@@ -86,8 +87,11 @@ class AuthController extends BaseApiController
             return $this->sendResponse(
                 User::where('id', auth()->user()->id)
                                 ->with('user_profile')
-                                // ->with('user_education')
+                                ->with('user_education')
                                 ->with('user_skills')
+                                ->with('user_profile_completed_percentages')
+                                ->with('user_languages')
+                                ->with('user_role')
                                 ->first()
             );
         } catch (JWTException $exception) {
@@ -100,7 +104,7 @@ class AuthController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
     */
-    public function change_password(Request $request)
+    public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:6',
@@ -123,42 +127,93 @@ class AuthController extends BaseApiController
         }
     }
 
-    public function update_profile(Request $request)
+    public function loginWithGoogle(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'country' => 'required',
-            'name' => 'required|max:50',
-            // 'last_name' => 'required|max:50',
-            'email' => 'required|email|max:100|unique:users,email,'.auth()->user()->id,
-            // 'country_code' => 'required|max:5',
-            'phone' => 'required|max:15|unique:users,phone,'.auth()->user()->id
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try{
-            $image_path = "";
-            if (request()->hasFile('image')) {
-                $file = request()->file('image');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/images/'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/images/'.$fileName;
-            }
+            $client = new \Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Your Google Client ID
+            $payload = $client->verifyIdToken($request->token);
 
-            User::where('id', auth()->user()->id)->update([
-                'name'=> $request->name,
-                'email'=> $request->email,
-                // 'country_code' => $request->country_code,
-                'phone'=> $request->phone,
-                'profile_image' => $image_path
+            if ($payload) {
+                $email = $payload['email'];
+
+                // Find or create the user
+                $user = User::firstOrFail(
+                                ['email' => $email]
+                            );
+                if($user->status == 0){
+                    return $this->sendError('Unauthorized', 'Your account is not active. Please contact to the admin.', Response::HTTP_UNAUTHORIZED);
+                }
+                // Create JWT token
+                $token = JWTAuth::fromUser($user);
+                // Set guard to "api" for the current request
+                auth()->setUser($user);
+
+                return $this->sendResponse([
+                                            'token_type' => 'bearer',
+                                            'token' => $token,
+                                            'user' => $this->getUserDetails(),
+                                            'expires_in' => config('jwt.ttl') * 60,
+                                        ], 'Login successfully done.');
+            } else {
+                return response()->json(['error' => 'Invalid token'], 401);
+            }
+        }catch (JWTException $e) {
+            return $this->sendError('Error', 'Login failed.',  Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function loginWithLinkedIn(Request $request)
+    {
+        $code = $request->code;
+        try{
+            $response = Http::asForm()->post('https://www.linkedin.com/oauth/v2/accessToken', [
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'redirect_uri' => 'http://localhost:3000/linkedin/callback',
+                'client_id' => env('LINKEDIN_CLIENT_ID'),
+                'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
             ]);
 
-            return $this->sendResponse([], 'Profile updated successfully.');
+            if (!$response->ok()) {
+                return response()->json(['error' => 'Failed to get access token'], 400);
+            }
 
-        } catch (JWTException $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to update profile.');
+            $accessToken = $response->json()['access_token'];
+
+            // Get user profile
+            $profile = Http::withToken($accessToken)->get('https://api.linkedin.com/v2/me');
+            $emailData = Http::withToken($accessToken)->get('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))');
+
+            if (!$profile->ok() || !$emailData->ok()) {
+                return response()->json(['error' => 'Failed to fetch LinkedIn user'], 400);
+            }
+
+            $email = $emailData->json()['elements'][0]['handle~']['emailAddress'];
+
+            $user = User::firstOrCreate(
+                ['email' => $email]
+            );
+
+            // Find or create the user
+            $user = User::firstOrFail(
+                            ['email' => $email]
+                        );
+            if($user->status == 0){
+                return $this->sendError('Unauthorized', 'Your account is not active. Please contact to the admin.', Response::HTTP_UNAUTHORIZED);
+            }
+            // Create JWT token
+            $token = JWTAuth::fromUser($user);
+            // Set guard to "api" for the current request
+            auth()->setUser($user);
+
+            return $this->sendResponse([
+                                        'token_type' => 'bearer',
+                                        'token' => $token,
+                                        'user' => $this->getUserDetails(),
+                                        'expires_in' => config('jwt.ttl') * 60,
+                                    ], 'Login successfully done.');
+        }catch (JWTException $e) {
+            return $this->sendError('Error', 'Login failed.',  Response::HTTP_UNAUTHORIZED);
         }
     }
 
