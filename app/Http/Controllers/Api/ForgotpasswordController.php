@@ -20,7 +20,7 @@ class ForgotpasswordController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
     */
-    public function forgot_password(Request $request)
+    public function forgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email'
@@ -55,7 +55,7 @@ class ForgotpasswordController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
     */
-    public function otp_verification(Request $request)
+    public function otpVerification(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -88,7 +88,7 @@ class ForgotpasswordController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
     */
-    public function reset_password(Request $request)
+    public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',

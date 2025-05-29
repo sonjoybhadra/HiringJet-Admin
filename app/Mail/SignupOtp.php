@@ -18,7 +18,7 @@ class SignupOtp extends Mailable
      *
      * @return void
      */
-    public $name, $otp, $email, $password, $content;
+    public $name, $otp, $content;
     public function __construct($name = '', $otp = '', $content = '')
     {
         $this->name = $name;
@@ -50,8 +50,6 @@ class SignupOtp extends Mailable
             with: [
                 'name' => $this->name,
                 'otp' => $this->otp,
-                'email' => $this->email,
-                'password' => $this->password,
                 'content' => $this->content,
             ],
         );

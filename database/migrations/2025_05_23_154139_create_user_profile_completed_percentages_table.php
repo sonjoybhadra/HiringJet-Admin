@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('profile_completes_id')->constrained('profile_completes');
+            $table->string('slug', 100);
             $table->integer('percentage');
-            $table->string('perticulars');
+            $table->string('perticulars', 100);
             $table->softDeletes();
             $table->timestamps();
         });

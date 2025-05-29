@@ -62,6 +62,8 @@ class CommonController extends BaseApiController
             'language'=> $this->get_language(1),
             'maritalstatus'=> $this->get_maritalstatus(1),
             'proficiency_level'=> $this->get_proficiency_level(1),
+            'cast_category'=> $this->get_cast_category(1),
+            'diverse_background'=> $this->get_diverse_background(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -361,6 +363,30 @@ class CommonController extends BaseApiController
     public function get_proficiency_level($res = '')
     {
         $list = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
+    }
+
+    public function get_cast_category($res = '')
+    {
+        $list = ['General/UR', 'SC', 'ST', 'OBC', 'OBC - Non Creamy', 'Others'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
+    }
+
+    public function get_diverse_background($res = '')
+    {
+        $list = ['Single Parent', 'Working Mother', 'Retired', 'LGBTQ'];
         if($res != ''){
             return $list;
         }else{
