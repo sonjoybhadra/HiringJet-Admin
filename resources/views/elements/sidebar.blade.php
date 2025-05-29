@@ -54,6 +54,29 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <div data-i18n="Dashboard">Dashboard</div>
     </a>
   </li>
+  <li class="menu-item active <?=(($pageSegment == 'module')?'open':'')?>">
+    <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <i class="menu-icon fa-solid fa-lock"></i>
+      <div data-i18n="Access & Permission">Access & Permission</div>
+    </a>
+    <ul class="menu-sub">
+      <li class="menu-item <?=(($pageSegment == 'module')?'active':'')?>">
+        <a href="<?=url('/module/list')?>" class="menu-link">
+          <div data-i18n="Modules"><i class="fa-solid fa-arrow-right"></i> Modules</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">
+        <a href="javascript:void(0);" class="menu-link">
+          <div data-i18n="Roles"><i class="fa-solid fa-arrow-right"></i> Roles</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">
+        <a href="javascript:void(0);" class="menu-link">
+          <div data-i18n="Job Curators"><i class="fa-solid fa-arrow-right"></i> Job Curators</div>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization' || $pageSegment == 'job-category' || $pageSegment == 'functional-area')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-database"></i>

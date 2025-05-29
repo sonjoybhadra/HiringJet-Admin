@@ -2,6 +2,8 @@
 use App\Helpers\Helper;
 $user_type = session('type');
 ?>
+@extends('layouts.main')
+@section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
       <h4><?=$page_header?></h4>
@@ -122,4 +124,7 @@ $user_type = session('type');
       </div>
    </div>
 </div>
+@endsection
+@section('scripts')
 <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/table.js"></script>
+@endsection

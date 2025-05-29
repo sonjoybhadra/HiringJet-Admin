@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\Module;
+use App\Models\UserActivity;
+use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
@@ -14,8 +16,10 @@ use Hash;
 
 class ModuleController extends Controller
 {
+    protected $siteAuthService;
     public function __construct()
-    {        
+    {
+        $this->siteAuthService = new SiteAuthService();
         $this->data = array(
             'title'             => 'Module',
             'controller'        => 'ModuleController',
@@ -28,8 +32,8 @@ class ModuleController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'module.list';
-            $data['rows']                   = Module::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* list */
     /* add */
@@ -41,6 +45,18 @@ class ModuleController extends Controller
                     'name'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
                     $fields = [
                         'name'         => strip_tags($postData['name']),
                     ];
@@ -54,7 +70,8 @@ class ModuleController extends Controller
             $title                          = $this->data['title'].' Add';
             $page_name                      = 'module.add-edit';
             $data['row']                    = [];
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* add */
     /* edit */
@@ -75,22 +92,48 @@ class ModuleController extends Controller
                         'name'                  => strip_tags($postData['name'])
                     ];
                     Module::where($this->data['primary_key'], '=', $id)->update($fields);
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-            echo $this->admin_after_login_layout($title,$page_name,$data);
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
         }
     /* edit */
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
+            $model                          = JobCategory::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
             Module::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
         }
     /* delete */
@@ -102,9 +145,33 @@ class ModuleController extends Controller
             {
                 $model->status  = 0;
                 $msg            = 'Deactivated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
             } else {
                 $model->status  = 1;
                 $msg            = 'Activated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
             }            
             $model->save();
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');

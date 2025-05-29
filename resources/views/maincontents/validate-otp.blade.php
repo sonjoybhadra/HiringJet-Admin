@@ -1,3 +1,6 @@
+@extends('layouts.auth')
+@section('title', 'Sign In')
+@section('content')
 <?php
 use App\Helpers\Helper;
 ?>
@@ -24,7 +27,7 @@ use App\Helpers\Helper;
     <span class="fw-medium d-block mt-1 text-heading">******@hiringjet.com</span>
   </p>
   <p class="mb-0">Type your 6 digit security code</p>
-  <form id="twoStepsForm" action="" method="POST">
+  <form id="twoStepsForm" action="{{ route('validateotp') }}" method="POST">
   	@csrf
     <div class="mb-6">
       <div class="auth-input-wrapper d-flex align-items-center justify-content-between numeral-mask-wrapper">
@@ -48,3 +51,4 @@ use App\Helpers\Helper;
     © <script>document.write(new Date().getFullYear())</script>, Developed & maintained by <a href="https://itiffyconsultants.com/" target="_blank" class="footer-link fw-medium">Itiffy Consultants</a>
   </div>
 </div>
+@endsection

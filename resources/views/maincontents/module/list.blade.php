@@ -36,35 +36,21 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                  'containerId' => 'table1',
-                  'searchId' => 'search1',
-                  'table' => 'specializations',
-                  'columns' => ['qualification_id', 'course_id', 'name', 'created_at', 'specializations.status'],
-                  'visibleColumns' => ['qualification_name', 'course_name', 'name', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Qualification Name', 'Course Name', 'Specialization Name', 'Created At'],
-                  'filename' => "Specialization",
-                  'orderBy' => 'id',
-                  'orderType' => 'desc',
-                  'conditions' => [
-                    ['column' => 'specializations.status', 'operator' => '!=', 'value' => 3]
-                  ],
-                  'routePrefix' => 'specialization',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'joins' => [
-                     [
-                           'table' => 'qualifications',
-                           'localKey' => 'qualification_id',
-                           'foreignKey' => 'id',
-                           'select' => ['name as qualification_name']
-                     ],
-                     [
-                           'table' => 'courses',
-                           'localKey' => 'course_id',
-                           'foreignKey' => 'id',
-                           'select' => ['name as course_name']
-                     ]
-                  ]
+                'containerId' => 'table1',
+                'searchId' => 'search1',
+                'table' => 'modules',
+                'columns' => ['name', 'created_at', 'status'],
+                'visibleColumns' => ['name', 'created_at'],    // used for rendering
+                'headers' => ['#', 'Name', 'Created At'],
+                'filename' => "Module",
+                'orderBy' => 'id',
+                'orderType' => 'desc',
+                'conditions' => [
+                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
+                ],
+                'routePrefix' => 'module',
+                'showActions' => true, // set to false to hide actions
+                'statusColumn' => 'status' // optional, defaults to 'is_active'
                 ])
             </div>
         </div>
