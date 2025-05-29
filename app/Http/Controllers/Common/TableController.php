@@ -47,6 +47,9 @@ class TableController extends Controller
             $query->leftJoin('courses', DB::raw("CAST($table.course_id AS TEXT)"), '=', DB::raw("CAST(courses.id AS TEXT)"));
             $query->leftJoin('qualifications', DB::raw("CAST($table.qualification_id AS TEXT)"), '=', DB::raw("CAST(qualifications.id AS TEXT)"));
         }
+        if ($table === 'users') {
+            $query->leftJoin('roles', DB::raw("CAST($table.role_id AS TEXT)"), '=', DB::raw("CAST(roles.id AS TEXT)"));
+        }
 
         // Aliased select columns
         $columns = array_map(function ($col) use ($table) {
@@ -70,6 +73,9 @@ class TableController extends Controller
             }
             if ($table === 'specializations' && $col === 'qualification_id') {
                 return 'qualifications.name as qualification_name';
+            }
+            if ($table === 'users' && $col === 'role_id') {
+                return 'roles.role_name as role_name';
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);

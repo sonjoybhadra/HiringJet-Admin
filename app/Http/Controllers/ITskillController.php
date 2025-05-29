@@ -6,35 +6,35 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
-use App\Models\Role;
-use App\Models\Module;
+use App\Models\ItSkill;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
 use Hash;
+use DB;
 
-class RoleController extends Controller
+class ITskillController extends Controller
 {
     protected $siteAuthService;
     public function __construct()
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Role',
-            'controller'        => 'RoleController',
-            'controller_route'  => 'role',
+            'title'             => 'IT Skill',
+            'controller'        => 'ITskillController',
+            'controller_route'  => 'itskill',
             'primary_key'       => 'id',
+            'table_name'        => 'it_skills',
         );
     }
     /* list */
         public function list(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
-            $page_name                      = 'role.list';
+            $page_name                      = 'itskill.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-            $data['rows']                   = Role::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
             return view('maincontents.' . $page_name, $data);
         }
     /* list */
@@ -44,7 +44,9 @@ class RoleController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'role_name'           => 'required',
+                    'name'                      => 'required',
+                    'version'                   => 'required',
+                    'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -54,16 +56,18 @@ class RoleController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['role_name'] . ' ' . $this->data['title'] . ' Added',
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
                     $fields = [
-                        'role_name'         => strip_tags($postData['role_name']),
-                        'module_id'         => ((!empty($postData['module_id']))?json_encode($postData['module_id']):''),
+                        'name'                          => strip_tags($postData['name']),
+                        'version'                       => strip_tags($postData['version']),
+                        'publishing_year'               => strip_tags($postData['publishing_year']),
+                        'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    Role::insert($fields);
+                    ItSkill::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -71,9 +75,8 @@ class RoleController extends Controller
             }
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Add';
-            $page_name                      = 'role.add-edit';
+            $page_name                      = 'itskill.add-edit';
             $data['row']                    = [];
-            $data['modules']                = Module::select('id', 'name')->where('status', '=', 1)->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -83,20 +86,23 @@ class RoleController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
-            $page_name                      = 'role.add-edit';
-            $data['row']                    = Role::where($this->data['primary_key'], '=', $id)->first();
-            $data['modules']                = Module::select('id', 'name')->where('status', '=', 1)->get();
+            $page_name                      = 'itskill.add-edit';
+            $data['row']                    = ItSkill::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'role_name'           => 'required',
+                    'name'                      => 'required',
+                    'version'                   => 'required',
+                    'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
-                        'role_name'         => strip_tags($postData['role_name']),
-                        'module_id'         => ((!empty($postData['module_id']))?json_encode($postData['module_id']):''),
+                        'name'                          => strip_tags($postData['name']),
+                        'version'                       => strip_tags($postData['version']),
+                        'publishing_year'               => strip_tags($postData['publishing_year']),
+                        'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    Role::where($this->data['primary_key'], '=', $id)->update($fields);
+                    ItSkill::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -104,7 +110,7 @@ class RoleController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['role_name'] . ' ' . $this->data['title'] . ' Updated',
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
@@ -121,12 +127,12 @@ class RoleController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Role::find($id);
+            $model                          = ItSkill::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            Role::where($this->data['primary_key'], '=', $id)->update($fields);
+            ItSkill::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -134,7 +140,7 @@ class RoleController extends Controller
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
                     'activity_type'     => 3,
-                    'activity_details'  => $model->role_name . ' ' . $this->data['title'] . ' Deleted',
+                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
                     'platform_type'     => 'WEB',
                 ];
                 UserActivity::insert($activityData);
@@ -145,7 +151,7 @@ class RoleController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Role::find($id);
+            $model                          = ItSkill::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;
@@ -157,7 +163,7 @@ class RoleController extends Controller
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
                         'activity_type'     => 3,
-                        'activity_details'  => $model->role_name . ' ' . $this->data['title'] . ' Deactivated',
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
                         'platform_type'     => 'WEB',
                     ];
                     UserActivity::insert($activityData);
@@ -172,7 +178,7 @@ class RoleController extends Controller
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
                         'activity_type'     => 3,
-                        'activity_details'  => $model->role_name . ' ' . $this->data['title'] . ' Activated',
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
                         'platform_type'     => 'WEB',
                     ];
                     UserActivity::insert($activityData);

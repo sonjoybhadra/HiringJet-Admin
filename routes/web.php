@@ -5,13 +5,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Common\TableController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\RoleController;
-// use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FaqCategoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\KeyskillController;
+use App\Http\Controllers\ITskillController;
 use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\UniversityController;
@@ -87,11 +88,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('role/change-status/{id}', [RoleController::class, 'change_status']);
         /* roles */
         /* admin users */
-            // Route::get('admin-users/list', [AdminUserController::class, 'list']);
-            // Route::match(['get', 'post'], 'admin-users/add', [AdminUserController::class, 'add']);
-            // Route::match(['get', 'post'], 'admin-users/edit/{id}', [AdminUserController::class, 'edit']);
-            // Route::get('admin-users/delete/{id}', [AdminUserController::class, 'delete']);
-            // Route::get('admin-users/change-status/{id}', [AdminUserController::class, 'change_status']);
+            Route::get('admin-user/list', [AdminUserController::class, 'list']);
+            Route::match(['get', 'post'], 'admin-user/add', [AdminUserController::class, 'add']);
+            Route::match(['get', 'post'], 'admin-user/edit/{id}', [AdminUserController::class, 'edit']);
+            Route::get('admin-user/delete/{id}', [AdminUserController::class, 'delete']);
+            Route::get('admin-user/change-status/{id}', [AdminUserController::class, 'change_status']);
         /* admin users */
     /* access & permission */
     /* masters */
@@ -151,6 +152,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('keyskill/delete/{id}', [KeyskillController::class, 'delete']);
             Route::get('keyskill/change-status/{id}', [KeyskillController::class, 'change_status']);
         /* keyskill */
+        /* itskill */
+            Route::get('itskill/list', [ITskillController::class, 'list']);
+            Route::match(['get', 'post'], 'itskill/add', [ITskillController::class, 'add']);
+            Route::match(['get', 'post'], 'itskill/edit/{id}', [ITskillController::class, 'edit']);
+            Route::get('itskill/delete/{id}', [ITskillController::class, 'delete']);
+            Route::get('itskill/change-status/{id}', [ITskillController::class, 'change_status']);
+        /* itskill */
         /* benefit */
             Route::get('benefit/list', [BenefitController::class, 'list']);
             Route::match(['get', 'post'], 'benefit/add', [BenefitController::class, 'add']);
