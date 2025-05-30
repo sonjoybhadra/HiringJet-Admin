@@ -42,9 +42,14 @@ use App\Http\Controllers\FunctionalAreaController;
 //     return view('welcome');
 // });
 
+// GET route – to display the page
+Route::get('/test-email-function', [AuthController::class, 'showEmailTestPage']);
+
+// POST route – to send the email
+Route::post('/test-email-function', [AuthController::class, 'testEmailFunction']);
+
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('signin', [AuthController::class, 'login'])->name('signin');
-Route::get('test-email-function', [AuthController::class, 'testEmailFunction'])->name('testemailfunction');
 Route::match(['get','post'],'/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotpassword');
 Route::match(['get','post'],'/validate-otp/{id}', [AuthController::class, 'validateOtp'])->name('validateotp');
 Route::match(['get','post'],'/resend-otp/{id}', [AuthController::class, 'resendOtp']);
