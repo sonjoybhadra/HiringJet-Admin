@@ -368,7 +368,7 @@ class RegistrationController extends BaseApiController
             'preferred_designation' => 'nullable|array',
             'preferred_location' => 'nullable|array',
             'preferred_industry' => 'nullable|array',
-            'availabilitie' => 'nullable|integer',
+            'availability' => 'nullable|integer',
         ]);
 
         if($validator->fails()){
@@ -408,18 +408,18 @@ class RegistrationController extends BaseApiController
                             'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
                             'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,
                             'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL,
-                            // 'availabilitie_id' => $request->availabilitie,
+                            'availabilitie_id' => $request->availability,
                             'completed_steps'=> 3,
                         ]);
             if(!empty($request->profile_summery)){
                 $this->calculate_profile_completed_percentage($user->id, 'profile-summary'); //Profile Summary completes
             }
             if(!empty($preferred_designation)){
-                $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes
+                $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Education completes
             }
             if(!empty($request->qualification)){
                 UserEducation::where('user_id', $user->id)->delete();
-                UserEducation::insertGetId([
+                UserEducation::create([
                     'user_id'=> $user->id,
                     'qualification_id'=> $request->qualification,
                     'course_id'=> $request->course,
@@ -428,7 +428,7 @@ class RegistrationController extends BaseApiController
                     'university_id'=> $request->university,
                     'passing_year'=> $request->passing_year
                 ]);
-                $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Education completes
+                $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes
             }
 
             return $this->sendResponse($this->getUserDetails(), 'Your profile completed successfully.');
