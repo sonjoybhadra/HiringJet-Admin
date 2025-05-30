@@ -7,6 +7,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FaqCategoryController;
+use App\Http\Controllers\FaqSubCategoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\IndustryController;
@@ -43,6 +44,7 @@ use App\Http\Controllers\FunctionalAreaController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('signin', [AuthController::class, 'login'])->name('signin');
+Route::get('test-email-function', [AuthController::class, 'testEmailFunction'])->name('testemailfunction');
 Route::match(['get','post'],'/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotpassword');
 Route::match(['get','post'],'/validate-otp/{id}', [AuthController::class, 'validateOtp'])->name('validateotp');
 Route::match(['get','post'],'/resend-otp/{id}', [AuthController::class, 'resendOtp']);
@@ -280,6 +282,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('faq-category/delete/{id}', [FaqCategoryController::class, 'delete']);
             Route::get('faq-category/change-status/{id}', [FaqCategoryController::class, 'change_status']);
         /* faq category */
+        /* faq sub category */
+            Route::get('faq-sub-category/list', [FaqSubCategoryController::class, 'list']);
+            Route::match(['get', 'post'], 'faq-sub-category/add', [FaqSubCategoryController::class, 'add']);
+            Route::match(['get', 'post'], 'faq-sub-category/edit/{id}', [FaqSubCategoryController::class, 'edit']);
+            Route::get('faq-sub-category/delete/{id}', [FaqSubCategoryController::class, 'delete']);
+            Route::get('faq-sub-category/change-status/{id}', [FaqSubCategoryController::class, 'change_status']);
+        /* faq sub category */
         /* faq */
             Route::get('faq/list', [FaqController::class, 'list']);
             Route::match(['get', 'post'], 'faq/add', [FaqController::class, 'add']);

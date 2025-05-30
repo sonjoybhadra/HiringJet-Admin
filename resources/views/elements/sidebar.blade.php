@@ -210,7 +210,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       </li>
     </ul>
   </li>
-  <li class="menu-item active <?=(($pageSegment == 'faq-category' || $pageSegment == 'faq')?'open':'')?>">
+  <li class="menu-item active <?=(($pageSegment == 'faq-category' || $pageSegment == 'faq-sub-category' || $pageSegment == 'faq')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-circle-question"></i>
       <div data-i18n="FAQs">FAQs</div>
@@ -219,6 +219,11 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
       <li class="menu-item <?=(($pageSegment == 'faq-category')?'active':'')?>">
         <a href="<?=url('/faq-category/list')?>" class="menu-link">
           <div data-i18n="FAQ Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Categories</div>
+        </a>
+      </li>
+      <li class="menu-item <?=(($pageSegment == 'faq-sub-category')?'active':'')?>">
+        <a href="<?=url('/faq-sub-category/list')?>" class="menu-link">
+          <div data-i18n="FAQ Sub Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Sub Categories</div>
         </a>
       </li>
       <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">

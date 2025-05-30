@@ -31,8 +31,12 @@ class TableController extends Controller
         if ($table === 'employers') {
             $query->leftJoin('industries', DB::raw("CAST($table.industry_id AS TEXT)"), '=', DB::raw("CAST(industries.id AS TEXT)"));
         }
+        if ($table === 'faq_sub_categories') {
+            $query->leftJoin('faq_categories', DB::raw("CAST($table.faq_category_id AS TEXT)"), '=', DB::raw("CAST(faq_categories.id AS TEXT)"));
+        }
         if ($table === 'faqs') {
             $query->leftJoin('faq_categories', DB::raw("CAST($table.faq_category_id AS TEXT)"), '=', DB::raw("CAST(faq_categories.id AS TEXT)"));
+            $query->leftJoin('faq_sub_categories', DB::raw("CAST($table.faq_sub_category_id AS TEXT)"), '=', DB::raw("CAST(faq_sub_categories.id AS TEXT)"));
         }
         if ($table === 'cities') {
             $query->leftJoin('countries', DB::raw("CAST($table.country_id AS TEXT)"), '=', DB::raw("CAST(countries.id AS TEXT)"));
@@ -56,8 +60,16 @@ class TableController extends Controller
             if ($table === 'employers' && $col === 'industry_id') {
                 return 'industries.name as industry_name';
             }
-            if ($table === 'faqs' && $col === 'faq_category_id') {
+            if ($table === 'faq_sub_categories' && $col === 'faq_category_id') {
                 return 'faq_categories.name as faq_category_name';
+            }
+            if ($table === 'faqs') {
+                if ($col === 'faq_category_id') {
+                    return 'faq_categories.name as faq_category_name';
+                }
+                if ($col === 'faq_sub_category_id') {
+                    return 'faq_sub_categories.name as faq_sub_category_name';
+                }
             }
             if ($table === 'cities' && $col === 'country_id') {
                 return 'countries.name as country_name';
