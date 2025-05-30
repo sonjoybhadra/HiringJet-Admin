@@ -66,6 +66,7 @@ Route::get('/get-proficiency-level', [CommonController::class, 'get_proficiency_
 Route::get('/get-cast-category', [CommonController::class, 'get_cast_category']);
 Route::get('/get-diverse-background', [CommonController::class, 'get_diverse_background']);
 Route::get('/get-employment-type', [CommonController::class, 'get_employment_type']);
+Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 
 
 Route::group([

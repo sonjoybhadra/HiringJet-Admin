@@ -17,9 +17,12 @@ return new class extends Migration
             $table->foreignId('qualification_id')->constrained('qualifications');
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('specialization_id')->constrained('specializations');
-            $table->foreignId('location_id')->constrained('cities')->comment('belongs to cities');
+            $table->foreignId('location_id')->constrained('cities')->nullable()->comment('belongs to cities');
             $table->string('university_id')->nullable();
             $table->integer('passing_year')->nullable();
+            $table->integer('course_start_year')->nullable();
+            $table->integer('course_end_year')->nullable();
+            $table->string('course_type', 50)->nullable();
             $table->float('percentage', 8,2)->nullable();
             $table->string('grade', 10)->nullable();
             $table->boolean('is_active')->default(true);
