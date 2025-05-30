@@ -38,17 +38,17 @@ $controllerRoute = $module['controller_route'];
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
-                  'table' => 'faqs',
-                  'columns' => ['faq_category_id', 'faq_sub_category_id', 'question', 'answer', 'created_at', 'faqs.status'],
-                  'visibleColumns' => ['faq_category_name', 'faq_sub_category_name', 'question', 'answer', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'FAQ Category', 'FAQ Sub Category', 'Question', 'Answer', 'Created At'],
-                  'filename' => "FAQ",
+                  'table' => 'faq_sub_categories',
+                  'columns' => ['faq_category_id', 'name', 'created_at', 'faq_sub_categories.status'],
+                  'visibleColumns' => ['faq_category_name', 'name','created_at'],
+                  'headers' => ['#', 'FAQ Category', 'Name', 'Created At'],
+                  'filename' => "FAQ_Sub_Category",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                    ['column' => 'faqs.status', 'operator' => '!=', 'value' => 3]
+                    ['column' => 'faq_sub_categories.status', 'operator' => '!=', 'value' => 3]
                   ],
-                  'routePrefix' => 'faq',
+                  'routePrefix' => 'faq-sub-category',
                   'showActions' => true, // set to false to hide actions
                   'statusColumn' => 'status', // optional, defaults to 'is_active',
                   'joins' => [
@@ -57,12 +57,6 @@ $controllerRoute = $module['controller_route'];
                         'localKey' => 'faq_category_id',
                         'foreignKey' => 'id',
                         'select' => ['name as faq_category_name']
-                     ],
-                     [
-                        'table' => 'faq_sub_categories',
-                        'localKey' => 'faq_sub_category_id',
-                        'foreignKey' => 'id',
-                        'select' => ['name as faq_sub_category_name']
                      ]
                   ]
                 ])

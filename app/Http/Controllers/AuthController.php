@@ -26,6 +26,13 @@ class AuthController extends Controller
     {
         $this->siteAuthService = new SiteAuthService();
     }
+    public function testEmailFunction(){
+        $to = 'subhomoysamanta1989@gmail.com';
+        $subject = "Test Email Subject On " . date('Y-m-d H:i:s');
+        $message = "Test Email Body On " . date('Y-m-d H:i:s');
+        $this->sendMail($to,$subject,$message);
+        return redirect('/test-email-function/')->with('success_message', 'Test Email Sent Successfully');
+    }
     /* authentication */
         public function showLogin()
         {

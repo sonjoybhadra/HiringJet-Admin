@@ -32,19 +32,15 @@ $controllerRoute = $module['controller_route'];
          <div class="card mb-4">
             <?php
             if($row){
-                $id                     = $row->id;
-                $faq_category_id        = $row->faq_category_id;
-                $faq_sub_category_id    = $row->faq_sub_category_id;
-                $question               = $row->question;
-                $answer                 = $row->answer;
-                $status                 = $row->status;
+                $id                 = $row->id;
+                $faq_category_id    = $row->faq_category_id;
+                $name               = $row->name;
+                $status             = $row->status;
             } else {
-                $id                     = '';
-                $faq_category_id        = '';
-                $faq_sub_category_id    = '';
-                $question               = '';
-                $answer                 = '';
-                $status                 = '';
+                $id                 = '';
+                $faq_category_id    = '';
+                $name               = '';
+                $status             = '';
             }
             ?>
             <div class="card-body">
@@ -61,13 +57,8 @@ $controllerRoute = $module['controller_route'];
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="faq_sub_category_id" class="form-label">FAQ Sub Category <small class="text-danger">*</small></label>
-                            <select class="form-control" type="text" id="faq_sub_category_id" name="faq_sub_category_id" required>
-                                <option value="" selected>Select FAQ Sub Category</option>
-                                <?php if($sub_cats){ foreach($sub_cats as $sub_cat){?>
-                                    <option class="faqsubcat faqcat-<?=$sub_cat->faq_category_id?>" value="<?=$sub_cat->id?>" <?=(($sub_cat->id == $faq_sub_category_id)?'selected':'')?>><?=$sub_cat->name?></option>
-                                <?php } }?>
-                            </select>
+                            <label for="name" class="form-label">Name <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="name" name="name" value="<?=$name?>" required placeholder="Name" autofocus />
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
@@ -75,15 +66,6 @@ $controllerRoute = $module['controller_route'];
                                 <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
                                 <label class="form-check-label" for="status">Active</label>
                             </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="question" class="form-label">Question <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="question" name="question" required placeholder="Question"><?=$question?></textarea>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="answer" class="form-label">Answer <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="answer" name="answer" required placeholder="Answer"><?=$answer?></textarea>
                         </div>
                     </div>
                     <div class="mt-2">
@@ -96,19 +78,4 @@ $controllerRoute = $module['controller_route'];
       </div>
    </div>
 </div>
-@endsection
-@section('scripts')
-<script>
-    $(function(){
-        var faq_category_id = '<?=$faq_sub_category_id?>';
-        $('#faq_sub_category_id .faqsubcat').hide();
-        $('#faq_sub_category_id .faqcat-' + faq_category_id).show();
-
-        $('#faq_category_id').on('change', function(){
-            var faq_category_id = $('#faq_category_id').val();
-            $('#faq_sub_category_id .faqsubcat').hide();
-            $('#faq_sub_category_id .faqcat-' + faq_category_id).show();
-        });
-    })
-</script>
 @endsection

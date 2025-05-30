@@ -36,35 +36,21 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                  'containerId' => 'table1',
-                  'searchId' => 'search1',
-                  'table' => 'faqs',
-                  'columns' => ['faq_category_id', 'faq_sub_category_id', 'question', 'answer', 'created_at', 'faqs.status'],
-                  'visibleColumns' => ['faq_category_name', 'faq_sub_category_name', 'question', 'answer', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'FAQ Category', 'FAQ Sub Category', 'Question', 'Answer', 'Created At'],
-                  'filename' => "FAQ",
-                  'orderBy' => 'id',
-                  'orderType' => 'desc',
-                  'conditions' => [
-                    ['column' => 'faqs.status', 'operator' => '!=', 'value' => 3]
-                  ],
-                  'routePrefix' => 'faq',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'joins' => [
-                     [
-                        'table' => 'faq_categories',
-                        'localKey' => 'faq_category_id',
-                        'foreignKey' => 'id',
-                        'select' => ['name as faq_category_name']
-                     ],
-                     [
-                        'table' => 'faq_sub_categories',
-                        'localKey' => 'faq_sub_category_id',
-                        'foreignKey' => 'id',
-                        'select' => ['name as faq_sub_category_name']
-                     ]
-                  ]
+                'containerId' => 'table1',
+                'searchId' => 'search1',
+                'table' => 'it_skills',
+                'columns' => ['name', 'version', 'publishing_year', 'created_at', 'status'],
+                'visibleColumns' => ['name', 'version', 'publishing_year', 'created_at'],    // used for rendering
+                'headers' => ['#', 'Name', 'Version', 'Publishing Year', 'Created At'],
+                'filename' => "ITskill",
+                'orderBy' => 'id',
+                'orderType' => 'desc',
+                'conditions' => [
+                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
+                ],
+                'routePrefix' => 'itskill',
+                'showActions' => true, // set to false to hide actions
+                'statusColumn' => 'status' // optional, defaults to 'is_active'
                 ])
             </div>
         </div>

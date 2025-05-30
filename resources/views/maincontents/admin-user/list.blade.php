@@ -35,34 +35,29 @@ $controllerRoute = $module['controller_route'];
                <div id="table-overlay-loader" class="text-loader">
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
+                
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
-                  'table' => 'faqs',
-                  'columns' => ['faq_category_id', 'faq_sub_category_id', 'question', 'answer', 'created_at', 'faqs.status'],
-                  'visibleColumns' => ['faq_category_name', 'faq_sub_category_name', 'question', 'answer', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'FAQ Category', 'FAQ Sub Category', 'Question', 'Answer', 'Created At'],
-                  'filename' => "FAQ",
+                  'table' => 'users',
+                  'columns' => ['role_id', 'first_name', 'last_name', 'email', 'country_code', 'phone', 'users.status'],
+                  'visibleColumns' => ['role_name', 'first_name', 'last_name', 'email', 'country_code', 'phone'],
+                  'headers' => ['#', 'Role', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone'],
+                  'filename' => "Admin_User",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                    ['column' => 'faqs.status', 'operator' => '!=', 'value' => 3]
+                    ['column' => 'users.role_id', 'operator' => '=', 'value' => 4]
                   ],
-                  'routePrefix' => 'faq',
+                  'routePrefix' => 'admin-user',
                   'showActions' => true, // set to false to hide actions
                   'statusColumn' => 'status', // optional, defaults to 'is_active',
                   'joins' => [
                      [
-                        'table' => 'faq_categories',
-                        'localKey' => 'faq_category_id',
+                        'table' => 'roles',
+                        'localKey' => 'role_id',
                         'foreignKey' => 'id',
-                        'select' => ['name as faq_category_name']
-                     ],
-                     [
-                        'table' => 'faq_sub_categories',
-                        'localKey' => 'faq_sub_category_id',
-                        'foreignKey' => 'id',
-                        'select' => ['name as faq_sub_category_name']
+                        'select' => ['role_name as role_name']
                      ]
                   ]
                 ])
