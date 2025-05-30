@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\EditProfessionalDetailsController;
 use App\Http\Controllers\Api\EditPersonalDetailsController;
 use App\Http\Controllers\Api\EditEducationalDetailsController;
 use App\Http\Controllers\Api\EditEmploymentDetailsController;
+use App\Http\Controllers\Api\EditResumeController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -64,6 +65,7 @@ Route::get('/get-maritalstatus', [CommonController::class, 'get_maritalstatus'])
 Route::get('/get-proficiency-level', [CommonController::class, 'get_proficiency_level']);
 Route::get('/get-cast-category', [CommonController::class, 'get_cast_category']);
 Route::get('/get-diverse-background', [CommonController::class, 'get_diverse_background']);
+Route::get('/get-employment-type', [CommonController::class, 'get_employment_type']);
 
 
 Route::group([
@@ -94,6 +96,9 @@ Route::group([
 
     Route::get('/get-educational-details', [EditEducationalDetailsController::class, 'getEducationalDetails']);
     Route::post('/post-educational-details', [EditEducationalDetailsController::class, 'postEducationalDetails']);
+
+    Route::delete('/delete-cv', [EditResumeController::class, 'deleteResume']);
+    Route::post('/post-cv', [EditResumeController::class, 'postResume']);
 
 });
 

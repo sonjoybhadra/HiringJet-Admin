@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserEmployment extends Model
 {
@@ -22,7 +23,7 @@ class UserEmployment extends Model
         return $this->BelongsTo(Country::class, 'country_id');
     }
 
-    public function citie(): BelongsTo
+    public function city(): BelongsTo
     {
         return $this->BelongsTo(City::class, 'city_id');
     }
@@ -30,6 +31,33 @@ class UserEmployment extends Model
     public function currency(): BelongsTo
     {
         return $this->BelongsTo(Currency::class, 'currency_id');
+    }
+
+    public function work_level(): BelongsTo
+    {
+        return $this->BelongsTo(CurrentWorkLevel::class, 'work_level');
+    }
+
+    public function notice_period(): BelongsTo
+    {
+        return $this->BelongsTo(Availability::class, 'notice_period');
+    }
+
+    public function skills(): HasMany
+    {
+        return $this->HasMany(UserEmploymentSkill::class, 'user_employment_id');
+    }
+    public function industrys(): HasMany
+    {
+        return $this->HasMany(UserEmploymentIndustry::class, 'user_employment_id');
+    }
+    public function functional_areas(): HasMany
+    {
+        return $this->HasMany(UserEmploymentFunctionalArea::class, 'user_employment_id');
+    }
+    public function park_benefits(): HasMany
+    {
+        return $this->HasMany(UserEmploymentParkBenefit::class, 'user_employment_id');
     }
 
 }

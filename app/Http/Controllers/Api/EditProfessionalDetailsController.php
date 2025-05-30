@@ -15,6 +15,10 @@ use App\Models\UserEmployment;
 use App\Models\UserSkill;
 use App\Models\ProfileComplete;
 use App\Models\UserProfileCompletedPercentage;
+use App\Models\UserEmploymentSkill;
+use App\Models\UserEmploymentIndustry;
+use App\Models\UserEmploymentFunctionalArea;
+use App\Models\UserEmploymentParkBenefit;
 
 class EditProfessionalDetailsController extends BaseApiController
 {
@@ -157,11 +161,11 @@ class EditProfessionalDetailsController extends BaseApiController
         try {
             return $this->sendResponse(
                 UserEmployment::where('user_id', auth()->user()->id)
+                                ->where('is_current_job', 1)
                                 ->with('employer')
                                 ->with('countrie')
-                                ->with('citie')
-                                ->with('BelongsTo')
-                                ->latest()
+                                ->with('city')
+                                ->with('skills')
                                 ->first()
             );
         } catch (\Exception $e) {
@@ -171,30 +175,66 @@ class EditProfessionalDetailsController extends BaseApiController
     /**
      * Post professional details.
     */
-    public function postProfessionalDetails(Request $request)
+    public function postProfessionalDetails(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'keyskills' => 'required|array'
+            'total_experience_years' => 'required|integer',
+            'total_experience_months' => 'required|integer',
+            'industry' => 'required|integer',
+            'functional_area' => 'required|integer',
+            'work_level' => 'required|integer',
+            'salary_currency' => 'required|integer',
+            'current_salary' => 'required|integer',
+            'perk_benefits' => 'required|integer'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            if(!empty($request->keyskills)){
-                foreach($request->keyskills as $keyskill){
-                    UserSkill::insert([
+            UserEmployment::where('id', $id)->update([
+                'total_experience_years'=> $request->total_experience_years,
+                'total_experience_months'=> $request->total_experience_months,
+                'work_level'=> $request->work_level,
+                'currency_id'=> $request->salary_currency,
+                'current_salary'=> $request->current_salary,
+                'is_current_job'=> 1,
+            ]);
+
+            if(!empty($request->industry)){
+                UserEmploymentIndustry::where('user_employment_id', $id)->delete();
+                foreach($request->industry as $industry_id){
+                    UserEmploymentIndustry::insert([
                         'user_id'=> auth()->user()->id,
-                        'keyskill_id'=> $keyskill,
-                        'proficiency_level' => 'Beginner',
-                        'is_primary'=> 1
+                        'user_employment_id'=> $id,
+                        'industry'=> $industry_id,
                     ]);
                 }
-
-                $this->calculate_profile_completed_percentage(auth()->user()->id, 'key-skills'); //Key skills completes
             }
 
-            return $this->sendResponse($this->getUserDetails(), 'Key skills updated successfully.');
+            if(!empty($request->functional_area)){
+                UserEmploymentFunctionalArea::where('user_employment_id', $id)->delete();
+                foreach($request->functional_area as $functional_area_id){
+                    UserEmploymentFunctionalArea::insert([
+                        'user_id'=> auth()->user()->id,
+                        'user_employment_id'=> $id,
+                        'functional_area'=> $functional_area_id,
+                    ]);
+                }
+            }
+
+            if(!empty($request->functional_area)){
+                UserEmploymentParkBenefit::where('user_employment_id', $id)->delete();
+                foreach($request->functional_area as $functional_area_id){
+                    UserEmploymentParkBenefit::insert([
+                        'user_id'=> auth()->user()->id,
+                        'user_employment_id'=> $id,
+                        'perk_benefit'=> $functional_area_id,
+                    ]);
+                }
+            }
+
+            return $this->sendResponse($this->getUserDetails(), 'Professional details updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }

@@ -26,7 +26,14 @@ return new class extends Migration
             $table->integer('working_since_from_month')->nullable();
             $table->integer('working_since_to_year')->nullable();
             $table->integer('working_since_to_month')->nullable();
-            $table->text('note')->nullable();
+
+            $table->foreignId('work_level')->nullable()->constrained('current_work_levels');
+            /* $table->foreignId('industry')->nullable()->constrained('industries');
+            $table->foreignId('functional_area')->nullable()->constrained('functional_areas');
+            $table->foreignId('perk_benefits')->nullable()->constrained('perk_benefits'); */
+
+            $table->string('employment_type')->nullable();
+            $table->integer('notice_period')->nullable()->constrained('availabilities');
             $table->boolean('is_current_job')->default(true);
             $table->boolean('is_active')->default(true);
             $table->softDeletes();

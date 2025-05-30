@@ -64,6 +64,8 @@ class CommonController extends BaseApiController
             'proficiency_level'=> $this->get_proficiency_level(1),
             'cast_category'=> $this->get_cast_category(1),
             'diverse_background'=> $this->get_diverse_background(1),
+            'employment_type'=> $this->get_employment_type(1),
+            'current_work_levels'=> $this->get_current_work_levels(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -387,6 +389,18 @@ class CommonController extends BaseApiController
     public function get_diverse_background($res = '')
     {
         $list = ['Single Parent', 'Working Mother', 'Retired', 'LGBTQ'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse([
+                    $list
+                ], 'Data list.');
+        }
+    }
+
+    public function get_employment_type($res = '')
+    {
+        $list = ['Full Time', 'Internship'];
         if($res != ''){
             return $list;
         }else{
