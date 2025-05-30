@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('user_employment_id')->constrained('user_employments');
-            $table->foreignId('perk_benefit')->nullable()->constrained('perk_benefit');
+            $table->foreignId('perk_benefit')->nullable()->constrained('perk_benefits');
             $table->softDeletes();
             $table->timestamps();
         });
