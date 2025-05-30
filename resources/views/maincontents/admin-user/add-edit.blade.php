@@ -96,7 +96,7 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password <small class="text-danger">*</small></label>
-                            <input class="form-control" type="password" id="password" name="password" placeholder="Password" <?=((empty($row)?'required':'')?> />
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Password" <?=((empty($row))?'required':'')?> />
                             <small class="text-danger">* Leave blank if you do not want to changes password</small>
                         </div>
                     </div>
