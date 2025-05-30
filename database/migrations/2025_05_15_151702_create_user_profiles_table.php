@@ -40,6 +40,7 @@ return new class extends Migration
             $table->string('alt_country_code', 10)->nullable();
             $table->string('alt_phone', 20)->nullable();
             $table->string('diverse_background', 50)->nullable();
+            $table->boolean('is_experienced')->default(false);
             $table->boolean('currently_employed')->default(false);
 
             /*---------- Not required here ---------*/

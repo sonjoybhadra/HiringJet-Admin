@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserEmployment;
-use App\Models\UserEducation;
+use App\Models\UserEmploymentSkill;
 
 class EditEmploymentDetailsController extends BaseApiController
 {
@@ -24,8 +24,12 @@ class EditEmploymentDetailsController extends BaseApiController
                 UserEmployment::where('user_id', auth()->user()->id)
                                 ->with('employer')
                                 ->with('countrie')
-                                ->with('citie')
-                                ->with('BelongsTo')
+                                ->with('city')
+                                ->with('skills')
+                                ->with('notice_period')
+                                ->with('industrys')
+                                ->with('functional_areas')
+                                ->with('park_benefits')
                                 ->first()
             );
         } catch (\Exception $e) {
@@ -36,45 +40,67 @@ class EditEmploymentDetailsController extends BaseApiController
     /**
      * Post personal details.
     */
-    public function updatePersonalDetails(Request $request)
+    public function updatePersonalDetails(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'gender'=> 'required|string',
-            'merital_status'=> 'required|string',
-            'cast_category'=> 'required|string',
-            'dob'=> 'required|date',
-            // 'differently_abled'=> 'required',
-            'career_break'=> 'required',
-            'usa_working_permit'=> 'required|boolean',
-            'other_working_permit_country'=> 'required|integer',
-            'address'=> 'required|string',
-            'city'=> 'required|integer',
-            'pincode'=> 'required|integer',
-            'language' => 'required|array'
+            'total_experience_years' => 'required|integer',
+            'total_experience_months' => 'required|integer',
+            'designation' => 'required|string',
+            'employer' => 'required|string',
+            'industry' => 'required|integer',
+            'functional_area' => 'required|integer',
+            'employment_type' => 'required|integer',
+            'location' => 'required|integer',
+            'is_current_job'=> 'required|boolean',
+            'notice_period'=> 'required|integer',
+            'working_since_from_year' => 'required|integer',
+            'working_since_from_month' => 'required|integer',
+            'working_since_to_year' => 'required|integer',
+            'working_since_to_month' => 'required|integer',
+            'salary_currency' => 'required|integer',
+            'current_salary' => 'required|integer',
+            'skills' => 'required|array',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            UserEmployment::where('id', auth()->user()->id)->update([
-                'date_of_birth'=> $request->dob,
-                'gender'=> $request->gender,
-                'merital_status'=> $request->merital_status,
-                'cast_category'=> $request->cast_category,
-                'career_break'=> $request->career_break,
-                'usa_working_permit'=> $request->career_break,
-                'pasport_country_id'=> $request->other_working_permit_country,
-                'address'=> $request->address,
-                'city_id'=> $request->city,
-                'pincode'=> $request->pincode,
-                'alt_email'=> $request->alt_email,
-                'alt_country_code'=> $request->alt_country_code,
-                'alt_phone'=> $request->alt_phone,
-                'diverse_background'=> $request->diverse_background,
+            if($request->is_current_job == 1){
+                UserEmployment::where('user_id', auth()->user()->id)->update([
+                    'is_current_job'=> 0
+                ]);
+            }
+            UserEmployment::where('id', $id)->update([
+                'total_experience_years'=> $request->total_experience_years,
+                'total_experience_months'=> $request->total_experience_months,
+                'last_designation'=> $request->designation,
+                'employer_id'=> $request->employer,
+                'employment_type'=> $request->employment_type,
+                // 'country_id'=> $request->employer_country,
+                'city_id'=> $request->location,
+                'notice_period'=> $request->notice_period,
+                'working_since_from_year'=> $request->working_since_from_year,
+                'working_since_from_month'=> $request->working_since_from_month,
+                'working_since_to_year'=> $request->working_since_to_year,
+                'working_since_to_month'=> $request->working_since_to_month,
+                'currency_id'=> $request->salary_currency,
+                'current_salary'=> $request->current_salary,
+                'is_current_job'=> $request->is_current_job,
             ]);
 
-            return $this->sendResponse([], 'Professional details updated successfully.');
+            if(!empty($request->skills)){
+                UserEmploymentSkill::where('user_employment_id', $id)->delete();
+                foreach($request->skills as $skill){
+                    UserEmploymentSkill::insert([
+                        'user_id'=> auth()->user()->id,
+                        'user_employment_id'=> $id,
+                        'keyskill_id'=> $skill,
+                    ]);
+                }
+            }
+
+            return $this->sendResponse($this->getUserDetails(), 'Professional details updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
@@ -86,43 +112,60 @@ class EditEmploymentDetailsController extends BaseApiController
     public function postPersonalDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'gender'=> 'required|string',
-            'merital_status'=> 'required|string',
-            'cast_category'=> 'required|string',
-            'dob'=> 'required|date',
-            // 'differently_abled'=> 'required',
-            'career_break'=> 'required',
-            'usa_working_permit'=> 'required|boolean',
-            'other_working_permit_country'=> 'required|integer',
-            'address'=> 'required|string',
-            'city'=> 'required|integer',
-            'pincode'=> 'required|integer',
-            'language' => 'required|array'
+            'total_experience_years' => 'required|integer',
+            'total_experience_months' => 'required|integer',
+            'designation' => 'required|string',
+            'employer' => 'required|string',
+            'industry' => 'required|integer',
+            'functional_area' => 'required|integer',
+            'salary_currency' => 'required|integer',
+            'current_salary' => 'required|integer',
+            'perk_benefits' => 'required|integer',
+            'employment_type' => 'required|integer',
+            'location' => 'required|integer',
+            'is_current_job'=> 'required|boolean',
+            'notice_period'=> 'required|integer',
+            'working_since_from_year' => 'required|integer',
+            'working_since_from_month' => 'required|integer',
+            'working_since_to_year' => 'required|integer',
+            'working_since_to_month' => 'required|integer',
+            'salary_currency' => 'required|integer',
+            'current_salary' => 'required|integer',
+            'skills' => 'required|array',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            UserEmployment::insert([
+            $employment_id = UserEmployment::insertGetId([
                 'user_id'=> auth()->user()->id,
-                'date_of_birth'=> $request->dob,
-                'gender'=> $request->gender,
-                'merital_status'=> $request->merital_status,
-                'cast_category'=> $request->cast_category,
-                'career_break'=> $request->career_break,
-                'usa_working_permit'=> $request->career_break,
-                'pasport_country_id'=> $request->other_working_permit_country,
-                'address'=> $request->address,
-                'city_id'=> $request->city,
-                'pincode'=> $request->pincode,
-                'alt_email'=> $request->alt_email,
-                'alt_country_code'=> $request->alt_country_code,
-                'alt_phone'=> $request->alt_phone,
-                'diverse_background'=> $request->diverse_background,
+                'total_experience_years'=> $request->total_experience_years,
+                'total_experience_months'=> $request->total_experience_months,
+                'last_designation'=> $request->designation,
+                'employer_id'=> $request->employer,
+                // 'country_id'=> $request->employer_country,
+                'city_id'=> $request->location,
+                'currency_id'=> $request->salary_currency,
+                'current_salary'=> $request->current_salary,
+                'working_since_from_year'=> $request->working_since_from_year,
+                'working_since_from_month'=> $request->working_since_from_month,
+                'working_since_to_year'=> $request->working_since_to_year,
+                'working_since_to_month'=> $request->working_since_to_month,
+                'is_current_job'=> 1,
             ]);
 
-            return $this->sendResponse([], 'Professional details added successfully.');
+            if(!empty($request->skills)){
+                foreach($request->skills as $skill){
+                    UserEmploymentSkill::insert([
+                        'user_id'=> auth()->user()->id,
+                        'user_employment_id'=> $employment_id,
+                        'keyskill_id'=> $skill,
+                    ]);
+                }
+            }
+
+            return $this->sendResponse($this->getUserDetails(), 'Professional details updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }

@@ -48,7 +48,7 @@ class RegistrationController extends BaseApiController
             'phone' => 'required|max:15|unique:users',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
-            'currently_employed' => 'required|boolean',//yes/no
+            'is_experienced' => 'required|boolean',//yes/no
             'resume' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
         ]);
 
@@ -60,7 +60,7 @@ class RegistrationController extends BaseApiController
             $otp = mt_rand(1111, 9999);
             $otp_mail_hash = base64_encode($otp);
 
-            $user = User::where('email', $request->email)->where('status', 0)->first();
+            /* $user = User::where('email', $request->email)->where('status', 0)->first();
             if($user){
                 $otp_mail_hash = base64_encode($otp);
                 $user->remember_token = $otp_mail_hash;
@@ -70,7 +70,7 @@ class RegistrationController extends BaseApiController
                 $full_name = $user->first_name.' '.$user->last_name;
                 $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
                 Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
-            }
+            } */
             $image_path = "";
             if (request()->hasFile('resume')) {
                 $file = request()->file('resume');
@@ -99,14 +99,14 @@ class RegistrationController extends BaseApiController
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'currently_employed'=> $request->currently_employed,
+                    'is_experienced'=> $request->is_experienced,
                     'profile_completed_percentage'=> 0,
                     'completed_steps'=> 0
                 ]);
 
                 $this->calculate_profile_completed_percentage($user_id, 'full-name'); //Full name completes
                 if($request->is_whatsapp == 1){
-                    $this->calculate_profile_completed_percentage($user->id, 'whatsapp'); //WhatsApp completes
+                    $this->calculate_profile_completed_percentage($user_id, 'whatsapp'); //WhatsApp completes
                 }
 
                 if($image_path != ""){
