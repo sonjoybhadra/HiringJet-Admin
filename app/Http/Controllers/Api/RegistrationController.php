@@ -408,7 +408,7 @@ class RegistrationController extends BaseApiController
                             'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
                             'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,
                             'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL,
-                            'availabilitie_id' => $request->availability,
+                            'availability_id' => $request->availability,
                             'completed_steps'=> 3,
                         ]);
             if(!empty($request->profile_summery)){
