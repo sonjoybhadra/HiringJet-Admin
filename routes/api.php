@@ -96,7 +96,12 @@ Route::group([
     Route::post('/post-personal-details', [EditPersonalDetailsController::class, 'postPersonalDetails']);
 
     Route::get('/get-educational-details', [EditEducationalDetailsController::class, 'getEducationalDetails']);
+    Route::post('/update-educational-details', [EditEducationalDetailsController::class, 'updateEducationalDetails']);
     Route::post('/post-educational-details', [EditEducationalDetailsController::class, 'postEducationalDetails']);
+
+    Route::get('/get-employment-list', [EditEmploymentDetailsController::class, 'getEmploymentDetails']);
+    Route::post('/update-employment-details/{id}', [EditEmploymentDetailsController::class, 'updatePersonalDetails']);
+    Route::post('/post-employment-details', [EditEmploymentDetailsController::class, 'postPersonalDetails']);
 
     Route::delete('/delete-cv', [EditResumeController::class, 'deleteResume']);
     Route::post('/post-cv', [EditResumeController::class, 'postResume']);
