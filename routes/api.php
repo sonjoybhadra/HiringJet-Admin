@@ -71,7 +71,7 @@ Route::get('/get-diverse-background', [CommonController::class, 'get_diverse_bac
 Route::get('/get-employment-type', [CommonController::class, 'get_employment_type']);
 Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 
-Route::get('/get-faq-category', [FaqController::class, 'getFaqCategory']);
+Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
 
 Route::get('/get-article', [CmsArticleController::class, 'getArticle']);
