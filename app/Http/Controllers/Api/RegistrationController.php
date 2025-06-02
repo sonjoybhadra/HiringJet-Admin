@@ -276,6 +276,7 @@ class RegistrationController extends BaseApiController
                 'profile_image'=> $image_path,
                 'gender'=> $request->gender ? ucfirst($request->gender) : NULL,
                 'nationality_id'=> $request->nationality,
+                'country_id'=> $request->country_id,
                 'city_id'=> $request->location,
                 'pasport_country_id'=> $request->pasport_country,
                 'whatsapp_country_code'=> $request->is_whatsapp == 1 ? $request->country_code : $request->whatsapp_country_code,

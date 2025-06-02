@@ -16,6 +16,11 @@ class UserProfile extends Model
         return $this->BelongsTo(MaritalStatus::class, 'merital_status_id');
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->BelongsTo(Country::class, 'country_id');
+    }
+
     public function city(): BelongsTo
     {
         return $this->BelongsTo(City::class, 'city_id');

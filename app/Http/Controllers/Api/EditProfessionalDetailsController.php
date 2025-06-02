@@ -223,13 +223,13 @@ class EditProfessionalDetailsController extends BaseApiController
                 }
             }
 
-            if(!empty($request->functional_area)){
+            if(!empty($request->perk_benefits)){
                 UserEmploymentParkBenefit::where('user_employment_id', $id)->delete();
-                foreach($request->functional_area as $functional_area_id){
+                foreach($request->perk_benefits as $perk_benefit_id){
                     UserEmploymentParkBenefit::insert([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
-                        'perk_benefit'=> $functional_area_id,
+                        'perk_benefit'=> $perk_benefit_id,
                     ]);
                 }
             }
