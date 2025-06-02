@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\EditEmploymentDetailsController;
 use App\Http\Controllers\Api\EditResumeController;
 
 use App\Http\Controllers\Api\FaqController;
-use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\CmsArticleController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -74,7 +74,7 @@ Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 Route::get('/get-faq-category', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
 
-Route::get('/get-article', [ArticleController::class, 'getArticle']);
+Route::get('/get-article', [CmsArticleController::class, 'getArticle']);
 
 
 Route::group([
