@@ -74,6 +74,7 @@ Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
 
+Route::get('/get-page', [CmsArticleController::class, 'getPage']);
 Route::get('/get-article', [CmsArticleController::class, 'getArticle']);
 
 
