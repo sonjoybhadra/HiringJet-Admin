@@ -43,8 +43,8 @@ class EditResumeController extends BaseApiController
             if (request()->hasFile('resume')) {
                 $file = request()->file('resume');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/profile_resume'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/user/profile_resume/'.$fileName;
+                Storage::disk('public')->put('uploads/user/resume/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/resume/'.$fileName;
 
                 $has_data = UserResume::where('user_id', auth()->user()->id)->first();
                 if($has_data){

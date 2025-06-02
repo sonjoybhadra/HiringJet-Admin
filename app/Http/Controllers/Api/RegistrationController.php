@@ -60,23 +60,12 @@ class RegistrationController extends BaseApiController
             $otp = mt_rand(1111, 9999);
             $otp_mail_hash = base64_encode($otp);
 
-            /* $user = User::where('email', $request->email)->where('status', 0)->first();
-            if($user){
-                $otp_mail_hash = base64_encode($otp);
-                $user->remember_token = $otp_mail_hash;
-                $user->email_verified_at = date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes'));
-                $user->save();
-
-                $full_name = $user->first_name.' '.$user->last_name;
-                $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
-                Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
-            } */
             $image_path = "";
             if (request()->hasFile('resume')) {
                 $file = request()->file('resume');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/profile_resume'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/user/profile_resume/'.$fileName;
+                Storage::disk('public')->put('uploads/user/resume/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/resume/'.$fileName;
             }
             $user_id = User::insertGetId([
                 'role_id'=> $this->job_seeker_role,
@@ -269,8 +258,8 @@ class RegistrationController extends BaseApiController
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/profile_image'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/profile_image/'.$fileName;
+                Storage::disk('public')->put('uploads/user/profile_image/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/profile_image/'.$fileName;
             }
 
             User::where('id', $user->id)->update([
