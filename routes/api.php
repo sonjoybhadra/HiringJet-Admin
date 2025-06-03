@@ -102,7 +102,7 @@ Route::group([
     Route::get('/profile-completed-percentages', [EditProfessionalDetailsController::class, 'getProfileCompletedPercentages']);
 
     Route::get('/get-personal-details', [EditPersonalDetailsController::class, 'getPersonalDetails']);
-    Route::post('/post-personal-details/{id}', [EditPersonalDetailsController::class, 'postPersonalDetails']);
+    Route::post('/post-personal-details', [EditPersonalDetailsController::class, 'postPersonalDetails']);
 
     Route::get('/get-educational-details', [EditEducationalDetailsController::class, 'getEducationalDetails']);
     Route::post('/update-educational-details', [EditEducationalDetailsController::class, 'updateEducationalDetails']);

@@ -178,6 +178,7 @@ class EditProfessionalDetailsController extends BaseApiController
     public function postProfessionalDetails(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'professional_id' => 'nullable|integer',
             'total_experience_years' => 'required|integer',
             'total_experience_months' => 'required|integer',
             'industry' => 'required|integer',
@@ -192,14 +193,35 @@ class EditProfessionalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            UserEmployment::where('id', $id)->update([
-                'total_experience_years'=> $request->total_experience_years,
-                'total_experience_months'=> $request->total_experience_months,
-                'work_level'=> $request->work_level,
-                'currency_id'=> $request->salary_currency,
-                'current_salary'=> $request->current_salary,
-                'is_current_job'=> 1,
-            ]);
+            if(!empty($request->professional_id)){
+                $id = $request->professional_id;
+                UserEmployment::where('id', $id)->update([
+                    'total_experience_years'=> $request->total_experience_years,
+                    'total_experience_months'=> $request->total_experience_months,
+                    'work_level'=> $request->work_level,
+                    'currency_id'=> $request->salary_currency,
+                    'current_salary'=> $request->current_salary,
+                    'is_current_job'=> 1,
+                ]);
+            }else{
+                $id = UserEmployment::insertGetId([
+                    'user_id'=> auth()->user()->id,
+                    'total_experience_years'=> $request->total_experience_years,
+                    'total_experience_months'=> $request->total_experience_months,
+                    'work_level'=> $request->work_level,
+                    // 'last_designation'=> $request->last_designation,
+                    // 'employer_id'=> $request->last_employer,
+                    // 'country_id'=> $request->employer_country,
+                    // 'city_id'=> $request->employer_city,
+                    'currency_id'=> $request->salary_currency,
+                    'current_salary'=> $request->current_salary,
+                    // 'working_since_from_year'=> $request->working_since_from_year,
+                    // 'working_since_from_month'=> $request->working_since_from_month,
+                    // 'working_since_to_year'=> $request->working_since_to_year,
+                    // 'working_since_to_month'=> $request->working_since_to_month,
+                    'is_current_job'=> 1,
+                ]);
+            }
 
             if(!empty($request->industry)){
                 UserEmploymentIndustry::where('user_employment_id', $id)->delete();
