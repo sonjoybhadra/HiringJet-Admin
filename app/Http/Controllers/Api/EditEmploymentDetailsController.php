@@ -38,9 +38,9 @@ class EditEmploymentDetailsController extends BaseApiController
     }
 
     /**
-     * Post personal details.
+     * Post Employment details.
     */
-    public function updatePersonalDetails(Request $request, $id)
+    public function updateEmploymentDetails(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'total_experience_years' => 'required|integer',
@@ -107,9 +107,9 @@ class EditEmploymentDetailsController extends BaseApiController
     }
 
     /**
-     * Post personal details.
+     * Post Employment details.
     */
-    public function postPersonalDetails(Request $request)
+    public function postEmploymentDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'total_experience_years' => 'required|integer',
