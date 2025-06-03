@@ -1,0 +1,366 @@
+<?php
+use App\Helpers\Helper;
+$controllerRoute = $module['controller_route'];
+?>
+@extends('layouts.main')
+@section('content')
+<div class="container-xxl flex-grow-1 container-p-y">
+   <div class="row g-6">
+      <h4><?=$page_header?></h4>
+      <h6 class="breadcrumb-wrapper">
+            <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span>
+            <span class="text-muted fw-light"><a href="<?=url($controllerRoute . '/list/')?>"><?=$module['title']?> List</a> /</span>
+            <?=$page_header?>
+      </h6>
+      <div class="nav-align-top mb-4">
+         <?php if(session('success_message')){?>
+            <div class="alert alert-success alert-dismissible autohide" role="alert">
+               <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-desktop align-top me-2"></i>Success!</h6>
+               <span><?=session('success_message')?></span>
+               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+               </button>
+            </div>
+         <?php }?>
+         <?php if(session('error_message')){?>
+            <div class="alert alert-danger alert-dismissible autohide" role="alert">
+               <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-store align-top me-2"></i>Error!</h6>
+               <span><?=session('error_message')?></span>
+               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+               </button>
+            </div>
+         <?php }?>
+         <div class="card mb-4">
+            <?php
+            if($row){
+                $position_name              = $row->position_name;
+                $status                     = $row->status;
+            } else {
+                $position_name              = '';
+                $status                     = '';
+            }
+            ?>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Validation Wizard -->
+                    <div class="col-12 mb-6">
+                    <small class="text-light fw-medium">Validation</small>
+                    <div id="wizard-validation" class="bs-stepper mt-2">
+                        <div class="bs-stepper-header">
+                        <div class="step" data-target="#account-details-validation">
+                            <button type="button" class="step-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label mt-1">
+                                <span class="bs-stepper-title">Step 1</span>
+                                <span class="bs-stepper-subtitle">Setup Step 1</span>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="line">
+                            <i class="ti ti-chevron-right"></i>
+                        </div>
+                        <div class="step" data-target="#personal-info-validation">
+                            <button type="button" class="step-trigger">
+                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-label">
+                                <span class="bs-stepper-title">Step 2</span>
+                                <span class="bs-stepper-subtitle">Add Step 2</span>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="line">
+                            <i class="ti ti-chevron-right"></i>
+                        </div>
+                        <div class="step" data-target="#social-links-validation">
+                            <button type="button" class="step-trigger">
+                            <span class="bs-stepper-circle">3</span>
+                            <span class="bs-stepper-label">
+                                <span class="bs-stepper-title">Step 3</span>
+                                <span class="bs-stepper-subtitle">Add Step 3</span>
+                            </span>
+                            </button>
+                        </div>
+                        </div>
+                        <div class="bs-stepper-content">
+                        <form id="wizard-validation-form" onSubmit="return false">
+                            <!-- Account Details -->
+                            <div id="account-details-validation" class="content">
+                                <div class="content-header mb-4">
+                                    <h6 class="mb-0">Step 1</h6>
+                                    <small>Enter Your Step 1.</small>
+                                </div>
+                                <div class="row g-6 mt-3">
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="position_name">Position Name</label>
+                                        <input type="text" name="position_name" id="position_name" class="form-control" placeholder="Position Name" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="employer_id">Employer</label>
+                                        <select class="select2" id="employer_id" name="employer_id">
+                                            <option label="" selected></option>
+                                            <?php if($employers){ foreach($employers as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="job_type">Job Type</label>
+                                        <select class="select2" id="job_type" name="job_type">
+                                            <option label="" selected></option>
+                                            <option value="Walk-in">Walk-in</option>
+                                            <option value="Remote">Remote</option>
+                                            <option value="On-Site">On-Site</option>
+                                            <option value="Temp Role">Temp Role</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="location_ids">Location</label>
+                                        <select class="select2" id="location_ids" name="location_ids[]" multiple>
+                                            <option label="" selected></option>
+                                            <?php if($cities){ foreach($cities as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="open_position_number">Number of open positions</label>
+                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" placeholder="Number of open positions" min="1" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="contract_type">Contract Type</label>
+                                        <select class="select2" id="contract_type" name="contract_type">
+                                            <option label="" selected></option>
+                                            <?php if($contract_types){ foreach($contract_types as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <button class="btn btn-label-secondary btn-prev" disabled>
+                                            <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-next">
+                                            <span class="align-middle d-sm-inline-block d-none me-sm-2">Next</span>
+                                            <i class="ti ti-arrow-right ti-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Personal Info -->
+                            <div id="personal-info-validation" class="content">
+                                <div class="content-header mb-4">
+                                    <h6 class="mb-0">Step 2</h6>
+                                    <small>Enter Your Step 2.</small>
+                                </div>
+                                <div class="row g-6 mt-3">
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="job_description">Job Description</label>
+                                        <textarea id="job_description" name="job_description" class="form-control" placeholder="Job Description" rows="5"></textarea>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="requirement">Requirements</label>
+                                        <textarea id="requirement" name="requirement" class="form-control" placeholder="Requirements" rows="5"></textarea>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="skill_ids">Skills</label>
+                                        <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
+                                            <option label="" selected></option>
+                                            <?php if($keyskills){ foreach($keyskills as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="formValidationCountry">Experience Level</label>
+                                        <select class="select2" id="formValidationCountry" name="formValidationCountry">
+                                            <option label="" selected></option>
+                                            <?php if($experiences){ foreach($experiences as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="expected_close_date">Expected Close Date</label>
+                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="currency">Currency</label>
+                                        <select class="select2" id="currency" name="currency">
+                                            <option label="" selected></option>
+                                            <?php if($currencies){ foreach($currencies as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label for="status" class="form-label d-block">Status</label>
+                                        <div class="form-check form-switch mt-0 ">
+                                            <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
+                                            <label class="form-check-label" for="status">Active</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
+                                        <div class="form-check form-switch mt-0 ">
+                                            <input class="form-check-input" type="checkbox" name="is_salary_negotiable" role="switch" id="is_salary_negotiable">
+                                            <label class="form-check-label" for="is_salary_negotiable">YES</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="min_salary">Minimum Salary</label>
+                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="max_salary">Maximum Salary</label>
+                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" />
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="industry">Industry</label>
+                                        <select class="select2" id="industry" name="industry">
+                                            <option label="" selected></option>
+                                            <?php if($industries){ foreach($industries as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="job_category">Job Category</label>
+                                        <select class="select2" id="job_category" name="job_category">
+                                            <option label="" selected></option>
+                                            <?php if($jobcats){ foreach($jobcats as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="department">Department</label>
+                                        <select class="select2" id="department" name="department">
+                                            <option label="" selected></option>
+                                            <?php if($departments){ foreach($departments as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="functional_area">Functional Area</label>
+                                        <select class="select2" id="functional_area" name="functional_area">
+                                            <option label="" selected></option>
+                                            <?php if($functionalareas){ foreach($functionalareas as $select_row){?>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="posting_open_date">Posting Open Date</label>
+                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="posting_close_date">Posting Close Date</label>
+                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" />
+                                    </div>
+
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <button class="btn btn-label-secondary btn-prev">
+                                            <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-next">
+                                            <span class="align-middle d-sm-inline-block d-none me-sm-2">Next</span>
+                                            <i class="ti ti-arrow-right ti-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Social Links -->
+                            <div id="social-links-validation" class="content">
+                                <div class="content-header mb-4">
+                                    <h6 class="mb-0">Step 3</h6>
+                                    <small>Enter Your Step 3.</small>
+                                </div>
+                                <div class="row g-6 mt-3">
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="apply_on_email">Apply To (Email)</label>
+                                        <input type="date" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="apply_on_link">Apply To (Link)</label>
+                                        <input type="date" name="apply_on_link" id="apply_on_link" class="form-control" placeholder="Apply To (Link)" />
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <h6>Office Address (for walk-ins)</h6>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="walkin_address1">Address Line 1</label>
+                                        <input type="text" name="walkin_address1" id="walkin_address1" class="form-control" placeholder="Address Line 1" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="walkin_address2">Address Line 2</label>
+                                        <input type="text" name="walkin_address2" id="walkin_address2" class="form-control" placeholder="Address Line 2" />
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="walkin_country">Country</label>
+                                        <input type="text" name="walkin_country" id="walkin_country" class="form-control" placeholder="Country" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="walkin_state">State</label>
+                                        <input type="text" name="walkin_state" id="walkin_state" class="form-control" placeholder="State" />
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="walkin_city">City</label>
+                                        <input type="text" name="walkin_city" id="walkin_city" class="form-control" placeholder="City" />
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="walkin_pincode">Pincode</label>
+                                        <input type="text" name="walkin_pincode" id="walkin_pincode" class="form-control" placeholder="Pincode" />
+                                        <input type="text" name="walkin_latitude" id="walkin_latitude" class="form-control" placeholder="Latitude" />
+                                        <input type="text" name="walkin_longitude" id="walkin_longitude" class="form-control" placeholder="Longitude" />
+                                    </div>
+
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <button class="btn btn-label-secondary btn-prev">
+                                            <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                        </button>
+                                        <button class="btn btn-success btn-next btn-submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- /Validation Wizard -->
+                </div>
+            </div>
+        </div>
+      </div>
+   </div>
+</div>
+@endsection
+@section('scripts')
+    <!-- Vendors JS -->
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/select2/select2.js"></script>
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/popular.js"></script>
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
+
+    <!-- Page JS -->
+
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-numbered.js"></script>
+    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-validation.js"></script>
+@endsection
