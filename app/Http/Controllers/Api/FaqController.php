@@ -14,7 +14,7 @@ class FaqController extends BaseApiController
 {
     public function getFaqCategory($slug)
     {
-        $main_category = FaqCategory::select('id')->where('slug', $slug)->where('status', 1)->get();
+        $main_category = FaqCategory::select('id')->where('slug', $slug)->where('status', 1)->first();
         $list = [];
         if($main_category){
             $list = FaqSubCategory::select('id', 'name')
