@@ -170,7 +170,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
                                             <option label="" selected></option>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -179,7 +179,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="formValidationCountry" name="formValidationCountry">
                                             <option label="" selected></option>
                                             <?php if($experiences){ foreach($experiences as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -193,7 +193,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="currency" name="currency">
                                             <option label="" selected></option>
                                             <?php if($currencies){ foreach($currencies as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -227,7 +227,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="industry" name="industry">
                                             <option label="" selected></option>
                                             <?php if($industries){ foreach($industries as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -236,7 +236,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="job_category" name="job_category">
                                             <option label="" selected></option>
                                             <?php if($jobcats){ foreach($jobcats as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -246,7 +246,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="department" name="department">
                                             <option label="" selected></option>
                                             <?php if($departments){ foreach($departments as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -255,7 +255,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="functional_area" name="functional_area">
                                             <option label="" selected></option>
                                             <?php if($functionalareas){ foreach($functionalareas as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->id?></option>
+                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>

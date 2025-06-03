@@ -9,6 +9,8 @@ class UserEducation extends Model
 {
     protected $table = 'user_educations';
 
+    protected $fillable = ['user_id', 'qualification_id', 'course_id', 'specialization_id', 'location_id', 'university_id', 'passing_year', 'course_start_year', 'course_end_year', 'course_type', 'percentage', 'grade', 'is_active'];
+
     /**
      * Get the qualification details of associated user.
     */

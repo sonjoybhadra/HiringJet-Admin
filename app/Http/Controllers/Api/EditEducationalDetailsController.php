@@ -28,12 +28,51 @@ class EditEducationalDetailsController extends BaseApiController
                                 ->with('location')
                                 ->with('university')
                                 ->with('specialization')
-                                ->first()
+                                ->get()
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
     }
+    /**
+     * Update educational details.
+    */
+    public function updateEducationalDetails(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'qualification' => 'required|integer',
+            'university' => 'required|integer',
+            'course' => 'required|integer',
+            'specialization' => 'required|integer',
+            'course_type' => 'required|integer',
+            'course_start_year' => 'required|integer',
+            'course_end_year' => 'required|integer',
+            'grade' => 'required|integer',
+            // 'location' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        try {
+            UserEducation::where('id', $id)->update([
+                'qualification_id'=> $request->qualification,
+                'university_id'=> $request->university,
+                'course_id'=> $request->course,
+                'specialization_id'=> $request->specialization,
+                'course_type'=> $request->course_type,
+                'course_start_year'=> $request->course_start_year,
+                'course_end_year'=> $request->course_end_year,
+                'grade'=> $request->grade
+                // 'location_id' => $request->location,
+            ]);
+
+            return $this->sendResponse([], 'Education details updated successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
     /**
      * Post educational details.
     */
@@ -41,39 +80,38 @@ class EditEducationalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'qualification' => 'required|integer',
+            'university' => 'required|integer',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
-            'location' => 'required|integer',
-            'university' => 'required|integer',
-            'passing_year' => 'required|integer',
+            'course_type' => 'required|integer',
+            'course_start_year' => 'required|integer',
+            'course_end_year' => 'required|integer',
+            'grade' => 'required|integer',
+            // 'location' => 'required|integer',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            UserEducation::where('user_id', auth()->user()->id)->update([
-                'resume_headline'=> $request->resume_headline,
+            // UserEducation::where('user_id', auth()->user()->id)->delete();
+            UserEducation::insert([
+                'user_id'=> auth()->user()->id,
+                'qualification_id'=> $request->qualification,
+                'university_id'=> $request->university,
+                'course_id'=> $request->course,
+                'specialization_id'=> $request->specialization,
+                'course_type'=> $request->course_type,
+                'course_start_year'=> $request->course_start_year,
+                'course_end_year'=> $request->course_end_year,
+                'grade'=> $request->grade
+                // 'location_id' => $request->location,
             ]);
 
-            /* if(!empty($request->language)){
-                UserEducation::where('user_id', auth()->user()->id)->delete();
-                foreach($request->language as $index => $language){
-                    UserEducation::insert([
-                        'user_id'=> auth()->user()->id,
-                        'qualification_id'=> $request->qualification,
-                        'course_id'=> $request->course,
-                        'specialization_id'=> $request->specialization,
-                        'location_id' => $request->location,
-                        'university_id'=> $request->university,
-                        'passing_year'=> $request->passing_year
-                    ]);
-                }
-            } */
-
-            return $this->sendResponse([], 'Education details updated successfully.');
+            return $this->sendResponse([], 'Education details added successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
     }
+
 }

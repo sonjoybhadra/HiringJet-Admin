@@ -17,6 +17,10 @@ use App\Http\Controllers\Api\EditProfessionalDetailsController;
 use App\Http\Controllers\Api\EditPersonalDetailsController;
 use App\Http\Controllers\Api\EditEducationalDetailsController;
 use App\Http\Controllers\Api\EditEmploymentDetailsController;
+use App\Http\Controllers\Api\EditResumeController;
+
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\CmsArticleController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -64,6 +68,14 @@ Route::get('/get-maritalstatus', [CommonController::class, 'get_maritalstatus'])
 Route::get('/get-proficiency-level', [CommonController::class, 'get_proficiency_level']);
 Route::get('/get-cast-category', [CommonController::class, 'get_cast_category']);
 Route::get('/get-diverse-background', [CommonController::class, 'get_diverse_background']);
+Route::get('/get-employment-type', [CommonController::class, 'get_employment_type']);
+Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
+
+Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
+Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
+
+Route::get('/get-page', [CmsArticleController::class, 'getPage']);
+Route::get('/get-article', [CmsArticleController::class, 'getArticle']);
 
 
 Route::group([
@@ -93,7 +105,15 @@ Route::group([
     Route::post('/post-personal-details', [EditPersonalDetailsController::class, 'postPersonalDetails']);
 
     Route::get('/get-educational-details', [EditEducationalDetailsController::class, 'getEducationalDetails']);
+    Route::post('/update-educational-details', [EditEducationalDetailsController::class, 'updateEducationalDetails']);
     Route::post('/post-educational-details', [EditEducationalDetailsController::class, 'postEducationalDetails']);
+
+    Route::get('/get-employment-list', [EditEmploymentDetailsController::class, 'getEmploymentDetails']);
+    Route::post('/update-employment-details/{id}', [EditEmploymentDetailsController::class, 'updatePersonalDetails']);
+    Route::post('/post-employment-details', [EditEmploymentDetailsController::class, 'postPersonalDetails']);
+
+    Route::delete('/delete-cv', [EditResumeController::class, 'deleteResume']);
+    Route::post('/post-cv', [EditResumeController::class, 'postResume']);
 
 });
 

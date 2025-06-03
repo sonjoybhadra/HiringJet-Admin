@@ -54,7 +54,7 @@ class CommonController extends BaseApiController
             'onlineprofile'=> $this->get_onlineprofile(1),
             'qualification'=> $this->get_qualification(1),
             'course'=> $this->get_course(1),
-            'specialization'=> $this->get_specialization(1),
+            // 'specialization'=> $this->get_specialization(1),
             'nationality'=> $this->get_nationality(1),
             'religion'=> $this->get_religion(1),
             'university'=> $this->get_university(1),
@@ -64,6 +64,8 @@ class CommonController extends BaseApiController
             'proficiency_level'=> $this->get_proficiency_level(1),
             'cast_category'=> $this->get_cast_category(1),
             'diverse_background'=> $this->get_diverse_background(1),
+            'employment_type'=> $this->get_employment_type(1),
+            'course_type'=> $this->get_course_type(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -83,9 +85,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -95,9 +98,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -107,9 +111,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -122,9 +127,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -134,16 +140,21 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
-    public function get_city($country_id)
+    public function get_city($country_id = '')
     {
+        $sql = City::select('id', 'name')->where('status', 1);
+        if($country_id != ''){
+            $sql->where('country_id', $country_id);
+        }
         return $this->sendResponse(
-            City::select('id', 'name')->where('status', 1)->where('country_id', $country_id)->get(),
+            $sql->get(),
             'List'
         );
     }
@@ -154,9 +165,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -169,9 +181,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -181,9 +194,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -193,9 +207,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -205,9 +220,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -217,9 +233,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -229,9 +246,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -241,9 +259,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -253,9 +272,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -267,25 +287,30 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
-    public function get_specialization($res = '')
+    public function get_specialization(Request $request)
     {
-        $list = Specialization::select('id', 'name')->where('status', 1)
+        $sql = Specialization::select('id', 'name')->where('status', 1)
                             ->with('qualification')
-                            ->with('course')
-                            ->get();
-        if($res != ''){
-            return $list;
-        }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+                            ->with('course');
+        if(!empty($request->qualification_id)){
+            $sql->where('qualification_id', $request->qualification_id);
         }
+        if(!empty($request->course_id)){
+            $sql->where('course_id', $request->course_id);
+        }
+        $list = $sql->get();
+
+        return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
     }
 
     public function get_nationality($res = '')
@@ -294,9 +319,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -306,9 +332,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -318,9 +345,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -330,9 +358,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -342,9 +371,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -354,9 +384,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -366,9 +397,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -378,9 +410,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -390,9 +423,36 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_employment_type($res = '')
+    {
+        $list = ['Full Time', 'Internship'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_course_type($res = '')
+    {
+        $list = ['Full Time', 'Part Time', 'Correspenence/ Distance learning'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 

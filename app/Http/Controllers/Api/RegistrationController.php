@@ -48,7 +48,7 @@ class RegistrationController extends BaseApiController
             'phone' => 'required|max:15|unique:users',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
-            'currently_employed' => 'required|boolean',//yes/no
+            'is_experienced' => 'required|boolean',//yes/no
             'resume' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
         ]);
 
@@ -60,23 +60,12 @@ class RegistrationController extends BaseApiController
             $otp = mt_rand(1111, 9999);
             $otp_mail_hash = base64_encode($otp);
 
-            $user = User::where('email', $request->email)->where('status', 0)->first();
-            if($user){
-                $otp_mail_hash = base64_encode($otp);
-                $user->remember_token = $otp_mail_hash;
-                $user->email_verified_at = date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes'));
-                $user->save();
-
-                $full_name = $user->first_name.' '.$user->last_name;
-                $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
-                Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
-            }
             $image_path = "";
             if (request()->hasFile('resume')) {
                 $file = request()->file('resume');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/profile_resume'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/user/profile_resume/'.$fileName;
+                Storage::disk('public')->put('uploads/user/resume/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/resume/'.$fileName;
             }
             $user_id = User::insertGetId([
                 'role_id'=> $this->job_seeker_role,
@@ -99,14 +88,14 @@ class RegistrationController extends BaseApiController
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'currently_employed'=> $request->currently_employed,
+                    'is_experienced'=> $request->is_experienced,
                     'profile_completed_percentage'=> 0,
                     'completed_steps'=> 0
                 ]);
 
                 $this->calculate_profile_completed_percentage($user_id, 'full-name'); //Full name completes
                 if($request->is_whatsapp == 1){
-                    $this->calculate_profile_completed_percentage($user->id, 'whatsapp'); //WhatsApp completes
+                    $this->calculate_profile_completed_percentage($user_id, 'whatsapp'); //WhatsApp completes
                 }
 
                 if($image_path != ""){
@@ -269,8 +258,8 @@ class RegistrationController extends BaseApiController
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/profile_image'.$fileName, file_get_contents($file));
-                $image_path = 'storage/uploads/profile_image/'.$fileName;
+                Storage::disk('public')->put('uploads/user/profile_image/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/profile_image/'.$fileName;
             }
 
             User::where('id', $user->id)->update([
@@ -287,6 +276,7 @@ class RegistrationController extends BaseApiController
                 'profile_image'=> $image_path,
                 'gender'=> $request->gender ? ucfirst($request->gender) : NULL,
                 'nationality_id'=> $request->nationality,
+                'country_id'=> $request->country_id,
                 'city_id'=> $request->location,
                 'pasport_country_id'=> $request->pasport_country,
                 'whatsapp_country_code'=> $request->is_whatsapp == 1 ? $request->country_code : $request->whatsapp_country_code,
@@ -368,7 +358,7 @@ class RegistrationController extends BaseApiController
             'preferred_designation' => 'nullable|array',
             'preferred_location' => 'nullable|array',
             'preferred_industry' => 'nullable|array',
-            'availabilitie' => 'nullable|integer',
+            'availability' => 'nullable|integer',
         ]);
 
         if($validator->fails()){
@@ -408,18 +398,18 @@ class RegistrationController extends BaseApiController
                             'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
                             'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,
                             'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL,
-                            // 'availabilitie_id' => $request->availabilitie,
+                            'availability_id' => $request->availability,
                             'completed_steps'=> 3,
                         ]);
             if(!empty($request->profile_summery)){
                 $this->calculate_profile_completed_percentage($user->id, 'profile-summary'); //Profile Summary completes
             }
             if(!empty($preferred_designation)){
-                $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes
+                $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Education completes
             }
             if(!empty($request->qualification)){
                 UserEducation::where('user_id', $user->id)->delete();
-                UserEducation::insertGetId([
+                UserEducation::create([
                     'user_id'=> $user->id,
                     'qualification_id'=> $request->qualification,
                     'course_id'=> $request->course,
@@ -428,7 +418,7 @@ class RegistrationController extends BaseApiController
                     'university_id'=> $request->university,
                     'passing_year'=> $request->passing_year
                 ]);
-                $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Education completes
+                $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes
             }
 
             return $this->sendResponse($this->getUserDetails(), 'Your profile completed successfully.');
