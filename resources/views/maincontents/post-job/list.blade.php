@@ -32,13 +32,14 @@ $controllerRoute = $module['controller_route'];
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
             </div>
             <div class="card-body">
-               
+               <!-- table will goes here -->
             </div>
         </div>
       </div>
    </div>
 </div>
 @endsection
+
 @section('scripts')
 <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/table.js"></script>
 @endsection
