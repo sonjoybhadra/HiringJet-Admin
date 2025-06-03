@@ -14,10 +14,11 @@ class CmsArticleController extends BaseApiController
     public function getPage(Request $request)
     {
         $sql = Page::where('status', 1);
-        if(!empty($requesr->slug)){
-            $sql->where('page_slug', $request->slug);
+        if(!empty($request->slug)){
+            $list = $sql->where('page_slug', $request->slug)->first();
+        }else{
+            $list = $sql->get();
         }
-        $list = $sql->get();
         return $this->sendResponse(
                 $list,
                 'CMS list.'
@@ -27,10 +28,11 @@ class CmsArticleController extends BaseApiController
     public function getArticle(Request $request)
     {
         $sql = Article::where('status', 1);
-        if(!empty($requesr->slug)){
-            $sql->where('page_slug', $request->slug);
+        if(!empty($request->slug)){
+            $list = $sql->where('page_slug', $request->slug)->first();
+        }else{
+            $list = $sql->get();
         }
-        $list = $sql->get();
         return $this->sendResponse(
                 $list,
                 'Article list.'
