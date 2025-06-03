@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Industry extends Model
+class Department extends Model
 {
     use SoftDeletes;
 
     public function postJobs()
     {
-        return $this->hasMany(PostJob::class, 'industry');
+        return $this->hasMany(PostJob::class, 'department');
     }
 }

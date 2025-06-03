@@ -36,22 +36,21 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                  'containerId' => 'table1',
-                  'searchId' => 'search1',
-                  'table' => 'countries',
-                  'columns' => ['name', 'country_code', 'country_short_code', 'country_flag', 'created_at', 'status'],
-                  'visibleColumns' => ['name', 'country_code', 'country_short_code', 'country_flag', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Name', 'Country ISD Code', 'Country Short Code', 'Country Flag', 'Created At'],
-                  'filename' => "Country",
-                  'orderBy' => 'id',
-                  'orderType' => 'desc',
-                  'conditions' => [
+                'containerId' => 'table1',
+                'searchId' => 'search1',
+                'table' => 'contract_types',
+                'columns' => ['name', 'created_at', 'status'],
+                'visibleColumns' => ['name', 'created_at'],    // used for rendering
+                'headers' => ['#', 'Name', 'Created At'],
+                'filename' => "Contract_Type",
+                'orderBy' => 'id',
+                'orderType' => 'desc',
+                'conditions' => [
                     ['column' => 'status', 'operator' => '!=', 'value' => 3]
-                  ],
-                  'routePrefix' => 'country',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'imageColumns' => ['country_flag']
+                ],
+                'routePrefix' => 'contract-type',
+                'showActions' => true, // set to false to hide actions
+                'statusColumn' => 'status' // optional, defaults to 'is_active'
                 ])
             </div>
         </div>

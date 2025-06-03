@@ -32,27 +32,7 @@ $controllerRoute = $module['controller_route'];
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
             </div>
             <div class="card-body">
-               <div id="table-overlay-loader" class="text-loader">
-                  Fetching data. Please wait <span id="dot-animation">.</span>
-               </div>
-                @include('components.table', [
-                  'containerId' => 'table1',
-                  'searchId' => 'search1',
-                  'table' => 'countries',
-                  'columns' => ['name', 'country_code', 'country_short_code', 'country_flag', 'created_at', 'status'],
-                  'visibleColumns' => ['name', 'country_code', 'country_short_code', 'country_flag', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Name', 'Country ISD Code', 'Country Short Code', 'Country Flag', 'Created At'],
-                  'filename' => "Country",
-                  'orderBy' => 'id',
-                  'orderType' => 'desc',
-                  'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
-                  ],
-                  'routePrefix' => 'country',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'imageColumns' => ['country_flag']
-                ])
+               
             </div>
         </div>
       </div>
