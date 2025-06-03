@@ -29,49 +29,54 @@
     // Account details
     const FormValidation1 = FormValidation.formValidation(wizardValidationFormStep1, {
       fields: {
-        formValidationUsername: {
+        position_name: {
           validators: {
             notEmpty: {
-              message: 'The name is required'
+              message: 'Position Name is required'
             },
             stringLength: {
               min: 6,
               max: 30,
-              message: 'The name must be more than 6 and less than 30 characters long'
+              message: 'Position Name must be more than 6 and less than 30 characters long'
             },
             regexp: {
               regexp: /^[a-zA-Z0-9 ]+$/,
-              message: 'The name can only consist of alphabetical, number and space'
+              message: 'Position Name can only consist of alphabetical, number and space'
             }
           }
         },
-        formValidationEmail: {
+        employer_id: {
           validators: {
             notEmpty: {
-              message: 'The Email is required'
-            },
-            emailAddress: {
-              message: 'The value is not a valid email address'
+              message: 'Employer is required'
             }
           }
         },
-        formValidationPass: {
+        job_type: {
           validators: {
             notEmpty: {
-              message: 'The password is required'
+              message: 'Job Type is required'
             }
           }
         },
-        formValidationConfirmPass: {
+        location_ids: {
           validators: {
             notEmpty: {
-              message: 'The Confirm Password is required'
-            },
-            identical: {
-              compare: function () {
-                return wizardValidationFormStep1.querySelector('[name="formValidationPass"]').value;
-              },
-              message: 'The password and its confirm are not the same'
+              message: 'Location is required'
+            }
+          }
+        },
+        open_position_number: {
+          validators: {
+            notEmpty: {
+              message: 'Number of open positions is required'
+            }
+          }
+        },
+        contract_type: {
+          validators: {
+            notEmpty: {
+              message: 'Contract Type is required'
             }
           }
         }
@@ -103,34 +108,34 @@
     // Personal info
     const FormValidation2 = FormValidation.formValidation(wizardValidationFormStep2, {
       fields: {
-        formValidationFirstName: {
-          validators: {
-            notEmpty: {
-              message: 'The first name is required'
-            }
-          }
-        },
-        formValidationLastName: {
-          validators: {
-            notEmpty: {
-              message: 'The last name is required'
-            }
-          }
-        },
-        formValidationCountry: {
-          validators: {
-            notEmpty: {
-              message: 'The Country is required'
-            }
-          }
-        },
-        formValidationLanguage: {
-          validators: {
-            notEmpty: {
-              message: 'The Languages is required'
-            }
-          }
-        }
+        // formValidationFirstName: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The first name is required'
+        //     }
+        //   }
+        // },
+        // formValidationLastName: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The last name is required'
+        //     }
+        //   }
+        // },
+        // formValidationCountry: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The Country is required'
+        //     }
+        //   }
+        // },
+        // formValidationLanguage: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The Languages is required'
+        //     }
+        //   }
+        // }
       },
       plugins: {
         trigger: new FormValidation.plugins.Trigger(),
@@ -178,46 +183,46 @@
     // Social links
     const FormValidation3 = FormValidation.formValidation(wizardValidationFormStep3, {
       fields: {
-        formValidationTwitter: {
-          validators: {
-            notEmpty: {
-              message: 'The Twitter URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        },
-        formValidationFacebook: {
-          validators: {
-            notEmpty: {
-              message: 'The Facebook URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        },
-        formValidationGoogle: {
-          validators: {
-            notEmpty: {
-              message: 'The Google URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        },
-        formValidationLinkedIn: {
-          validators: {
-            notEmpty: {
-              message: 'The LinkedIn URL is required'
-            },
-            uri: {
-              message: 'The URL is not proper'
-            }
-          }
-        }
+        // formValidationTwitter: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The Twitter URL is required'
+        //     },
+        //     uri: {
+        //       message: 'The URL is not proper'
+        //     }
+        //   }
+        // },
+        // formValidationFacebook: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The Facebook URL is required'
+        //     },
+        //     uri: {
+        //       message: 'The URL is not proper'
+        //     }
+        //   }
+        // },
+        // formValidationGoogle: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The Google URL is required'
+        //     },
+        //     uri: {
+        //       message: 'The URL is not proper'
+        //     }
+        //   }
+        // },
+        // formValidationLinkedIn: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'The LinkedIn URL is required'
+        //     },
+        //     uri: {
+        //       message: 'The URL is not proper'
+        //     }
+        //   }
+        // }
       },
       plugins: {
         trigger: new FormValidation.plugins.Trigger(),

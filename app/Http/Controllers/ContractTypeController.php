@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
-use App\Models\FaqCategory;
+use App\Models\ContractType;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
@@ -15,25 +15,25 @@ use Session;
 use Hash;
 use DB;
 
-class FaqCategoryController extends Controller
+class ContractTypeController extends Controller
 {
     protected $siteAuthService;
     public function __construct()
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'FAQ Category',
-            'controller'        => 'FaqCategoryController',
-            'controller_route'  => 'faq-category',
+            'title'             => 'Contract Type',
+            'controller'        => 'ContractTypeController',
+            'controller_route'  => 'contract-type',
             'primary_key'       => 'id',
-            'table_name'        => 'faq_categories',
+            'table_name'        => 'contract_types',
         );
     }
     /* list */
         public function list(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
-            $page_name                      = 'faq-category.list';
+            $page_name                      = 'contract-type.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -61,10 +61,9 @@ class FaqCategoryController extends Controller
                     /* user activity */
                     $fields = [
                         'name'              => strip_tags($postData['name']),
-                        'slug'              => Helper::clean(strip_tags($postData['name'])),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    FaqCategory::insert($fields);
+                    ContractType::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -72,7 +71,7 @@ class FaqCategoryController extends Controller
             }
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Add';
-            $page_name                      = 'faq-category.add-edit';
+            $page_name                      = 'contract-type.add-edit';
             $data['row']                    = [];
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
@@ -83,8 +82,8 @@ class FaqCategoryController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
-            $page_name                      = 'faq-category.add-edit';
-            $data['row']                    = FaqCategory::where('id', '=', $id)->first();
+            $page_name                      = 'contract-type.add-edit';
+            $data['row']                    = ContractType::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
@@ -93,10 +92,9 @@ class FaqCategoryController extends Controller
                 if($this->validate($request, $rules)){
                     $fields = [
                         'name'              => strip_tags($postData['name']),
-                        'slug'              => Helper::clean(strip_tags($postData['name'])),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);
+                    ContractType::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -121,12 +119,12 @@ class FaqCategoryController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = FaqCategory::find($id);
+            $model                          = ContractType::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);
+            ContractType::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -145,7 +143,7 @@ class FaqCategoryController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = FaqCategory::find($id);
+            $model                          = ContractType::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;

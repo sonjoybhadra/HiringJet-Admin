@@ -46,6 +46,7 @@ class CountryController extends Controller
                 $rules = [
                     'name'                      => 'required',
                     'country_code'              => 'required',
+                    'country_short_code'        => 'required',
                     'country_flag'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
@@ -79,6 +80,7 @@ class CountryController extends Controller
                     $fields = [
                         'name'                      => strtoupper(strip_tags($postData['name'])),
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
+                        'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
                         'country_flag'              => env('UPLOADS_URL') . $upload_folder . '/' . $country_flag,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
@@ -107,6 +109,7 @@ class CountryController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'                      => 'required',
+                    'country_short_code'        => 'required',
                     'country_code'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
@@ -130,6 +133,7 @@ class CountryController extends Controller
                     $fields = [
                         'name'                      => strtoupper(strip_tags($postData['name'])),
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
+                        'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
                         'country_flag'              => $countryFlag,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];

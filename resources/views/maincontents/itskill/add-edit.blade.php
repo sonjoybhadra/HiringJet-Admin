@@ -53,7 +53,24 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <div class="col-md-6">
                             <label for="version" class="form-label">Version <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="version" name="version" value="<?=$version?>" required placeholder="Version" />
+                            <input type="text" name="input-tags" class="form-control" id="input-tags">
+                            <div id="validation-msg" style="color:red; font-size: 0.9em;"></div>
+                            <div id="input-tags-error" class="error"></div>
+
+                            <textarea class="form-control" name="version" id="version" style="display:none;"><?=$version?></textarea>
+                            <small class="text-primary">Type a comma after each version</small>
+                            <div id="badge-container">
+                                <?php
+                                if($version != ''){
+                                    $deal_keywords = explode(",", $version);
+                                    if(!empty($deal_keywords)){
+                                    for($k=0;$k<count($deal_keywords);$k++){
+                                ?>
+                                    <span class="badge" style="background-color: #092b61; margin-right:5px;"><?=$deal_keywords[$k]?> <span class="remove" data-tag="<?=$deal_keywords[$k]?>">&times;</span></span>
+                                <?php } }
+                                }
+                                ?>
+                            </div>
                         </div>
 
                         <div class="col-md-6 mt-3">
@@ -78,4 +95,51 @@ $controllerRoute = $module['controller_route'];
       </div>
    </div>
 </div>
+@endsection
+@section('scripts')
+<script type="text/javascript">
+    $(document).ready(function () {
+        var tagsArray = [];
+        var beforeData = $('#version').val();
+        if (beforeData.length > 0) {
+            tagsArray = beforeData.split(',');
+        }
+
+        $('#input-tags').on('input', function () {
+            var input = $(this).val().trim();
+            if (input.length > 0) {
+                $(this).removeAttr('required'); // remove required
+                // $('#input-tags-error').hide();  // hide any previous error
+            }
+            $('#validation-msg').text('').hide();  // 🛠️ Hide old error immediately
+            // When comma is typed
+            if (input.includes(',')) {
+                var tags = input.split(',');
+                tags.forEach(function (tag) {
+                    tag = tag.trim();
+                    if (tag.length > 0) {   
+                        if (!tagsArray.includes(tag)) {
+                            tagsArray.push(tag);
+                            $('#badge-container').append(
+                                '<span class="badge" style="background-color: #092b61; margin-right:5px;">' + tag + ' <span class="remove" data-tag="' + tag + '">&times;</span></span>'
+                            );
+                        }
+                    }
+                });
+                $('#version').val(tagsArray.join(','));
+                $(this).val('');
+            }
+        });
+
+        // Remove tag handler
+        $(document).on('click', '.remove', function () {
+            var tag = $(this).data('tag');
+            tagsArray = tagsArray.filter(function (item) {
+                return item !== tag;
+            });
+            $(this).parent().remove();
+            $('#version').val(tagsArray.join(','));
+        });
+    });
+</script>
 @endsection

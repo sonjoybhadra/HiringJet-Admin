@@ -6,7 +6,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
-use App\Models\FaqCategory;
+use App\Models\PostJob;
+use App\Models\Employer;
+use App\Models\City;
+use App\Models\ContractType;
+use App\Models\Keyskill;
+use App\Models\ExperienceLevel;
+use App\Models\Currency;
+use App\Models\Industry;
+use App\Models\JobCategory;
+use App\Models\Department;
+use App\Models\FunctionalArea;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
@@ -15,25 +25,25 @@ use Session;
 use Hash;
 use DB;
 
-class FaqCategoryController extends Controller
+class PostJobController extends Controller
 {
     protected $siteAuthService;
     public function __construct()
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'FAQ Category',
-            'controller'        => 'FaqCategoryController',
-            'controller_route'  => 'faq-category',
+            'title'             => 'Posting Job',
+            'controller'        => 'PostJobController',
+            'controller_route'  => 'post-job',
             'primary_key'       => 'id',
-            'table_name'        => 'faq_categories',
+            'table_name'        => 'post_jobs',
         );
     }
     /* list */
         public function list(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
-            $page_name                      = 'faq-category.list';
+            $page_name                      = 'post-job.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -54,17 +64,16 @@ class FaqCategoryController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                            'activity_details'  => $postData['position_name'] . ' ' . $this->data['title'] . ' Added',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
                     $fields = [
-                        'name'              => strip_tags($postData['name']),
-                        'slug'              => Helper::clean(strip_tags($postData['name'])),
+                        'name'              => strip_tags($postData['position_name']),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    FaqCategory::insert($fields);
+                    PostJob::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -72,8 +81,18 @@ class FaqCategoryController extends Controller
             }
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Add';
-            $page_name                      = 'faq-category.add-edit';
+            $page_name                      = 'post-job.add-edit';
             $data['row']                    = [];
+            $data['employers']              = Employer::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['contract_types']         = ContractType::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['keyskills']              = Keyskill::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['experiences']            = ExperienceLevel::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['currencies']             = Currency::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['industries']             = Industry::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['departments']            = Department::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -83,8 +102,8 @@ class FaqCategoryController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
-            $page_name                      = 'faq-category.add-edit';
-            $data['row']                    = FaqCategory::where('id', '=', $id)->first();
+            $page_name                      = 'post-job.add-edit';
+            $data['row']                    = PostJob::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
@@ -92,11 +111,10 @@ class FaqCategoryController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
-                        'name'              => strip_tags($postData['name']),
-                        'slug'              => Helper::clean(strip_tags($postData['name'])),
+                        'name'              => strip_tags($postData['position_name']),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);
+                    PostJob::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -104,7 +122,7 @@ class FaqCategoryController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                            'activity_details'  => $postData['position_name'] . ' ' . $this->data['title'] . ' Updated',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
@@ -121,12 +139,12 @@ class FaqCategoryController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = FaqCategory::find($id);
+            $model                          = PostJob::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);
+            PostJob::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -134,7 +152,7 @@ class FaqCategoryController extends Controller
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
                     'activity_type'     => 3,
-                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'activity_details'  => $model->position_name . ' ' . $this->data['title'] . ' Deleted',
                     'platform_type'     => 'WEB',
                 ];
                 UserActivity::insert($activityData);
@@ -145,7 +163,7 @@ class FaqCategoryController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = FaqCategory::find($id);
+            $model                          = PostJob::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;
@@ -157,7 +175,7 @@ class FaqCategoryController extends Controller
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
                         'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
+                        'activity_details'  => $model->position_name . ' ' . $this->data['title'] . ' Deactivated',
                         'platform_type'     => 'WEB',
                     ];
                     UserActivity::insert($activityData);
@@ -172,7 +190,7 @@ class FaqCategoryController extends Controller
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
                         'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
+                        'activity_details'  => $model->position_name . ' ' . $this->data['title'] . ' Activated',
                         'platform_type'     => 'WEB',
                     ];
                     UserActivity::insert($activityData);

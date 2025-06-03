@@ -37,6 +37,10 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\FunctionalAreaController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ContractTypeController;
+use App\Http\Controllers\ExperienceLevelController;
+use App\Http\Controllers\PostJobController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -278,6 +282,27 @@ Route::middleware(['auth'])->group(function () {
             Route::get('specialization/delete/{id}', [SpecializationController::class, 'delete']);
             Route::get('specialization/change-status/{id}', [SpecializationController::class, 'change_status']);
         /* specialization */
+        /* department */
+            Route::get('department/list', [DepartmentController::class, 'list']);
+            Route::match(['get', 'post'], 'department/add', [DepartmentController::class, 'add']);
+            Route::match(['get', 'post'], 'department/edit/{id}', [DepartmentController::class, 'edit']);
+            Route::get('department/delete/{id}', [DepartmentController::class, 'delete']);
+            Route::get('department/change-status/{id}', [DepartmentController::class, 'change_status']);
+        /* department */
+        /* contract type */
+            Route::get('contract-type/list', [ContractTypeController::class, 'list']);
+            Route::match(['get', 'post'], 'contract-type/add', [ContractTypeController::class, 'add']);
+            Route::match(['get', 'post'], 'contract-type/edit/{id}', [ContractTypeController::class, 'edit']);
+            Route::get('contract-type/delete/{id}', [ContractTypeController::class, 'delete']);
+            Route::get('contract-type/change-status/{id}', [ContractTypeController::class, 'change_status']);
+        /* contract type */
+        /* experience level */
+            Route::get('experience-level/list', [ExperienceLevelController::class, 'list']);
+            Route::match(['get', 'post'], 'experience-level/add', [ExperienceLevelController::class, 'add']);
+            Route::match(['get', 'post'], 'experience-level/edit/{id}', [ExperienceLevelController::class, 'edit']);
+            Route::get('experience-level/delete/{id}', [ExperienceLevelController::class, 'delete']);
+            Route::get('experience-level/change-status/{id}', [ExperienceLevelController::class, 'change_status']);
+        /* experience level */
     /* masters */
     /* FAQs */
         /* faq category */
@@ -323,4 +348,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('article/delete/{id}', [ArticleController::class, 'delete']);
         Route::get('article/change-status/{id}', [ArticleController::class, 'change_status']);
     /* article */
+    /* post job */
+        Route::get('post-job/list', [PostJobController::class, 'list']);
+        Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
+        Route::match(['get', 'post'], 'post-job/edit/{id}', [PostJobController::class, 'edit']);
+        Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);
+        Route::get('post-job/change-status/{id}', [PostJobController::class, 'change_status']);
+    /* post job */
 });

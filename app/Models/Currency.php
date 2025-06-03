@@ -17,4 +17,9 @@ class Currency extends Model
     {
         return $this->BelongsTo(Country::class, 'country_id');
     }
+
+    public function postJobs()
+    {
+        return $this->hasMany(PostJob::class, 'currency');
+    }
 }
