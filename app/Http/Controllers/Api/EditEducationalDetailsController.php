@@ -44,7 +44,7 @@ class EditEducationalDetailsController extends BaseApiController
             'university' => 'required|integer',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
-            'course_type' => 'required|integer',
+            'course_type' => 'required|string',
             'course_start_year' => 'required|integer',
             'course_end_year' => 'required|integer',
             'grade' => 'required|string',
@@ -83,10 +83,10 @@ class EditEducationalDetailsController extends BaseApiController
             'university' => 'required|integer',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
-            'course_type' => 'required|integer',
+            'course_type' => 'required|string',
             'course_start_year' => 'required|integer',
             'course_end_year' => 'required|integer',
-            'grade' => 'required|integer',
+            'grade' => 'required|string',
             // 'location' => 'required|integer',
         ]);
 
