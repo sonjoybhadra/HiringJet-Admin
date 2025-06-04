@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email', 100);
             $table->string('country_code', 10);
             $table->string('phone', 20);
+            $table->dateTime('phone_verified_at')->nullable();
             $table->string('whatsapp_country_code', 10)->nullable();
             $table->string('whatsapp_number', 20)->nullable();
             $table->string('profile_image')->nullable();

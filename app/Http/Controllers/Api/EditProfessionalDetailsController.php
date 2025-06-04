@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserResume;
-use App\Models\UserEducation;
+use App\Models\UserItSkill;
 use App\Models\UserEmployment;
 use App\Models\UserSkill;
 use App\Models\ProfileComplete;
@@ -113,7 +113,7 @@ class EditProfessionalDetailsController extends BaseApiController
     {
         try {
             return $this->sendResponse(
-                UserSkill::where('user_id', auth()->user()->id)
+                UserItSkill::where('user_id', auth()->user()->id)
                     ->with('key_skills')
                     ->get()
             );
@@ -127,7 +127,10 @@ class EditProfessionalDetailsController extends BaseApiController
     public function postItskills(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'itskills' => 'required|array'
+            'itkill_id' => 'required|integer',
+            'version' => 'required|integer',
+            'exp_year' => 'required|integer',
+            'exp_month' => 'required|integer',
         ]);
 
         if($validator->fails()){
@@ -135,14 +138,13 @@ class EditProfessionalDetailsController extends BaseApiController
         }
         try {
             if(!empty($request->keyskills)){
-                foreach($request->keyskills as $keyskill){
-                    UserSkill::insert([
-                        'user_id'=> auth()->user()->id,
-                        'keyskill_id'=> $keyskill,
-                        'proficiency_level' => 'Beginner',
-                        'is_primary'=> 1
-                    ]);
-                }
+                UserItSkill::insert([
+                    'user_id'=> auth()->user()->id,
+                    'itkill_id'=> $request->itkill_id,
+                    'last_used'=> $request->last_used,
+                    'exp_year'=> $request->exp_year,
+                    'exp_month'=> $request->exp_month,
+                ]);
 
                 $this->calculate_profile_completed_percentage(auth()->user()->id, 'key-skills'); //Key skills completes
             }

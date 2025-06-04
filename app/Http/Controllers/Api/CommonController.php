@@ -29,6 +29,7 @@ use App\Models\MostCommonEmail;
 use App\Models\Language;
 use App\Models\Religion;
 use App\Models\MaritalStatus;
+use App\Models\ItSkill;
 
 use App\Models\Nationality;
 
@@ -68,6 +69,7 @@ class CommonController extends BaseApiController
             'course_type'=> $this->get_course_type(1),
             'report_bug_category'=> $this->get_report_bug_category(1),
             'interestedIn'=> $this->get_interestedIn(1),
+            'itSkill'=> $this->get_itSkill(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -475,6 +477,19 @@ class CommonController extends BaseApiController
     public function get_interestedIn($res = '')
     {
         $list = ['CV Search', 'Job Posting', 'Employer Branding', 'Salary Tool', 'Power Your Career Site', 'Not Sure'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_itSkill($res = '')
+    {
+        $list = ItSkill::select('name')->where('status', 1)->get();
         if($res != ''){
             return $list;
         }else{

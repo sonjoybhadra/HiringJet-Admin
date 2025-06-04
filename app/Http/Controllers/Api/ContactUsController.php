@@ -19,7 +19,7 @@ class ContactUsController extends BaseApiController
             'phone' => 'required|string',
             'city' => 'required|integer',
             'organization' => 'required|string',
-            'interested_in' => 'required|string'
+            // 'interested_in' => 'required|string'
         ]);
 
         if($validator->fails()){

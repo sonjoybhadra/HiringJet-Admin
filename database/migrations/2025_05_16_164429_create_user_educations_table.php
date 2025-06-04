@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('qualification_id')->constrained('qualifications');
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('specialization_id')->constrained('specializations');
-            $table->foreignId('location_id')->constrained('cities')->nullable()->comment('belongs to cities');
+            $table->foreignId('location_id')->nullable()->constrained('cities')->nullOnDelete()->comment('belongs to cities');
             $table->string('university_id')->nullable();
             $table->integer('passing_year')->nullable();
             $table->integer('course_start_year')->nullable();
