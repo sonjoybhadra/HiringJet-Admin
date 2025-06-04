@@ -17,10 +17,9 @@ class EditResumeController extends BaseApiController
         try{
             $has_data = UserResume::where('user_id', auth()->user()->id)->first();
             if($has_data){
+                $data_path = str_replace("public/storage/", "", $has_data->resume);
                 UserResume::find($has_data->id)->delete();
-                if (file_exists($has_data->resume)) {
-                    unlink($has_data->resume);
-                }
+                Storage::disk('public')->delete($data_path);
             }
 
             return $this->sendResponse([], 'CV deleted successfully.');
@@ -48,9 +47,9 @@ class EditResumeController extends BaseApiController
 
                 $has_data = UserResume::where('user_id', auth()->user()->id)->first();
                 if($has_data){
-                    if (file_exists($has_data->resume)) {
-                        unlink($has_data->resume);
-                    }
+                    $data_path = str_replace("public/storage/", "", $has_data->resume);
+                    Storage::disk('public')->delete($data_path);
+
                     UserResume::where('id', $has_data->id)->update([
                         'resume' => $image_path,
                         'is_default' => 1

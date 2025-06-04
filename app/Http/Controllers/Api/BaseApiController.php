@@ -96,7 +96,7 @@ class BaseApiController extends Controller
         $profile_data = UserProfile::select('profile_completed_percentage')
                                                         ->where('user_id', $user_id)
                                                         ->first();
-        $profile_completed_percentage = $profile_data->profile_completed_percentage;
+        $profile_completed_percentage = $profile_data ? $profile_data->profile_completed_percentage : 0;
 
         $create_data_array = [];
         if(!$this->get_profile_completed_status($user_id, $slug)){
