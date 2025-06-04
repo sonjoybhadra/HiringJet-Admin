@@ -18,7 +18,8 @@ class ContactUsController extends BaseApiController
             'email' => 'required|string',
             'phone' => 'required|string',
             'city' => 'required|integer',
-            'organization' => 'required|string'
+            'organization' => 'required|string',
+            'interested_in' => 'required|string'
         ]);
 
         if($validator->fails()){
@@ -32,6 +33,7 @@ class ContactUsController extends BaseApiController
                 'phone'=> $request->phone,
                 'city_id'=> $request->city,
                 'organization'=> $request->organization,
+                'interested_in'=> $request->interested_in,
             ]);
 
             return $this->sendResponse($this->getUserDetails(), 'Contact us request is submitted successfully.');

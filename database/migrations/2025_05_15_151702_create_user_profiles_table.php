@@ -42,22 +42,6 @@ return new class extends Migration
             $table->string('diverse_background', 50)->nullable();
             $table->boolean('is_experienced')->default(false);
             $table->boolean('currently_employed')->default(false);
-
-            /*---------- Not required here ---------*/
-            /* $table->integer('total_experience_years')->nullable();
-            $table->integer('total_experience_months')->nullable();
-            $table->string('last_designation')->nullable();
-            $table->string('last_employer_name')->nullable();
-            $table->foreignId('employer_country_id')->nullable();
-            $table->foreignId('employer_city_id')->nullable();
-            $table->float('current_salary', 15, 2)->nullable();
-            $table->foreignId('current_salary_currency_id')->nullable();
-            $table->integer('working_since_from_year')->nullable();
-            $table->integer('working_since_from_month')->nullable();
-            $table->integer('working_since_to_year')->nullable();
-            $table->integer('working_since_to_month')->nullable(); */
-            /*---------- Not required here ---------*/
-
             $table->text('profile_summery')->nullable();
             $table->text('preferred_designation')->nullable();
             $table->text('preferred_location')->nullable();

@@ -67,6 +67,7 @@ class CommonController extends BaseApiController
             'employment_type'=> $this->get_employment_type(1),
             'course_type'=> $this->get_course_type(1),
             'report_bug_category'=> $this->get_report_bug_category(1),
+            'interestedIn'=> $this->get_interestedIn(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -461,6 +462,19 @@ class CommonController extends BaseApiController
     public function get_report_bug_category($res = '')
     {
         $list = ['Suggest Improvements', 'Feedback on Paid Services', 'Report Bug', 'Any Complaints / Report Abuse', ' Appreciation'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_interestedIn($res = '')
+    {
+        $list = ['CV Search', 'Job Posting', 'Employer Branding', 'Salary Tool', 'Power Your Career Site', 'Not Sure'];
         if($res != ''){
             return $list;
         }else{

@@ -25,11 +25,16 @@ use App\Http\Controllers\Api\CmsArticleController;
 use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\ReportBugController;
 
+use App\Http\Controllers\Api\LinkedInAuthController;
+
 Route::post('/login', [AuthController::class, 'login']);
 
 //Login with Google & Linkdin
 Route::post('/google-login', [AuthController::class, 'loginWithGoogle']);
 Route::post('/linkedin-login', [AuthController::class, 'loginWithLinkedIn']);
+
+Route::get('/linkedin/redirect', [LinkedInAuthController::class, 'redirect']);
+Route::get('/linkedin/callback', [LinkedInAuthController::class, 'callback']);
 
 Route::post('/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
@@ -74,6 +79,7 @@ Route::get('/get-diverse-background', [CommonController::class, 'get_diverse_bac
 Route::get('/get-employment-type', [CommonController::class, 'get_employment_type']);
 Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 Route::get('/get-report-bug-category', [CommonController::class, 'get_report_bug_category']);
+Route::get('/get-interested-in', [CommonController::class, 'get_interestedIn']);
 
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
@@ -112,7 +118,7 @@ Route::group([
     Route::post('/post-personal-details', [EditPersonalDetailsController::class, 'postPersonalDetails']);
 
     Route::get('/get-educational-details', [EditEducationalDetailsController::class, 'getEducationalDetails']);
-    Route::post('/update-educational-details', [EditEducationalDetailsController::class, 'updateEducationalDetails']);
+    Route::post('/update-educational-details/{id}', [EditEducationalDetailsController::class, 'updateEducationalDetails']);
     Route::post('/post-educational-details', [EditEducationalDetailsController::class, 'postEducationalDetails']);
 
     Route::get('/get-employment-list', [EditEmploymentDetailsController::class, 'getEmploymentDetails']);

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone', 20);
             $table->integer('city_id')->nullable()->constrained('cities');
             $table->string('organization', 100);
-            $table->text('interested_in')->nullable();
+            $table->string('interested_in', 50);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -47,7 +47,7 @@ class EditEducationalDetailsController extends BaseApiController
             'course_type' => 'required|integer',
             'course_start_year' => 'required|integer',
             'course_end_year' => 'required|integer',
-            'grade' => 'required|integer',
+            'grade' => 'required|string',
             // 'location' => 'required|integer',
         ]);
 
