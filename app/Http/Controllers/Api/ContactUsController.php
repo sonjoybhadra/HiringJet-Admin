@@ -27,7 +27,7 @@ class ContactUsController extends BaseApiController
         }
         try {
             ContactUs::insertGetId([
-                'user_id'=> auth()->user()->id??NULL,
+                'user_id'=> auth()->check() ? auth()->user()->id : NULL,
                 'name'=> $request->name,
                 'email'=> $request->email,
                 'phone'=> $request->phone,

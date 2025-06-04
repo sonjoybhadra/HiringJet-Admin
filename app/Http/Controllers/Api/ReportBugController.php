@@ -26,7 +26,7 @@ class ReportBugController extends BaseApiController
         }
         try {
             ReportBug::insertGetId([
-                'user_id'=> auth()->user()->id??NULL,
+                'user_id'=> auth()->check() ? auth()->user()->id : NULL,
                 'email'=> $request->email,
                 'phone'=> $request->phone,
                 'category'=> $request->category,
