@@ -36,7 +36,7 @@ class ContactUsController extends BaseApiController
                 'interested_in'=> $request->interested_in,
             ]);
 
-            return $this->sendResponse($this->getUserDetails(), 'Contact us request is submitted successfully.');
+            return $this->sendResponse([], 'Contact us request is submitted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }

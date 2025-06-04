@@ -34,7 +34,7 @@ class ReportBugController extends BaseApiController
                 'source'=> $request->source,
             ]);
 
-            return $this->sendResponse($this->getUserDetails(), 'Report bug is submitted successfully.');
+            return $this->sendResponse([], 'Report bug is submitted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
