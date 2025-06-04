@@ -175,7 +175,7 @@ class EditProfessionalDetailsController extends BaseApiController
     /**
      * Post professional details.
     */
-    public function postProfessionalDetails(Request $request, $id)
+    public function postProfessionalDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'professional_id' => 'nullable|integer',

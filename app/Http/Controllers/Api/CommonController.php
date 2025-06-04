@@ -66,6 +66,7 @@ class CommonController extends BaseApiController
             'diverse_background'=> $this->get_diverse_background(1),
             'employment_type'=> $this->get_employment_type(1),
             'course_type'=> $this->get_course_type(1),
+            'report_bug_category'=> $this->get_report_bug_category(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -447,6 +448,19 @@ class CommonController extends BaseApiController
     public function get_course_type($res = '')
     {
         $list = ['Full Time', 'Part Time', 'Correspenence/ Distance learning'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_report_bug_category($res = '')
+    {
+        $list = ['Suggest Improvements', 'Feedback on Paid Services', 'Report Bug', 'Any Complaints / Report Abuse', ' Appreciation'];
         if($res != ''){
             return $list;
         }else{

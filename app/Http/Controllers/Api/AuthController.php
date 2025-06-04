@@ -166,7 +166,7 @@ class AuthController extends BaseApiController
     {
         $code = $request->code;
         try{
-            $response = Http::asForm()->post('https://www.linkedin.com/oauth/v2/accessToken', [
+            $response = Http::asForm()->post(env('LINKEDIN_AUTH_URL'), [
                 'grant_type' => 'authorization_code',
                 'code' => $code,
                 'redirect_uri' => 'http://localhost:3000/linkedin/callback',
@@ -175,7 +175,7 @@ class AuthController extends BaseApiController
             ]);
 
             if (!$response->ok()) {
-                return response()->json(['error' => 'Failed to get access token'], 400);
+                return $this->sendError('Authentication Error', 'Failed to get access token', 400);
             }
 
             $accessToken = $response->json()['access_token'];
@@ -185,7 +185,7 @@ class AuthController extends BaseApiController
             $emailData = Http::withToken($accessToken)->get('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))');
 
             if (!$profile->ok() || !$emailData->ok()) {
-                return response()->json(['error' => 'Failed to fetch LinkedIn user'], 400);
+                return $this->sendError('Authentication Error', 'Failed to fetch LinkedIn user', 400);
             }
 
             $email = $emailData->json()['elements'][0]['handle~']['emailAddress'];
