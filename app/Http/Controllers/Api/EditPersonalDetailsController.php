@@ -52,8 +52,10 @@ class EditPersonalDetailsController extends BaseApiController
             'usa_working_permit'=> 'required|boolean',
             'other_working_permit_country'=> 'required|integer',
             'address'=> 'required|string',
+            'country_id'=> 'required|integer',
             'city'=> 'required|integer',
             'pincode'=> 'required|integer',
+            'religion_id'=> 'required|integer',
             'language' => 'required|array'
         ]);
 
@@ -70,8 +72,10 @@ class EditPersonalDetailsController extends BaseApiController
                 'usa_working_permit'=> $request->career_break,
                 'pasport_country_id'=> $request->other_working_permit_country,
                 'address'=> $request->address,
+                'country_id'=> $request->country_id,
                 'city_id'=> $request->city,
                 'pincode'=> $request->pincode,
+                'religion_id'=> $request->religion_id,
                 'alt_email'=> $request->alt_email,
                 'alt_country_code'=> $request->alt_country_code,
                 'alt_phone'=> $request->alt_phone,

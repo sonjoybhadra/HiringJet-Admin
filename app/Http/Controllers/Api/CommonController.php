@@ -178,7 +178,7 @@ class CommonController extends BaseApiController
 
     public function get_currency($res = '')
     {
-        $list = Currency::select('name')
+        $list = Currency::select('id', 'name')
                         ->where('status', 1)
                         ->where('name','<>','')
                         ->with('country')
@@ -489,7 +489,7 @@ class CommonController extends BaseApiController
 
     public function get_itSkill($res = '')
     {
-        $list = ItSkill::select('name')->where('status', 1)->get();
+        $list = ItSkill::select('id', 'name')->where('status', 1)->get();
         if($res != ''){
             return $list;
         }else{
