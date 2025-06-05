@@ -85,14 +85,8 @@ class AuthController extends BaseApiController
     {
         try {
             return $this->sendResponse(
-                User::where('id', auth()->user()->id)
-                                ->with('user_profile')
-                                ->with('user_education')
-                                ->with('user_skills')
-                                ->with('user_profile_completed_percentages')
-                                ->with('user_languages')
-                                ->with('user_role')
-                                ->first()
+                $this->getUserDetails(),
+                'User Details'
             );
         } catch (JWTException $exception) {
             return $this->sendError('Error', 'Sorry, something went wrong, unable to fetch user details.',  Response::HTTP_INTERNAL_SERVER_ERROR);
