@@ -31,7 +31,7 @@ class EditResumeController extends BaseApiController
     public function postResume(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'resume' => 'nullable|mimes:pdf,doc,docx|max:2048', // max:2048 = 2MB
+            'cv' => 'nullable|mimes:pdf,doc,docx|max:2048', // max:2048 = 2MB
         ]);
 
         if($validator->fails()){
@@ -39,11 +39,11 @@ class EditResumeController extends BaseApiController
         }
 
         try{
-            if (request()->hasFile('resume')) {
-                $file = request()->file('resume');
+            if (request()->hasFile('cv')) {
+                $file = request()->file('cv');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/resume/'.$fileName, file_get_contents($file));
-                $image_path = 'public/storage/uploads/user/resume/'.$fileName;
+                Storage::disk('public')->put('uploads/user/cv/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/cv/'.$fileName;
 
                 $has_data = UserResume::where('user_id', auth()->user()->id)->first();
                 if($has_data){
@@ -51,13 +51,13 @@ class EditResumeController extends BaseApiController
                     Storage::disk('public')->delete($data_path);
 
                     UserResume::where('id', $has_data->id)->update([
-                        'resume' => $image_path,
+                        'cv' => $image_path,
                         'is_default' => 1
                     ]);
                 }else{
                     UserResume::insert([
                         'user_id' => auth()->user()->id,
-                        'resume' => $image_path,
+                        'cv' => $image_path,
                         'is_default' => 1
                     ]);
                     $this->calculate_profile_completed_percentage(auth()->user()->id, 'upload-cv'); //CV Uploads completes

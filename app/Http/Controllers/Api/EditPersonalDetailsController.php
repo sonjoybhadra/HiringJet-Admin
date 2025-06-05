@@ -9,10 +9,7 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Models\UserResume;
-use App\Models\ProfileComplete;
 use App\Models\UserLanguage;
-use App\Models\UserProfileCompletedPercentage;
 
 class EditPersonalDetailsController extends BaseApiController
 {

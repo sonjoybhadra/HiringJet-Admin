@@ -49,7 +49,7 @@ class RegistrationController extends BaseApiController
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
             'is_experienced' => 'required|boolean',//yes/no
-            'resume' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
+            'cv' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
         ]);
 
         if($validator->fails()){
@@ -61,11 +61,11 @@ class RegistrationController extends BaseApiController
             $otp_mail_hash = base64_encode($otp);
 
             $image_path = "";
-            if (request()->hasFile('resume')) {
-                $file = request()->file('resume');
+            if (request()->hasFile('cv')) {
+                $file = request()->file('cv');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/resume/'.$fileName, file_get_contents($file));
-                $image_path = 'public/storage/uploads/user/resume/'.$fileName;
+                Storage::disk('public')->put('uploads/user/cv/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/cv/'.$fileName;
             }
             $user_id = User::insertGetId([
                 'role_id'=> $this->job_seeker_role,
@@ -101,7 +101,7 @@ class RegistrationController extends BaseApiController
                 if($image_path != ""){
                     UserResume::insert([
                         'user_id' => $user_id,
-                        'resume' => $image_path,
+                        'cv' => $image_path,
                         'is_default' => 1
                     ]);
                     $this->calculate_profile_completed_percentage($user_id, 'upload-cv'); //CV Uploads completes

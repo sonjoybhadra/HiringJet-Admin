@@ -9,7 +9,6 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Models\UserResume;
 use App\Models\UserItSkill;
 use App\Models\UserEmployment;
 use App\Models\UserSkill;
