@@ -113,8 +113,9 @@ class EditProfessionalDetailsController extends BaseApiController
         try {
             return $this->sendResponse(
                 UserItSkill::where('user_id', auth()->user()->id)
-                    ->with('key_skills')
-                    ->get()
+                    ->with('it_skills')
+                    ->get(),
+                'Itskills details'
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
@@ -136,17 +137,13 @@ class EditProfessionalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            if(!empty($request->keyskills)){
-                UserItSkill::insert([
-                    'user_id'=> auth()->user()->id,
-                    'itkill_id'=> $request->itkill_id,
-                    'last_used'=> $request->last_used,
-                    'exp_year'=> $request->exp_year,
-                    'exp_month'=> $request->exp_month,
-                ]);
-
-                $this->calculate_profile_completed_percentage(auth()->user()->id, 'key-skills'); //Key skills completes
-            }
+            UserItSkill::insert([
+                'user_id'=> auth()->user()->id,
+                'itkill_id'=> $request->itkill_id,
+                'last_used'=> $request->last_used,
+                'exp_year'=> $request->exp_year,
+                'exp_month'=> $request->exp_month,
+            ]);
 
             return $this->sendResponse($this->getUserDetails(), 'Key skills updated successfully.');
         } catch (\Exception $e) {

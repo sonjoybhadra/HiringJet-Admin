@@ -178,7 +178,7 @@ class CommonController extends BaseApiController
 
     public function get_currency($res = '')
     {
-        $list = Country::select('id', 'currency_code')
+        $list = Country::select('id', 'currency_code as name')
                         ->where('status', 1)
                         ->where('currency_code','<>','')
                         ->get();
@@ -497,6 +497,21 @@ class CommonController extends BaseApiController
                     'Data list.'
                 );
         }
+    }
+
+    public function get_city_by_param(Request $request)
+    {
+        $sql = City::select('id', 'name')->where('status', 1);
+        if(!empty($request->country_id)){
+            $sql->where('country_id', $request->country_id);
+        }
+        if(!empty($request->key)){
+            $sql->where('name', 'like',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->with('country')->get(),
+            'List'
+        );
     }
 
 }

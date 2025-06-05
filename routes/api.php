@@ -83,6 +83,7 @@ Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 Route::get('/get-report-bug-category', [CommonController::class, 'get_report_bug_category']);
 Route::get('/get-interested-in', [CommonController::class, 'get_interestedIn']);
 Route::get('/get-it-skill', [CommonController::class, 'get_itSkill']);
+Route::get('/get-city-by-param', [CommonController::class, 'get_city_by_param']);
 
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
