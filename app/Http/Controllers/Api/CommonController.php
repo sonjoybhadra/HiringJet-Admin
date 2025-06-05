@@ -181,7 +181,7 @@ class CommonController extends BaseApiController
         $list = Currency::select('id', 'name')
                         ->where('status', 1)
                         ->where('name','<>','')
-                        ->with('country')
+                        // ->with('country')
                         ->get();
         if($res != ''){
             return $list;
