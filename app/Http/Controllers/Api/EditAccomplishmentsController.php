@@ -289,7 +289,7 @@ class EditAccomplishmentsController extends BaseApiController
                 Storage::disk('public')->put('uploads/user/work/'.$fileName, file_get_contents($file));
                 $image_path = 'public/storage/uploads/user/work/'.$fileName;
             }
-            UserCertification::insert([
+            UserWorkSample::insert([
                 'user_id'=> auth()->user()->id,
                 'sample_title'=> $request->sample_title,
                 'sample_url'=> $request->sample_url,
