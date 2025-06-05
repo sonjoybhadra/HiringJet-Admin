@@ -501,15 +501,15 @@ class CommonController extends BaseApiController
 
     public function get_city_by_param(Request $request)
     {
-        $sql = City::select('id', 'name')->where('status', 1);
+        $sql = City::select('id', 'name')->where('status', 1)->with('country');
         if(!empty($request->country_id)){
             $sql->where('country_id', $request->country_id);
         }
         if(!empty($request->key)){
-            $sql->where('name', 'like',  '%'.strtolower($request->key).'%');
+            $sql->where('name', 'like',  '%'.$request->key.'%');
         }
         return $this->sendResponse(
-            $sql->with('country')->get(),
+            $sql->get(),
             'List'
         );
     }

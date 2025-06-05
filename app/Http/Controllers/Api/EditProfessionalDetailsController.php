@@ -145,7 +145,7 @@ class EditProfessionalDetailsController extends BaseApiController
                 'exp_month'=> $request->exp_month,
             ]);
 
-            return $this->sendResponse($this->getUserDetails(), 'Key skills added successfully.');
+            return $this->sendResponse($this->getUserDetails(), 'It skills added successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
@@ -174,7 +174,7 @@ class EditProfessionalDetailsController extends BaseApiController
                 'exp_month'=> $request->exp_month,
             ]);
 
-            return $this->sendResponse($this->getUserDetails(), 'Key skills updated successfully.');
+            return $this->sendResponse($this->getUserDetails(), 'It skills updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
