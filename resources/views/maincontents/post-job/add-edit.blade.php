@@ -3,6 +3,71 @@ use App\Helpers\Helper;
 $controllerRoute = $module['controller_route'];
 ?>
 @extends('layouts.main')
+
+<script>
+    let autocomplete;
+    let address1Field;
+    let address2Field;
+    let postalField;
+    
+    function initAutocomplete() {
+        address1Field = document.querySelector("#walkin_address1");
+        address2Field = document.querySelector("#walkin_address2");
+        postalField = document.querySelector("#walkin_pincode");
+        autocomplete = new google.maps.places.Autocomplete(address1Field, {
+        componentRestrictions: { country: [] },
+        fields: ["address_components", "geometry", "formatted_address"],
+        types: ["address"],
+        });
+        address1Field.focus();
+        autocomplete.addListener("place_changed", fillInAddress);
+    }
+    
+    function fillInAddress() {
+        const place = autocomplete.getPlace();
+        let address1 = "";
+        let postcode = "";
+        for (const component of place.address_components) {
+        const componentType = component.types[0];
+        switch (componentType) {
+            case "postal_code": {
+            postcode = `${component.long_name}${postcode}`;
+            break;
+            }
+            case "postal_code_suffix": {
+            postcode = `${postcode}-${component.long_name}`;
+            break;
+            }
+            case "street_number": {
+            document.querySelector("#walkin_address2").value = component.long_name;
+            break;
+            }
+            case "route": {
+            document.querySelector("#walkin_city").value = component.long_name;
+            break;
+            }
+            case "locality": {
+            document.querySelector("#walkin_city").value = component.long_name;
+            break;
+            }
+            case "administrative_area_level_1": {
+            document.querySelector("#walkin_state").value = component.long_name;
+            break;
+            }
+            case "country":
+            document.querySelector("#walkin_country").value = component.long_name;
+            break;
+            }
+        }
+        address1Field.value = place.formatted_address;
+        postalField.value = postcode;
+        document.querySelector("#walkin_latitude").value = place.geometry.location.lat();
+        document.querySelector("#walkin_longitude").value = place.geometry.location.lng();
+        address2Field.focus();
+    }
+    window.initAutocomplete = initAutocomplete;
+</script>
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
@@ -32,11 +97,69 @@ $controllerRoute = $module['controller_route'];
          <div class="card mb-4">
             <?php
             if($row){
-                $position_name              = $row->position_name;
-                $status                     = $row->status;
+                $position_name                      = $row->position_name;
+                $employer_id                        = $row->employer_id;
+                $job_type                           = $row->job_type;
+                $location_ids                       = (($row->location_ids != '')?json_decode($row->location_ids):[]);
+                $open_position_number               = $row->open_position_number;
+                $contract_type                      = $row->contract_type;
+                $job_description                    = $row->job_description;
+                $requirement                        = $row->requirement;
+                $skill_ids                          = (($row->skill_ids != '')?json_decode($row->skill_ids):[]);
+                $experience_level                   = $row->experience_level;
+                $expected_close_date                = $row->expected_close_date;
+                $currency                           = $row->currency;
+                $min_salary                         = $row->min_salary;
+                $max_salary                         = $row->max_salary;
+                $is_salary_negotiable               = $row->is_salary_negotiable;
+                $industry                           = $row->industry;
+                $job_category                       = $row->job_category;
+                $department                         = $row->department;
+                $functional_area                    = $row->functional_area;
+                $posting_open_date                  = $row->posting_open_date;
+                $posting_close_date                 = $row->posting_close_date;
+                $apply_on_email                     = $row->apply_on_email;
+                $apply_on_link                      = $row->apply_on_link;
+                $walkin_address1                    = $row->walkin_address1;
+                $walkin_address2                    = $row->walkin_address2;
+                $walkin_country                     = $row->walkin_country;
+                $walkin_state                       = $row->walkin_state;
+                $walkin_city                        = $row->walkin_city;
+                $walkin_pincode                     = $row->walkin_pincode;
+                $walkin_latitude                    = $row->walkin_latitude;
+                $walkin_longitude                   = $row->walkin_longitude;
             } else {
-                $position_name              = '';
-                $status                     = '';
+                $position_name                      = '';
+                $employer_id                        = '';
+                $job_type                           = '';
+                $location_ids                       = [];
+                $open_position_number               = '';
+                $contract_type                      = '';
+                $job_description                    = '';
+                $requirement                        = '';
+                $skill_ids                          = [];
+                $experience_level                   = '';
+                $expected_close_date                = '';
+                $currency                           = '';
+                $min_salary                         = '';
+                $max_salary                         = '';
+                $is_salary_negotiable               = '';
+                $industry                           = '';
+                $job_category                       = '';
+                $department                         = '';
+                $functional_area                    = '';
+                $posting_open_date                  = '';
+                $posting_close_date                 = '';
+                $apply_on_email                     = '';
+                $apply_on_link                      = '';
+                $walkin_address1                    = '';
+                $walkin_address2                    = '';
+                $walkin_country                     = '';
+                $walkin_state                       = '';
+                $walkin_city                        = '';
+                $walkin_pincode                     = '';
+                $walkin_latitude                    = '';
+                $walkin_longitude                   = '';
             }
             ?>
             <div class="card-body">
@@ -46,42 +169,43 @@ $controllerRoute = $module['controller_route'];
                     <small class="text-light fw-medium">Validation</small>
                     <div id="wizard-validation" class="bs-stepper mt-2">
                         <div class="bs-stepper-header">
-                        <div class="step" data-target="#account-details-validation">
-                            <button type="button" class="step-trigger">
-                            <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label mt-1">
-                                <span class="bs-stepper-title">Step 1</span>
-                                <span class="bs-stepper-subtitle">Setup Step 1</span>
-                            </span>
-                            </button>
-                        </div>
-                        <div class="line">
-                            <i class="ti ti-chevron-right"></i>
-                        </div>
-                        <div class="step" data-target="#personal-info-validation">
-                            <button type="button" class="step-trigger">
-                            <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">
-                                <span class="bs-stepper-title">Step 2</span>
-                                <span class="bs-stepper-subtitle">Add Step 2</span>
-                            </span>
-                            </button>
-                        </div>
-                        <div class="line">
-                            <i class="ti ti-chevron-right"></i>
-                        </div>
-                        <div class="step" data-target="#social-links-validation">
-                            <button type="button" class="step-trigger">
-                            <span class="bs-stepper-circle">3</span>
-                            <span class="bs-stepper-label">
-                                <span class="bs-stepper-title">Step 3</span>
-                                <span class="bs-stepper-subtitle">Add Step 3</span>
-                            </span>
-                            </button>
-                        </div>
+                            <div class="step" data-target="#account-details-validation">
+                                <button type="button" class="step-trigger">
+                                <span class="bs-stepper-circle">1</span>
+                                <span class="bs-stepper-label mt-1">
+                                    <span class="bs-stepper-title">Step 1</span>
+                                    <span class="bs-stepper-subtitle">Setup Step 1</span>
+                                </span>
+                                </button>
+                            </div>
+                            <div class="line">
+                                <i class="ti ti-chevron-right"></i>
+                            </div>
+                            <div class="step" data-target="#personal-info-validation">
+                                <button type="button" class="step-trigger">
+                                <span class="bs-stepper-circle">2</span>
+                                <span class="bs-stepper-label">
+                                    <span class="bs-stepper-title">Step 2</span>
+                                    <span class="bs-stepper-subtitle">Add Step 2</span>
+                                </span>
+                                </button>
+                            </div>
+                            <div class="line">
+                                <i class="ti ti-chevron-right"></i>
+                            </div>
+                            <div class="step" data-target="#social-links-validation">
+                                <button type="button" class="step-trigger">
+                                <span class="bs-stepper-circle">3</span>
+                                <span class="bs-stepper-label">
+                                    <span class="bs-stepper-title">Step 3</span>
+                                    <span class="bs-stepper-subtitle">Add Step 3</span>
+                                </span>
+                                </button>
+                            </div>
                         </div>
                         <div class="bs-stepper-content">
-                        <form id="wizard-validation-form" onSubmit="return false">
+                        <form id="wizard-validation-form" method="POST" onSubmit="return false">
+                            @csrf
                             <!-- Account Details -->
                             <div id="account-details-validation" class="content">
                                 <div class="content-header mb-4">
@@ -91,14 +215,14 @@ $controllerRoute = $module['controller_route'];
                                 <div class="row g-6 mt-3">
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="position_name">Position Name</label>
-                                        <input type="text" name="position_name" id="position_name" class="form-control" placeholder="Position Name" />
+                                        <input type="text" name="position_name" id="position_name" class="form-control" placeholder="Position Name" value="<?=$position_name?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="employer_id">Employer</label>
                                         <select class="select2" id="employer_id" name="employer_id">
                                             <option label="" selected></option>
                                             <?php if($employers){ foreach($employers as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($select_row->id == $employer_id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -107,32 +231,31 @@ $controllerRoute = $module['controller_route'];
                                         <label class="form-label" for="job_type">Job Type</label>
                                         <select class="select2" id="job_type" name="job_type">
                                             <option label="" selected></option>
-                                            <option value="Walk-in">Walk-in</option>
-                                            <option value="Remote">Remote</option>
-                                            <option value="On-Site">On-Site</option>
-                                            <option value="Temp Role">Temp Role</option>
+                                            <option value="Walk-in" <?=(($job_type == 'Walk-in')?'selected':'')?>>Walk-in</option>
+                                            <option value="Remote" <?=(($job_type == 'Remote')?'selected':'')?>>Remote</option>
+                                            <option value="On-Site" <?=(($job_type == 'On-Site')?'selected':'')?>>On-Site</option>
+                                            <option value="Temp Role" <?=(($job_type == 'Temp Role')?'selected':'')?>>Temp Role</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="location_ids">Location</label>
-                                        <select class="select2" id="location_ids" name="location_ids[]" multiple>
-                                            <option label="" selected></option>
+                                        <select class="select2" id="location_ids" name="location_ids[]" required multiple>
                                             <?php if($cities){ foreach($cities as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $location_ids))?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="open_position_number">Number of open positions</label>
-                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" placeholder="Number of open positions" min="1" />
+                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" placeholder="Number of open positions" min="1" value="<?=$open_position_number?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="contract_type">Contract Type</label>
                                         <select class="select2" id="contract_type" name="contract_type">
                                             <option label="" selected></option>
                                             <?php if($contract_types){ foreach($contract_types as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($contract_type == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -158,68 +281,59 @@ $controllerRoute = $module['controller_route'];
                                 <div class="row g-6 mt-3">
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="job_description">Job Description</label>
-                                        <textarea id="job_description" name="job_description" class="form-control" placeholder="Job Description" rows="5"></textarea>
+                                        <textarea id="ckeditor1" name="job_description" class="form-control" placeholder="Job Description" rows="5"><?=$job_description?></textarea>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="requirement">Requirements</label>
-                                        <textarea id="requirement" name="requirement" class="form-control" placeholder="Requirements" rows="5"></textarea>
+                                        <textarea id="ckeditor2" name="requirement" class="form-control" placeholder="Requirements" rows="5"><?=$requirement?></textarea>
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="skill_ids">Skills</label>
                                         <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
-                                            <option label="" selected></option>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $skill_ids))?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
                                     <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="formValidationCountry">Experience Level</label>
-                                        <select class="select2" id="formValidationCountry" name="formValidationCountry">
+                                        <label class="form-label" for="experience_level">Experience Level</label>
+                                        <select class="select2" id="experience_level" name="experience_level">
                                             <option label="" selected></option>
                                             <?php if($experiences){ foreach($experiences as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($experience_level == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="expected_close_date">Expected Close Date</label>
-                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" />
+                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?=$expected_close_date?>" />
                                     </div>
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-3 mb-3">
                                         <label class="form-label" for="currency">Currency</label>
                                         <select class="select2" id="currency" name="currency">
                                             <option label="" selected></option>
                                             <?php if($currencies){ foreach($currencies as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->currency_code?>" <?=(($currency == $select_row->currency_code)?'selected':'')?>><?=$select_row->currency_code?> (<?=$select_row->name?>)</option>
                                             <?php } }?>
                                         </select>
-                                    </div>
-
-                                    <div class="col-sm-6 mb-3">
-                                        <label for="status" class="form-label d-block">Status</label>
-                                        <div class="form-check form-switch mt-0 ">
-                                            <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
-                                            <label class="form-check-label" for="status">Active</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 mb-3">
+                                    </div>                                    
+                                    <div class="col-sm-3 mb-3">
                                         <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
                                         <div class="form-check form-switch mt-0 ">
-                                            <input class="form-check-input" type="checkbox" name="is_salary_negotiable" role="switch" id="is_salary_negotiable">
+                                            <input class="form-check-input" type="checkbox" name="is_salary_negotiable" role="switch" id="is_salary_negotiable" <?=(($is_salary_negotiable)?'checked':'')?>>
                                             <label class="form-check-label" for="is_salary_negotiable">YES</label>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-6 mb-3 salary">
                                         <label class="form-label" for="min_salary">Minimum Salary</label>
-                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" />
+                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" value="<?=$min_salary?>" />
                                     </div>
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-6 mb-3 salary">
                                         <label class="form-label" for="max_salary">Maximum Salary</label>
-                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" />
+                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" value="<?=$max_salary?>" />
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
@@ -227,7 +341,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="industry" name="industry">
                                             <option label="" selected></option>
                                             <?php if($industries){ foreach($industries as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($industry == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -236,7 +350,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="job_category" name="job_category">
                                             <option label="" selected></option>
                                             <?php if($jobcats){ foreach($jobcats as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($job_category == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -246,7 +360,7 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="department" name="department">
                                             <option label="" selected></option>
                                             <?php if($departments){ foreach($departments as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($department == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
@@ -255,18 +369,18 @@ $controllerRoute = $module['controller_route'];
                                         <select class="select2" id="functional_area" name="functional_area">
                                             <option label="" selected></option>
                                             <?php if($functionalareas){ foreach($functionalareas as $select_row){?>
-                                                <option value="<?=$select_row->id?>"><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=(($functional_area == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_open_date">Posting Open Date</label>
-                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" />
+                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" value="<?=$posting_open_date?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_close_date">Posting Close Date</label>
-                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" />
+                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?=$posting_close_date?>" />
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
@@ -290,11 +404,11 @@ $controllerRoute = $module['controller_route'];
                                 <div class="row g-6 mt-3">
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="apply_on_email">Apply To (Email)</label>
-                                        <input type="date" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" />
+                                        <input type="text" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?=$posting_close_date?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="apply_on_link">Apply To (Link)</label>
-                                        <input type="date" name="apply_on_link" id="apply_on_link" class="form-control" placeholder="Apply To (Link)" />
+                                        <input type="text" name="apply_on_link" id="apply_on_link" class="form-control" placeholder="Apply To (Link)" value="<?=$posting_close_date?>" />
                                     </div>
 
                                     <div class="col-sm-12">
@@ -302,31 +416,31 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_address1">Address Line 1</label>
-                                        <input type="text" name="walkin_address1" id="walkin_address1" class="form-control" placeholder="Address Line 1" />
+                                        <input type="text" name="walkin_address1" id="walkin_address1" class="form-control" placeholder="Address Line 1" value="<?=$walkin_address1?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_address2">Address Line 2</label>
-                                        <input type="text" name="walkin_address2" id="walkin_address2" class="form-control" placeholder="Address Line 2" />
+                                        <input type="text" name="walkin_address2" id="walkin_address2" class="form-control" placeholder="Address Line 2" value="<?=$walkin_address2?>" />
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_country">Country</label>
-                                        <input type="text" name="walkin_country" id="walkin_country" class="form-control" placeholder="Country" />
+                                        <input type="text" name="walkin_country" id="walkin_country" class="form-control" placeholder="Country" value="<?=$walkin_country?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_state">State</label>
-                                        <input type="text" name="walkin_state" id="walkin_state" class="form-control" placeholder="State" />
+                                        <input type="text" name="walkin_state" id="walkin_state" class="form-control" placeholder="State" value="<?=$walkin_state?>" />
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_city">City</label>
-                                        <input type="text" name="walkin_city" id="walkin_city" class="form-control" placeholder="City" />
+                                        <input type="text" name="walkin_city" id="walkin_city" class="form-control" placeholder="City" value="<?=$walkin_city?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_pincode">Pincode</label>
-                                        <input type="text" name="walkin_pincode" id="walkin_pincode" class="form-control" placeholder="Pincode" />
-                                        <input type="text" name="walkin_latitude" id="walkin_latitude" class="form-control" placeholder="Latitude" />
-                                        <input type="text" name="walkin_longitude" id="walkin_longitude" class="form-control" placeholder="Longitude" />
+                                        <input type="text" name="walkin_pincode" id="walkin_pincode" class="form-control" placeholder="Pincode" value="<?=$walkin_pincode?>" />
+                                        <input type="hidden" name="walkin_latitude" id="walkin_latitude" class="form-control" placeholder="Latitude" value="<?=$walkin_latitude?>" />
+                                        <input type="hidden" name="walkin_longitude" id="walkin_longitude" class="form-control" placeholder="Longitude" value="<?=$walkin_longitude?>" />
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
@@ -334,7 +448,7 @@ $controllerRoute = $module['controller_route'];
                                             <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
                                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                                         </button>
-                                        <button class="btn btn-success btn-next btn-submit">Submit</button>
+                                        <button type="submit" class="btn btn-success btn-next btn-submit">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -363,4 +477,23 @@ $controllerRoute = $module['controller_route'];
 
     <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-numbered.js"></script>
     <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-validation.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
+    <script>
+        $(document).ready(function () {
+            var is_salary_negotiable = '<?=$is_salary_negotiable?>';
+            if (is_salary_negotiable) {
+                $('.salary').hide(); // Hide salary range if negotiable
+            } else {
+                $('.salary').show(); // Show salary range if not negotiable
+            }
+
+            $('#is_salary_negotiable').change(function () {
+                if ($(this).is(':checked')) {
+                    $('.salary').hide(); // Hide salary range if negotiable
+                } else {
+                    $('.salary').show(); // Show salary range if not negotiable
+                }
+            });
+        });
+    </script>
 @endsection
