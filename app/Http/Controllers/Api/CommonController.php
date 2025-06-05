@@ -506,7 +506,7 @@ class CommonController extends BaseApiController
             $sql->where('country_id', $request->country_id);
         }
         if(!empty($request->key)){
-            $sql->where('LOWER(name)', 'like',  '%'.strtolower($request->key).'%');
+            $sql->where('name', 'like',  '%'.strtolower($request->key).'%');
         }
         return $this->sendResponse(
             $sql->with('country')->get(),

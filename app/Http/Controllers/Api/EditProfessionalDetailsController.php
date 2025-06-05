@@ -167,7 +167,7 @@ class EditProfessionalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            UserItSkill::where('id', $id)->update->([
+            UserItSkill::where('id', $id)->update([
                 'itkill_id'=> $request->itkill_id,
                 'last_used'=> $request->version,
                 'exp_year'=> $request->exp_year,

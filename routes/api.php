@@ -112,6 +112,7 @@ Route::group([
     Route::post('/keyskills', [EditProfessionalDetailsController::class, 'postKeyskills']);
     Route::get('/itskills', [EditProfessionalDetailsController::class, 'getItskills']);
     Route::post('/itskills', [EditProfessionalDetailsController::class, 'postItskills']);
+    Route::post('/update-itskills/{id}', [EditProfessionalDetailsController::class, 'updateItskills']);
     Route::get('/professional-details', [EditProfessionalDetailsController::class, 'getProfessionalDetails']);
     Route::post('/professional-details', [EditProfessionalDetailsController::class, 'postProfessionalDetails']);
     Route::get('/profile-summery', [EditProfessionalDetailsController::class, 'getProfileSummery']);
