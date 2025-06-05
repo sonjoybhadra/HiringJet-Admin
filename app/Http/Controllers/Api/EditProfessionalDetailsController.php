@@ -140,7 +140,36 @@ class EditProfessionalDetailsController extends BaseApiController
             UserItSkill::insert([
                 'user_id'=> auth()->user()->id,
                 'itkill_id'=> $request->itkill_id,
-                'last_used'=> $request->last_used,
+                'last_used'=> $request->version,
+                'exp_year'=> $request->exp_year,
+                'exp_month'=> $request->exp_month,
+            ]);
+
+            return $this->sendResponse($this->getUserDetails(), 'Key skills added successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Post resume itskills.
+    */
+    public function updateItskills(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'itkill_id' => 'required|integer',
+            'version' => 'required|integer',
+            'exp_year' => 'required|integer',
+            'exp_month' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        try {
+            UserItSkill::where('id', $id)->update->([
+                'itkill_id'=> $request->itkill_id,
+                'last_used'=> $request->version,
                 'exp_year'=> $request->exp_year,
                 'exp_month'=> $request->exp_month,
             ]);

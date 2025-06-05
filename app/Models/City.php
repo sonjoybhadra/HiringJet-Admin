@@ -11,7 +11,7 @@ class City extends Model
     use SoftDeletes;
 
     /**
-     * Get the role details of associated user.
+     * Get the Country details of associated city.
     */
     public function country(): BelongsTo
     {
