@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\EditEducationalDetailsController;
 use App\Http\Controllers\Api\EditEmploymentDetailsController;
 use App\Http\Controllers\Api\EditResumeController;
 use App\Http\Controllers\Api\EditAccomplishmentsController;
+use App\Http\Controllers\Api\EditDesiredJobsController;
 
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\CmsArticleController;
@@ -138,6 +139,9 @@ Route::group([
     Route::get('/get-work-sample', [EditAccomplishmentsController::class, 'getWorkSampleDetails']);
     Route::post('/update-work-sample/{id}', [EditAccomplishmentsController::class, 'updateWorkSampleDetails']);
     Route::post('/post-work-sample', [EditAccomplishmentsController::class, 'postWorkSampleDetails']);
+
+    Route::get('/get-desired-jobs', [EditDesiredJobsController::class, 'getDesiredJobs']);
+    Route::post('/post-desired-jobs', [EditDesiredJobsController::class, 'postDesiredJobs']);
 
 });
 
