@@ -192,9 +192,9 @@ class EditAccomplishmentsController extends BaseApiController
                 ];
             }
 
-            UserOnlineProfile::create();
+            UserOnlineProfile::create($data_array);
 
-            return $this->sendResponse([$data_array], 'Online profile updated successfully.');
+            return $this->sendResponse([], 'Online profile updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
