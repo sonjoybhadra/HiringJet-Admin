@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserOnlineProfile extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['user_id', 'profile_key', 'value'];
 }
