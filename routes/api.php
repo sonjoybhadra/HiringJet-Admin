@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\EditPersonalDetailsController;
 use App\Http\Controllers\Api\EditEducationalDetailsController;
 use App\Http\Controllers\Api\EditEmploymentDetailsController;
 use App\Http\Controllers\Api\EditResumeController;
+use App\Http\Controllers\Api\EditAccomplishmentsController;
 
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\CmsArticleController;
@@ -128,6 +129,15 @@ Route::group([
 
     Route::delete('/delete-cv', [EditResumeController::class, 'deleteResume']);
     Route::post('/post-cv', [EditResumeController::class, 'postResume']);
+
+    Route::get('/get-certifications', [EditAccomplishmentsController::class, 'getCertificationDetails']);
+    Route::post('/update-certifications/{id}', [EditAccomplishmentsController::class, 'updateCertificationDetails']);
+    Route::post('/post-certifications', [EditAccomplishmentsController::class, 'postCertificationDetails']);
+    Route::get('/get-online-profile', [EditAccomplishmentsController::class, 'getOnlineProfile']);
+    Route::post('/post-online-profile', [EditAccomplishmentsController::class, 'postOnlineProfile']);
+    Route::get('/get-work-sample', [EditAccomplishmentsController::class, 'getWorkSampleDetails']);
+    Route::post('/update-work-sample/{id}', [EditAccomplishmentsController::class, 'updateWorkSampleDetails']);
+    Route::post('/post-work-sample', [EditAccomplishmentsController::class, 'postWorkSampleDetails']);
 
 });
 

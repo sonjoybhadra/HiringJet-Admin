@@ -31,4 +31,9 @@ class UserProfile extends Model
         return $this->BelongsTo(Country::class, 'pasport_country_id');
     }
 
+    public function availabilitie(): BelongsTo
+    {
+        return $this->BelongsTo(Availability::class, 'availability_id');
+    }
+
 }

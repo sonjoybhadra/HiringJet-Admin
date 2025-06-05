@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserEducation extends Model
 {
+    use SoftDeletes;
     protected $table = 'user_educations';
 
     protected $fillable = ['user_id', 'qualification_id', 'course_id', 'specialization_id', 'location_id', 'university_id', 'passing_year', 'course_start_year', 'course_end_year', 'course_type', 'percentage', 'grade', 'is_active'];

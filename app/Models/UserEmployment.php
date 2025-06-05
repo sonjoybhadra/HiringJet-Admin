@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserEmployment extends Model
 {
+    use SoftDeletes;
     protected $fillable = ['user_id', 'total_experience_years', 'total_experience_months', 'last_designation', 'employer_id', 'country_id', 'city_id', 'currency_id', 'current_salary', 'working_since_from_year', 'working_since_from_month', 'working_since_to_year', 'working_since_to_month'];
 
     /**

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserExperience extends Model
 {
+    use SoftDeletes;
     /**
      * Get the role details of associated user.
     */
