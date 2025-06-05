@@ -22,6 +22,7 @@ class EditAccomplishmentsController extends BaseApiController
         try {
             return $this->sendResponse(
                 UserCertification::where('user_id', auth()->user()->id)
+                                    ->orderBy('id', 'asc')
                                     ->get(),
                 'Certificate list'
             );
@@ -191,7 +192,7 @@ class EditAccomplishmentsController extends BaseApiController
                 ];
             }
 
-            UserCertification::create();
+            UserOnlineProfile::create();
 
             return $this->sendResponse([$data_array], 'Online profile updated successfully.');
         } catch (\Exception $e) {
