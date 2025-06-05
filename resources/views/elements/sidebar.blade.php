@@ -310,12 +310,12 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
   </li>
 
   <!-- Posting Jobs -->
-  <!-- <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
+  <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
     <a href="<?=url('/post-job/list')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-file-lines"></i>
       <div data-i18n="Jobs">Jobs</div>
     </a>
-  </li> -->
+  </li>
 
   <!-- Email Logs -->
   <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
