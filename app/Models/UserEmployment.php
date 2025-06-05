@@ -32,7 +32,7 @@ class UserEmployment extends Model
 
     public function currency(): BelongsTo
     {
-        return $this->BelongsTo(Currency::class, 'currency_id');
+        return $this->BelongsTo(Country::class, 'currency_id');
     }
 
     public function work_level(): BelongsTo

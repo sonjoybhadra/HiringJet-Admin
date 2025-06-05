@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('employer_id')->constrained('employers');
             $table->foreignId('country_id')->nullable()->constrained('countries');
             $table->foreignId('city_id')->nullable()->constrained('cities');
-            $table->foreignId('currency_id')->constrained('currencies');
+            $table->foreignId('currency_id')->constrained('countries');
             $table->float('current_salary', 15, 2)->nullable();
             $table->integer('working_since_from_year')->nullable();
             $table->integer('working_since_from_month')->nullable();
