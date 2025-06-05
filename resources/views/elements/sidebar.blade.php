@@ -129,11 +129,11 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
         </a>
       </li>
 
-      <li class="menu-item <?=(($pageSegment == 'currency')?'active':'')?>">
+      <!-- <li class="menu-item <?=(($pageSegment == 'currency')?'active':'')?>">
         <a href="<?=url('/currency/list')?>" class="menu-link">
           <div data-i18n="Currency"><i class="fa-solid fa-arrow-right"></i> Currency</div>
         </a>
-      </li>
+      </li> -->
 
       <li class="menu-item <?=(($pageSegment == 'keyskill')?'active':'')?>">
         <a href="<?=url('/keyskill/list')?>" class="menu-link">
@@ -313,7 +313,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
   <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
     <a href="<?=url('/post-job/list')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="Posting Jobs">Posting Jobs</div>
+      <div data-i18n="Jobs">Jobs</div>
     </a>
   </li>
 

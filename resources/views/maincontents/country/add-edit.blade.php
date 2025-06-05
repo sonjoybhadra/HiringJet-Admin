@@ -36,6 +36,7 @@ $controllerRoute = $module['controller_route'];
                 $name                   = $row->name;
                 $country_code           = $row->country_code;
                 $country_short_code     = $row->country_short_code;
+                $currency_code          = $row->currency_code;
                 $country_flag           = $row->country_flag;
                 $status                 = $row->status;
             } else {
@@ -43,6 +44,7 @@ $controllerRoute = $module['controller_route'];
                 $name                   = '';
                 $country_code           = '';
                 $country_short_code     = '';
+                $currency_code          = '';
                 $country_flag           = '';
                 $status                 = '';
             }
@@ -57,12 +59,16 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="country_short_code" class="form-label">Country Short Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="country_short_code" name="country_short_code" value="<?=$country_short_code?>" required placeholder="Country Short Code" autofocus />
+                            <input class="form-control" type="text" id="country_short_code" name="country_short_code" value="<?=$country_short_code?>" required placeholder="Country Short Code" />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="country_code" class="form-label">Country ISD Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="country_code" name="country_code" value="<?=$country_code?>" required placeholder="Country ISD Code" autofocus />
+                            <input class="form-control" type="text" id="country_code" name="country_code" value="<?=$country_code?>" required placeholder="Country ISD Code" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="currency_code" class="form-label">Currency Code <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="currency_code" name="currency_code" value="<?=$currency_code?>" required placeholder="Currency Code" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>

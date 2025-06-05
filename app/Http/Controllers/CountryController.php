@@ -47,6 +47,7 @@ class CountryController extends Controller
                     'name'                      => 'required',
                     'country_code'              => 'required',
                     'country_short_code'        => 'required',
+                    'currency_code'             => 'required',
                     'country_flag'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
@@ -81,6 +82,7 @@ class CountryController extends Controller
                         'name'                      => strtoupper(strip_tags($postData['name'])),
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
                         'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
+                        'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),
                         'country_flag'              => env('UPLOADS_URL') . $upload_folder . '/' . $country_flag,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
@@ -111,6 +113,7 @@ class CountryController extends Controller
                     'name'                      => 'required',
                     'country_short_code'        => 'required',
                     'country_code'              => 'required',
+                    'currency_code'             => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* country_flag */
@@ -134,6 +137,7 @@ class CountryController extends Controller
                         'name'                      => strtoupper(strip_tags($postData['name'])),
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
                         'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
+                        'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),
                         'country_flag'              => $countryFlag,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
