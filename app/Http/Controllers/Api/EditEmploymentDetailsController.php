@@ -23,7 +23,7 @@ class EditEmploymentDetailsController extends BaseApiController
             return $this->sendResponse(
                 UserEmployment::where('user_id', auth()->user()->id)
                                 ->with('employer')
-                                ->with('countrie')
+                                ->with('country')
                                 ->with('city')
                                 ->with('skills')
                                 ->with('notice_period')
@@ -43,23 +43,23 @@ class EditEmploymentDetailsController extends BaseApiController
     public function updateEmploymentDetails(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'total_experience_years' => 'required|integer',
-            'total_experience_months' => 'required|integer',
             'designation' => 'required|string',
             'employer' => 'required|string',
-            'industry' => 'required|integer',
-            'functional_area' => 'required|integer',
+            'is_current_job'=> 'required|boolean',
             'employment_type' => 'required|integer',
             'location' => 'required|integer',
-            'is_current_job'=> 'required|boolean',
-            'notice_period'=> 'required|integer',
+            'skills' => 'required|array',
             'working_since_from_year' => 'required|integer',
             'working_since_from_month' => 'required|integer',
             'working_since_to_year' => 'required|integer',
             'working_since_to_month' => 'required|integer',
             'salary_currency' => 'required|integer',
             'current_salary' => 'required|integer',
-            'skills' => 'required|array',
+            'notice_period'=> 'required|integer',
+            /* 'total_experience_years' => 'required|integer',
+            'total_experience_months' => 'required|integer',
+            'industry' => 'required|integer',
+            'functional_area' => 'required|integer', */
         ]);
 
         if($validator->fails()){
@@ -72,21 +72,18 @@ class EditEmploymentDetailsController extends BaseApiController
                 ]);
             }
             UserEmployment::where('id', $id)->update([
-                'total_experience_years'=> $request->total_experience_years,
-                'total_experience_months'=> $request->total_experience_months,
                 'last_designation'=> $request->designation,
                 'employer_id'=> $request->employer,
+                'is_current_job'=> $request->is_current_job,
                 'employment_type'=> $request->employment_type,
-                // 'country_id'=> $request->employer_country,
                 'city_id'=> $request->location,
-                'notice_period'=> $request->notice_period,
                 'working_since_from_year'=> $request->working_since_from_year,
                 'working_since_from_month'=> $request->working_since_from_month,
                 'working_since_to_year'=> $request->working_since_to_year,
                 'working_since_to_month'=> $request->working_since_to_month,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
-                'is_current_job'=> $request->is_current_job,
+                'notice_period'=> $request->notice_period,
             ]);
 
             if(!empty($request->skills)){
@@ -100,7 +97,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 }
             }
 
-            return $this->sendResponse($this->getUserDetails(), 'Professional details updated successfully.');
+            return $this->sendResponse($this->getUserDetails(), 'Employment details updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
@@ -112,26 +109,19 @@ class EditEmploymentDetailsController extends BaseApiController
     public function postEmploymentDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'total_experience_years' => 'required|integer',
-            'total_experience_months' => 'required|integer',
             'designation' => 'required|string',
             'employer' => 'required|string',
-            'industry' => 'required|integer',
-            'functional_area' => 'required|integer',
-            'salary_currency' => 'required|integer',
-            'current_salary' => 'required|integer',
-            'perk_benefits' => 'required|integer',
+            'is_current_job'=> 'required|boolean',
             'employment_type' => 'required|integer',
             'location' => 'required|integer',
-            'is_current_job'=> 'required|boolean',
-            'notice_period'=> 'required|integer',
+            'skills' => 'required|array',
             'working_since_from_year' => 'required|integer',
             'working_since_from_month' => 'required|integer',
             'working_since_to_year' => 'required|integer',
             'working_since_to_month' => 'required|integer',
             'salary_currency' => 'required|integer',
             'current_salary' => 'required|integer',
-            'skills' => 'required|array',
+            'notice_period'=> 'required|integer',
         ]);
 
         if($validator->fails()){
@@ -140,19 +130,18 @@ class EditEmploymentDetailsController extends BaseApiController
         try {
             $employment_id = UserEmployment::insertGetId([
                 'user_id'=> auth()->user()->id,
-                'total_experience_years'=> $request->total_experience_years,
-                'total_experience_months'=> $request->total_experience_months,
                 'last_designation'=> $request->designation,
                 'employer_id'=> $request->employer,
-                // 'country_id'=> $request->employer_country,
+                'is_current_job'=> $request->is_current_job,
+                'employment_type'=> $request->employment_type,
                 'city_id'=> $request->location,
-                'currency_id'=> $request->salary_currency,
-                'current_salary'=> $request->current_salary,
                 'working_since_from_year'=> $request->working_since_from_year,
                 'working_since_from_month'=> $request->working_since_from_month,
                 'working_since_to_year'=> $request->working_since_to_year,
                 'working_since_to_month'=> $request->working_since_to_month,
-                'is_current_job'=> 1,
+                'currency_id'=> $request->salary_currency,
+                'current_salary'=> $request->current_salary,
+                'notice_period'=> $request->notice_period
             ]);
 
             if(!empty($request->skills)){
@@ -165,7 +154,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 }
             }
 
-            return $this->sendResponse($this->getUserDetails(), 'Professional details updated successfully.');
+            return $this->sendResponse($this->getUserDetails(), 'Employment details updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
