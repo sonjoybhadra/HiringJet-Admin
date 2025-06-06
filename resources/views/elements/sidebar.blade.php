@@ -293,6 +293,35 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     </ul>
   </li>
 
+  <!-- Home Page -->
+  <li class="menu-item active <?=(($pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
+    <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <i class="menu-icon fa-solid fa-home"></i>
+      <div data-i18n="Home Page">Home Page</div>
+    </a>
+    <ul class="menu-sub">
+
+      <li class="menu-item <?=(($pageSegment == '')?'active':'')?>">
+        <a href="javascript:void(0);" class="menu-link">
+          <div data-i18n="Sections"><i class="fa-solid fa-arrow-right"></i> Sections</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'blog')?'active':'')?>">
+        <a href="<?=url('/blog/list')?>" class="menu-link">
+          <div data-i18n="Blogs"><i class="fa-solid fa-arrow-right"></i> Blogs</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'testimonial')?'active':'')?>">
+        <a href="<?=url('/testimonial/list')?>" class="menu-link">
+          <div data-i18n="Testimonials"><i class="fa-solid fa-arrow-right"></i> Testimonials</div>
+        </a>
+      </li>
+
+    </ul>
+  </li>
+
   <!-- CMS Pages -->
   <li class="menu-item <?=(($pageSegment == 'page')?'active':'')?>">
     <a href="<?=url('/page/list')?>" class="menu-link">
