@@ -41,6 +41,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\ExperienceLevelController;
 use App\Http\Controllers\PostJobController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\TestimonialController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -355,4 +357,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);
         Route::get('post-job/change-status/{id}', [PostJobController::class, 'change_status']);
     /* post job */
+    /* blog */
+        Route::get('blog/list', [BlogController::class, 'list']);
+        Route::match(['get', 'post'], 'blog/add', [BlogController::class, 'add']);
+        Route::match(['get', 'post'], 'blog/edit/{id}', [BlogController::class, 'edit']);
+        Route::get('blog/delete/{id}', [BlogController::class, 'delete']);
+        Route::get('blog/change-status/{id}', [BlogController::class, 'change_status']);
+    /* blog */
+    /* testimonial */
+        Route::get('testimonial/list', [TestimonialController::class, 'list']);
+        Route::match(['get', 'post'], 'testimonial/add', [TestimonialController::class, 'add']);
+        Route::match(['get', 'post'], 'testimonial/edit/{id}', [TestimonialController::class, 'edit']);
+        Route::get('testimonial/delete/{id}', [TestimonialController::class, 'delete']);
+        Route::get('testimonial/change-status/{id}', [TestimonialController::class, 'change_status']);
+    /* testimonial */
 });
