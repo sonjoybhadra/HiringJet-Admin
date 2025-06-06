@@ -21,7 +21,7 @@ return new class extends Migration
             $table->longText('location_ids');
             $table->longText('location_names');
             $table->integer('open_position_number');
-            $table->foreignId('contract_type')->constrained('contract_types')->onDelete('cascade');
+            $table->foreignId('contract_type')->nullable();
             $table->longText('job_description');
             $table->longText('requirement');
             $table->longText('skill_ids');
