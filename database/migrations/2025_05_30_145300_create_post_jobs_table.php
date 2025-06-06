@@ -34,7 +34,7 @@ return new class extends Migration
             $table->tinyInteger('is_salary_negotiable')->default(0);
             $table->foreignId('industry')->nullable()->constrained('industries')->onDelete('cascade');
             $table->foreignId('job_category')->nullable()->constrained('job_categories')->onDelete('cascade');
-            $table->foreignId('department')->nullable()->constrained('departments')->onDelete('cascade');
+            $table->foreignId('department')->nullable();
             $table->foreignId('functional_area')->nullable()->constrained('functional_areas')->onDelete('cascade');
             $table->string('posting_open_date');
             $table->string('posting_close_date');
