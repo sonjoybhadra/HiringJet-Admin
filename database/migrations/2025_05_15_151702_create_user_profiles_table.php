@@ -48,7 +48,7 @@ return new class extends Migration
             $table->text('preferred_location')->nullable();
             $table->text('preferred_industry')->nullable();
             $table->foreignId('availability_id')->nullable()->constrained('availabilities')->nullOnDelete();
-            $table->foreignId('religion_id')->nullable()->constrained('religions')->nullOnDelete();
+            $table->foreignId('religion_id')->nullable();
             $table->integer('profile_completed_percentage')->default(0);
             $table->integer('completed_steps');
             $table->boolean('is_active')->default(true);
