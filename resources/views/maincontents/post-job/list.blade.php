@@ -32,7 +32,26 @@ $controllerRoute = $module['controller_route'];
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
             </div>
             <div class="card-body">
-               <!-- table will goes here -->
+               <div id="table-overlay-loader" class="text-loader">
+                  Fetching data. Please wait <span id="dot-animation">.</span>
+               </div>
+                @include('components.table', [
+                'containerId' => 'table1',
+                'searchId' => 'search1',
+                'table' => 'post_jobs',
+                'columns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'status'],
+                'visibleColumns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at'],    // used for rendering
+                'headers' => ['#', 'Job No.', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At'],
+                'filename' => "Job",
+                'orderBy' => 'id',
+                'orderType' => 'desc',
+                'conditions' => [
+                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
+                ],
+                'routePrefix' => 'post-job',
+                'showActions' => true, // set to false to hide actions
+                'statusColumn' => 'status' // optional, defaults to 'is_active'
+                ])
             </div>
         </div>
       </div>

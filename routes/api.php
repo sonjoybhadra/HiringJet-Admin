@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\EditEducationalDetailsController;
 use App\Http\Controllers\Api\EditEmploymentDetailsController;
 use App\Http\Controllers\Api\EditResumeController;
 use App\Http\Controllers\Api\EditAccomplishmentsController;
+use App\Http\Controllers\Api\EditDesiredJobsController;
+use App\Http\Controllers\Api\AccountSettingsController;
 
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\CmsArticleController;
@@ -82,6 +84,7 @@ Route::get('/get-course-type', [CommonController::class, 'get_course_type']);
 Route::get('/get-report-bug-category', [CommonController::class, 'get_report_bug_category']);
 Route::get('/get-interested-in', [CommonController::class, 'get_interestedIn']);
 Route::get('/get-it-skill', [CommonController::class, 'get_itSkill']);
+Route::get('/get-city-by-param', [CommonController::class, 'get_city_by_param']);
 
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
@@ -110,6 +113,7 @@ Route::group([
     Route::post('/keyskills', [EditProfessionalDetailsController::class, 'postKeyskills']);
     Route::get('/itskills', [EditProfessionalDetailsController::class, 'getItskills']);
     Route::post('/itskills', [EditProfessionalDetailsController::class, 'postItskills']);
+    Route::post('/update-itskills/{id}', [EditProfessionalDetailsController::class, 'updateItskills']);
     Route::get('/professional-details', [EditProfessionalDetailsController::class, 'getProfessionalDetails']);
     Route::post('/professional-details', [EditProfessionalDetailsController::class, 'postProfessionalDetails']);
     Route::get('/profile-summery', [EditProfessionalDetailsController::class, 'getProfileSummery']);
@@ -138,6 +142,14 @@ Route::group([
     Route::get('/get-work-sample', [EditAccomplishmentsController::class, 'getWorkSampleDetails']);
     Route::post('/update-work-sample/{id}', [EditAccomplishmentsController::class, 'updateWorkSampleDetails']);
     Route::post('/post-work-sample', [EditAccomplishmentsController::class, 'postWorkSampleDetails']);
+
+    Route::get('/get-desired-jobs', [EditDesiredJobsController::class, 'getDesiredJobs']);
+    Route::post('/post-desired-jobs', [EditDesiredJobsController::class, 'postDesiredJobs']);
+
+    Route::get('/get-account-settings', [AccountSettingsController::class, 'getAccountSettingsDetails']);
+    Route::post('/post-actively-looking-for', [AccountSettingsController::class, 'postActivelyLookingFor']);
+    Route::post('/post-account-settings', [AccountSettingsController::class, 'postAccountSettings']);
+    Route::post('/post-hide-my-profile', [AccountSettingsController::class, 'postHideMyProfile']);
 
 });
 

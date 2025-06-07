@@ -9,7 +9,6 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Models\UserResume;
 use App\Models\UserItSkill;
 use App\Models\UserEmployment;
 use App\Models\UserSkill;
@@ -114,8 +113,9 @@ class EditProfessionalDetailsController extends BaseApiController
         try {
             return $this->sendResponse(
                 UserItSkill::where('user_id', auth()->user()->id)
-                    ->with('key_skills')
-                    ->get()
+                    ->with('it_skills')
+                    ->get(),
+                'Itskills details'
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
@@ -137,19 +137,44 @@ class EditProfessionalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            if(!empty($request->keyskills)){
-                UserItSkill::insert([
-                    'user_id'=> auth()->user()->id,
-                    'itkill_id'=> $request->itkill_id,
-                    'last_used'=> $request->last_used,
-                    'exp_year'=> $request->exp_year,
-                    'exp_month'=> $request->exp_month,
-                ]);
+            UserItSkill::insert([
+                'user_id'=> auth()->user()->id,
+                'itkill_id'=> $request->itkill_id,
+                'last_used'=> $request->version,
+                'exp_year'=> $request->exp_year,
+                'exp_month'=> $request->exp_month,
+            ]);
 
-                $this->calculate_profile_completed_percentage(auth()->user()->id, 'key-skills'); //Key skills completes
-            }
+            return $this->sendResponse($this->getUserDetails(), 'It skills added successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
 
-            return $this->sendResponse($this->getUserDetails(), 'Key skills updated successfully.');
+    /**
+     * Post resume itskills.
+    */
+    public function updateItskills(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'itkill_id' => 'required|integer',
+            'version' => 'required|integer',
+            'exp_year' => 'required|integer',
+            'exp_month' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        try {
+            UserItSkill::where('id', $id)->update([
+                'itkill_id'=> $request->itkill_id,
+                'last_used'=> $request->version,
+                'exp_year'=> $request->exp_year,
+                'exp_month'=> $request->exp_month,
+            ]);
+
+            return $this->sendResponse($this->getUserDetails(), 'It skills updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }

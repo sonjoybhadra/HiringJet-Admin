@@ -79,14 +79,9 @@ class PostJob extends Model
 
     public function experienceLevel()
     {
-        return $this->belongsTo(ExperienceLevel::class, 'experience_level');
+        return $this->belongsTo(CurrentWorkLevel::class, 'experience_level');
     }
-
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class, 'currency');
-    }
-
+    
     public function industry()
     {
         return $this->belongsTo(Industry::class, 'industry');

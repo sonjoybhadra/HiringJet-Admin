@@ -80,6 +80,7 @@ class BaseApiController extends Controller
                                 ->with('user_education')
                                 ->with('user_profile_completed_percentages')
                                 ->with('user_languages')
+                                ->with('user_cv')
                                 ->first();
     }
 

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
-use App\Models\Country;
+use App\Models\Blog;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
@@ -15,25 +15,25 @@ use Session;
 use Hash;
 use DB;
 
-class CountryController extends Controller
+class BlogController extends Controller
 {
     protected $siteAuthService;
     public function __construct()
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Country',
-            'controller'        => 'CountryController',
-            'controller_route'  => 'country',
+            'title'             => 'Blog',
+            'controller'        => 'BlogController',
+            'controller_route'  => 'blog',
             'primary_key'       => 'id',
-            'table_name'        => 'countries',
+            'table_name'        => 'blogs',
         );
     }
     /* list */
         public function list(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
-            $page_name                      = 'country.list';
+            $page_name                      = 'blog.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -44,11 +44,10 @@ class CountryController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'name'                      => 'required',
-                    'country_code'              => 'required',
-                    'country_short_code'        => 'required',
-                    'currency_code'             => 'required',
-                    'country_flag'              => 'required',
+                    'title'                     => 'required',
+                    'short_description'         => 'required',
+                    'upload_date'               => 'required',
+                    'blog_image'                => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -58,35 +57,36 @@ class CountryController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                            'activity_details'  => $postData['title'] . ' ' . $this->data['title'] . ' Added',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
-                    /* country_flag */
-                        $upload_folder = 'country';
-                        $imageFile      = $request->file('country_flag');
+                    /* blog_image */
+                        $upload_folder = 'blog';
+                        $imageFile      = $request->file('blog_image');
                         if($imageFile != ''){
                             $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('country_flag', $imageName, $upload_folder, 'image');
+                            $uploadedFile   = $this->upload_single_file('blog_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
-                                $country_flag = $uploadedFile['newFilename'];
+                                $blog_image = $uploadedFile['newFilename'];
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' country_flag']);
+                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' image']);
                         }
-                    /* country_flag */
+                    /* blog_image */
                     $fields = [
-                        'name'                      => strtoupper(strip_tags($postData['name'])),
-                        'country_code'              => strtoupper(strip_tags($postData['country_code'])),
-                        'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
-                        'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),
-                        'country_flag'              => env('UPLOADS_URL') . $upload_folder . '/' . $country_flag,
-                        'status'                    => ((array_key_exists("status",$postData))?1:0),
+                        'title'                         => strtoupper(strip_tags($postData['title'])),
+                        'slug'                          => strtolower(Helper::clean(strip_tags($postData['title']))),
+                        'short_description'             => strip_tags($postData['short_description']),
+                        'long_description'              => strip_tags($postData['long_description']),
+                        'upload_date'                   => date_format(date_create($postData['upload_date']), "Y-m-d"),
+                        'blog_image'                    => env('UPLOADS_URL') . $upload_folder . '/' . $blog_image,
+                        'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    Country::insert($fields);
+                    Blog::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -94,7 +94,7 @@ class CountryController extends Controller
             }
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Add';
-            $page_name                      = 'country.add-edit';
+            $page_name                      = 'blog.add-edit';
             $data['row']                    = [];
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
@@ -105,43 +105,43 @@ class CountryController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
-            $page_name                      = 'country.add-edit';
-            $data['row']                    = Country::where('id', '=', $id)->first();
+            $page_name                      = 'blog.add-edit';
+            $data['row']                    = Blog::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'name'                      => 'required',
-                    'country_short_code'        => 'required',
-                    'country_code'              => 'required',
-                    'currency_code'             => 'required',
+                    'title'                     => 'required',
+                    'short_description'         => 'required',
+                    'upload_date'               => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    /* country_flag */
-                        $upload_folder = 'country';
-                        $imageFile      = $request->file('country_flag');
+                    /* blog_image */
+                        $upload_folder = 'blog';
+                        $imageFile      = $request->file('blog_image');
                         if($imageFile != ''){
                             $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('country_flag', $imageName, $upload_folder, 'image');
+                            $uploadedFile   = $this->upload_single_file('blog_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
-                                $country_flag = $uploadedFile['newFilename'];
-                                $countryFlag = env('UPLOADS_URL') . $upload_folder . '/' . $country_flag;
+                                $blog_image = $uploadedFile['newFilename'];
+                                $blogImage = env('UPLOADS_URL') . $upload_folder . '/' . $blog_image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            $country_flag = $data['row']->country_flag;
-                            $countryFlag = $country_flag;
+                            $blog_image = $data['row']->blog_image;
+                            $blogImage = $blog_image;
                         }
                     /* country_flag */
                     $fields = [
-                        'name'                      => strtoupper(strip_tags($postData['name'])),
-                        'country_code'              => strtoupper(strip_tags($postData['country_code'])),
-                        'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
-                        'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),
-                        'country_flag'              => $countryFlag,
-                        'status'                    => ((array_key_exists("status",$postData))?1:0),
+                        'title'                         => strtoupper(strip_tags($postData['title'])),
+                        'slug'                          => strtolower(Helper::clean(strip_tags($postData['title']))),
+                        'short_description'             => strip_tags($postData['short_description']),
+                        'long_description'              => strip_tags($postData['long_description']),
+                        'upload_date'                   => date_format(date_create($postData['upload_date']), "Y-m-d"),
+                        'blog_image'                    => $blogImage,
+                        'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    Country::where($this->data['primary_key'], '=', $id)->update($fields);
+                    Blog::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -149,7 +149,7 @@ class CountryController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                            'activity_details'  => $postData['title'] . ' ' . $this->data['title'] . ' Updated',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
@@ -166,12 +166,12 @@ class CountryController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Country::find($id);
+            $model                          = Blog::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            Country::where($this->data['primary_key'], '=', $id)->update($fields);
+            Blog::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -179,7 +179,7 @@ class CountryController extends Controller
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
                     'activity_type'     => 3,
-                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'activity_details'  => $model->title . ' ' . $this->data['title'] . ' Deleted',
                     'platform_type'     => 'WEB',
                 ];
                 UserActivity::insert($activityData);
@@ -190,7 +190,7 @@ class CountryController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Country::find($id);
+            $model                          = Blog::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;
@@ -202,7 +202,7 @@ class CountryController extends Controller
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
                         'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
+                        'activity_details'  => $model->title . ' ' . $this->data['title'] . ' Deactivated',
                         'platform_type'     => 'WEB',
                     ];
                     UserActivity::insert($activityData);
@@ -217,7 +217,7 @@ class CountryController extends Controller
                         'user_type'         => 'ADMIN',
                         'ip_address'        => $request->ip(),
                         'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
+                        'activity_details'  => $model->title . ' ' . $this->data['title'] . ' Activated',
                         'platform_type'     => 'WEB',
                     ];
                     UserActivity::insert($activityData);

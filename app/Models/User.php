@@ -105,7 +105,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the profile details of associated user.
     */
-    public function user_resume(): HasMany
+    public function user_cv(): HasMany
     {
         return $this->hasMany(UserResume::class, 'user_id')->orderBy('created_at', 'desc');
     }

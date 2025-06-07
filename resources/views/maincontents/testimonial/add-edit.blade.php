@@ -32,21 +32,21 @@ $controllerRoute = $module['controller_route'];
          <div class="card mb-4">
             <?php
             if($row){
-                $id                     = $row->id;
-                $name                   = $row->name;
-                $country_code           = $row->country_code;
-                $country_short_code     = $row->country_short_code;
-                $currency_code          = $row->currency_code;
-                $country_flag           = $row->country_flag;
-                $status                 = $row->status;
+                $id                         = $row->id;
+                $name                       = $row->name;
+                $designation                = $row->designation;
+                $rating                     = $row->rating;
+                $review                     = $row->review;
+                $user_image                 = $row->user_image;
+                $status                     = $row->status;
             } else {
-                $id                     = '';
-                $name                   = '';
-                $country_code           = '';
-                $country_short_code     = '';
-                $currency_code          = '';
-                $country_flag           = '';
-                $status                 = '';
+                $id                         = '';
+                $name                       = '';
+                $designation                = '';
+                $rating                     = '';
+                $review                     = '';
+                $user_image                 = '';
+                $status                     = '';
             }
             ?>
             <div class="card-body">
@@ -58,39 +58,44 @@ $controllerRoute = $module['controller_route'];
                             <input class="form-control" type="text" id="name" name="name" value="<?=$name?>" required placeholder="Name" autofocus />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="country_short_code" class="form-label">Country Short Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="country_short_code" name="country_short_code" value="<?=$country_short_code?>" required placeholder="Country Short Code" />
+                            <label for="designation" class="form-label">Designation <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="designation" name="designation" value="<?=$designation?>" required placeholder="Designation" />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="country_code" class="form-label">Country ISD Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="country_code" name="country_code" value="<?=$country_code?>" required placeholder="Country ISD Code" />
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="currency_code" class="form-label">Currency Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="currency_code" name="currency_code" value="<?=$currency_code?>" required placeholder="Currency Code" />
-                        </div>
                         <div class="col-md-6 mb-3">
+                            <label for="review" class="form-label">Review</label>
+                            <textarea class="form-control" id="review" name="review" placeholder="Review" rows="5"><?=$review?></textarea>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="rating" class="form-label">Rating <small class="text-danger">*</small></label>
+                            <select class="form-control" id="rating" name="rating" required>
+                                <option value="" selected>Select Rating</option>
+                                <?php for($i=1;$i<=5;$i++){?>
+                                <option value="<?=$i?>" <?=(($rating == $i)?'selected':'')?>><?=$i?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
                             <div class="form-check form-switch mt-0 ">
                                 <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
                                 <label class="form-check-label" for="status">Active</label>
                             </div>
-                        </div>
+                        </div>                        
 
                         <div class="col-md-6 mb-3">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                        <span class="d-none d-sm-block">Upload Country Flag</span>
+                                        <span class="d-none d-sm-block">Upload User Image</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input type="file" id="upload" class="account-file-input" name="country_flag" hidden accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                        <input type="file" id="upload" class="account-file-input" name="user_image" hidden accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                     </label>
                                     <?php
                                     if(!empty($row)){
                                         $pageLink = Request::url();
                                     ?>
-                                        <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/countries/country_flag/id/' . $id)?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                        <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/testimonials/user_image/id/' . $id)?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
                                             <i class="bx bx-reset d-block d-sm-none"></i>
                                             <span class="d-none d-sm-block">Reset</span>
                                         </a>
@@ -100,7 +105,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <img src="<?=(($country_flag != '')?$country_flag:env('NO_IMAGE'))?>" alt="<?=$name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($user_image != '')?$user_image:env('NO_IMAGE'))?>" alt="<?=$title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <div class="mt-2">

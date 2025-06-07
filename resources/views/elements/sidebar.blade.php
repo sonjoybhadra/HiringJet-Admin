@@ -129,11 +129,11 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
         </a>
       </li>
 
-      <li class="menu-item <?=(($pageSegment == 'currency')?'active':'')?>">
+      <!-- <li class="menu-item <?=(($pageSegment == 'currency')?'active':'')?>">
         <a href="<?=url('/currency/list')?>" class="menu-link">
           <div data-i18n="Currency"><i class="fa-solid fa-arrow-right"></i> Currency</div>
         </a>
-      </li>
+      </li> -->
 
       <li class="menu-item <?=(($pageSegment == 'keyskill')?'active':'')?>">
         <a href="<?=url('/keyskill/list')?>" class="menu-link">
@@ -293,6 +293,35 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     </ul>
   </li>
 
+  <!-- Home Page -->
+  <li class="menu-item active <?=(($pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
+    <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <i class="menu-icon fa-solid fa-home"></i>
+      <div data-i18n="Home Page">Home Page</div>
+    </a>
+    <ul class="menu-sub">
+
+      <li class="menu-item <?=(($pageSegment == '')?'active':'')?>">
+        <a href="javascript:void(0);" class="menu-link">
+          <div data-i18n="Sections"><i class="fa-solid fa-arrow-right"></i> Sections</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'blog')?'active':'')?>">
+        <a href="<?=url('/blog/list')?>" class="menu-link">
+          <div data-i18n="Blogs"><i class="fa-solid fa-arrow-right"></i> Blogs</div>
+        </a>
+      </li>
+
+      <li class="menu-item <?=(($pageSegment == 'testimonial')?'active':'')?>">
+        <a href="<?=url('/testimonial/list')?>" class="menu-link">
+          <div data-i18n="Testimonials"><i class="fa-solid fa-arrow-right"></i> Testimonials</div>
+        </a>
+      </li>
+
+    </ul>
+  </li>
+
   <!-- CMS Pages -->
   <li class="menu-item <?=(($pageSegment == 'page')?'active':'')?>">
     <a href="<?=url('/page/list')?>" class="menu-link">
@@ -313,7 +342,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
   <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
     <a href="<?=url('/post-job/list')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="Posting Jobs">Posting Jobs</div>
+      <div data-i18n="Jobs">Jobs</div>
     </a>
   </li>
 

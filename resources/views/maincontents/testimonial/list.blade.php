@@ -38,20 +38,20 @@ $controllerRoute = $module['controller_route'];
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
-                  'table' => 'countries',
-                  'columns' => ['name', 'country_code', 'country_short_code', 'currency_code', 'country_flag', 'created_at', 'status'],
-                  'visibleColumns' => ['name', 'country_code', 'country_short_code', 'currency_code', 'country_flag', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Name', 'Country ISD Code', 'Country Short Code', 'Currency Code', 'Country Flag', 'Created At'],
-                  'filename' => "Country",
+                  'table' => 'testimonials',
+                  'columns' => ['name', 'designation', 'rating', 'review', 'user_image', 'created_at', 'status'],
+                  'visibleColumns' => ['name', 'designation', 'rating', 'review', 'user_image', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Name', 'Designation', 'Rating', 'Review', 'User Image', 'Created At'],
+                  'filename' => "Testimonial",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
                     ['column' => 'status', 'operator' => '!=', 'value' => 3]
                   ],
-                  'routePrefix' => 'country',
+                  'routePrefix' => 'testimonial',
                   'showActions' => true, // set to false to hide actions
                   'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'imageColumns' => ['country_flag']
+                  'imageColumns' => ['user_image']
                 ])
             </div>
         </div>

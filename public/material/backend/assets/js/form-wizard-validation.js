@@ -237,10 +237,11 @@
       }
     }).on('core.form.valid', function () {
       // You can submit the form
-      // wizardValidationForm.submit()
+      wizardValidationForm.submit()
       // or send the form data to server via an Ajax request
       // To make the demo simple, I just placed an alert
-      alert('Submitted..!!');
+      // alert('Submitted..!!');
+      // this.form.submit();
     });
 
     wizardValidationNext.forEach(item => {
