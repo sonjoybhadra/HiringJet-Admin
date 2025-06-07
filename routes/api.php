@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\EditEmploymentDetailsController;
 use App\Http\Controllers\Api\EditResumeController;
 use App\Http\Controllers\Api\EditAccomplishmentsController;
 use App\Http\Controllers\Api\EditDesiredJobsController;
+use App\Http\Controllers\Api\AccountSettingsController;
 
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\CmsArticleController;
@@ -144,6 +145,11 @@ Route::group([
 
     Route::get('/get-desired-jobs', [EditDesiredJobsController::class, 'getDesiredJobs']);
     Route::post('/post-desired-jobs', [EditDesiredJobsController::class, 'postDesiredJobs']);
+
+    Route::get('/get-account-settings', [AccountSettingsController::class, 'getAccountSettingsDetails']);
+    Route::post('/post-actively-looking-for', [AccountSettingsController::class, 'postActivelyLookingFor']);
+    Route::post('/post-account-settings', [AccountSettingsController::class, 'postAccountSettings']);
+    Route::post('/post-hide-my-profile', [AccountSettingsController::class, 'postHideMyProfile']);
 
 });
 
