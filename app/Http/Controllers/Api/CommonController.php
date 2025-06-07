@@ -140,7 +140,7 @@ class CommonController extends BaseApiController
 
     public function get_country($res = '')
     {
-        $list = Country::select('id', 'name', 'country_code', 'country_flag')->where('status', 1)->get();
+        $list = Country::select('id', 'name', 'country_code', 'country_flag', 'country_short_code')->where('status', 1)->get();
         if($res != ''){
             return $list;
         }else{
@@ -165,7 +165,7 @@ class CommonController extends BaseApiController
 
     public function get_country_code($res = '')
     {
-        $list = Country::select('country_code', 'country_flag')->where('status', 1)->distinct('country_code')->get();
+        $list = Country::select('country_code', 'country_flag', 'country_short_code')->where('status', 1)->distinct('country_code')->get();
         if($res != ''){
             return $list;
         }else{
@@ -178,7 +178,7 @@ class CommonController extends BaseApiController
 
     public function get_currency($res = '')
     {
-        $list = Country::select('id', 'currency_code as name')
+        $list = Country::select('id', 'currency_code as name', 'country_short_code')
                         ->where('status', 1)
                         ->where('currency_code','<>','')
                         ->get();
