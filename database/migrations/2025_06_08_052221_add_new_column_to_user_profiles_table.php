@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('user_profiles', function (Blueprint $table) {
             $table->string('career_break_reason')->nullable();
-            $table->boolean('has_driving_license')->deafult(false);
+            $table->boolean('has_driving_license')->deafult(false)->nullable();
         });
     }
 
