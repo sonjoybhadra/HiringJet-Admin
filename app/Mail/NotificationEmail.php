@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SignupOtp extends Mailable
+class NotificationEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,13 +17,14 @@ class SignupOtp extends Mailable
      * Create a new message instance.
      *
      * @return void
-     */
-    public $name, $otp, $content;
-    public function __construct($name = '', $otp = '', $content = '')
+    */
+    public $subject;
+    private $name, $contect;
+    public function __construct($subject, $name, $contect)
     {
+        $this->subject = $subject;
         $this->name = $name;
-        $this->otp = $otp;
-        $this->content = $content;
+        $this->contect = $contect;
     }
 
     /**
@@ -34,7 +35,7 @@ class SignupOtp extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'OTP',
+            subject: $this->subject,
         );
     }
 
@@ -46,12 +47,11 @@ class SignupOtp extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mails.signup-otp',
+            view: 'mails.notification',
             with: [
-                'name' => $this->name,
-                'otp' => $this->otp,
-                'content' => $this->content,
-            ],
+                'body' => $this->contect,
+                'name'=> $this->name
+            ]
         );
     }
 

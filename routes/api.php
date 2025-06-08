@@ -150,6 +150,9 @@ Route::group([
     Route::post('/post-actively-looking-for', [AccountSettingsController::class, 'postActivelyLookingFor']);
     Route::post('/post-account-settings', [AccountSettingsController::class, 'postAccountSettings']);
     Route::post('/post-hide-my-profile', [AccountSettingsController::class, 'postHideMyProfile']);
+    Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
+    Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
+    Route::post('/change-password', [AccountSettingsController::class, 'changePassword']);
 
 });
 

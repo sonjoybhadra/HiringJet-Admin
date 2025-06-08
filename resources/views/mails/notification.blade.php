@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>
             {{ env('APP_NAME') }}
@@ -187,7 +188,7 @@
                                                 style="font-size:0px;padding:10px 25px; background: #ae860c;">
                                                 <div
                                                     style="font-family:'Lato', system-ui, sans-serif;text-align:center;">
-                                                    <h1 style="margin: 0;">OTP With {{ env('APP_NAME') }} (OTP Verification)</h1>
+                                                    <h1 style="margin: 0;">{{ env('APP_NAME') }}-Notification</h1>
                                                 </div>
                                             </td>
                                         </tr>
@@ -206,32 +207,19 @@
                                                 style="padding:10px 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-word;">
                                                 <div style="font-family:Lato, system-ui, sans-serif;font-size:13px;text-align:left;color:white;"
                                                     class="news-content">
-                                                    <p>{{ $content }}</p>
+                                                    <?php
+                                                        $list = explode('<br\>', $body);
+                                                        foreach($list as $l){
+                                                            echo '<p>'.$l.'</p>';
+                                                        }
+                                                    ?>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td align="left"
-                                                style="padding:5px 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-word;">
+                                                style="padding:10px 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-word;">
                                                 <div style="font-family:Lato, system-ui, sans-serif;font-size:13px;text-align:left;color:white;"
-                                                    class="news-content">
-                                                    <p style="margin-bottom: 6px;">OTP:{{ $otp }}</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left"
-                                                style="padding:10px 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-word;">
-                                                <div style="font-family:Lato, system-ui, sans-serif;font-size:10px;text-align:left;color:white;"
-                                                    class="news-content">
-                                                    <p>Please note that the OTP will be valid for next 10 Minutes.</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left"
-                                                style="padding:10px 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-word;">
-                                                <div style="font-family:Lato, system-ui, sans-serif;font-size:13px;text-align:left;color:rgba(255, 255, 255, 0.808);"
                                                     class="news-content">
                                                     <p>Thank you,</p>
                                                     <p>{{ env('APP_NAME') }}</p>
@@ -248,5 +236,5 @@
             </table>
         </div>
     </body>
-</html>
 
+</html>

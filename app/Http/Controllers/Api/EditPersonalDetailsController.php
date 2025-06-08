@@ -41,19 +41,21 @@ class EditPersonalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'gender'=> 'required|string',
+            'religion_id'=> 'required|integer',
             'merital_status'=> 'required|string',
-            'cast_category'=> 'required|string',
             'dob'=> 'required|date',
-            // 'differently_abled'=> 'required',
-            'career_break'=> 'required',
+            'nationality'=> 'required|integer',
+            'country_id'=> 'required|integer',
+            'city'=> 'required|integer',
+            'cast_category'=> 'required|string',
+            'differently_abled'=> 'required|boolean',
+            'career_break'=> 'required|boolean',
             'usa_working_permit'=> 'required|boolean',
             'other_working_permit_country'=> 'required|integer',
             'address'=> 'required|string',
-            'country_id'=> 'required|integer',
-            'city'=> 'required|integer',
             'pincode'=> 'required|integer',
-            'religion_id'=> 'required|integer',
-            'language' => 'required|array'
+            'language' => 'required|array',
+            'career_break_reason'=> 'required_if:career_break,1|string'
         ]);
 
         if($validator->fails()){
@@ -61,22 +63,26 @@ class EditPersonalDetailsController extends BaseApiController
         }
         try {
             UserProfile::where('user_id', auth()->user()->id)->update([
-                'date_of_birth'=> $request->dob,
                 'gender'=> $request->gender,
+                'religion_id'=> $request->religion_id,
                 'merital_status_id'=> $request->merital_status,
+                'date_of_birth'=> $request->dob,
+                'nationality_id'=> $request->nationality,
+                'country_id'=> $request->country_id,
+                'city_id'=> $request->city,
                 'cast_category'=> $request->cast_category,
+                'differently_abled'=> $request->differently_abled,
                 'career_break'=> $request->career_break,
+                'career_break_reason'=> $request->career_break_reason,
                 'usa_working_permit'=> $request->career_break,
                 'pasport_country_id'=> $request->other_working_permit_country,
                 'address'=> $request->address,
-                'country_id'=> $request->country_id,
-                'city_id'=> $request->city,
                 'pincode'=> $request->pincode,
-                'religion_id'=> $request->religion_id,
                 'alt_email'=> $request->alt_email,
                 'alt_country_code'=> $request->alt_country_code,
                 'alt_phone'=> $request->alt_phone,
                 'diverse_background'=> $request->diverse_background,
+                'has_driving_license'=> $request->has_driving_license,
             ]);
 
             if(!empty($request->language)){
