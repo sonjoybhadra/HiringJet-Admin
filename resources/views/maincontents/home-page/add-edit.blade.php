@@ -79,7 +79,6 @@ $controllerRoute = $module['controller_route'];
                 $section1_title             = '';
                 $section1_description       = '';
                 $section1_button_text       = '';
-
                 $section2_title             = '';
                 $section2_description       = '';
                 $section2_button_text       = '';
