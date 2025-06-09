@@ -167,7 +167,7 @@ class PostJobController extends Controller
             $page_name                      = 'post-job.add-edit';
             $data['row']                    = [];
             $data['employers']              = Employer::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(50)->get();
+            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(800)->get();
             $data['contract_types']         = ContractType::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['keyskills']              = Keyskill::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['experiences']            = CurrentWorkLevel::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
@@ -188,7 +188,7 @@ class PostJobController extends Controller
             $page_name                      = 'post-job.add-edit';
             $data['row']                    = PostJob::where('id', '=', $id)->first();
             $data['employers']              = Employer::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(50)->get();
+            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(800)->get();
             $data['contract_types']         = ContractType::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['keyskills']              = Keyskill::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['experiences']            = CurrentWorkLevel::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();

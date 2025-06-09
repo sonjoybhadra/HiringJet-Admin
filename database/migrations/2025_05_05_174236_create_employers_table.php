@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->longText('name');
             $table->string('logo', 100);
-            $table->string('description', 100);
+            $table->longText('description');
             $table->string('industry_id', 100);
             $table->string('no_of_employee', 100);
             $table->tinyInteger('status')->default(1);
