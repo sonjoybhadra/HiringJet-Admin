@@ -190,7 +190,7 @@ class EditProfessionalDetailsController extends BaseApiController
                 UserEmployment::where('user_id', auth()->user()->id)
                                 ->where('is_current_job', 1)
                                 ->with('employer')
-                                ->with('countrie')
+                                ->with('country')
                                 ->with('city')
                                 ->with('skills')
                                 ->first()
