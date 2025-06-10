@@ -30,8 +30,10 @@ use App\Models\Language;
 use App\Models\Religion;
 use App\Models\MaritalStatus;
 use App\Models\ItSkill;
-
 use App\Models\Nationality;
+
+use App\Models\HomePage;
+use App\Models\GeneralSetting;
 
 
 class CommonController extends BaseApiController
@@ -514,6 +516,26 @@ class CommonController extends BaseApiController
         return $this->sendResponse(
             $sql->get(),
             'List'
+        );
+    }
+
+    public function get_homepage(){
+        return $this->sendResponse(
+            HomePage::where('status', 1)->latest()->first(),
+            'Home page details'
+        );
+    }
+
+    public function get_general_settings(Request $request){
+        $sql = GeneralSetting::where('is_Active', 1)->latest();
+        if(!empty($request->slug)){
+            $params = explode(',', $request->slug);
+            $sql->whereIn('slug', $params);
+        }
+        $list = $sql->get();
+        return $this->sendResponse(
+            $list,
+            'General settings list'
         );
     }
 
