@@ -199,9 +199,9 @@ class SiteAuthService
                     // $temp = $images[$p]->getTempName();
                     $temp = $images[$p]->getPathName();
                     if($path == '') {
-                        $upload_path = 'uploads/';
+                        $upload_path = public_path('uploads/');
                     } else {
-                        $upload_path = $path.'/';
+                        $upload_path = public_path('uploads/'.$path.'/');
                     }
                     if($status) {
                         move_uploaded_file($temp, $upload_path.$newFilename);

@@ -47,25 +47,25 @@ $controllerRoute = $module['controller_route'];
                 $section2_title             = $row->section2_title;
                 $section2_description       = $row->section2_description;
                 $section2_button_text       = $row->section2_button_text;
-                $section3_box_image         = $row->section3_box_image;
-                $section3_box_text          = $row->section3_box_text;
-                $section3_box_number        = $row->section3_box_number;
+                $section3_box_image         = (($row->section3_box_image != '')?json_decode($row->section3_box_image):[]);
+                $section3_box_text          = (($row->section3_box_text != '')?json_decode($row->section3_box_text):[]);
+                $section3_box_number        = (($row->section3_box_number != '')?json_decode($row->section3_box_number):[]);
                 $section4_title             = $row->section4_title;
                 $section4_country           = (($row->section4_country != '')?json_decode($row->section4_country):[]);
                 $section4_city              = (($row->section4_city != '')?json_decode($row->section4_city):[]);
                 $section5_title             = $row->section5_title;
-                $section5_box_name          = $row->section5_box_name;
-                $section5_box_image         = $row->section5_box_image;
+                $section5_box_name          = (($row->section5_box_name != '')?json_decode($row->section5_box_name):[]);
+                $section5_box_image         = (($row->section5_box_image != '')?json_decode($row->section5_box_image):[]);
                 $section6_title             = $row->section6_title;
                 $section6_description       = $row->section6_description;
                 $section6_button_text       = $row->section6_button_text;
                 $section7_title             = $row->section7_title;
                 $section7_description       = $row->section7_description;
-                $section7_box_name          = $row->section7_box_name;
-                $section7_box_description   = $row->section7_box_description;
-                $section7_box_image         = $row->section7_box_image;
-                $section7_box_link_name     = $row->section7_box_link_name;
-                $section7_box_link_url      = $row->section7_box_link_url;
+                $section7_box_name          = (($row->section7_box_name != '')?json_decode($row->section7_box_name):[]);
+                $section7_box_description   = (($row->section7_box_description != '')?json_decode($row->section7_box_description):[]);
+                $section7_box_image         = (($row->section7_box_image != '')?json_decode($row->section7_box_image):[]);
+                $section7_box_link_name     = (($row->section7_box_link_name != '')?json_decode($row->section7_box_link_name):[]);
+                $section7_box_link_url      = (($row->section7_box_link_url != '')?json_decode($row->section7_box_link_url):[]);
                 $section8_title             = $row->section8_title;
                 $section8_description       = $row->section8_description;
                 $section9_title             = $row->section9_title;
@@ -82,31 +82,25 @@ $controllerRoute = $module['controller_route'];
                 $section2_title             = '';
                 $section2_description       = '';
                 $section2_button_text       = '';
-
-                $section3_box_image         = '';
-                $section3_box_text          = '';
-                $section3_box_number        = '';
-
+                $section3_box_image         = [];
+                $section3_box_text          = [];
+                $section3_box_number        = [];
                 $section4_title             = '';
                 $section4_country           = [];
                 $section4_city              = [];
-
                 $section5_title             = '';
-                $section5_box_name          = '';
-                $section5_box_image         = '';
-
+                $section5_box_name          = [];
+                $section5_box_image         = [];
                 $section6_title             = '';
                 $section6_description       = '';
                 $section6_button_text       = '';
-
                 $section7_title             = '';
                 $section7_description       = '';
-                $section7_box_name          = '';
-                $section7_box_description   = '';
-                $section7_box_image         = '';
-                $section7_box_link_name     = '';
-                $section7_box_link_url      = '';
-
+                $section7_box_name          = [];
+                $section7_box_description   = [];
+                $section7_box_image         = [];
+                $section7_box_link_name     = [];
+                $section7_box_link_url      = [];
                 $section8_title             = '';
                 $section8_description       = '';
                 $section9_title             = '';
@@ -121,7 +115,7 @@ $controllerRoute = $module['controller_route'];
             <div class="card-body">
                 <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 1</h5>
                         <div class="col-md-3">
                             <label for="section1_title" class="form-label">Section 1 Title <small class="text-danger">*</small></label>
@@ -138,7 +132,7 @@ $controllerRoute = $module['controller_route'];
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 2</h5>
                         <div class="col-md-3">
                             <label for="section2_title" class="form-label">Section 2 Title <small class="text-danger">*</small></label>
@@ -155,9 +149,59 @@ $controllerRoute = $module['controller_route'];
                     </div>
                     <hr class="mt-2">
 
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
+                        <h5>Section 3</h5>
+                        <div class="col-md-12">
+                            <div class="field_wrapper2 mt-3">
+                                <?php if(!empty($section3_box_text)){ for($k=0;$k<count($section3_box_text);$k++){?>
+                                    <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                        <div class="col-lg-4 col-md-4">
+                                            <label class="form-label">Section 3 Box Name</label>
+                                            <input type="text" class="form-control" name="section3_box_text[]" value="<?=$section3_box_text[$k]?>" placeholder="Section 3 Box Name"/>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2">
+                                            <label class="form-label">Section 3 Box Number</label>
+                                            <input type="text" class="form-control" name="section3_box_number[]" value="<?=$section3_box_number[$k]?>" placeholder="Section 3 Box Number"/>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
+                                            <label class="form-label">Section 3 Box Image</label><br>
+                                            <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                            <?php if(!empty($section3_box_image)) { if($section3_box_image[$k] != ''){?>
+                                                <img src="<?=(($section3_box_image[$k] != '')?$section3_box_image[$k]:env('NO_IMAGE'))?>" alt="<?=$section3_box_text[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                            <?php } }?>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                            <a href="javascript:void(0);" class="remove_button2" title="Remove row">
+                                                <i class="fa fa-minus-circle fa-2x text-danger"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php } }?>
+                                <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 3 Box Text</label>
+                                        <input type="text" class="form-control" name="section3_box_text[]" placeholder="Section 3 Box Text"/>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2">
+                                        <label class="form-label">Section 3 Box Number</label>
+                                        <input type="text" class="form-control" name="section3_box_number[]" placeholder="Section 3 Box Number"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 3 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="add_button2" title="Add row">
+                                            <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mt-2">
 
-
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 4</h5>
                         <div class="col-md-4">
                             <label for="section4_title" class="form-label">Section 4 Title <small class="text-danger">*</small></label>
@@ -182,16 +226,55 @@ $controllerRoute = $module['controller_route'];
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 5</h5>
-                        <div class="col-md-3">
+                        <div class="col-md-12">
                             <label for="section5_title" class="form-label">Section 5 Title <small class="text-danger">*</small></label>
                             <input class="form-control" type="text" id="section5_title" name="section5_title" value="<?=$section5_title?>" required placeholder="Section 5 Title" autofocus />
+                        </div>
+                        <div class="col-md-12">
+                            <div class="field_wrapper1 mt-3">
+                                <?php if(!empty($section5_box_name)){ for($k=0;$k<count($section5_box_name);$k++){?>
+                                    <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                        <div class="col-lg-5 col-md-5">
+                                            <label class="form-label">Section 5 Box Name</label>
+                                            <input type="text" class="form-control" name="section5_box_name[]" value="<?=$section5_box_name[$k]?>" placeholder="Section 5 Box Name"/>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5">
+                                            <label class="form-label">Section 5 Box Image</label><br>
+                                            <input type="file" class="account-file-input" name="section5_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                            <?php if(!empty($section5_box_image)) { if($section5_box_image[$k] != ''){?>
+                                                <img src="<?=(($section5_box_image[$k] != '')?$section5_box_image[$k]:env('NO_IMAGE'))?>" alt="<?=$section5_box_name[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                            <?php } }?>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                            <a href="javascript:void(0);" class="remove_button1" title="Add row">
+                                                <i class="fa fa-minus-circle fa-2x text-danger"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php } }?>
+                                <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 5 Box Name</label>
+                                        <input type="text" class="form-control" name="section5_box_name[]" placeholder="Section 5 Box Name"/>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 5 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section5_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="add_button1" title="Add row">
+                                            <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 6</h5>
                         <div class="col-md-3">
                             <label for="section6_title" class="form-label">Section 6 Title <small class="text-danger">*</small></label>
@@ -208,7 +291,7 @@ $controllerRoute = $module['controller_route'];
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 7</h5>
                         <div class="col-md-6">
                             <label for="section7_title" class="form-label">Section 7 Title <small class="text-danger">*</small></label>
@@ -218,10 +301,75 @@ $controllerRoute = $module['controller_route'];
                             <label for="section7_description" class="form-label">Section 7 Description <small class="text-danger">*</small></label>
                             <textarea class="form-control" id="section7_description" name="section7_description" placeholder="Section 7 Description" rows="5"><?=$section7_description?></textarea>
                         </div>
+                        <div class="col-md-12">
+                            <div class="field_wrapper3 mt-3">
+                                <?php if(!empty($section7_box_name)){ for($k=0;$k<count($section7_box_name);$k++){?>
+                                    <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                        <div class="col-lg-4 col-md-4">
+                                            <label class="form-label">Section 7 Box Name</label>
+                                            <input type="text" class="form-control" name="section7_box_name[]" value="<?=$section7_box_name[$k]?>" placeholder="Section 7 Box Name"/>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
+                                            <label class="form-label">Section 7 Box Link Name</label>
+                                            <input type="text" class="form-control" name="section7_box_link_name[]" value="<?=$section7_box_link_name[$k]?>" placeholder="Section 7 Box Link Name"/>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
+                                            <label class="form-label">Section 7 Box Link URL</label>
+                                            <input type="text" class="form-control" name="section7_box_link_url[]" value="<?=$section7_box_link_url[$k]?>" placeholder="Section 7 Box Link URL"/>
+                                        </div>
+
+                                        <div class="col-lg-5 col-md-5">
+                                            <label class="form-label">Section 7 Box Description</label>
+                                            <textarea class="form-control" name="section7_box_description[]" placeholder="Section 7 Box Description"><?=$section7_box_description[$k]?></textarea>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5">
+                                            <label class="form-label">Section 7 Box Image</label><br>
+                                            <input type="file" class="account-file-input" name="section7_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                            <?php if(!empty($section7_box_image)) { if($section7_box_image[$k] != ''){?>
+                                                <img src="<?=(($section7_box_image[$k] != '')?$section7_box_image[$k]:env('NO_IMAGE'))?>" alt="<?=$section7_box_name[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                            <?php } }?>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                            <a href="javascript:void(0);" class="remove_button3" title="Remove row">
+                                                <i class="fa fa-minus-circle fa-2x text-danger"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php } }?>
+                                <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 7 Box Name</label>
+                                        <input type="text" class="form-control" name="section7_box_name[]" placeholder="Section 7 Box Name"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 7 Box Link Name</label>
+                                        <input type="text" class="form-control" name="section7_box_link_name[]" placeholder="Section 7 Box Link Name"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 7 Box Link URL</label>
+                                        <input type="text" class="form-control" name="section7_box_link_url[]" placeholder="Section 7 Box Link URL"/>
+                                    </div>
+
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 7 Box Description</label>
+                                        <textarea class="form-control" name="section7_box_description[]" placeholder="Section 7 Box Description"></textarea>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 7 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section7_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="add_button3" title="Add row">
+                                            <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 8</h5>
                         <div class="col-md-6">
                             <label for="section8_title" class="form-label">Section 8 Title <small class="text-danger">*</small></label>
@@ -234,7 +382,7 @@ $controllerRoute = $module['controller_route'];
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 9</h5>
                         <div class="col-md-6">
                             <label for="section9_title" class="form-label">Section 9 Title <small class="text-danger">*</small></label>
@@ -247,7 +395,7 @@ $controllerRoute = $module['controller_route'];
                     </div>
                     <hr class="mt-2">
 
-                    <div class="row mt-2">
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 10</h5>
                         <div class="col-md-6">
                             <label for="section10_title" class="form-label">Section 10 Title <small class="text-danger">*</small></label>
@@ -352,6 +500,142 @@ $controllerRoute = $module['controller_route'];
                 searchResultLimit:30,
                 renderChoiceLimit:30
             });     
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button1'); //Add button selector
+            var wrapper = $('.field_wrapper1'); //Input field wrapper
+            var fieldHTML =     `<div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 5 Box Name</label>
+                                        <input type="text" class="form-control" name="section5_box_name[]" placeholder="Section 5 Box Name"/>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 5 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section5_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="remove_button1" title="Remove row">
+                                            <i class="fa fa-minus-circle fa-2x text-danger"></i>
+                                        </a>
+                                    </div>
+                                </div>`; //New input field html 
+            var x = 1; //Initial field counter is 1
+            
+            // Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){ 
+                    x++; //Increase field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }else{
+                    alert('A maximum of '+maxField+' fields are allowed to be added. ');
+                }
+            });
+            
+            // Once remove button is clicked
+            $(wrapper).on('click', '.remove_button1', function(e){
+                e.preventDefault();
+                $(this).parent('div').parent('div').remove(); //Remove field html
+                x--; //Decrease field counter
+            });
+        });
+        $(document).ready(function(){
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button2'); //Add button selector
+            var wrapper = $('.field_wrapper2'); //Input field wrapper
+            var fieldHTML =     `<div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 3 Box Text</label>
+                                        <input type="text" class="form-control" name="section3_box_text[]" placeholder="Section 3 Box Text"/>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2">
+                                        <label class="form-label">Section 3 Box Number</label>
+                                        <input type="text" class="form-control" name="section3_box_number[]" placeholder="Section 3 Box Number"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 3 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="remove_button2" title="Remove row">
+                                            <i class="fa fa-minus-circle fa-2x text-danger"></i>
+                                        </a>
+                                    </div>
+                                </div>`; //New input field html 
+            var x = 1; //Initial field counter is 1
+            
+            // Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){ 
+                    x++; //Increase field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }else{
+                    alert('A maximum of '+maxField+' fields are allowed to be added. ');
+                }
+            });
+            
+            // Once remove button is clicked
+            $(wrapper).on('click', '.remove_button2', function(e){
+                e.preventDefault();
+                $(this).parent('div').parent('div').remove(); //Remove field html
+                x--; //Decrease field counter
+            });
+        });
+        $(document).ready(function(){
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button3'); //Add button selector
+            var wrapper = $('.field_wrapper3'); //Input field wrapper
+            var fieldHTML =     `<div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 7 Box Name</label>
+                                        <input type="text" class="form-control" name="section7_box_name[]" placeholder="Section 7 Box Name"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 7 Box Link Name</label>
+                                        <input type="text" class="form-control" name="section7_box_link_name[]" placeholder="Section 7 Box Link Name"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 7 Box Link URL</label>
+                                        <input type="text" class="form-control" name="section7_box_link_url[]" placeholder="Section 7 Box Link URL"/>
+                                    </div>
+
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 7 Box Description</label>
+                                        <textarea class="form-control" name="section7_box_description[]" placeholder="Section 7 Box Description"></textarea>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5">
+                                        <label class="form-label">Section 7 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section7_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="add_button3" title="Add row">
+                                            <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                        </a>
+                                    </div>
+                                </div>`; //New input field html 
+            var x = 1; //Initial field counter is 1
+            
+            // Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){ 
+                    x++; //Increase field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }else{
+                    alert('A maximum of '+maxField+' fields are allowed to be added. ');
+                }
+            });
+            
+            // Once remove button is clicked
+            $(wrapper).on('click', '.remove_button3', function(e){
+                e.preventDefault();
+                $(this).parent('div').parent('div').remove(); //Remove field html
+                x--; //Decrease field counter
+            });
         });
     </script>
 @endsection

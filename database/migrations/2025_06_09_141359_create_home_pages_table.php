@@ -19,9 +19,9 @@ return new class extends Migration
             $table->longtext('section2_title');
             $table->longtext('section2_description');
             $table->string('section2_button_text', 250);
-            $table->string('section3_box_image', 250);
+            $table->longtext('section3_box_image');
             $table->longtext('section3_box_text');
-            $table->string('section3_box_number', 250);
+            $table->longtext('section3_box_number');
             $table->string('section4_title', 250);
             $table->longtext('section4_country');
             $table->longtext('section4_city');
