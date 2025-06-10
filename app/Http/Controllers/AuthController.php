@@ -92,7 +92,7 @@ class AuthController extends Controller
             }
             /* user activity */
                 $activityData = [
-                    'user_email'        => $postData['email'],
+                    'user_email'        => $authData['email'],
                     'user_name'         => 'Master Admin',
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
