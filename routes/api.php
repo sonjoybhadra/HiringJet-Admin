@@ -98,6 +98,7 @@ Route::post('/contact-us', [ContactUsController::class, 'postContactUs']);
 Route::post('/report-bug', [ReportBugController::class, 'postReportBug']);
 
 Route::post('/get-jobs/{job_type}', [JobSearchController::class, 'getJobsByParams']);
+Route::post('/get-jobs/{job_type}/{id}', [JobSearchController::class, 'getJobDetails']);
 
 
 Route::group([

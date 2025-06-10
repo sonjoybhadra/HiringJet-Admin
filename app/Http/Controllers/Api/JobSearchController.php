@@ -15,8 +15,12 @@ class JobSearchController extends BaseApiController
     */
     public function getJobsByParams(Request $request, $job_type)
     {
-        $sql = PostJob::where('job_type', $job_type);
         try {
+            $sql = PostJob::where('job_type', $job_type);
+            $sql->latest();
+            if($request->paginate){
+                $sql->paginate(15);
+            }
             return $this->sendResponse(
                 $sql->get(),
                 'Job list by params'
@@ -25,4 +29,17 @@ class JobSearchController extends BaseApiController
             return $this->sendError('Error', $e->getMessage());
         }
     }
+
+    public function getJobDetails(Request $request, $job_type, $id)
+    {
+        try {
+            return $this->sendResponse(
+                PostJob::findOrFail($id),
+                'Job details'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
 }
