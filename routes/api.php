@@ -70,7 +70,7 @@ Route::get('/get-currentworklevel', [CommonController::class, 'get_currentworkle
 Route::get('/get-functionalarea', [CommonController::class, 'get_functionalarea']);
 Route::get('/get-onlineprofile', [CommonController::class, 'get_onlineprofile']);
 Route::get('/get-qualification', [CommonController::class, 'get_qualification']);
-Route::get('/get-course', [CommonController::class, 'get_course']);
+Route::get('/get-course/{qualification_id}', [CommonController::class, 'get_course']);
 Route::get('/get-specialization', [CommonController::class, 'get_specialization']);
 Route::get('/get-nationality', [CommonController::class, 'get_nationality']);
 Route::get('/get-religion', [CommonController::class, 'get_religion']);

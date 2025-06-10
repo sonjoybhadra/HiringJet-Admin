@@ -54,7 +54,7 @@ class CommonController extends BaseApiController
             'functionalarea'=> $this->get_functionalarea(1),
             'onlineprofile'=> $this->get_onlineprofile(1),
             'qualification'=> $this->get_qualification(1),
-            'course'=> $this->get_course(1),
+            'course'=> $this->get_course('', 1),
             // 'specialization'=> $this->get_specialization(1),
             'nationality'=> $this->get_nationality(1),
             'religion'=> $this->get_religion(1),
@@ -283,12 +283,12 @@ class CommonController extends BaseApiController
         }
     }
 
-    public function get_course(Request $request, $res = '')
+    public function get_course($qualification_id = '', $res = '')
     {
         $sql = Course::select('id', 'name')->where('status', 1)
                     ->with('qualification');
-        if(!empty($request->qualification_id)){
-            $sql->where('qualification_id', $request->qualification_id);
+        if(!empty($qualification_id)){
+            $sql->where('qualification_id', $qualification_id);
         }
         $list = $sql->get();
         if($res != ''){
