@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserEducation;
-use App\Models\ProfileComplete;
-use App\Models\UserProfileCompletedPercentage;
 
 class EditEducationalDetailsController extends BaseApiController
 {

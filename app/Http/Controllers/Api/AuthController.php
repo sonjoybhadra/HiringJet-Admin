@@ -85,7 +85,20 @@ class AuthController extends BaseApiController
     {
         try {
             return $this->sendResponse(
-                $this->getUserDetails(),
+                User::where('id', auth()->user()->id)
+                    ->with('user_profile')
+                    ->with('user_skills')
+                    ->with('user_employments')
+                    ->with('user_education')
+                    ->with('user_profile_completed_percentages')
+                    ->with('user_languages')
+                    ->with('user_certification')
+                    ->with('user_online_profile')
+                    ->with('user_work_sample')
+                    ->with('user_employment')
+                    ->with('user_it_skill')
+                    ->with('user_cv')
+                    ->first(),
                 'User Details'
             );
         } catch (JWTException $exception) {

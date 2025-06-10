@@ -17,9 +17,11 @@ class FaqController extends BaseApiController
         $main_category = FaqCategory::select('id')->where('slug', $slug)->where('status', 1)->first();
         $list = [];
         if($main_category){
-            $list = FaqSubCategory::select('id', 'name')
+            $list = FaqSubCategory::select('id', 'name', 'description', 'image')
                                 ->where('faq_category_id', $main_category->id)
-                                ->where('status', 1)->get();
+                                ->where('status', 1)
+                                ->orderBy('id', 'ASC')
+                                ->get();
         }
         return $this->sendResponse(
                 $list,

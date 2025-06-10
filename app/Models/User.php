@@ -131,6 +131,33 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserEmployment::class, 'user_id')->orderBy('created_at', 'asc');
     }
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_certification(): HasMany
+    {
+        return $this->hasMany(UserCertification::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_online_profile(): HasMany
+    {
+        return $this->hasMany(UserOnlineProfile::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_work_sample(): HasMany
+    {
+        return $this->hasMany(UserWorkSample::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_employment(): HasMany
+    {
+        return $this->hasMany(UserEmployment::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_it_skill(): HasMany
+    {
+        return $this->hasMany(UserItSkill::class, 'user_id')->orderBy('created_at', 'asc');
+    }
 
 
 }
