@@ -527,7 +527,7 @@ class CommonController extends BaseApiController
     }
 
     public function get_general_settings(Request $request){
-        $sql = GeneralSetting::where('is_Active', 1)->latest();
+        $sql = GeneralSetting::where('is_active', 1)->latest();
         if(!empty($request->slug)){
             $params = explode(',', $request->slug);
             $sql->whereIn('slug', $params);
