@@ -46,6 +46,8 @@ class FaqSubCategoryController extends Controller
                 $rules = [
                     'faq_category_id'       => 'required',
                     'name'                  => 'required',
+                    'description'           => 'required',
+                    'image'                 => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -60,9 +62,26 @@ class FaqSubCategoryController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
+                    /* image */
+                        $upload_folder = 'faq-sub-category';
+                        $imageFile      = $request->file('image');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('image', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $image = $uploadedFile['newFilename'];
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' image']);
+                        }
+                    /* image */
                     $fields = [
-                        'faq_category_id'   => strip_tags($postData['faq_category_id']),
-                        'name'              => strip_tags($postData['name']),
+                        'faq_category_id'           => strip_tags($postData['faq_category_id']),
+                        'name'                      => strip_tags($postData['name']),
+                        'description'               => strip_tags($postData['description']),
+                        'image'                     => env('UPLOADS_URL') . $upload_folder . '/' . $image,
                     ];
                     FaqSubCategory::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -93,11 +112,31 @@ class FaqSubCategoryController extends Controller
                 $rules = [
                     'faq_category_id'       => 'required',
                     'name'                  => 'required',
+                    'description'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    /* image */
+                        $upload_folder = 'faq-sub-category';
+                        $imageFile      = $request->file('image');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('image', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $image = $uploadedFile['newFilename'];
+                                $faqSubImage = env('UPLOADS_URL') . $upload_folder . '/' . $image;
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            $image = $data['row']->image;
+                            $faqSubImage = $image;
+                        }
+                    /* image */
                     $fields = [
-                        'faq_category_id'   => strip_tags($postData['faq_category_id']),
-                        'name'              => strip_tags($postData['name']),
+                        'faq_category_id'           => strip_tags($postData['faq_category_id']),
+                        'name'                      => strip_tags($postData['name']),
+                        'description'               => strip_tags($postData['description']),
+                        'image'                     => $faqSubImage,
                     ];
                     FaqSubCategory::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
