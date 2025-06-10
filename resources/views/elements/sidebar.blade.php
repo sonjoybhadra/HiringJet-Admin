@@ -294,22 +294,28 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
   </li>
 
   <!-- Home Page -->
-  <li class="menu-item active <?=(($pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
+  <li class="menu-item active <?=(($pageSegment == 'home-page' || $pageSegment == 'article' || $pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
     <a href="javascript:void(0);" class="menu-link menu-toggle">
       <i class="menu-icon fa-solid fa-home"></i>
       <div data-i18n="Home Page">Home Page</div>
     </a>
     <ul class="menu-sub">
 
-      <li class="menu-item <?=(($pageSegment == '')?'active':'')?>">
-        <a href="javascript:void(0);" class="menu-link">
+      <li class="menu-item <?=(($pageSegment == 'home-page')?'active':'')?>">
+        <a href="<?=url('/home-page/manage')?>" class="menu-link">
           <div data-i18n="Sections"><i class="fa-solid fa-arrow-right"></i> Sections</div>
         </a>
       </li>
 
-      <li class="menu-item <?=(($pageSegment == 'blog')?'active':'')?>">
+      <!-- <li class="menu-item <?=(($pageSegment == 'blog')?'active':'')?>">
         <a href="<?=url('/blog/list')?>" class="menu-link">
           <div data-i18n="Blogs"><i class="fa-solid fa-arrow-right"></i> Blogs</div>
+        </a>
+      </li> -->
+      <!-- Articles -->
+      <li class="menu-item <?=(($pageSegment == 'article')?'active':'')?>">
+        <a href="<?=url('/article/list')?>" class="menu-link">
+          <div data-i18n="Articles"><i class="fa-solid fa-arrow-right"></i> Articles</div>
         </a>
       </li>
 
@@ -327,14 +333,6 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     <a href="<?=url('/page/list')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-file-lines"></i>
       <div data-i18n="CMS Pages">CMS Pages</div>
-    </a>
-  </li>
-
-  <!-- Articles -->
-  <li class="menu-item <?=(($pageSegment == 'article')?'active':'')?>">
-    <a href="<?=url('/article/list')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="Articles">Articles</div>
     </a>
   </li>
 

@@ -92,7 +92,7 @@ class AuthController extends Controller
             }
             /* user activity */
                 $activityData = [
-                    'user_email'        => $postData['email'],
+                    'user_email'        => $authData['email'],
                     'user_name'         => 'Master Admin',
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
@@ -608,81 +608,112 @@ class AuthController extends Controller
         }
         public function footer_settings(Request $request){
             $postData = $request->all();
+            // Helper::pr($postData);
             $rules = [
                 'footer_text'            => 'required',
             ];
             if($this->validate($request, $rules)){
-                // $footer_link_name_array = $postData['footer_link_name'];
-                // $footer_link_name       = [];
-                // if(!empty($footer_link_name_array)){
-                //     for($f=0;$f<count($footer_link_name_array);$f++){
-                //         if($footer_link_name_array[$f]){
-                //             $footer_link_name[]       = $footer_link_name_array[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_array = $postData['footer_link'];
-                // $footer_link       = [];
-                // if(!empty($footer_link_array)){
-                //     for($f=0;$f<count($footer_link_array);$f++){
-                //         if($footer_link_array[$f]){
-                //             $footer_link[]       = $footer_link_array[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_name_array2 = $postData['footer_link_name2'];
-                // $footer_link_name2       = [];
-                // if(!empty($footer_link_name_array2)){
-                //     for($f=0;$f<count($footer_link_name_array2);$f++){
-                //         if($footer_link_name_array2[$f]){
-                //             $footer_link_name2[]       = $footer_link_name_array2[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_array2 = $postData['footer_link2'];
-                // $footer_link2       = [];
-                // if(!empty($footer_link_array2)){
-                //     for($f=0;$f<count($footer_link_array2);$f++){
-                //         if($footer_link_array2[$f]){
-                //             $footer_link2[]       = $footer_link_array2[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_name_array3 = $postData['footer_link_name3'];
-                // $footer_link_name3       = [];
-                // if(!empty($footer_link_name_array3)){
-                //     for($f=0;$f<count($footer_link_name_array3);$f++){
-                //         if($footer_link_name_array3[$f]){
-                //             $footer_link_name3[]       = $footer_link_name_array3[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_array3 = $postData['footer_link3'];
-                // $footer_link3       = [];
-                // if(!empty($footer_link_array3)){
-                //     for($f=0;$f<count($footer_link_array3);$f++){
-                //         if($footer_link_array3[$f]){
-                //             $footer_link3[]       = $footer_link_array3[$f];
-                //         }
-                //     }
-                // }
-                // $fields = [
-                //     'footer_text'                   => $postData['footer_text'],
-                //     'footer_link_name'              => json_encode($footer_link_name),
-                //     'footer_link'                   => json_encode($footer_link),
-                //     'footer_link_name2'             => json_encode($footer_link_name2),
-                //     'footer_link2'                  => json_encode($footer_link2),
-                //     'footer_link_name3'             => json_encode($footer_link_name3),
-                //     'footer_link3'                  => json_encode($footer_link3),
-                // ];
-                // // Helper::pr($fields);
+                $footer_link_name_array = $postData['footer_link_name'];
+                $footer_link_name       = [];
+                if(!empty($footer_link_name_array)){
+                    for($f=0;$f<count($footer_link_name_array);$f++){
+                        if($footer_link_name_array[$f]){
+                            $footer_link_name[]       = $footer_link_name_array[$f];
+                        }
+                    }
+                }
+                $footer_link_array = $postData['footer_link'];
+                $footer_link       = [];
+                if(!empty($footer_link_array)){
+                    for($f=0;$f<count($footer_link_array);$f++){
+                        if($footer_link_array[$f]){
+                            $footer_link[]       = $footer_link_array[$f];
+                        }
+                    }
+                }
+                $footer_link_name_array2 = $postData['footer_link_name2'];
+                $footer_link_name2       = [];
+                if(!empty($footer_link_name_array2)){
+                    for($f=0;$f<count($footer_link_name_array2);$f++){
+                        if($footer_link_name_array2[$f]){
+                            $footer_link_name2[]       = $footer_link_name_array2[$f];
+                        }
+                    }
+                }
+                $footer_link_array2 = $postData['footer_link2'];
+                $footer_link2       = [];
+                if(!empty($footer_link_array2)){
+                    for($f=0;$f<count($footer_link_array2);$f++){
+                        if($footer_link_array2[$f]){
+                            $footer_link2[]       = $footer_link_array2[$f];
+                        }
+                    }
+                }
+                $footer_link_name_array3 = $postData['footer_link_name3'];
+                $footer_link_name3       = [];
+                if(!empty($footer_link_name_array3)){
+                    for($f=0;$f<count($footer_link_name_array3);$f++){
+                        if($footer_link_name_array3[$f]){
+                            $footer_link_name3[]       = $footer_link_name_array3[$f];
+                        }
+                    }
+                }
+                $footer_link_array3 = $postData['footer_link3'];
+                $footer_link3       = [];
+                if(!empty($footer_link_array3)){
+                    for($f=0;$f<count($footer_link_array3);$f++){
+                        if($footer_link_array3[$f]){
+                            $footer_link3[]       = $footer_link_array3[$f];
+                        }
+                    }
+                }
+                $fields = [
+                    'footer_link_name'              => json_encode($footer_link_name),
+                    'footer_link'                   => json_encode($footer_link),
+                    'footer_link_name2'             => json_encode($footer_link_name2),
+                    'footer_link2'                  => json_encode($footer_link2),
+                    'footer_link_name3'             => json_encode($footer_link_name3),
+                    'footer_link3'                  => json_encode($footer_link3),
+                ];
+                // Helper::pr($fields);
                 // GeneralSetting::where('id', '=', 1)->update($fields);
                 unset($postData['_token']);
                 if(!empty($postData)){
                     foreach($postData as $key => $value){
-                        $fields = [
-                            'value'            => strip_tags($postData[$key])
-                        ];
+                        if($key == 'footer_text'){
+                            $fields = [
+                                'value'            => strip_tags($postData[$key])
+                            ];
+                        } elseif($key == 'copyright_statement'){
+                            $fields = [
+                                'value'            => strip_tags($postData[$key])
+                            ];
+                        } elseif($key == 'footer_link_name'){
+                            $fields = [
+                                'value'            => json_encode($footer_link_name)
+                            ];
+                        } elseif($key == 'footer_link'){
+                            $fields = [
+                                'value'            => json_encode($footer_link)
+                            ];
+                        } elseif($key == 'footer_link_name2'){
+                            $fields = [
+                                'value'            => json_encode($footer_link_name2)
+                            ];
+                        } elseif($key == 'footer_link2'){
+                            $fields = [
+                                'value'            => json_encode($footer_link2)
+                            ];
+                        } elseif($key == 'footer_link_name3'){
+                            $fields = [
+                                'value'            => json_encode($footer_link_name3)
+                            ];
+                        } elseif($key == 'footer_link3'){
+                            $fields = [
+                                'value'            => json_encode($footer_link3)
+                            ];
+                        }
+                        // Helper::pr($fields,0);
                         GeneralSetting::where('key', '=', $key)->where('is_active', '=', 1)->update($fields);
                     }
                 }

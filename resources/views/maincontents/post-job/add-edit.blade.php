@@ -231,10 +231,10 @@ $controllerRoute = $module['controller_route'];
                                         <label class="form-label" for="job_type">Job Type</label>
                                         <select class="select2" id="job_type" name="job_type">
                                             <option label="" selected></option>
-                                            <option value="Walk-in" <?=(($job_type == 'Walk-in')?'selected':'')?>>Walk-in</option>
-                                            <option value="Remote" <?=(($job_type == 'Remote')?'selected':'')?>>Remote</option>
-                                            <option value="On-Site" <?=(($job_type == 'On-Site')?'selected':'')?>>On-Site</option>
-                                            <option value="Temp Role" <?=(($job_type == 'Temp Role')?'selected':'')?>>Temp Role</option>
+                                            <option value="walk-in-jobs" <?=(($job_type == 'walk-in-jobs')?'selected':'')?>>Walk-in</option>
+                                            <option value="remote-jobs" <?=(($job_type == 'remote-jobs')?'selected':'')?>>Remote</option>
+                                            <option value="on-site-jobs" <?=(($job_type == 'on-site-jobs')?'selected':'')?>>On-Site</option>
+                                            <option value="temp-role-jobs" <?=(($job_type == 'temp-role-jobs')?'selected':'')?>>Temp Role</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-6 mb-3">

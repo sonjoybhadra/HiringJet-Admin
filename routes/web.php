@@ -43,6 +43,7 @@ use App\Http\Controllers\ExperienceLevelController;
 use App\Http\Controllers\PostJobController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\HomePageController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -343,13 +344,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('page/delete/{id}', [PageController::class, 'delete']);
         Route::get('page/change-status/{id}', [PageController::class, 'change_status']);
     /* page */
-    /* article */
-        Route::get('article/list', [ArticleController::class, 'list']);
-        Route::match(['get', 'post'], 'article/add', [ArticleController::class, 'add']);
-        Route::match(['get', 'post'], 'article/edit/{id}', [ArticleController::class, 'edit']);
-        Route::get('article/delete/{id}', [ArticleController::class, 'delete']);
-        Route::get('article/change-status/{id}', [ArticleController::class, 'change_status']);
-    /* article */
+    
     /* post job */
         Route::get('post-job/list', [PostJobController::class, 'list']);
         Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
@@ -357,6 +352,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);
         Route::get('post-job/change-status/{id}', [PostJobController::class, 'change_status']);
     /* post job */
+
+    /* home page */
+        Route::match(['get', 'post'], 'home-page/manage', [HomePageController::class, 'manage']);
+    /* home page */
+    /* article */
+        Route::get('article/list', [ArticleController::class, 'list']);
+        Route::match(['get', 'post'], 'article/add', [ArticleController::class, 'add']);
+        Route::match(['get', 'post'], 'article/edit/{id}', [ArticleController::class, 'edit']);
+        Route::get('article/delete/{id}', [ArticleController::class, 'delete']);
+        Route::get('article/change-status/{id}', [ArticleController::class, 'change_status']);
+    /* article */
     /* blog */
         Route::get('blog/list', [BlogController::class, 'list']);
         Route::match(['get', 'post'], 'blog/add', [BlogController::class, 'add']);
