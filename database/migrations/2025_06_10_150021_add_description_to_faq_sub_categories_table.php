@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('faq_sub_categories', function (Blueprint $table) {
-            $table->longtext('description');
-            $table->string('image', 250);
+            $table->longtext('description')->nullable();
+            $table->string('image', 250)->nullable();
         });
     }
 
