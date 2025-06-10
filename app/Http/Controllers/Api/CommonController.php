@@ -283,11 +283,14 @@ class CommonController extends BaseApiController
         }
     }
 
-    public function get_course($res = '')
+    public function get_course(Request $request, $res = '')
     {
-        $list = Course::select('id', 'name')->where('status', 1)
-                    ->with('qualification')
-                    ->get();
+        $sql = Course::select('id', 'name')->where('status', 1)
+                    ->with('qualification');
+        if(!empty($request->qualification_id)){
+            $sql->where('qualification_id', $request->qualification_id);
+        }
+        $list = $sql->get();
         if($res != ''){
             return $list;
         }else{

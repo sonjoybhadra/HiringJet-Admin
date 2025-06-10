@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\CmsArticleController;
 use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\ReportBugController;
 
+use App\Http\Controllers\Api\JobSearchController;
+
 use App\Http\Controllers\Api\LinkedInAuthController;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -94,6 +96,8 @@ Route::get('/get-article', [CmsArticleController::class, 'getArticle']);
 
 Route::post('/contact-us', [ContactUsController::class, 'postContactUs']);
 Route::post('/report-bug', [ReportBugController::class, 'postReportBug']);
+
+Route::post('/get-jobs/{job_type}', [JobSearchController::class, 'getJobsByParams']);
 
 
 Route::group([
