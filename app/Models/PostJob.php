@@ -17,12 +17,20 @@ class PostJob extends Model
         'position_name',
         'employer_id',
         'job_type',
-        'location_ids',
-        'location_names',
+        'location_countries',
+        'location_country_names',
+        'location_cities',
+        'location_city_names',
+        'industry',
+        'job_category',
+        'nationality',
+        'gender',
         'open_position_number',
         'contract_type',
         'job_description',
         'requirement',
+        'department',
+        'functional_area',
         'skill_ids',
         'skill_names',
         'experience_level',
@@ -31,13 +39,10 @@ class PostJob extends Model
         'min_salary',
         'max_salary',
         'is_salary_negotiable',
-        'industry',
-        'job_category',
-        'department',
-        'functional_area',
         'posting_open_date',
         'posting_close_date',
         'apply_on_email',
+        'application_through',
         'apply_on_link',
         'walkin_address1',
         'walkin_address2',
@@ -53,36 +58,24 @@ class PostJob extends Model
     ];
 
     protected $casts = [
+        'expected_close_date' => 'date',
+        'posting_open_date' => 'date',
+        'posting_close_date' => 'date',
         'min_salary' => 'float',
         'max_salary' => 'float',
         'is_salary_negotiable' => 'boolean',
         'status' => 'boolean',
-        'skill_ids' => 'array',
-        'skill_names' => 'array',
-        'location_ids' => 'array',
-        'location_names' => 'array',
     ];
 
-    // ========================
-    // Relationships
-    // ========================
-
+    /**
+     * Relationships
+     */
     public function employer()
     {
         return $this->belongsTo(Employer::class);
     }
 
-    public function contractType()
-    {
-        return $this->belongsTo(ContractType::class, 'contract_type');
-    }
-
-    public function experienceLevel()
-    {
-        return $this->belongsTo(CurrentWorkLevel::class, 'experience_level');
-    }
-    
-    public function industry()
+    public function industryRelation()
     {
         return $this->belongsTo(Industry::class, 'industry');
     }
@@ -92,7 +85,17 @@ class PostJob extends Model
         return $this->belongsTo(JobCategory::class, 'job_category');
     }
 
-    public function department()
+    public function nationalityRelation()
+    {
+        return $this->belongsTo(Nationality::class, 'nationality');
+    }
+
+    public function contractType()
+    {
+        return $this->belongsTo(ContractType::class, 'contract_type');
+    }
+
+    public function departmentRelation()
     {
         return $this->belongsTo(Department::class, 'department');
     }
@@ -100,5 +103,10 @@ class PostJob extends Model
     public function functionalArea()
     {
         return $this->belongsTo(FunctionalArea::class, 'functional_area');
+    }
+
+    public function experienceLevel()
+    {
+        return $this->belongsTo(CurrentWorkLevel::class, 'experience_level');
     }
 }

@@ -94,7 +94,7 @@ class PageController extends Controller
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
-                        'page_content'              => strip_tags($postData['page_content']),
+                        'page_content'              => $postData['page_content'],
                         'page_banner_image'         => env('UPLOADS_URL') . $upload_folder . '/' . $page_banner_image,
                         'page_image'                => env('UPLOADS_URL') . $upload_folder . '/' . $page_image,
                         'meta_title'                => strip_tags($postData['meta_title']),
@@ -166,7 +166,7 @@ class PageController extends Controller
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
-                        'page_content'              => strip_tags($postData['page_content']),
+                        'page_content'              => $postData['page_content'],
                         'page_banner_image'         => $pageBannerImageLink,
                         'page_image'                => $pageImageLink,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),

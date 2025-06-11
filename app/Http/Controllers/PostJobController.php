@@ -8,11 +8,12 @@ use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\PostJob;
 use App\Models\Employer;
+use App\Models\Country;
 use App\Models\City;
+use App\Models\Nationality;
 use App\Models\ContractType;
 use App\Models\Keyskill;
 use App\Models\CurrentWorkLevel;
-use App\Models\Country;
 use App\Models\Industry;
 use App\Models\JobCategory;
 use App\Models\Department;
@@ -58,7 +59,12 @@ class PostJobController extends Controller
                     'position_name'             => 'required',
                     'employer_id'               => 'required',
                     'job_type'                  => 'required',
-                    'location_ids'              => 'required',
+                    'location_countries'        => 'required',
+                    'location_cities'           => 'required',
+                    'industry'                  => 'required',
+                    'job_category'              => 'required',
+                    'nationality'               => 'required',
+                    'gender'                    => 'required',
                     'open_position_number'      => 'required',
                     'contract_type'             => 'required',
                 ];
@@ -89,15 +95,28 @@ class PostJobController extends Controller
                         }
                     /* job number generate */
 
-                    $location_ids = [];
-                    $location_names = [];
-                    if(array_key_exists("location_ids",$postData)){
-                        $locationIds = $postData['location_ids'];
-                        $location_ids = json_encode($locationIds);
+                    $location_countries         = [];
+                    $location_country_names     = [];
+                    if(array_key_exists("location_countries",$postData)){
+                        $locationCountryIds = $postData['location_countries'];
+                        $location_countries = json_encode($locationCountryIds);
+                        if(!empty($locationCountryIds)){
+                            for($k=0;$k<count($locationCountryIds);$k++){
+                                $getCity = Country::select('name')->where('id', $locationCountryIds[$k])->first();
+                                $location_country_names[] = (($getCity)?$getCity->name:'');
+                            }
+                        }
+                    }
+
+                    $location_cities    = [];
+                    $location_city_names     = [];
+                    if(array_key_exists("location_cities",$postData)){
+                        $locationIds = $postData['location_cities'];
+                        $location_cities = json_encode($locationIds);
                         if(!empty($locationIds)){
                             for($k=0;$k<count($locationIds);$k++){
                                 $getCity = City::select('name')->where('id', $locationIds[$k])->first();
-                                $location_names[] = (($getCity)?$getCity->name:'');
+                                $location_city_names[] = (($getCity)?$getCity->name:'');
                             }
                         }
                     }
@@ -121,13 +140,21 @@ class PostJobController extends Controller
                         'position_name'             => strip_tags($postData['position_name']),
                         'employer_id'               => strip_tags($postData['employer_id']),
                         'job_type'                  => strip_tags($postData['job_type']),
-                        'location_ids'              => ((!empty($location_ids))?json_encode($location_ids):''),
-                        'location_names'            => ((!empty($location_names))?json_encode($location_names):''),
+                        'location_countries'        => ((!empty($location_countries))?$location_countries:''),
+                        'location_country_names'    => ((!empty($location_country_names))?json_encode($location_country_names):''),
+                        'location_cities'           => ((!empty($location_cities))?$location_cities:''),
+                        'location_city_names'       => ((!empty($location_city_names))?json_encode($location_city_names):''),
+                        'industry'                  => $postData['industry'],
+                        'job_category'              => $postData['job_category'],
+                        'nationality'               => $postData['nationality'],
+                        'gender'                    => $postData['gender'],
                         'open_position_number'      => strip_tags($postData['open_position_number']),
                         'contract_type'             => strip_tags($postData['contract_type']),
-                        'job_description'           => strip_tags($postData['job_description']),
-                        'requirement'               => strip_tags($postData['requirement']),
-                        'skill_ids'                 => ((!empty($skill_ids))?json_encode($skill_ids):''),
+                        'job_description'           => $postData['job_description'],
+                        'requirement'               => $postData['requirement'],
+                        'department'                => $postData['department'],
+                        'functional_area'           => $postData['functional_area'],
+                        'skill_ids'                 => ((!empty($skill_ids))?$skill_ids:''),
                         'skill_names'               => ((!empty($skill_names))?json_encode($skill_names):''),
                         'experience_level'          => $postData['experience_level'],
                         'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):''),
@@ -135,13 +162,10 @@ class PostJobController extends Controller
                         'min_salary'                => (($postData['min_salary'] != '')?$postData['min_salary']:0),
                         'max_salary'                => (($postData['max_salary'] != '')?$postData['max_salary']:0),
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
-                        'industry'                  => $postData['industry'],
-                        'job_category'              => $postData['job_category'],
-                        'department'                => $postData['department'],
-                        'functional_area'           => $postData['functional_area'],
                         'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):''),
                         'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):''),
                         'apply_on_email'            => strip_tags($postData['apply_on_email']),
+                        'application_through'       => strip_tags($postData['application_through']),
                         'apply_on_link'             => strip_tags($postData['apply_on_link']),
                         'walkin_address1'           => strip_tags($postData['walkin_address1']),
                         'walkin_address2'           => strip_tags($postData['walkin_address2']),
@@ -167,7 +191,8 @@ class PostJobController extends Controller
             $page_name                      = 'post-job.add-edit';
             $data['row']                    = [];
             $data['employers']              = Employer::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(800)->get();
+            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(1000)->get();
+            $data['nationalities']          = Nationality::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['contract_types']         = ContractType::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['keyskills']              = Keyskill::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['experiences']            = CurrentWorkLevel::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
@@ -188,7 +213,8 @@ class PostJobController extends Controller
             $page_name                      = 'post-job.add-edit';
             $data['row']                    = PostJob::where('id', '=', $id)->first();
             $data['employers']              = Employer::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(800)->get();
+            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(1000)->get();
+            $data['nationalities']          = Nationality::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['contract_types']         = ContractType::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['keyskills']              = Keyskill::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['experiences']            = CurrentWorkLevel::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
@@ -203,7 +229,12 @@ class PostJobController extends Controller
                     'position_name'             => 'required',
                     'employer_id'               => 'required',
                     'job_type'                  => 'required',
-                    'location_ids'              => 'required',
+                    'location_countries'        => 'required',
+                    'location_cities'           => 'required',
+                    'industry'                  => 'required',
+                    'job_category'              => 'required',
+                    'nationality'               => 'required',
+                    'gender'                    => 'required',
                     'open_position_number'      => 'required',
                     'contract_type'             => 'required',
                 ];
@@ -220,15 +251,29 @@ class PostJobController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
-                    $location_ids = [];
-                    $location_names = [];
-                    if(array_key_exists("location_ids",$postData)){
-                        $locationIds = $postData['location_ids'];
-                        $location_ids = json_encode($locationIds);
+                    
+                    $location_countries         = [];
+                    $location_country_names     = [];
+                    if(array_key_exists("location_countries",$postData)){
+                        $locationCountryIds = $postData['location_countries'];
+                        $location_countries = json_encode($locationCountryIds);
+                        if(!empty($locationCountryIds)){
+                            for($k=0;$k<count($locationCountryIds);$k++){
+                                $getCity = Country::select('name')->where('id', $locationCountryIds[$k])->first();
+                                $location_country_names[] = (($getCity)?$getCity->name:'');
+                            }
+                        }
+                    }
+
+                    $location_cities    = [];
+                    $location_city_names     = [];
+                    if(array_key_exists("location_cities",$postData)){
+                        $locationIds = $postData['location_cities'];
+                        $location_cities = json_encode($locationIds);
                         if(!empty($locationIds)){
                             for($k=0;$k<count($locationIds);$k++){
                                 $getCity = City::select('name')->where('id', $locationIds[$k])->first();
-                                $location_names[] = (($getCity)?$getCity->name:'');
+                                $location_city_names[] = (($getCity)?$getCity->name:'');
                             }
                         }
                     }
@@ -250,13 +295,21 @@ class PostJobController extends Controller
                         'position_name'             => strip_tags($postData['position_name']),
                         'employer_id'               => strip_tags($postData['employer_id']),
                         'job_type'                  => strip_tags($postData['job_type']),
-                        'location_ids'              => ((!empty($location_ids))?json_encode($location_ids):''),
-                        'location_names'            => ((!empty($location_names))?json_encode($location_names):''),
+                        'location_countries'        => ((!empty($location_countries))?$location_countries:''),
+                        'location_country_names'    => ((!empty($location_country_names))?json_encode($location_country_names):''),
+                        'location_cities'           => ((!empty($location_cities))?$location_cities:''),
+                        'location_city_names'       => ((!empty($location_city_names))?json_encode($location_city_names):''),
+                        'industry'                  => $postData['industry'],
+                        'job_category'              => $postData['job_category'],
+                        'nationality'               => $postData['nationality'],
+                        'gender'                    => $postData['gender'],
                         'open_position_number'      => strip_tags($postData['open_position_number']),
                         'contract_type'             => strip_tags($postData['contract_type']),
-                        'job_description'           => strip_tags($postData['job_description']),
-                        'requirement'               => strip_tags($postData['requirement']),
-                        'skill_ids'                 => ((!empty($skill_ids))?json_encode($skill_ids):''),
+                        'job_description'           => $postData['job_description'],
+                        'requirement'               => $postData['requirement'],
+                        'department'                => $postData['department'],
+                        'functional_area'           => $postData['functional_area'],
+                        'skill_ids'                 => ((!empty($skill_ids))?$skill_ids:''),
                         'skill_names'               => ((!empty($skill_names))?json_encode($skill_names):''),
                         'experience_level'          => $postData['experience_level'],
                         'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):''),
@@ -264,13 +317,10 @@ class PostJobController extends Controller
                         'min_salary'                => (($postData['min_salary'] != '')?$postData['min_salary']:0),
                         'max_salary'                => (($postData['max_salary'] != '')?$postData['max_salary']:0),
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
-                        'industry'                  => $postData['industry'],
-                        'job_category'              => $postData['job_category'],
-                        'department'                => $postData['department'],
-                        'functional_area'           => $postData['functional_area'],
                         'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):''),
                         'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):''),
                         'apply_on_email'            => strip_tags($postData['apply_on_email']),
+                        'application_through'       => strip_tags($postData['application_through']),
                         'apply_on_link'             => strip_tags($postData['apply_on_link']),
                         'walkin_address1'           => strip_tags($postData['walkin_address1']),
                         'walkin_address2'           => strip_tags($postData['walkin_address2']),

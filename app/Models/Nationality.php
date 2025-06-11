@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Nationality extends Model
 {
     use SoftDeletes;
+
+    public function postJobs()
+    {
+        return $this->hasMany(PostJob::class, 'nationality');
+    }
 }
