@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Validator;
 use App\Models\User;
 use App\Mail\ForgotPassword;
+use App\Mail\SignupOtp;
 use App\Mail\ResetPassword;
 
 class ForgotpasswordController extends BaseApiController
@@ -45,9 +46,15 @@ class ForgotpasswordController extends BaseApiController
                 ]);
 
         // $email = 'work.chayan2020@gmail.com';
-        Mail::to($request->input('email'))->send(new ForgotPassword($otp));
+        // Mail::to($request->input('email'))->send(new ForgotPassword($otp));
+        $full_name = $user->first_name.' '.$user->last_name;
+        $message = 'A OTP has sent successfully to your register email. Please verify OTP and reset your password.';
+        Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Forgot Password OTP'));
 
-        return $this->sendResponse([], 'Reset password OTP has sent successfully to your register email.');
+        return $this->sendResponse([
+            'otp'=> $otp,
+            'email'=> $user->email
+        ], 'Reset password OTP has sent successfully to your register email.');
     }
 
     /**

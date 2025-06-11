@@ -18,12 +18,13 @@ class SignupOtp extends Mailable
      *
      * @return void
      */
-    public $name, $otp, $content;
-    public function __construct($name = '', $otp = '', $content = '')
+    public $name, $otp, $content, $sub;
+    public function __construct($name = '', $otp = '', $content = '', $sub = '')
     {
         $this->name = $name;
         $this->otp = $otp;
         $this->content = $content;
+        $this->sub = $sub;
     }
 
     /**
@@ -34,7 +35,7 @@ class SignupOtp extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'OTP',
+            subject: !empty($this->sub) ? $this->sub : 'OTP',
         );
     }
 

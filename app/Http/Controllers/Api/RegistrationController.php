@@ -109,7 +109,7 @@ class RegistrationController extends BaseApiController
 
                 $full_name = $request->first_name.' '.$request->last_name;
                 $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
-                Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
+                Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
 
                 return $this->sendResponse([
                     'otp'=> $otp,
@@ -151,7 +151,7 @@ class RegistrationController extends BaseApiController
 
         $full_name = $user->first_name.' '.$user->last_name;
         $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
-        Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
+        Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
 
         return $this->sendResponse([
             'otp'=> $otp,

@@ -15,13 +15,38 @@ use App\Models\UserEmploymentSkill;
 class EditEmploymentDetailsController extends BaseApiController
 {
     /**
-     * Get educational details.
+     * Get educational List.
     */
-    public function getEmploymentDetails()
+    public function getEmploymentList()
     {
         try {
             return $this->sendResponse(
                 UserEmployment::where('user_id', auth()->user()->id)
+                                ->with('employer')
+                                ->with('country')
+                                ->with('city')
+                                ->with('skills')
+                                ->with('notice_period')
+                                ->with('industrys')
+                                ->with('functional_areas')
+                                ->with('park_benefits')
+                                ->latest()
+                                ->get()
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Get Employment details.
+    */
+    public function getEmploymentDetails($id)
+    {
+        try {
+            return $this->sendResponse(
+                UserEmployment::where('id', $id)
+                                ->where('user_id', auth()->user()->id)
                                 ->with('employer')
                                 ->with('country')
                                 ->with('city')

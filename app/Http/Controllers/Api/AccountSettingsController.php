@@ -199,7 +199,7 @@ class AccountSettingsController extends BaseApiController
 
         $full_name = $user->first_name.' '.$user->last_name;
         $message = 'Change email request verification OTP has sent. Please verify activation OTP.';
-        Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message));
+        Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message, 'Email Change OTP'));
 
         return $this->sendResponse([
             'otp'=> $otp,

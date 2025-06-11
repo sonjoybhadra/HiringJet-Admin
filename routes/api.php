@@ -118,6 +118,7 @@ Route::group([
     Route::post('/resume-headline', [EditProfessionalDetailsController::class, 'postResumeHeadline']);
     Route::get('/keyskills', [EditProfessionalDetailsController::class, 'getKeyskills']);
     Route::post('/keyskills', [EditProfessionalDetailsController::class, 'postKeyskills']);
+    Route::delete('/keyskills/{id}', [EditProfessionalDetailsController::class, 'deleteKeyskill']);
     Route::get('/itskills', [EditProfessionalDetailsController::class, 'getItskills']);
     Route::post('/itskills', [EditProfessionalDetailsController::class, 'postItskills']);
     Route::post('/update-itskills/{id}', [EditProfessionalDetailsController::class, 'updateItskills']);
@@ -134,7 +135,8 @@ Route::group([
     Route::post('/update-educational-details/{id}', [EditEducationalDetailsController::class, 'updateEducationalDetails']);
     Route::post('/post-educational-details', [EditEducationalDetailsController::class, 'postEducationalDetails']);
 
-    Route::get('/get-employment-list', [EditEmploymentDetailsController::class, 'getEmploymentDetails']);
+    Route::get('/get-employment-list', [EditEmploymentDetailsController::class, 'getEmploymentList']);
+    Route::get('/get-employment-list/{id}', [EditEmploymentDetailsController::class, 'getEmploymentDetails']);
     Route::post('/update-employment-details/{id}', [EditEmploymentDetailsController::class, 'updateEmploymentDetails']);
     Route::post('/post-employment-details', [EditEmploymentDetailsController::class, 'postEmploymentDetails']);
 

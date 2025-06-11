@@ -73,7 +73,7 @@ class EditProfessionalDetailsController extends BaseApiController
         }
     }
     /**
-     * Post resume headline.
+     * Post keySkills.
     */
     public function postKeyskills(Request $request)
     {
@@ -100,6 +100,20 @@ class EditProfessionalDetailsController extends BaseApiController
             }
 
             return $this->sendResponse($this->getUserDetails(), 'Key skills updated successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Post resume headline.
+    */
+    public function deleteKeyskill($id)
+    {
+        try {
+            UserSkill::find($id)->delete();
+
+            return $this->sendResponse($this->getUserDetails(), 'Key skills deleted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
