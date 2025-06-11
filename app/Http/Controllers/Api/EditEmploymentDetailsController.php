@@ -157,6 +157,11 @@ class EditEmploymentDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
+            if($request->is_current_job == 1){
+                UserEmployment::where('user_id', auth()->user()->id)->update([
+                    'is_current_job'=> 0
+                ]);
+            }
             $employment_id = UserEmployment::insertGetId([
                 'user_id'=> auth()->user()->id,
                 'last_designation'=> $request->designation,
