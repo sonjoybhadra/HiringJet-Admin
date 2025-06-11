@@ -76,16 +76,16 @@ class EditEmploymentDetailsController extends BaseApiController
             'skills' => 'required|array',
             'working_since_from_year' => 'required|integer',
             'working_since_from_month' => 'required|integer',
-            'working_since_to_year' => 'required_if:is_current_job,0|integer',
-            'working_since_to_month' => 'required_if:is_current_job,0|integer',
             'salary_currency' => 'required|integer',
             'current_salary' => 'required|integer',
             'notice_period'=> 'required|integer',
-            /* 'total_experience_years' => 'required|integer',
-            'total_experience_months' => 'required|integer',
-            'industry' => 'required|integer',
-            'functional_area' => 'required|integer', */
         ]);
+        if($request->is_current_job == 0){
+            $validator = Validator::make($request->all(), [
+                'working_since_to_year' => 'required|integer',
+                'working_since_to_month' => 'required|integer'
+            ]);
+        }
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -142,12 +142,16 @@ class EditEmploymentDetailsController extends BaseApiController
             'skills' => 'required|array',
             'working_since_from_year' => 'required|integer',
             'working_since_from_month' => 'required|integer',
-            'working_since_to_year' => 'required_if:is_current_job,0|integer',
-            'working_since_to_month' => 'required_if:is_current_job,0|integer',
             'salary_currency' => 'required|integer',
             'current_salary' => 'required|integer',
             'notice_period'=> 'required|integer',
         ]);
+        if($request->is_current_job == 0){
+            $validator = Validator::make($request->all(), [
+                'working_since_to_year' => 'required|integer',
+                'working_since_to_month' => 'required|integer'
+            ]);
+        }
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -162,24 +166,27 @@ class EditEmploymentDetailsController extends BaseApiController
                 'city_id'=> $request->location,
                 'working_since_from_year'=> $request->working_since_from_year,
                 'working_since_from_month'=> $request->working_since_from_month,
-                'working_since_to_year'=> $request->working_since_to_year,
-                'working_since_to_month'=> $request->working_since_to_month,
+                'working_since_to_year'=> $request->is_current_job == 0 ? $request->working_since_to_year : 0,
+                'working_since_to_month'=> $request->is_current_job == 0 ? $request->working_since_to_month : 0,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
                 'notice_period'=> $request->notice_period
             ]);
-
-            if(!empty($request->skills)){
-                foreach($request->skills as $skill){
-                    UserEmploymentSkill::insert([
-                        'user_id'=> auth()->user()->id,
-                        'user_employment_id'=> $employment_id,
-                        'keyskill_id'=> $skill,
-                    ]);
+            if($employment_id){
+                if(!empty($request->skills)){
+                    foreach($request->skills as $skill){
+                        UserEmploymentSkill::insert([
+                            'user_id'=> auth()->user()->id,
+                            'user_employment_id'=> $employment_id,
+                            'keyskill_id'=> $skill,
+                        ]);
+                    }
                 }
-            }
 
-            return $this->sendResponse($this->getUserDetails(), 'Employment details updated successfully.');
+                return $this->sendResponse($this->getUserDetails(), 'Employment details added successfully.');
+            }else{
+                return $this->sendResponse($this->getUserDetails(), 'Sorry!! Unable to add employment details.');
+            }
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
