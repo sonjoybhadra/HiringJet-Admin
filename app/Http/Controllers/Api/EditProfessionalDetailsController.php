@@ -106,7 +106,7 @@ class EditProfessionalDetailsController extends BaseApiController
     }
 
     /**
-     * Post resume headline.
+     * Delete Keyskill.
     */
     public function deleteKeyskill($id)
     {
@@ -122,13 +122,29 @@ class EditProfessionalDetailsController extends BaseApiController
     /**
      * Get itskills.
     */
-    public function getItskills()
+    public function getItskillsList()
     {
         try {
             return $this->sendResponse(
                 UserItSkill::where('user_id', auth()->user()->id)
                     ->with('it_skills')
                     ->get(),
+                'Itskills list'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+    /**
+     * Get itskill details.
+    */
+    public function getItskillDetails($id)
+    {
+        try {
+            return $this->sendResponse(
+                UserItSkill::where('id', $id)
+                    ->with('it_skills')
+                    ->first(),
                 'Itskills details'
             );
         } catch (\Exception $e) {
@@ -142,7 +158,7 @@ class EditProfessionalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'itkill_id' => 'required|integer',
-            'version' => 'required|integer',
+            'version' => 'required|string',
             'exp_year' => 'required|integer',
             'exp_month' => 'required|integer',
         ]);
@@ -172,7 +188,7 @@ class EditProfessionalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'itkill_id' => 'required|integer',
-            'version' => 'required|integer',
+            'version' => 'required|string',
             'exp_year' => 'required|integer',
             'exp_month' => 'required|integer',
         ]);
@@ -189,6 +205,20 @@ class EditProfessionalDetailsController extends BaseApiController
             ]);
 
             return $this->sendResponse($this->getUserDetails(), 'It skills updated successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete Itskill.
+    */
+    public function deleteItkill($id)
+    {
+        try {
+            UserItSkill::find($id)->delete();
+
+            return $this->sendResponse($this->getUserDetails(), 'It skill deleted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }

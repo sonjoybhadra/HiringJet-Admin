@@ -119,8 +119,10 @@ Route::group([
     Route::get('/keyskills', [EditProfessionalDetailsController::class, 'getKeyskills']);
     Route::post('/keyskills', [EditProfessionalDetailsController::class, 'postKeyskills']);
     Route::delete('/keyskills/{id}', [EditProfessionalDetailsController::class, 'deleteKeyskill']);
-    Route::get('/itskills', [EditProfessionalDetailsController::class, 'getItskills']);
+    Route::get('/itskills', [EditProfessionalDetailsController::class, 'getItskillsList']);
+    Route::get('/itskills/{id}', [EditProfessionalDetailsController::class, 'getItskillDetails']);
     Route::post('/itskills', [EditProfessionalDetailsController::class, 'postItskills']);
+    Route::delete('/itskills/{id}', [EditProfessionalDetailsController::class, 'deleteItkill']);
     Route::post('/update-itskills/{id}', [EditProfessionalDetailsController::class, 'updateItskills']);
     Route::get('/professional-details', [EditProfessionalDetailsController::class, 'getProfessionalDetails']);
     Route::post('/professional-details', [EditProfessionalDetailsController::class, 'postProfessionalDetails']);
