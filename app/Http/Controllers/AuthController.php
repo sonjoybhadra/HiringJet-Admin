@@ -610,7 +610,7 @@ class AuthController extends Controller
             $postData = $request->all();
             // Helper::pr($postData);
             $rules = [
-                'footer_text'            => 'required',
+                'footer_text'                       => 'required',
             ];
             if($this->validate($request, $rules)){
                 $footer_link_name_array = $postData['footer_link_name'];
@@ -667,55 +667,57 @@ class AuthController extends Controller
                         }
                     }
                 }
-                $fields = [
-                    'footer_link_name'              => json_encode($footer_link_name),
-                    'footer_link'                   => json_encode($footer_link),
-                    'footer_link_name2'             => json_encode($footer_link_name2),
-                    'footer_link2'                  => json_encode($footer_link2),
-                    'footer_link_name3'             => json_encode($footer_link_name3),
-                    'footer_link3'                  => json_encode($footer_link3),
-                ];
-                // Helper::pr($fields);
-                // GeneralSetting::where('id', '=', 1)->update($fields);
-                unset($postData['_token']);
+                // Helper::pr($postData);
                 if(!empty($postData)){
+                    $counter = 0;
                     foreach($postData as $key => $value){
-                        if($key == 'footer_text'){
-                            $fields = [
-                                'value'            => strip_tags($postData[$key])
-                            ];
-                        } elseif($key == 'copyright_statement'){
-                            $fields = [
-                                'value'            => strip_tags($postData[$key])
-                            ];
-                        } elseif($key == 'footer_link_name'){
-                            $fields = [
-                                'value'            => json_encode($footer_link_name)
-                            ];
-                        } elseif($key == 'footer_link'){
-                            $fields = [
-                                'value'            => json_encode($footer_link)
-                            ];
-                        } elseif($key == 'footer_link_name2'){
-                            $fields = [
-                                'value'            => json_encode($footer_link_name2)
-                            ];
-                        } elseif($key == 'footer_link2'){
-                            $fields = [
-                                'value'            => json_encode($footer_link2)
-                            ];
-                        } elseif($key == 'footer_link_name3'){
-                            $fields = [
-                                'value'            => json_encode($footer_link_name3)
-                            ];
-                        } elseif($key == 'footer_link3'){
-                            $fields = [
-                                'value'            => json_encode($footer_link3)
-                            ];
+                        if($counter > 0){
+                            if($key == 'footer_text'){
+                                $field = [
+                                    'value'            => strip_tags($postData[$key])
+                                ];
+                            }
+                            if($key == 'copyright_statement'){
+                                $field = [
+                                    'value'            => strip_tags($postData[$key])
+                                ];
+                            }
+                            if($key == 'footer_link_name'){
+                                $field = [
+                                    'value'            => json_encode($footer_link_name)
+                                ];
+                            }
+                            if($key == 'footer_link'){
+                                $field = [
+                                    'value'            => json_encode($footer_link)
+                                ];
+                            }
+                            if($key == 'footer_link_name2'){
+                                $field = [
+                                    'value'            => json_encode($footer_link_name2)
+                                ];
+                            }
+                            if($key == 'footer_link2'){
+                                $field = [
+                                    'value'            => json_encode($footer_link2)
+                                ];
+                            }
+                            if($key == 'footer_link_name3'){
+                                $field = [
+                                    'value'            => json_encode($footer_link_name3)
+                                ];
+                            }
+                            if($key == 'footer_link3'){
+                                $field = [
+                                    'value'            => json_encode($footer_link3)
+                                ];
+                            }
+                            // Helper::pr($field,0);
+                            GeneralSetting::where('key', '=', $key)->where('is_active', '=', 1)->update($field);
                         }
-                        // Helper::pr($fields,0);
-                        GeneralSetting::where('key', '=', $key)->where('is_active', '=', 1)->update($fields);
+                        $counter++;
                     }
+                    // die;
                 }
                 return redirect()->back()->with('success_message', 'Footer Settings Updated Successfully');
             } else {

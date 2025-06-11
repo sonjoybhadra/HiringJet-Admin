@@ -100,11 +100,19 @@ $controllerRoute = $module['controller_route'];
                 $position_name                      = $row->position_name;
                 $employer_id                        = $row->employer_id;
                 $job_type                           = $row->job_type;
-                $location_ids                       = (($row->location_ids != '')?json_decode($row->location_ids):[]);
+                $location_countries                 = (($row->location_countries != '')?json_decode($row->location_countries):[]);
+                $location_cities                    = (($row->location_cities != '')?json_decode($row->location_cities):[]);
+                $industry                           = $row->industry;
+                $job_category                       = $row->job_category;
+                $nationality                        = $row->nationality;
+                $gender                             = $row->gender;
                 $open_position_number               = $row->open_position_number;
                 $contract_type                      = $row->contract_type;
+
                 $job_description                    = $row->job_description;
                 $requirement                        = $row->requirement;
+                $department                         = $row->department;
+                $functional_area                    = $row->functional_area;
                 $skill_ids                          = (($row->skill_ids != '')?json_decode($row->skill_ids):[]);
                 $experience_level                   = $row->experience_level;
                 $expected_close_date                = $row->expected_close_date;
@@ -112,13 +120,11 @@ $controllerRoute = $module['controller_route'];
                 $min_salary                         = $row->min_salary;
                 $max_salary                         = $row->max_salary;
                 $is_salary_negotiable               = $row->is_salary_negotiable;
-                $industry                           = $row->industry;
-                $job_category                       = $row->job_category;
-                $department                         = $row->department;
-                $functional_area                    = $row->functional_area;
                 $posting_open_date                  = $row->posting_open_date;
                 $posting_close_date                 = $row->posting_close_date;
+
                 $apply_on_email                     = $row->apply_on_email;
+                $application_through                = $row->application_through;
                 $apply_on_link                      = $row->apply_on_link;
                 $walkin_address1                    = $row->walkin_address1;
                 $walkin_address2                    = $row->walkin_address2;
@@ -132,11 +138,19 @@ $controllerRoute = $module['controller_route'];
                 $position_name                      = '';
                 $employer_id                        = '';
                 $job_type                           = '';
-                $location_ids                       = [];
+                $location_countries                 = [];
+                $location_cities                    = [];
+                $industry                           = '';
+                $job_category                       = '';
+                $nationality                        = '';
+                $gender                             = '';
                 $open_position_number               = '';
                 $contract_type                      = '';
+
                 $job_description                    = '';
                 $requirement                        = '';
+                $department                         = '';
+                $functional_area                    = '';
                 $skill_ids                          = [];
                 $experience_level                   = '';
                 $expected_close_date                = '';
@@ -144,13 +158,11 @@ $controllerRoute = $module['controller_route'];
                 $min_salary                         = '';
                 $max_salary                         = '';
                 $is_salary_negotiable               = '';
-                $industry                           = '';
-                $job_category                       = '';
-                $department                         = '';
-                $functional_area                    = '';
                 $posting_open_date                  = '';
                 $posting_close_date                 = '';
+
                 $apply_on_email                     = '';
+                $application_through                = '';
                 $apply_on_link                      = '';
                 $walkin_address1                    = '';
                 $walkin_address2                    = '';
@@ -166,7 +178,7 @@ $controllerRoute = $module['controller_route'];
                 <div class="row">
                     <!-- Validation Wizard -->
                     <div class="col-12 mb-6">
-                    <small class="text-light fw-medium">Validation</small>
+                    <!-- <small class="text-light fw-medium">Validation</small> -->
                     <div id="wizard-validation" class="bs-stepper mt-2">
                         <div class="bs-stepper-header">
                             <div class="step" data-target="#account-details-validation">
@@ -212,24 +224,24 @@ $controllerRoute = $module['controller_route'];
                                     <h6 class="mb-0">Step 1</h6>
                                     <small>Enter Your Step 1.</small>
                                 </div>
-                                <div class="row g-6 mt-3">
-                                    <div class="col-sm-6 mb-3">
+                                <div class="row g-6 mt-3" id="step1">
+                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="position_name">Position Name</label>
-                                        <input type="text" name="position_name" id="position_name" class="form-control" placeholder="Position Name" value="<?=$position_name?>" />
+                                        <input type="text" name="position_name" id="position_name" class="form-control" placeholder="Position Name" value="<?=$position_name?>" required />
                                     </div>
+
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="employer_id">Employer</label>
-                                        <select class="select2" id="employer_id" name="employer_id">
+                                        <select class="select2" id="employer_id" name="employer_id" required>
                                             <option label="" selected></option>
                                             <?php if($employers){ foreach($employers as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($select_row->id == $employer_id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
-
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="job_type">Job Type</label>
-                                        <select class="select2" id="job_type" name="job_type">
+                                        <select class="select2" id="job_type" name="job_type" required>
                                             <option label="" selected></option>
                                             <option value="walk-in-jobs" <?=(($job_type == 'walk-in-jobs')?'selected':'')?>>Walk-in</option>
                                             <option value="remote-jobs" <?=(($job_type == 'remote-jobs')?'selected':'')?>>Remote</option>
@@ -237,22 +249,70 @@ $controllerRoute = $module['controller_route'];
                                             <option value="temp-role-jobs" <?=(($job_type == 'temp-role-jobs')?'selected':'')?>>Temp Role</option>
                                         </select>
                                     </div>
+
                                     <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="location_ids">Location</label>
-                                        <select class="select2" id="location_ids" name="location_ids[]" required multiple>
+                                        <label class="form-label" for="location_countries">Location Country</label>
+                                        <select class="select2" id="location_countries" name="location_countries[]" required multiple>
+                                            <?php if($currencies){ foreach($currencies as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $location_countries))?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="location_cities">Location City</label>
+                                        <select class="select2" id="location_cities" name="location_cities[]" required multiple>
                                             <?php if($cities){ foreach($cities as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $location_ids))?'selected':'')?>><?=$select_row->name?></option>
+                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $location_cities))?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="industry">Industry</label>
+                                        <select class="select2" id="industry" name="industry" required>
+                                            <option label="" selected></option>
+                                            <?php if($industries){ foreach($industries as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=(($industry == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="job_category">Job Category</label>
+                                        <select class="select2" id="job_category" name="job_category" required>
+                                            <option label="" selected></option>
+                                            <?php if($jobcats){ foreach($jobcats as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=(($job_category == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="nationality">Nationality</label>
+                                        <select class="select2" id="nationality" name="nationality" required>
+                                            <option label="" selected></option>
+                                            <?php if($nationalities){ foreach($nationalities as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=(($nationality == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="gender">Gender</label>
+                                        <select class="select2" id="gender" name="gender" required>
+                                            <option label="" selected></option>
+                                            <option value="Male" <?=(($gender == 'Male')?'selected':'')?>>Male</option>
+                                            <option value="Female" <?=(($gender == 'Female')?'selected':'')?>>Female</option>
+                                            <option value="Transgender" <?=(($gender == 'Transgender')?'selected':'')?>>Transgender</option>
+                                            <option value="No Preference" <?=(($gender == 'No Preference')?'selected':'')?>>No Preference</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="open_position_number">Number of open positions</label>
-                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" placeholder="Number of open positions" min="1" value="<?=$open_position_number?>" />
+                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" placeholder="Number of open positions" min="1" value="<?=$open_position_number?>" required />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="contract_type">Contract Type</label>
-                                        <select class="select2" id="contract_type" name="contract_type">
+                                        <select class="select2" id="contract_type" name="contract_type" required>
                                             <option label="" selected></option>
                                             <?php if($contract_types){ foreach($contract_types as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($contract_type == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
@@ -265,7 +325,7 @@ $controllerRoute = $module['controller_route'];
                                             <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
                                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                                         </button>
-                                        <button class="btn btn-primary btn-next">
+                                        <button class="btn btn-primary btn-next" type="button">
                                             <span class="align-middle d-sm-inline-block d-none me-sm-2">Next</span>
                                             <i class="ti ti-arrow-right ti-xs"></i>
                                         </button>
@@ -278,81 +338,15 @@ $controllerRoute = $module['controller_route'];
                                     <h6 class="mb-0">Step 2</h6>
                                     <small>Enter Your Step 2.</small>
                                 </div>
-                                <div class="row g-6 mt-3">
-                                    <div class="col-sm-6 mb-3">
+                                <div class="row g-6 mt-3" id="step2">
+                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="job_description">Job Description</label>
                                         <textarea id="ckeditor1" name="job_description" class="form-control" placeholder="Job Description" rows="5"><?=$job_description?></textarea>
                                     </div>
-                                    <div class="col-sm-6 mb-3">
+
+                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="requirement">Requirements</label>
                                         <textarea id="ckeditor2" name="requirement" class="form-control" placeholder="Requirements" rows="5"><?=$requirement?></textarea>
-                                    </div>
-
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="skill_ids">Skills</label>
-                                        <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
-                                            <?php if($keyskills){ foreach($keyskills as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $skill_ids))?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="experience_level">Experience Level</label>
-                                        <select class="select2" id="experience_level" name="experience_level">
-                                            <option label="" selected></option>
-                                            <?php if($experiences){ foreach($experiences as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=(($experience_level == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="expected_close_date">Expected Close Date</label>
-                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?=$expected_close_date?>" />
-                                    </div>
-                                    <div class="col-sm-3 mb-3">
-                                        <label class="form-label" for="currency">Currency</label>
-                                        <select class="select2" id="currency" name="currency">
-                                            <option label="" selected></option>
-                                            <?php if($currencies){ foreach($currencies as $select_row){?>
-                                                <option value="<?=$select_row->currency_code?>" <?=(($currency == $select_row->currency_code)?'selected':'')?>><?=$select_row->currency_code?> (<?=$select_row->name?>)</option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>                                    
-                                    <div class="col-sm-3 mb-3">
-                                        <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
-                                        <div class="form-check form-switch mt-0 ">
-                                            <input class="form-check-input" type="checkbox" name="is_salary_negotiable" role="switch" id="is_salary_negotiable" <?=(($is_salary_negotiable)?'checked':'')?>>
-                                            <label class="form-check-label" for="is_salary_negotiable">YES</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mb-3 salary">
-                                        <label class="form-label" for="min_salary">Minimum Salary</label>
-                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" value="<?=$min_salary?>" />
-                                    </div>
-                                    <div class="col-sm-6 mb-3 salary">
-                                        <label class="form-label" for="max_salary">Maximum Salary</label>
-                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" value="<?=$max_salary?>" />
-                                    </div>
-
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="industry">Industry</label>
-                                        <select class="select2" id="industry" name="industry">
-                                            <option label="" selected></option>
-                                            <?php if($industries){ foreach($industries as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=(($industry == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="job_category">Job Category</label>
-                                        <select class="select2" id="job_category" name="job_category">
-                                            <option label="" selected></option>
-                                            <?php if($jobcats){ foreach($jobcats as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=(($job_category == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
@@ -374,13 +368,62 @@ $controllerRoute = $module['controller_route'];
                                         </select>
                                     </div>
 
+                                    <div class="col-sm-12 mb-3">
+                                        <label class="form-label" for="skill_ids">Skills</label>
+                                        <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
+                                            <?php if($keyskills){ foreach($keyskills as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $skill_ids))?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="experience_level">Experience Level</label>
+                                        <select class="select2" id="experience_level" name="experience_level">
+                                            <option label="" selected></option>
+                                            <?php if($experiences){ foreach($experiences as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=(($experience_level == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="expected_close_date">Expected Close Date</label>
+                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" />
+                                    </div>
+                                    
+                                    <div class="col-sm-12 mb-3">
+                                        <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
+                                        <div class="form-check form-switch mt-0 ">
+                                            <input class="form-check-input" type="checkbox" name="is_salary_negotiable" role="switch" id="is_salary_negotiable" <?=(($is_salary_negotiable)?'checked':'')?>>
+                                            <label class="form-check-label" for="is_salary_negotiable">YES</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <label class="form-label" for="currency">Currency</label>
+                                        <select class="select2" id="currency" name="currency">
+                                            <option label="" selected></option>
+                                            <?php if($currencies){ foreach($currencies as $select_row){?>
+                                                <option value="<?=$select_row->currency_code?>" <?=(($currency == $select_row->currency_code)?'selected':'')?>><?=$select_row->currency_code?> (<?=$select_row->name?>)</option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4 mb-3 salary">
+                                        <label class="form-label" for="min_salary">Minimum Salary</label>
+                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" value="<?=$min_salary?>" />
+                                    </div>
+                                    <div class="col-sm-4 mb-3 salary">
+                                        <label class="form-label" for="max_salary">Maximum Salary</label>
+                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" value="<?=$max_salary?>" />
+                                    </div>                                    
+
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_open_date">Posting Open Date</label>
-                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" value="<?=$posting_open_date?>" />
+                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" value="<?= !empty($posting_open_date) ? date('Y-m-d', strtotime($posting_open_date)) : '' ?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_close_date">Posting Close Date</label>
-                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?=$posting_close_date?>" />
+                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?= !empty($posting_close_date) ? date('Y-m-d', strtotime($posting_close_date)) : '' ?>" />
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
@@ -401,14 +444,22 @@ $controllerRoute = $module['controller_route'];
                                     <h6 class="mb-0">Step 3</h6>
                                     <small>Enter Your Step 3.</small>
                                 </div>
-                                <div class="row g-6 mt-3">
-                                    <div class="col-sm-6 mb-3">
+                                <div class="row g-6 mt-3" id="step3">
+                                    <div class="col-sm-4 mb-3">
                                         <label class="form-label" for="apply_on_email">Apply To (Email)</label>
-                                        <input type="text" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?=$posting_close_date?>" />
+                                        <input type="text" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?=$apply_on_email?>" />
                                     </div>
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-4 mb-3">
+                                        <label class="form-label" for="application_through">Accept Application Through</label><br>
+                                        <input type="radio" name="application_through" id="application_through1" value="Hiring Jet" <?=(($application_through == 'Hiring Jet')?'checked':'')?> />
+                                        <label for="application_through1">Hiring Jet</label>
+
+                                        <input type="radio" name="application_through" id="application_through2" value="Externally" <?=(($application_through == 'Externally')?'checked':'')?> />
+                                        <label for="application_through2">Externally</label>
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
                                         <label class="form-label" for="apply_on_link">Apply To (Link)</label>
-                                        <input type="text" name="apply_on_link" id="apply_on_link" class="form-control" placeholder="Apply To (Link)" value="<?=$posting_close_date?>" />
+                                        <input type="text" name="apply_on_link" id="apply_on_link" class="form-control" placeholder="Apply To (Link)" value="<?=$apply_on_link?>" />
                                     </div>
 
                                     <div class="col-sm-12">
@@ -495,5 +546,37 @@ $controllerRoute = $module['controller_route'];
                 }
             });
         });
+        // $(document).ready(function () {
+        //     $('#nextToStep2').click(function () {
+        //         let isValid = true;
+
+        //         // Validate all required fields in Step 1
+        //         $('#step1 input[required]').each(function () {
+        //         if ($(this).val().trim() === '') {
+        //             $(this).addClass('error');
+        //             isValid = false;
+        //         } else {
+        //             $(this).removeClass('error');
+        //         }
+        //         });
+
+        //         if (isValid) {
+        //             // Move to Step 2
+        //             $('#step1').hide();
+        //             $('#step2').show();
+        //             $('#step3').hide();
+        //         } else {
+        //             alert('Please fill all required fields in Step 1.');
+        //             $('#account-details').show();
+        //             $('#personal-info').hide();
+        //             $('#social-links').hide();
+        //         }
+        //     });
+
+        //     // Optional: remove red border when typing
+        //     $('input').on('input', function () {
+        //         $(this).removeClass('error');
+        //     });
+        // });
     </script>
 @endsection

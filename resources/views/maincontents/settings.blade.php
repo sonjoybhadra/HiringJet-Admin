@@ -478,7 +478,7 @@ $user_type = session('type');
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="copyright_statement" class="form-label">Copyright Statement</label>
-                              <textraea class="form-control" id="ckeditor10" name="copyright_statement" placeholder="Copyright Statement"><?=Helper::getSettingValue('copyright_statement')?></textraea>
+                              <textarea class="form-control" id="ckeditor10" name="copyright_statement" placeholder="Copyright Statement"><?=Helper::getSettingValue('copyright_statement')?></textarea>
                            </div>
                         </div>
                         <div class="row mt-3">
