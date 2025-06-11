@@ -20,6 +20,6 @@ class Employer extends Model
     
     public function postJobs()
     {
-        return $this->hasMany(PostJob::class);
+        return $this->hasMany(PostJob::class, 'employer_id');
     }
 }

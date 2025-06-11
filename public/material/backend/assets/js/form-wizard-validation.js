@@ -59,10 +59,31 @@
             }
           }
         },
-        location_ids: {
+        industry: {
           validators: {
             notEmpty: {
-              message: 'Location is required'
+              message: 'Industry is required'
+            }
+          }
+        },
+        job_category: {
+          validators: {
+            notEmpty: {
+              message: 'Job Category is required'
+            }
+          }
+        },
+        nationality: {
+          validators: {
+            notEmpty: {
+              message: 'Nationality is required'
+            }
+          }
+        },
+        gender: {
+          validators: {
+            notEmpty: {
+              message: 'Gender is required'
             }
           }
         },
@@ -87,7 +108,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-sm-6'
+          rowSelector: '.col-sm-6, .col-sm-12'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
