@@ -67,6 +67,7 @@ class EditProfessionalDetailsController extends BaseApiController
         try {
             return $this->sendResponse(
                 User::where('id', auth()->user()->id)->with('user_skills')->first()->user_skills
+                // UserSkill::where('user_id', auth()->user()->id)->with('key_skills')->get()
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
