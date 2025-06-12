@@ -13,7 +13,7 @@ use App\Helpers\Helper;
 <meta name="keywords" content="<?=Helper::getSettingValue('meta_keywords')?>">
 <meta name="base-url" content="<?=env('APP_URL')?>">
 <!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="<?=((Helper::getSettingValue('site_favicon') != '')?env('UPLOADS_URL').Helper::getSettingValue('site_favicon'):env('NO_IMAGE'))?>" />
+<link rel="icon" type="image/x-icon" href="<?=((Helper::getSettingValue('site_favicon') != '')?env('APP_URL') . Helper::getSettingValue('site_favicon'):env('NO_IMAGE'))?>" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
