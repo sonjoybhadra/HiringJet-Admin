@@ -34,6 +34,7 @@ use App\Models\Nationality;
 
 use App\Models\HomePage;
 use App\Models\GeneralSetting;
+use App\Models\Testimonial;
 
 
 class CommonController extends BaseApiController
@@ -536,6 +537,15 @@ class CommonController extends BaseApiController
         return $this->sendResponse(
             $list,
             'General settings list'
+        );
+    }
+
+    public function get_testimonials(Request $request){
+        $sql = Testimonial::where('status', 1)->latest();
+        $list = $sql->get();
+        return $this->sendResponse(
+            $list,
+            'Testimonials list'
         );
     }
 

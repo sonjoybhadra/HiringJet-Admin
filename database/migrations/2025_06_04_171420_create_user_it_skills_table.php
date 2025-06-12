@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('itkill_id')->constrained('it_skills');
+            $table->string('version', 50)->nullable();
             $table->string('last_used', 50)->nullable();
             $table->integer('exp_year')->nullable();
             $table->integer('exp_month')->nullable();

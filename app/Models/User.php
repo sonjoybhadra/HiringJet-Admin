@@ -156,7 +156,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function user_it_skill(): HasMany
     {
-        return $this->hasMany(UserItSkill::class, 'user_id')->with('itSkill')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserItSkill::class, 'user_id')->with('it_skills')->orderBy('created_at', 'asc');
     }
 
 
