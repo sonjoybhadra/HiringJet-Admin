@@ -399,7 +399,7 @@ class AuthController extends Controller
                     $imageName      = $imageFile->getClientOriginalName();
                     $uploadedFile   = $this->upload_single_file('profile_image', $imageName, '', 'image');
                     if($uploadedFile['status']){
-                        $profile_image = $uploadedFile['newFilename'];
+                        $profile_image = env('UPLOADS_URL_PATH') . $uploadedFile['newFilename'];
                     } else {
                         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                     }
@@ -437,7 +437,7 @@ class AuthController extends Controller
                         $imageName      = $imageFile->getClientOriginalName();
                         $uploadedFile   = $this->upload_single_file('site_logo', $imageName, '', 'image');
                         if($uploadedFile['status']){
-                            $site_logo = $uploadedFile['newFilename'];
+                            $site_logo = env('UPLOADS_URL_PATH') . $uploadedFile['newFilename'];
                         } else {
                             return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                         }
@@ -451,7 +451,7 @@ class AuthController extends Controller
                         $imageName      = $imageFile->getClientOriginalName();
                         $uploadedFile   = $this->upload_single_file('site_footer_logo', $imageName, '', 'image');
                         if($uploadedFile['status']){
-                            $site_footer_logo = $uploadedFile['newFilename'];
+                            $site_footer_logo = env('UPLOADS_URL_PATH') . $uploadedFile['newFilename'];
                         } else {
                             return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                         }
@@ -465,7 +465,7 @@ class AuthController extends Controller
                         $imageName      = $imageFile->getClientOriginalName();
                         $uploadedFile   = $this->upload_single_file('site_favicon', $imageName, '', 'image');
                         if($uploadedFile['status']){
-                            $site_favicon = $uploadedFile['newFilename'];
+                            $site_favicon = env('UPLOADS_URL_PATH') . $uploadedFile['newFilename'];
                         } else {
                             return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                         }
