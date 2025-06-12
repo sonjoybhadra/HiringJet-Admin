@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_resumes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('resume');
+            $table->string('cv');
             $table->tinyInteger('is_default')->default(1);
             $table->softDeletes();
             $table->timestamps();

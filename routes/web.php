@@ -5,13 +5,15 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Common\TableController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\RoleController;
-// use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FaqCategoryController;
+use App\Http\Controllers\FaqSubCategoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\KeyskillController;
+use App\Http\Controllers\ITskillController;
 use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\UniversityController;
@@ -35,10 +37,23 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\FunctionalAreaController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ContractTypeController;
+use App\Http\Controllers\ExperienceLevelController;
+use App\Http\Controllers\PostJobController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\HomePageController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+// GET route – to display the page
+Route::get('/test-email-function', [AuthController::class, 'showEmailTestPage']);
+
+// POST route – to send the email
+Route::post('/test-email-function', [AuthController::class, 'testEmailFunction']);
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('signin', [AuthController::class, 'login'])->name('signin');
@@ -87,11 +102,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('role/change-status/{id}', [RoleController::class, 'change_status']);
         /* roles */
         /* admin users */
-            // Route::get('admin-users/list', [AdminUserController::class, 'list']);
-            // Route::match(['get', 'post'], 'admin-users/add', [AdminUserController::class, 'add']);
-            // Route::match(['get', 'post'], 'admin-users/edit/{id}', [AdminUserController::class, 'edit']);
-            // Route::get('admin-users/delete/{id}', [AdminUserController::class, 'delete']);
-            // Route::get('admin-users/change-status/{id}', [AdminUserController::class, 'change_status']);
+            Route::get('admin-user/list', [AdminUserController::class, 'list']);
+            Route::match(['get', 'post'], 'admin-user/add', [AdminUserController::class, 'add']);
+            Route::match(['get', 'post'], 'admin-user/edit/{id}', [AdminUserController::class, 'edit']);
+            Route::get('admin-user/delete/{id}', [AdminUserController::class, 'delete']);
+            Route::get('admin-user/change-status/{id}', [AdminUserController::class, 'change_status']);
         /* admin users */
     /* access & permission */
     /* masters */
@@ -151,6 +166,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('keyskill/delete/{id}', [KeyskillController::class, 'delete']);
             Route::get('keyskill/change-status/{id}', [KeyskillController::class, 'change_status']);
         /* keyskill */
+        /* itskill */
+            Route::get('itskill/list', [ITskillController::class, 'list']);
+            Route::match(['get', 'post'], 'itskill/add', [ITskillController::class, 'add']);
+            Route::match(['get', 'post'], 'itskill/edit/{id}', [ITskillController::class, 'edit']);
+            Route::get('itskill/delete/{id}', [ITskillController::class, 'delete']);
+            Route::get('itskill/change-status/{id}', [ITskillController::class, 'change_status']);
+        /* itskill */
         /* benefit */
             Route::get('benefit/list', [BenefitController::class, 'list']);
             Route::match(['get', 'post'], 'benefit/add', [BenefitController::class, 'add']);
@@ -263,6 +285,27 @@ Route::middleware(['auth'])->group(function () {
             Route::get('specialization/delete/{id}', [SpecializationController::class, 'delete']);
             Route::get('specialization/change-status/{id}', [SpecializationController::class, 'change_status']);
         /* specialization */
+        /* department */
+            Route::get('department/list', [DepartmentController::class, 'list']);
+            Route::match(['get', 'post'], 'department/add', [DepartmentController::class, 'add']);
+            Route::match(['get', 'post'], 'department/edit/{id}', [DepartmentController::class, 'edit']);
+            Route::get('department/delete/{id}', [DepartmentController::class, 'delete']);
+            Route::get('department/change-status/{id}', [DepartmentController::class, 'change_status']);
+        /* department */
+        /* contract type */
+            Route::get('contract-type/list', [ContractTypeController::class, 'list']);
+            Route::match(['get', 'post'], 'contract-type/add', [ContractTypeController::class, 'add']);
+            Route::match(['get', 'post'], 'contract-type/edit/{id}', [ContractTypeController::class, 'edit']);
+            Route::get('contract-type/delete/{id}', [ContractTypeController::class, 'delete']);
+            Route::get('contract-type/change-status/{id}', [ContractTypeController::class, 'change_status']);
+        /* contract type */
+        /* experience level */
+            Route::get('experience-level/list', [ExperienceLevelController::class, 'list']);
+            Route::match(['get', 'post'], 'experience-level/add', [ExperienceLevelController::class, 'add']);
+            Route::match(['get', 'post'], 'experience-level/edit/{id}', [ExperienceLevelController::class, 'edit']);
+            Route::get('experience-level/delete/{id}', [ExperienceLevelController::class, 'delete']);
+            Route::get('experience-level/change-status/{id}', [ExperienceLevelController::class, 'change_status']);
+        /* experience level */
     /* masters */
     /* FAQs */
         /* faq category */
@@ -272,6 +315,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('faq-category/delete/{id}', [FaqCategoryController::class, 'delete']);
             Route::get('faq-category/change-status/{id}', [FaqCategoryController::class, 'change_status']);
         /* faq category */
+        /* faq sub category */
+            Route::get('faq-sub-category/list', [FaqSubCategoryController::class, 'list']);
+            Route::match(['get', 'post'], 'faq-sub-category/add', [FaqSubCategoryController::class, 'add']);
+            Route::match(['get', 'post'], 'faq-sub-category/edit/{id}', [FaqSubCategoryController::class, 'edit']);
+            Route::get('faq-sub-category/delete/{id}', [FaqSubCategoryController::class, 'delete']);
+            Route::get('faq-sub-category/change-status/{id}', [FaqSubCategoryController::class, 'change_status']);
+        /* faq sub category */
         /* faq */
             Route::get('faq/list', [FaqController::class, 'list']);
             Route::match(['get', 'post'], 'faq/add', [FaqController::class, 'add']);
@@ -294,6 +344,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('page/delete/{id}', [PageController::class, 'delete']);
         Route::get('page/change-status/{id}', [PageController::class, 'change_status']);
     /* page */
+    
+    /* post job */
+        Route::get('post-job/list', [PostJobController::class, 'list']);
+        Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
+        Route::match(['get', 'post'], 'post-job/edit/{id}', [PostJobController::class, 'edit']);
+        Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);
+        Route::get('post-job/change-status/{id}', [PostJobController::class, 'change_status']);
+    /* post job */
+
+    /* home page */
+        Route::match(['get', 'post'], 'home-page/manage', [HomePageController::class, 'manage']);
+    /* home page */
     /* article */
         Route::get('article/list', [ArticleController::class, 'list']);
         Route::match(['get', 'post'], 'article/add', [ArticleController::class, 'add']);
@@ -301,4 +363,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('article/delete/{id}', [ArticleController::class, 'delete']);
         Route::get('article/change-status/{id}', [ArticleController::class, 'change_status']);
     /* article */
+    /* blog */
+        Route::get('blog/list', [BlogController::class, 'list']);
+        Route::match(['get', 'post'], 'blog/add', [BlogController::class, 'add']);
+        Route::match(['get', 'post'], 'blog/edit/{id}', [BlogController::class, 'edit']);
+        Route::get('blog/delete/{id}', [BlogController::class, 'delete']);
+        Route::get('blog/change-status/{id}', [BlogController::class, 'change_status']);
+    /* blog */
+    /* testimonial */
+        Route::get('testimonial/list', [TestimonialController::class, 'list']);
+        Route::match(['get', 'post'], 'testimonial/add', [TestimonialController::class, 'add']);
+        Route::match(['get', 'post'], 'testimonial/edit/{id}', [TestimonialController::class, 'edit']);
+        Route::get('testimonial/delete/{id}', [TestimonialController::class, 'delete']);
+        Route::get('testimonial/change-status/{id}', [TestimonialController::class, 'change_status']);
+    /* testimonial */
 });

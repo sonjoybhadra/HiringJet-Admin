@@ -26,6 +26,26 @@ class AuthController extends Controller
     {
         $this->siteAuthService = new SiteAuthService();
     }
+    // Shows the page (like a form or a button)
+    public function showEmailTestPage()
+    {
+        return view('test-email'); // Your Blade view
+    }
+
+    // Handles the email sending
+    public function testEmailFunction(Request $request)
+    {
+        $to = 'subhomoysamanta1989@gmail.com';
+        $subject = "Test Email Subject On " . now();
+        $message = "Test Email Body On " . now();
+
+        try {
+            $this->sendMail($to, $subject, $message);
+            return redirect('/test-email-function')->with('success_message', 'Test Email Sent Successfully');
+        } catch (\Exception $e) {
+            return redirect('/test-email-function')->with('error_message', 'Failed to send email: ' . $e->getMessage());
+        }
+    }
     /* authentication */
         public function showLogin()
         {
@@ -72,7 +92,7 @@ class AuthController extends Controller
             }
             /* user activity */
                 $activityData = [
-                    'user_email'        => $postData['email'],
+                    'user_email'        => $authData['email'],
                     'user_name'         => 'Master Admin',
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
@@ -588,83 +608,116 @@ class AuthController extends Controller
         }
         public function footer_settings(Request $request){
             $postData = $request->all();
+            // Helper::pr($postData);
             $rules = [
-                'footer_text'            => 'required',
+                'footer_text'                       => 'required',
             ];
             if($this->validate($request, $rules)){
-                // $footer_link_name_array = $postData['footer_link_name'];
-                // $footer_link_name       = [];
-                // if(!empty($footer_link_name_array)){
-                //     for($f=0;$f<count($footer_link_name_array);$f++){
-                //         if($footer_link_name_array[$f]){
-                //             $footer_link_name[]       = $footer_link_name_array[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_array = $postData['footer_link'];
-                // $footer_link       = [];
-                // if(!empty($footer_link_array)){
-                //     for($f=0;$f<count($footer_link_array);$f++){
-                //         if($footer_link_array[$f]){
-                //             $footer_link[]       = $footer_link_array[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_name_array2 = $postData['footer_link_name2'];
-                // $footer_link_name2       = [];
-                // if(!empty($footer_link_name_array2)){
-                //     for($f=0;$f<count($footer_link_name_array2);$f++){
-                //         if($footer_link_name_array2[$f]){
-                //             $footer_link_name2[]       = $footer_link_name_array2[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_array2 = $postData['footer_link2'];
-                // $footer_link2       = [];
-                // if(!empty($footer_link_array2)){
-                //     for($f=0;$f<count($footer_link_array2);$f++){
-                //         if($footer_link_array2[$f]){
-                //             $footer_link2[]       = $footer_link_array2[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_name_array3 = $postData['footer_link_name3'];
-                // $footer_link_name3       = [];
-                // if(!empty($footer_link_name_array3)){
-                //     for($f=0;$f<count($footer_link_name_array3);$f++){
-                //         if($footer_link_name_array3[$f]){
-                //             $footer_link_name3[]       = $footer_link_name_array3[$f];
-                //         }
-                //     }
-                // }
-                // $footer_link_array3 = $postData['footer_link3'];
-                // $footer_link3       = [];
-                // if(!empty($footer_link_array3)){
-                //     for($f=0;$f<count($footer_link_array3);$f++){
-                //         if($footer_link_array3[$f]){
-                //             $footer_link3[]       = $footer_link_array3[$f];
-                //         }
-                //     }
-                // }
-                // $fields = [
-                //     'footer_text'                   => $postData['footer_text'],
-                //     'footer_link_name'              => json_encode($footer_link_name),
-                //     'footer_link'                   => json_encode($footer_link),
-                //     'footer_link_name2'             => json_encode($footer_link_name2),
-                //     'footer_link2'                  => json_encode($footer_link2),
-                //     'footer_link_name3'             => json_encode($footer_link_name3),
-                //     'footer_link3'                  => json_encode($footer_link3),
-                // ];
-                // // Helper::pr($fields);
-                // GeneralSetting::where('id', '=', 1)->update($fields);
-                unset($postData['_token']);
-                if(!empty($postData)){
-                    foreach($postData as $key => $value){
-                        $fields = [
-                            'value'            => strip_tags($postData[$key])
-                        ];
-                        GeneralSetting::where('key', '=', $key)->where('is_active', '=', 1)->update($fields);
+                $footer_link_name_array = $postData['footer_link_name'];
+                $footer_link_name       = [];
+                if(!empty($footer_link_name_array)){
+                    for($f=0;$f<count($footer_link_name_array);$f++){
+                        if($footer_link_name_array[$f]){
+                            $footer_link_name[]       = $footer_link_name_array[$f];
+                        }
                     }
+                }
+                $footer_link_array = $postData['footer_link'];
+                $footer_link       = [];
+                if(!empty($footer_link_array)){
+                    for($f=0;$f<count($footer_link_array);$f++){
+                        if($footer_link_array[$f]){
+                            $footer_link[]       = $footer_link_array[$f];
+                        }
+                    }
+                }
+                $footer_link_name_array2 = $postData['footer_link_name2'];
+                $footer_link_name2       = [];
+                if(!empty($footer_link_name_array2)){
+                    for($f=0;$f<count($footer_link_name_array2);$f++){
+                        if($footer_link_name_array2[$f]){
+                            $footer_link_name2[]       = $footer_link_name_array2[$f];
+                        }
+                    }
+                }
+                $footer_link_array2 = $postData['footer_link2'];
+                $footer_link2       = [];
+                if(!empty($footer_link_array2)){
+                    for($f=0;$f<count($footer_link_array2);$f++){
+                        if($footer_link_array2[$f]){
+                            $footer_link2[]       = $footer_link_array2[$f];
+                        }
+                    }
+                }
+                $footer_link_name_array3 = $postData['footer_link_name3'];
+                $footer_link_name3       = [];
+                if(!empty($footer_link_name_array3)){
+                    for($f=0;$f<count($footer_link_name_array3);$f++){
+                        if($footer_link_name_array3[$f]){
+                            $footer_link_name3[]       = $footer_link_name_array3[$f];
+                        }
+                    }
+                }
+                $footer_link_array3 = $postData['footer_link3'];
+                $footer_link3       = [];
+                if(!empty($footer_link_array3)){
+                    for($f=0;$f<count($footer_link_array3);$f++){
+                        if($footer_link_array3[$f]){
+                            $footer_link3[]       = $footer_link_array3[$f];
+                        }
+                    }
+                }
+                // Helper::pr($postData);
+                if(!empty($postData)){
+                    $counter = 0;
+                    foreach($postData as $key => $value){
+                        if($counter > 0){
+                            if($key == 'footer_text'){
+                                $field = [
+                                    'value'            => strip_tags($postData[$key])
+                                ];
+                            }
+                            if($key == 'copyright_statement'){
+                                $field = [
+                                    'value'            => strip_tags($postData[$key])
+                                ];
+                            }
+                            if($key == 'footer_link_name'){
+                                $field = [
+                                    'value'            => json_encode($footer_link_name)
+                                ];
+                            }
+                            if($key == 'footer_link'){
+                                $field = [
+                                    'value'            => json_encode($footer_link)
+                                ];
+                            }
+                            if($key == 'footer_link_name2'){
+                                $field = [
+                                    'value'            => json_encode($footer_link_name2)
+                                ];
+                            }
+                            if($key == 'footer_link2'){
+                                $field = [
+                                    'value'            => json_encode($footer_link2)
+                                ];
+                            }
+                            if($key == 'footer_link_name3'){
+                                $field = [
+                                    'value'            => json_encode($footer_link_name3)
+                                ];
+                            }
+                            if($key == 'footer_link3'){
+                                $field = [
+                                    'value'            => json_encode($footer_link3)
+                                ];
+                            }
+                            // Helper::pr($field,0);
+                            GeneralSetting::where('key', '=', $key)->where('is_active', '=', 1)->update($field);
+                        }
+                        $counter++;
+                    }
+                    // die;
                 }
                 return redirect()->back()->with('success_message', 'Footer Settings Updated Successfully');
             } else {

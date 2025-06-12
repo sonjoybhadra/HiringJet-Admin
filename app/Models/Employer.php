@@ -17,4 +17,9 @@ class Employer extends Model
     {
         return $this->BelongsTo(Industry::class, 'industry_id');
     }
+    
+    public function postJobs()
+    {
+        return $this->hasMany(PostJob::class, 'employer_id');
+    }
 }

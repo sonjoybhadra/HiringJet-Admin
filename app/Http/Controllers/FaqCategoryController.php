@@ -61,6 +61,7 @@ class FaqCategoryController extends Controller
                     /* user activity */
                     $fields = [
                         'name'              => strip_tags($postData['name']),
+                        'slug'              => Helper::clean(strip_tags($postData['name'])),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     FaqCategory::insert($fields);
@@ -92,6 +93,7 @@ class FaqCategoryController extends Controller
                 if($this->validate($request, $rules)){
                     $fields = [
                         'name'              => strip_tags($postData['name']),
+                        'slug'              => Helper::clean(strip_tags($postData['name'])),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     FaqCategory::where($this->data['primary_key'], '=', $id)->update($fields);

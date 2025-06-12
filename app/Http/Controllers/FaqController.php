@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\FaqCategory;
+use App\Models\FaqSubCategory;
 use App\Models\Faq;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
@@ -44,9 +45,10 @@ class FaqController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'faq_category_id'    => 'required',
-                    'question'           => 'required',
-                    'answer'             => 'required',
+                    'faq_category_id'           => 'required',
+                    'faq_sub_category_id'       => 'required',
+                    'question'                  => 'required',
+                    'answer'                    => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -62,9 +64,10 @@ class FaqController extends Controller
                         UserActivity::insert($activityData);
                     /* user activity */
                     $fields = [
-                        'faq_category_id'  => strip_tags($postData['faq_category_id']),
-                        'question'         => strip_tags($postData['question']),
-                        'answer'           => strip_tags($postData['answer']),
+                        'faq_category_id'       => strip_tags($postData['faq_category_id']),
+                        'faq_sub_category_id'   => strip_tags($postData['faq_sub_category_id']),
+                        'question'              => strip_tags($postData['question']),
+                        'answer'                => strip_tags($postData['answer']),
                     ];
                     Faq::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -77,6 +80,7 @@ class FaqController extends Controller
             $page_name                      = 'faq.add-edit';
             $data['row']                    = [];
             $data['cats']                   = FaqCategory::select('id', 'name')->where('status', '=', 1)->get();
+            $data['sub_cats']               = FaqSubCategory::select('id', 'name', 'faq_category_id')->where('status', '=', 1)->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -89,19 +93,22 @@ class FaqController extends Controller
             $page_name                      = 'faq.add-edit';
             $data['row']                    = Faq::where($this->data['primary_key'], '=', $id)->first();
             $data['cats']                   = FaqCategory::select('id', 'name')->where('status', '=', 1)->get();
+            $data['sub_cats']               = FaqSubCategory::select('id', 'name', 'faq_category_id')->where('status', '=', 1)->get();
 
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'faq_category_id'    => 'required',
-                    'question'           => 'required',
-                    'answer'             => 'required',
+                    'faq_category_id'           => 'required',
+                    'faq_sub_category_id'       => 'required',
+                    'question'                  => 'required',
+                    'answer'                    => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
-                        'faq_category_id'  => strip_tags($postData['faq_category_id']),
-                        'question'         => strip_tags($postData['question']),
-                        'answer'           => strip_tags($postData['answer']),
+                        'faq_category_id'       => strip_tags($postData['faq_category_id']),
+                        'faq_sub_category_id'   => strip_tags($postData['faq_sub_category_id']),
+                        'question'              => strip_tags($postData['question']),
+                        'answer'                => strip_tags($postData['answer']),
                     ];
                     Faq::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */

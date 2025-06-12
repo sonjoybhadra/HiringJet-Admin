@@ -29,8 +29,11 @@ use App\Models\MostCommonEmail;
 use App\Models\Language;
 use App\Models\Religion;
 use App\Models\MaritalStatus;
-
+use App\Models\ItSkill;
 use App\Models\Nationality;
+
+use App\Models\HomePage;
+use App\Models\GeneralSetting;
 
 
 class CommonController extends BaseApiController
@@ -53,8 +56,8 @@ class CommonController extends BaseApiController
             'functionalarea'=> $this->get_functionalarea(1),
             'onlineprofile'=> $this->get_onlineprofile(1),
             'qualification'=> $this->get_qualification(1),
-            'course'=> $this->get_course(1),
-            'specialization'=> $this->get_specialization(1),
+            'course'=> $this->get_course('', 1),
+            // 'specialization'=> $this->get_specialization(1),
             'nationality'=> $this->get_nationality(1),
             'religion'=> $this->get_religion(1),
             'university'=> $this->get_university(1),
@@ -62,6 +65,13 @@ class CommonController extends BaseApiController
             'language'=> $this->get_language(1),
             'maritalstatus'=> $this->get_maritalstatus(1),
             'proficiency_level'=> $this->get_proficiency_level(1),
+            'cast_category'=> $this->get_cast_category(1),
+            'diverse_background'=> $this->get_diverse_background(1),
+            'employment_type'=> $this->get_employment_type(1),
+            'course_type'=> $this->get_course_type(1),
+            'report_bug_category'=> $this->get_report_bug_category(1),
+            'interestedIn'=> $this->get_interestedIn(1),
+            'itSkill'=> $this->get_itSkill(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -81,9 +91,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -93,9 +104,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -105,9 +117,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -120,56 +133,64 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
     public function get_country($res = '')
     {
-        $list = Country::select('id', 'name', 'country_code', 'country_flag')->where('status', 1)->get();
+        $list = Country::select('id', 'name', 'country_code', 'country_flag', 'country_short_code')->where('status', 1)->get();
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
-    public function get_city($country_id)
+    public function get_city($country_id = '')
     {
+        $sql = City::select('id', 'name')->where('status', 1);
+        if($country_id != ''){
+            $sql->where('country_id', $country_id);
+        }
         return $this->sendResponse(
-            City::select('id', 'name')->where('status', 1)->where('country_id', $country_id)->get(),
+            $sql->get(),
             'List'
         );
     }
 
     public function get_country_code($res = '')
     {
-        $list = Country::select('country_code', 'country_flag')->where('status', 1)->distinct('country_code')->get();
+        $list = Country::select('country_code', 'country_flag', 'country_short_code')->where('status', 1)->distinct('country_code')->get();
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
     public function get_currency($res = '')
     {
-        $list = Currency::select('name')
+        $list = Country::select('id', 'currency_code as name', 'country_short_code')
                         ->where('status', 1)
-                        ->with('country')
+                        ->where('currency_code','<>','')
                         ->get();
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -179,9 +200,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -191,9 +213,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -203,9 +226,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -215,9 +239,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -227,9 +252,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -239,9 +265,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -251,39 +278,48 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
-    public function get_course($res = '')
+    public function get_course($qualification_id = '', $res = '')
     {
-        $list = Course::select('id', 'name')->where('status', 1)
-                    ->with('qualification')
-                    ->get();
+        $sql = Course::select('id', 'name')->where('status', 1)
+                    ->with('qualification');
+        if(!empty($qualification_id)){
+            $sql->where('qualification_id', $qualification_id);
+        }
+        $list = $sql->get();
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
-    public function get_specialization($res = '')
+    public function get_specialization(Request $request)
     {
-        $list = Specialization::select('id', 'name')->where('status', 1)
+        $sql = Specialization::select('id', 'name')->where('status', 1)
                             ->with('qualification')
-                            ->with('course')
-                            ->get();
-        if($res != ''){
-            return $list;
-        }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+                            ->with('course');
+        if(!empty($request->qualification_id)){
+            $sql->where('qualification_id', $request->qualification_id);
         }
+        if(!empty($request->course_id)){
+            $sql->where('course_id', $request->course_id);
+        }
+        $list = $sql->get();
+
+        return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
     }
 
     public function get_nationality($res = '')
@@ -292,9 +328,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -304,9 +341,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -316,9 +354,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -328,9 +367,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -340,9 +380,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -352,9 +393,10 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
     }
 
@@ -364,10 +406,137 @@ class CommonController extends BaseApiController
         if($res != ''){
             return $list;
         }else{
-            return $this->sendResponse([
-                    $list
-                ], 'Data list.');
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
         }
+    }
+
+    public function get_cast_category($res = '')
+    {
+        $list = ['General/UR', 'SC', 'ST', 'OBC', 'OBC - Non Creamy', 'Others'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_diverse_background($res = '')
+    {
+        $list = ['Single Parent', 'Working Mother', 'Retired', 'LGBTQ'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_employment_type($res = '')
+    {
+        $list = ['Full Time', 'Internship'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_course_type($res = '')
+    {
+        $list = ['Full Time', 'Part Time', 'Correspenence/ Distance learning'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_report_bug_category($res = '')
+    {
+        $list = ['Suggest Improvements', 'Feedback on Paid Services', 'Report Bug', 'Any Complaints / Report Abuse', ' Appreciation'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_interestedIn($res = '')
+    {
+        $list = ['CV Search', 'Job Posting', 'Employer Branding', 'Salary Tool', 'Power Your Career Site', 'Not Sure'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_itSkill($res = '')
+    {
+        $list = ItSkill::select('id', 'name')->where('status', 1)->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_city_by_param(Request $request)
+    {
+        $sql = City::select('id', 'name')->where('status', 1)->with('country');
+        if(!empty($request->country_id)){
+            $sql->where('country_id', $request->country_id);
+        }
+        if(!empty($request->key)){
+            $sql->where('name', 'ILIKE',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
+        );
+    }
+
+    public function get_homepage(){
+        return $this->sendResponse(
+            HomePage::where('status', 1)->latest()->first(),
+            'Home page details'
+        );
+    }
+
+    public function get_general_settings(Request $request){
+        $sql = GeneralSetting::where('is_active', 1)->latest();
+        if(!empty($request->slug)){
+            $params = explode(',', $request->slug);
+            $sql->whereIn('slug', $params);
+        }
+        $list = $sql->get();
+        return $this->sendResponse(
+            $list,
+            'General settings list'
+        );
     }
 
 }

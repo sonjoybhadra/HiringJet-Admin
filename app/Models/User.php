@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -104,9 +105,58 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the profile details of associated user.
     */
+    public function user_cv(): HasMany
+    {
+        return $this->hasMany(UserResume::class, 'user_id')->orderBy('created_at', 'desc');
+    }
+    /**
+     * Get the profile details of associated user.
+    */
     public function user_profile_completed_percentages(): HasMany
     {
-        return $this->hasMany(ProfileComplete::class, 'user_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserProfileCompletedPercentage::class, 'user_id')->orderBy('created_at', 'desc');
+    }
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_languages(): HasMany
+    {
+        return $this->hasMany(UserLanguage::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_employments(): HasMany
+    {
+        return $this->hasMany(UserEmployment::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_certification(): HasMany
+    {
+        return $this->hasMany(UserCertification::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_online_profile(): HasMany
+    {
+        return $this->hasMany(UserOnlineProfile::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_work_sample(): HasMany
+    {
+        return $this->hasMany(UserWorkSample::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_employment(): HasMany
+    {
+        return $this->hasMany(UserEmployment::class, 'user_id')->orderBy('created_at', 'asc');
+    }
+
+    public function user_it_skill(): HasMany
+    {
+        return $this->hasMany(UserItSkill::class, 'user_id')->orderBy('created_at', 'asc');
     }
 
 

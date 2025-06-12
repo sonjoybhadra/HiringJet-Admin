@@ -35,12 +35,16 @@ $controllerRoute = $module['controller_route'];
                 $id                     = $row->id;
                 $name                   = $row->name;
                 $country_code           = $row->country_code;
+                $country_short_code     = $row->country_short_code;
+                $currency_code          = $row->currency_code;
                 $country_flag           = $row->country_flag;
                 $status                 = $row->status;
             } else {
                 $id                     = '';
                 $name                   = '';
                 $country_code           = '';
+                $country_short_code     = '';
+                $currency_code          = '';
                 $country_flag           = '';
                 $status                 = '';
             }
@@ -49,22 +53,32 @@ $controllerRoute = $module['controller_route'];
                 <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Name <small class="text-danger">*</small></label>
                             <input class="form-control" type="text" id="name" name="name" value="<?=$name?>" required placeholder="Name" autofocus />
                         </div>
-                        <div class="col-md-4">
-                            <label for="country_code" class="form-label">Country ISD Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="country_code" name="country_code" value="<?=$country_code?>" required placeholder="Country ISD Code" autofocus />
+                        <div class="col-md-6 mb-3">
+                            <label for="country_short_code" class="form-label">Country Short Code <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="country_short_code" name="country_short_code" value="<?=$country_short_code?>" required placeholder="Country Short Code" />
                         </div>
-                        <div class="col-md-4">
+
+                        <div class="col-md-3 mb-3">
+                            <label for="country_code" class="form-label">Country ISD Code <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="country_code" name="country_code" value="<?=$country_code?>" required placeholder="Country ISD Code" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="currency_code" class="form-label">Currency Code <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="currency_code" name="currency_code" value="<?=$currency_code?>" required placeholder="Currency Code" />
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
                             <div class="form-check form-switch mt-0 ">
                                 <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
                                 <label class="form-check-label" for="status">Active</label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-6 mb-3">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
@@ -85,7 +99,7 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3">
                             <img src="<?=(($country_flag != '')?$country_flag:env('NO_IMAGE'))?>" alt="<?=$name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             PackageSeeder::class,
             GeneralSettingSeeder::class,
             ModuleTableSeeder::class,
+            HomePageTableSeeder::class,
         ]);
     }
 }

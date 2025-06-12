@@ -172,10 +172,6 @@ $user_type = session('type');
                               <textraea class="form-control" id="ckeditor9" name="description" required><?=Helper::getSettingValue('description')?></textraea>
                            </div>
                            <div class="mb-3 col-md-6">
-                              <label for="copyright_statement" class="form-label">Copyright Statement</label>
-                              <textraea class="form-control" id="ckeditor10" name="copyright_statement" required><?=Helper::getSettingValue('copyright_statement')?></textraea>
-                           </div>
-                           <div class="mb-3 col-md-6">
                               <label for="google_map_api_code" class="form-label">Google Map API Code</label>
                               <textraea class="form-control" id="ckeditor11" name="google_map_api_code" required><?=Helper::getSettingValue('google_map_api_code')?></textraea>
                            </div>
@@ -476,9 +472,148 @@ $user_type = session('type');
                      <form id="formAccountSettings" action="<?=url('footer-settings')?>" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                           <div class="mb-3 col-md-12">
+                           <div class="mb-3 col-md-6">
                               <label for="footer_text" class="form-label">Footer Text</label>
                               <textarea class="form-control" id="ckeditor18" name="footer_text" placeholder="Footer Text"><?=Helper::getSettingValue('footer_text')?></textarea>
+                           </div>
+                           <div class="mb-3 col-md-6">
+                              <label for="copyright_statement" class="form-label">Copyright Statement</label>
+                              <textarea class="form-control" id="ckeditor10" name="copyright_statement" placeholder="Copyright Statement"><?=Helper::getSettingValue('copyright_statement')?></textarea>
+                           </div>
+                        </div>
+                        <div class="row mt-3">
+                           <div class="col-md-12">
+                              <label for="" class="col-md-4 col-lg-3 col-form-label">Column 1</label>
+                              <div class="field_wrapper1" style="border: 1px solid #8144f0;padding: 10px;margin-bottom: 10px;">
+                                 <?php
+                                 $footer_link_name = ((Helper::getSettingValue('footer_link_name') != '')?json_decode(Helper::getSettingValue('footer_link_name')):[]);
+                                 $footer_link = ((Helper::getSettingValue('footer_link') != '')?json_decode(Helper::getSettingValue('footer_link')):[]);
+                                 if(!empty($footer_link_name)){ for($i=0;$i<count($footer_link_name);$i++){
+                                 ?>
+                                    <div class="row">
+                                       <div class="col-md-5">
+                                             <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>
+                                             <span class="input-with-icon">
+                                                <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name[]" value="<?=$footer_link_name[$i]?>" autocomplete="off">
+                                             </span>
+                                       </div>
+                                       <div class="col-md-5">
+                                             <label for="lefticon" class="control-label">Link<span class="red">*</span></label>
+                                             <span class="input-with-icon">
+                                                <input type="text" class="form-control requiredCheck" data-check="Link" value="<?=$footer_link[$i]?>" name="footer_link[]" autocomplete="off">
+                                             </span>
+                                       </div>
+                                       <div class="col-md-2" style="margin-top: 26px;">
+                                             <a href="javascript:void(0);" class="remove_button1" title="Add field"><i class="fa fa-minus-circle fa-2x text-danger"></i></a>
+                                       </div>                                    
+                                    </div>
+                                 <?php } }?>
+                                 <div class="row">
+                                    <div class="col-md-5">
+                                       <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>
+                                       <span class="input-with-icon">
+                                             <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name[]" autocomplete="off">
+                                       </span>
+                                    </div>
+                                    <div class="col-md-5">
+                                       <label for="lefticon" class="control-label">Link<span class="red">*</span></label>
+                                       <span class="input-with-icon">
+                                             <input type="text" class="form-control requiredCheck" data-check="Link" name="footer_link[]" autocomplete="off">
+                                       </span>
+                                    </div>
+                                    <div class="col-md-2" style="margin-top: 26px;">
+                                       <a href="javascript:void(0);" class="add_button1" title="Add field"><i class="fa fa-plus-circle fa-2x text-success"></i></a>
+                                    </div>                                    
+                                 </div>
+                              </div>
+
+                              <label for="" class="col-md-4 col-lg-3 col-form-label">Column 2</label>
+                              <div class="field_wrapper2" style="border: 1px solid #8144f0;padding: 10px;margin-bottom: 10px;">
+                                 <?php
+                                 $footer_link_name2 = ((Helper::getSettingValue('footer_link_name2') != '')?json_decode(Helper::getSettingValue('footer_link_name2')):[]);
+                                 $footer_link2 = ((Helper::getSettingValue('footer_link2') != '')?json_decode(Helper::getSettingValue('footer_link2')):[]);
+                                 if(!empty($footer_link_name2)){ for($i=0;$i<count($footer_link_name2);$i++){
+                                 ?>
+                                    <div class="row">
+                                       <div class="col-md-5">
+                                             <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>
+                                             <span class="input-with-icon">
+                                                <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name2[]" value="<?=$footer_link_name2[$i]?>" autocomplete="off">
+                                             </span>
+                                       </div>
+                                       <div class="col-md-5">
+                                             <label for="lefticon" class="control-label">Link<span class="red">*</span></label>
+                                             <span class="input-with-icon">
+                                                <input type="text" class="form-control requiredCheck" data-check="Link" value="<?=$footer_link2[$i]?>" name="footer_link2[]" autocomplete="off">
+                                             </span>
+                                       </div>
+                                       <div class="col-md-2" style="margin-top: 26px;">
+                                             <a href="javascript:void(0);" class="remove_button2" title="Add field"><i class="fa fa-minus-circle fa-2x text-danger"></i></a>
+                                       </div>                                    
+                                    </div>
+                                 <?php } }?>
+                                 <div class="row">
+                                    <div class="col-md-5">
+                                       <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>
+                                       <span class="input-with-icon">
+                                             <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name2[]" autocomplete="off">
+                                       </span>
+                                    </div>
+                                    <div class="col-md-5">
+                                       <label for="lefticon" class="control-label">Link<span class="red">*</span></label>
+                                       <span class="input-with-icon">
+                                             <input type="text" class="form-control requiredCheck" data-check="Link" name="footer_link2[]" autocomplete="off">
+                                       </span>
+                                    </div>
+                                    <div class="col-md-2" style="margin-top: 26px;">
+                                       <a href="javascript:void(0);" class="add_button2" title="Add field"><i class="fa fa-plus-circle fa-2x text-success"></i></a>
+                                    </div>                                    
+                                 </div>
+                              </div>
+
+                              <label for="" class="col-md-4 col-lg-3 col-form-label">Column 3</label>
+                              <div class="field_wrapper3" style="border: 1px solid #8144f0;padding: 10px;margin-bottom: 10px;">
+                                 <?php
+                                 $footer_link_name3 = ((Helper::getSettingValue('footer_link_name3') != '')?json_decode(Helper::getSettingValue('footer_link_name3')):[]);
+                                 $footer_link3 = ((Helper::getSettingValue('footer_link3') != '')?json_decode(Helper::getSettingValue('footer_link3')):[]);
+                                 if(!empty($footer_link_name3)){ for($i=0;$i<count($footer_link_name3);$i++){
+                                 ?>
+                                    <div class="row">
+                                       <div class="col-md-5">
+                                             <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>
+                                             <span class="input-with-icon">
+                                                <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name3[]" value="<?=$footer_link_name3[$i]?>" autocomplete="off">
+                                             </span>
+                                       </div>
+                                       <div class="col-md-5">
+                                             <label for="lefticon" class="control-label">Link<span class="red">*</span></label>
+                                             <span class="input-with-icon">
+                                                <input type="text" class="form-control requiredCheck" data-check="Link" value="<?=$footer_link3[$i]?>" name="footer_link3[]" autocomplete="off">
+                                             </span>
+                                       </div>
+                                       <div class="col-md-2" style="margin-top: 26px;">
+                                             <a href="javascript:void(0);" class="remove_button3" title="Add field"><i class="fa fa-minus-circle fa-2x text-danger"></i></a>
+                                       </div>                                    
+                                    </div>
+                                 <?php } }?>
+                                 <div class="row">
+                                    <div class="col-md-5">
+                                       <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>
+                                       <span class="input-with-icon">
+                                             <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name3[]" autocomplete="off">
+                                       </span>
+                                    </div>
+                                    <div class="col-md-5">
+                                       <label for="lefticon" class="control-label">Link<span class="red">*</span></label>
+                                       <span class="input-with-icon">
+                                             <input type="text" class="form-control requiredCheck" data-check="Link" name="footer_link3[]" autocomplete="off">
+                                       </span>
+                                    </div>
+                                    <div class="col-md-2" style="margin-top: 26px;">
+                                       <a href="javascript:void(0);" class="add_button3" title="Add field"><i class="fa fa-plus-circle fa-2x text-success"></i></a>
+                                    </div>                                    
+                                 </div>
+                              </div>
                            </div>
                         </div>
                         <div class="mt-2">
@@ -523,4 +658,128 @@ $user_type = session('type');
       </div>
    </div>
 </div>
+@endsection
+@section('scripts')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){        
+        var maxField = 10; //Input fields increment limitation
+        var addButton = $('.add_button1'); //Add button selector
+        var wrapper = $('.field_wrapper1'); //Input field wrapper
+        var fieldHTML = '<div class="row">\
+                            <div class="col-md-5">\
+                                <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>\
+                                <span class="input-with-icon">\
+                                    <input type="text" class="form-control requiredCheck" data-check="Link Text" name="footer_link_name[]" autocomplete="off">\
+                                </span>\
+                            </div>\
+                            <div class="col-md-5">\
+                                <label for="lefticon" class="control-label">Link<span class="red">*</span></label>\
+                                <span class="input-with-icon">\
+                                    <input type="text" class="form-control requiredCheck" data-check="Link" name="footer_link[]" autocomplete="off">\
+                                </span>\
+                            </div>\
+                            <div class="col-md-2" style="margin-top: 26px;">\
+                                <a href="javascript:void(0);" class="remove_button1" title="Remove field"><i class="fa fa-minus-circle fa-2x text-danger"></i></a>\
+                            </div>\
+                        </div>'; //New input field html 
+        var x = 1; //Initial field counter is 1
+        
+        //Once add button is clicked
+        $(addButton).click(function(){
+            //Check maximum number of input fields
+            if(x < maxField){ 
+                x++; //Increment field counter
+                $(wrapper).append(fieldHTML); //Add field html
+            }
+        });
+        
+        //Once remove button is clicked
+        $(wrapper).on('click', '.remove_button1', function(e){
+            e.preventDefault();
+            $(this).parent('div').parent('div').remove(); //Remove field html
+            x--; //Decrement field counter
+        });
+    });
+
+    $(document).ready(function(){        
+        var maxField = 10; //Input fields increment limitation
+        var addButton = $('.add_button2'); //Add button selector
+        var wrapper = $('.field_wrapper2'); //Input field wrapper
+        var fieldHTML = '<div class="row">\
+                            <div class="col-md-5">\
+                                <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>\
+                                <span class="input-with-icon">\
+                                    <input type="text" class="form-control requiredCheck" data-check="Second Column Link Text" name="footer_link_name2[]" autocomplete="off">\
+                                </span>\
+                            </div>\
+                            <div class="col-md-5">\
+                                <label for="lefticon" class="control-label">Link<span class="red">*</span></label>\
+                                <span class="input-with-icon">\
+                                    <input type="text" class="form-control requiredCheck" data-check="Second Column Link" name="footer_link2[]" autocomplete="off">\
+                                </span>\
+                            </div>\
+                            <div class="col-md-2" style="margin-top: 33px;">\
+                                <a href="javascript:void(0);" class="remove_button2" title="Remove field"><i class="fa fa-minus-circle fa-2x text-danger"></i></a>\
+                            </div>\
+                        </div>'; //New input field html 
+        var x = 1; //Initial field counter is 1
+        
+        //Once add button is clicked
+        $(addButton).click(function(){
+            //Check maximum number of input fields
+            if(x < maxField){ 
+                x++; //Increment field counter
+                $(wrapper).append(fieldHTML); //Add field html
+            }
+        });
+        
+        //Once remove button is clicked
+        $(wrapper).on('click', '.remove_button2', function(e){
+            e.preventDefault();
+            $(this).parent('div').parent('div').remove(); //Remove field html
+            x--; //Decrement field counter
+        });
+    });
+
+    $(document).ready(function(){        
+        var maxField = 10; //Input fields increment limitation
+        var addButton = $('.add_button3'); //Add button selector
+        var wrapper = $('.field_wrapper3'); //Input field wrapper
+        var fieldHTML = '<div class="row">\
+                            <div class="col-md-5">\
+                                <label for="lefticon" class="control-label">Link Text<span class="red">*</span></label>\
+                                <span class="input-with-icon">\
+                                    <input type="text" class="form-control requiredCheck" data-check="Third Column Link Text" name="footer_link_name3[]" autocomplete="off">\
+                                </span>\
+                            </div>\
+                            <div class="col-md-5">\
+                                <label for="lefticon" class="control-label">Link<span class="red">*</span></label>\
+                                <span class="input-with-icon">\
+                                    <input type="text" class="form-control requiredCheck" data-check="Third Column Link" name="footer_link3[]" autocomplete="off">\
+                                </span>\
+                            </div>\
+                            <div class="col-md-2" style="margin-top: 33px;">\
+                                <a href="javascript:void(0);" class="remove_button3" title="Remove field"><i class="fa fa-minus-circle fa-2x text-danger"></i></a>\
+                            </div>\
+                        </div>'; //New input field html 
+        var x = 1; //Initial field counter is 1
+        
+        //Once add button is clicked
+        $(addButton).click(function(){
+            //Check maximum number of input fields
+            if(x < maxField){ 
+                x++; //Increment field counter
+                $(wrapper).append(fieldHTML); //Add field html
+            }
+        });
+        
+        //Once remove button is clicked
+        $(wrapper).on('click', '.remove_button3', function(e){
+            e.preventDefault();
+            $(this).parent('div').parent('div').remove(); //Remove field html
+            x--; //Decrement field counter
+        });
+    });
+</script>
 @endsection

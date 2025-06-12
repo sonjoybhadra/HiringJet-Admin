@@ -39,9 +39,9 @@ $controllerRoute = $module['controller_route'];
                   'containerId' => 'table1',
                   'searchId' => 'search1',
                   'table' => 'faqs',
-                  'columns' => ['faq_category_id', 'question', 'answer', 'created_at', 'faqs.status'],
-                  'visibleColumns' => ['faq_category_name', 'question', 'answer', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'FAQ Category', 'Question', 'Answer', 'Created At'],
+                  'columns' => ['faq_category_id', 'faq_sub_category_id', 'question', 'answer', 'created_at', 'faqs.status'],
+                  'visibleColumns' => ['faq_category_name', 'faq_sub_category_name', 'question', 'answer', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'FAQ Category', 'FAQ Sub Category', 'Question', 'Answer', 'Created At'],
                   'filename' => "FAQ",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
@@ -53,10 +53,16 @@ $controllerRoute = $module['controller_route'];
                   'statusColumn' => 'status', // optional, defaults to 'is_active',
                   'joins' => [
                      [
-                           'table' => 'faq_categories',
-                           'localKey' => 'faq_category_id',
-                           'foreignKey' => 'id',
-                           'select' => ['name as faq_category_name']
+                        'table' => 'faq_categories',
+                        'localKey' => 'faq_category_id',
+                        'foreignKey' => 'id',
+                        'select' => ['name as faq_category_name']
+                     ],
+                     [
+                        'table' => 'faq_sub_categories',
+                        'localKey' => 'faq_sub_category_id',
+                        'foreignKey' => 'id',
+                        'select' => ['name as faq_sub_category_name']
                      ]
                   ]
                 ])

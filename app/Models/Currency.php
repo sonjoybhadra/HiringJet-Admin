@@ -9,12 +9,4 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Currency extends Model
 {
     use SoftDeletes;
-
-    /**
-     * Get the role details of associated user.
-    */
-    public function country(): BelongsTo
-    {
-        return $this->BelongsTo(Country::class, 'country_id');
-    }
 }

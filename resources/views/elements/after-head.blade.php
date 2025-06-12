@@ -39,6 +39,14 @@ use App\Helpers\Helper;
 <!-- Vendors CSS -->
 <link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/node-waves/node-waves.css" />
 
+<!-- posting job wizard -->
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/typeahead-js/typeahead.css" />
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bs-stepper/bs-stepper.css" />
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bootstrap-select/bootstrap-select.css" />
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/select2/select2.css" />
+<link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/form-validation.css" />
+
 <link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 <link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/typeahead-js/typeahead.css" />
 <link rel="stylesheet" href="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/apex-charts/apex-charts.css" />
