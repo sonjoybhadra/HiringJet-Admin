@@ -170,7 +170,8 @@ class EditProfessionalDetailsController extends BaseApiController
             UserItSkill::insert([
                 'user_id'=> auth()->user()->id,
                 'itkill_id'=> $request->itkill_id,
-                'last_used'=> $request->version,
+                'version'=> $request->version,
+                'last_used'=> $request->last_used,
                 'exp_year'=> $request->exp_year,
                 'exp_month'=> $request->exp_month,
             ]);
@@ -199,7 +200,8 @@ class EditProfessionalDetailsController extends BaseApiController
         try {
             UserItSkill::where('id', $id)->update([
                 'itkill_id'=> $request->itkill_id,
-                'last_used'=> $request->version,
+                'version'=> $request->version,
+                'last_used'=> $request->last_used,
                 'exp_year'=> $request->exp_year,
                 'exp_month'=> $request->exp_month,
             ]);
