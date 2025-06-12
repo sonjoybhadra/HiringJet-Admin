@@ -82,7 +82,7 @@ $user_type = session('type');
                            </div>
                            <div class="mb-3 col-md-12">
                               <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                 <img src="<?=(($user->profile_image != '')?env('UPLOADS_URL').$user->profile_image:env('NO_IMAGE_AVATAR'))?>" alt="<?=$user->name?>" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+                                 <img src="<?=(($user->profile_image != '')?env('APP_URL') . $user->profile_image:env('NO_IMAGE_AVATAR'))?>" alt="<?=$user->name?>" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
                                  <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                     <span class="d-none d-sm-block">Upload new photo</span>
@@ -219,7 +219,7 @@ $user_type = session('type');
 
                            <div class="mb-3 col-md-12">
                               <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                 <img src="<?=((Helper::getSettingValue('site_logo') != '')?env('UPLOADS_URL').Helper::getSettingValue('site_logo'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block rounded" height="50" width="300" id="uploadedAvatar" />
+                                 <img src="<?=((Helper::getSettingValue('site_logo') != '')?env('APP_URL') . Helper::getSettingValue('site_logo'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block rounded" height="50" width="300" id="uploadedAvatar" />
                                  <div class="button-wrapper">
                                     <label for="upload2" class="btn btn-primary me-2 mb-4" tabindex="0">
                                     <span class="d-none d-sm-block">Upload Logo</span>
@@ -239,7 +239,7 @@ $user_type = session('type');
                            </div>
                            <div class="mb-3 col-md-12">
                               <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                 <img src="<?=((Helper::getSettingValue('site_footer_logo') != '')?env('UPLOADS_URL').Helper::getSettingValue('site_footer_logo'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block rounded" height="50" width="300" id="uploadedAvatar" />
+                                 <img src="<?=((Helper::getSettingValue('site_footer_logo') != '')?env('APP_URL') . Helper::getSettingValue('site_footer_logo'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block rounded" height="50" width="300" id="uploadedAvatar" />
                                  <div class="button-wrapper">
                                     <label for="upload3" class="btn btn-primary me-2 mb-4" tabindex="0">
                                     <span class="d-none d-sm-block">Upload Footer Logo</span>
@@ -259,7 +259,7 @@ $user_type = session('type');
                            </div>
                            <div class="mb-3 col-md-12">
                               <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                 <img src="<?=((Helper::getSettingValue('site_favicon') != '')?env('UPLOADS_URL').Helper::getSettingValue('site_favicon'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block rounded" height="50" width="300" id="uploadedAvatar" />
+                                 <img src="<?=((Helper::getSettingValue('site_favicon') != '')?env('APP_URL') . Helper::getSettingValue('site_favicon'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block rounded" height="50" width="300" id="uploadedAvatar" />
                                  <div class="button-wrapper">
                                     <label for="upload4" class="btn btn-primary me-2 mb-4" tabindex="0">
                                     <span class="d-none d-sm-block">Upload Favicon</span>
