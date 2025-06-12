@@ -15,6 +15,7 @@ use Validator;
 // use JWTAuth;
 use App\Models\User;
 use App\Models\UserEmployment;
+use App\Models\Designation;
 
 class AuthController extends BaseApiController
 {
@@ -106,7 +107,7 @@ class AuthController extends BaseApiController
                                             ->with('employer')
                                             ->first();
         }
-        $data->current_designation = $user_employment ? $user_employment->last_designation : '';
+        $data->current_designation = $user_employment ? Designation::find($user_employment->last_designation) : [];
         $data->current_company = $user_employment ? $user_employment->employer : [];
         try {
             return $this->sendResponse(
