@@ -313,6 +313,12 @@ class GeneralSettingSeeder extends Seeder
                 'slug' => 'footer_link3',
                 'value' => '',
                 'is_active' => 1
+            ],
+            [
+                'key'=> 'footer_data',
+                'slug' => 'footer_data',
+                'value' => '',
+                'is_active' => 1
             ]
         ]);
     }
