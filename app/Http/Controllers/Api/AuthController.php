@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Validator;
 // use JWTAuth;
 use App\Models\User;
-use App\Models\UserDetails;
+use App\Models\UserEmployment;
 
 class AuthController extends BaseApiController
 {
@@ -83,9 +83,7 @@ class AuthController extends BaseApiController
     */
     public function getUser()
     {
-        try {
-            return $this->sendResponse(
-                User::where('id', auth()->user()->id)
+        $data = User::where('id', auth()->user()->id)
                     ->with('user_profile')
                     ->with('user_skills')
                     ->with('user_employments')
@@ -98,7 +96,22 @@ class AuthController extends BaseApiController
                     ->with('user_employment')
                     ->with('user_it_skill')
                     ->with('user_cv')
-                    ->first(),
+                    ->first();
+        $user_employment = UserEmployment::where('user_id', auth()->user()->id)
+                                            ->where('is_current_job', 1)
+                                            ->with('employer')
+                                            ->first();
+        if(!$user_employment){
+            $user_employment = UserEmployment::where('user_id', auth()->user()->id)
+                                            ->latest()
+                                            ->with('employer')
+                                            ->first();
+        }
+        $data->current_designation = $user_employment ? $user_employment->last_designation : '';
+        $data->current_company = $user_employment ? $user_employment->employer : [];
+        try {
+            return $this->sendResponse(
+                $data,
                 'User Details'
             );
         } catch (JWTException $exception) {

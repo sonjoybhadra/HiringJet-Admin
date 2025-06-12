@@ -240,6 +240,7 @@ class EditProfessionalDetailsController extends BaseApiController
                                 ->with('country')
                                 ->with('city')
                                 ->with('skills')
+                                ->with('functional_areas')
                                 ->first()
             );
         } catch (\Exception $e) {

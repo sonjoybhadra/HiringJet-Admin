@@ -522,7 +522,9 @@ class CommonController extends BaseApiController
 
     public function get_homepage(){
         return $this->sendResponse(
-            HomePage::where('status', 1)->latest()->first(),
+            HomePage::select('section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9', 'section10')
+                    ->where('status', 1)
+                    ->latest()->first(),
             'Home page details'
         );
     }
@@ -546,6 +548,14 @@ class CommonController extends BaseApiController
         return $this->sendResponse(
             $list,
             'Testimonials list'
+        );
+    }
+
+    public function get_testimonials_details(Request $request, $id){
+        $data = Testimonial::find($id);
+        return $this->sendResponse(
+            $data,
+            'Testimonials details'
         );
     }
 

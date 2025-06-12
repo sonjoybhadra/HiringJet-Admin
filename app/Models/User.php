@@ -175,11 +175,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UserWorkSample::class, 'user_id')->orderBy('created_at', 'asc');
     }
 
-    public function user_employment(): HasMany
-    {
-        return $this->hasMany(UserEmployment::class, 'user_id')->orderBy('created_at', 'asc');
-    }
-
     public function user_it_skill(): HasMany
     {
         return $this->hasMany(UserItSkill::class, 'user_id')
