@@ -112,7 +112,7 @@ class User extends Authenticatable implements JWTSubject
     public function user_skills(): HasMany
     {
         return $this->hasMany(UserSkill::class, 'user_id')
-                    ->with('key_skills')
+                    // ->with('key_skills')
                     ->orderBy('created_at', 'asc');
     }
     /**
