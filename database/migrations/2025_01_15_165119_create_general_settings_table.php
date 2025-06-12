@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('key', 100);
             $table->string('slug', 100);
-            $table->string('value');
+            $table->longText('value');
             $table->tinyInteger('is_active')->default(1);
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
