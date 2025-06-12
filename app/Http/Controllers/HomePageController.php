@@ -199,6 +199,72 @@ class HomePageController extends Controller
                         }
                     /* Section 7 images */
 
+                    $section1 = [];
+                    $section2 = [];
+                    $section3 = [];
+                    $section4 = [];
+                    $section5 = [];
+                    $section6 = [];
+                    $section7 = [];
+                    $section8 = [];
+                    $section9 = [];
+                    $section10 = [];
+
+                    $section1 = [
+                        'title'         => strip_tags($postData['section1_title']),
+                        'description'   => strip_tags($postData['section1_description']),
+                        'button_text'   => strip_tags($postData['section1_button_text']),
+                    ];
+                    $section2 = [
+                        'title'         => strip_tags($postData['section2_title']),
+                        'description'   => strip_tags($postData['section2_description']),
+                        'button_text'   => strip_tags($postData['section2_button_text']),
+                    ];
+                    $section3 = [
+                        'box_text'          => ((!empty($section3_box_text))?json_encode($section3_box_text):''),
+                        'box_number'        => ((!empty($section3_box_number))?json_encode($section3_box_number):''),
+                        'box_image'         => ((!empty($image_link3))?json_encode($image_link3):''),
+                    ];
+                    $section4 = [
+                        'title'         => strip_tags($postData['section4_title']),
+                        'country'       => ((!empty($section4_country))?json_encode($section4_country):''),
+                        'city'          => ((!empty($section4_city))?json_encode($section4_city):''),
+                    ];
+                    $section5 = [
+                        'title'                 => strip_tags($postData['section5_title']),
+                        'box_name'              => ((!empty($section5_box_name))?json_encode($section5_box_name):''),
+                        'box_image'             => ((!empty($image_link5))?json_encode($image_link5):''),
+                    ];
+                    $section6 = [
+                        'title'                 => strip_tags($postData['section6_title']),
+                        'description'           => strip_tags($postData['section6_description']),
+                        'button_text'           => strip_tags($postData['section6_button_text']),
+                    ];
+                    $section7 = [
+                        'title'                 => strip_tags($postData['section7_title']),
+                        'description'           => strip_tags($postData['section7_description']),
+                        'box_name'              => ((!empty($section7_box_name))?json_encode($section7_box_name):''),
+                        'box_link_name'         => ((!empty($section7_box_link_name))?json_encode($section7_box_link_name):''),
+                        'box_link_url'          => ((!empty($section7_box_link_url))?json_encode($section7_box_link_url):''),
+                        'box_description'       => ((!empty($section7_box_description))?json_encode($section7_box_description):''),
+                        'box_image'             => ((!empty($image_link7))?json_encode($image_link7):''),
+                    ];
+                    $section8 = [
+                        'title'                    => strip_tags($postData['section8_title']),
+                        'description'              => strip_tags($postData['section8_description']),
+                    ];
+                    $section9 = [
+                        'title'                    => strip_tags($postData['section9_title']),
+                        'description'              => strip_tags($postData['section9_description']),
+                    ];
+                    $section10 = [
+                        'title'                   => strip_tags($postData['section10_title']),
+                        'description'             => strip_tags($postData['section10_description']),
+                        'image1'                  => $section10Image1,
+                        'image2'                  => $section10Image2,
+                        'image3'                  => $section10Image3,
+                    ];
+
                     $fields = [
                         'section1_title'                    => strip_tags($postData['section1_title']),
                         'section1_description'              => strip_tags($postData['section1_description']),
@@ -234,6 +300,16 @@ class HomePageController extends Controller
                         'section10_image1'                  => $section10Image1,
                         'section10_image2'                  => $section10Image2,
                         'section10_image3'                  => $section10Image3,
+                        'section1'                          => json_encode($section1),
+                        'section2'                          => json_encode($section2),
+                        'section3'                          => json_encode($section3),
+                        'section4'                          => json_encode($section4),
+                        'section5'                          => json_encode($section5),
+                        'section6'                          => json_encode($section6),
+                        'section7'                          => json_encode($section7),
+                        'section8'                          => json_encode($section8),
+                        'section9'                          => json_encode($section9),
+                        'section10'                         => json_encode($section10),
                         'status'                            => 1,
                     ];
                     // Helper::pr($fields);
