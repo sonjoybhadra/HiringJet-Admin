@@ -85,7 +85,12 @@ class User extends Authenticatable implements JWTSubject
     */
     public function user_profile(): HasOne
     {
-        return $this->hasOne(UserProfile::class, 'user_id');
+        return $this->hasOne(UserProfile::class, 'user_id')
+                    ->with('marital_statuse')
+                    ->with('country')
+                    ->with('city')
+                    ->with('pasport_country')
+                    ->with('availabilitie');
     }
 
     /**
@@ -93,14 +98,22 @@ class User extends Authenticatable implements JWTSubject
     */
     public function user_education(): HasMany
     {
-        return $this->hasMany(UserEducation::class, 'user_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserEducation::class, 'user_id')
+                    ->with('qualification')
+                    ->with('course')
+                    ->with('location')
+                    ->with('university')
+                    ->with('specialization')
+                    ->orderBy('created_at', 'asc');
     }
     /**
      * Get the profile details of associated user.
     */
     public function user_skills(): HasMany
     {
-        return $this->hasMany(UserSkill::class, 'user_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserSkill::class, 'user_id')
+                    ->with('key_skills')
+                    ->orderBy('created_at', 'asc');
     }
     /**
      * Get the profile details of associated user.
@@ -121,7 +134,9 @@ class User extends Authenticatable implements JWTSubject
     */
     public function user_languages(): HasMany
     {
-        return $this->hasMany(UserLanguage::class, 'user_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserLanguage::class, 'user_id')
+                    ->with('language')
+                    ->orderBy('created_at', 'asc');
     }
 
     /**
@@ -129,7 +144,18 @@ class User extends Authenticatable implements JWTSubject
     */
     public function user_employments(): HasMany
     {
-        return $this->hasMany(UserEmployment::class, 'user_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserEmployment::class, 'user_id')
+                    ->with('employer')
+                    ->with('country')
+                    ->with('city')
+                    ->with('currency')
+                    ->with('work_level')
+                    ->with('notice_period')
+                    ->with('skills')
+                    ->with('industrys')
+                    ->with('functional_areas')
+                    ->with('park_benefits')
+                    ->orderBy('created_at', 'asc');
     }
     /**
      * Get the profile details of associated user.
@@ -156,7 +182,9 @@ class User extends Authenticatable implements JWTSubject
 
     public function user_it_skill(): HasMany
     {
-        return $this->hasMany(UserItSkill::class, 'user_id')->with('it_skills')->orderBy('created_at', 'asc');
+        return $this->hasMany(UserItSkill::class, 'user_id')
+                    ->with('it_skills')
+                    ->orderBy('created_at', 'asc');
     }
 
 
