@@ -64,7 +64,7 @@ class HomePageController extends Controller
                             $uploadedFile   = $this->upload_single_file('section10_image1', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $section10_image1 = $uploadedFile['newFilename'];
-                                $section10Image1 = env('UPLOADS_URL') . $upload_folder . '/' . $section10_image1;
+                                $section10Image1 = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $section10_image1;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
@@ -81,7 +81,7 @@ class HomePageController extends Controller
                             $uploadedFile   = $this->upload_single_file('section10_image2', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $section10_image2 = $uploadedFile['newFilename'];
-                                $section10Image2 = env('UPLOADS_URL') . $upload_folder . '/' . $section10_image2;
+                                $section10Image2 = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $section10_image2;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
@@ -98,7 +98,7 @@ class HomePageController extends Controller
                             $uploadedFile   = $this->upload_single_file('section10_image3', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $section10_image3 = $uploadedFile['newFilename'];
-                                $section10Image3 = env('UPLOADS_URL') . $upload_folder . '/' . $section10_image3;
+                                $section10Image3 = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $section10_image3;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
@@ -137,7 +137,7 @@ class HomePageController extends Controller
                         $image_link3 = [];
                         if(!empty($images)){
                             for($i=0;$i<count($images);$i++){
-                                $image_link3[] = env('UPLOADS_URL').'home-page/'.$images[$i];
+                                $image_link3[] = env('UPLOADS_URL_PATH').'home-page/'.$images[$i];
                             }
                         } else {
                             $image_link3 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
@@ -160,7 +160,7 @@ class HomePageController extends Controller
                         $image_link5 = [];
                         if(!empty($images)){
                             for($i=0;$i<count($images);$i++){
-                                $image_link5[] = env('UPLOADS_URL').'home-page/'.$images[$i];
+                                $image_link5[] = env('UPLOADS_URL_PATH').'home-page/'.$images[$i];
                             }
                         } else {
                             $image_link5 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
@@ -192,7 +192,7 @@ class HomePageController extends Controller
                         $image_link7 = [];
                         if(!empty($images)){
                             for($i=0;$i<count($images);$i++){
-                                $image_link7[] = env('UPLOADS_URL').'home-page/'.$images[$i];
+                                $image_link7[] = env('UPLOADS_URL_PATH').'home-page/'.$images[$i];
                             }
                         } else {
                             $image_link7 = (($data['row'])?json_decode($data['row']->section7_box_image):[]);

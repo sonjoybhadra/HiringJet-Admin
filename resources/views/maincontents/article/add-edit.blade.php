@@ -98,7 +98,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <img src="<?=(($page_banner_image != '')?$page_banner_image:env('NO_IMAGE'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($page_banner_image != '')?env('APP_URL') . $page_banner_image:env('NO_IMAGE'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -124,7 +124,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <img src="<?=(($page_image != '')?$page_image:env('NO_IMAGE'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($page_image != '')?env('APP_URL') . $page_image:env('NO_IMAGE'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <div class="row mt-3">

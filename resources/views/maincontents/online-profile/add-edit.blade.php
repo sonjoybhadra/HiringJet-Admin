@@ -80,7 +80,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <img src="<?=(($logo != '')?$logo:env('NO_IMAGE'))?>" alt="<?=$name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($logo != '')?env('APP_URL') . $logo:env('NO_IMAGE'))?>" alt="<?=$name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <div class="mt-2">
