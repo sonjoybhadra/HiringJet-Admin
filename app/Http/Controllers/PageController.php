@@ -95,8 +95,8 @@ class PageController extends Controller
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
                         'page_content'              => $postData['page_content'],
-                        'page_banner_image'         => env('UPLOADS_URL') . $upload_folder . '/' . $page_banner_image,
-                        'page_image'                => env('UPLOADS_URL') . $upload_folder . '/' . $page_image,
+                        'page_banner_image'         => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $page_banner_image,
+                        'page_image'                => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $page_image,
                         'meta_title'                => strip_tags($postData['meta_title']),
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),
                         'meta_description'          => strip_tags($postData['meta_description']),
@@ -137,7 +137,7 @@ class PageController extends Controller
                             $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $page_banner_image = $uploadedFile['newFilename'];
-                                $pageBannerImageLink = env('UPLOADS_URL') . $upload_folder . '/' . $page_banner_image;
+                                $pageBannerImageLink = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $page_banner_image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
@@ -154,7 +154,7 @@ class PageController extends Controller
                             $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $page_image = $uploadedFile['newFilename'];
-                                $pageImageLink = env('UPLOADS_URL') . $upload_folder . '/' . $page_image;
+                                $pageImageLink = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $page_image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }

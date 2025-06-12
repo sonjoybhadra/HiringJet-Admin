@@ -98,7 +98,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <img src="<?=(($image != '')?$image:env('NO_IMAGE'))?>" alt="<?=$name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($image != '')?env('APP_URL') . $image:env('NO_IMAGE'))?>" alt="<?=$name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <div class="mt-2">

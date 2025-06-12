@@ -81,7 +81,7 @@ class FaqSubCategoryController extends Controller
                         'faq_category_id'           => strip_tags($postData['faq_category_id']),
                         'name'                      => strip_tags($postData['name']),
                         'description'               => strip_tags($postData['description']),
-                        'image'                     => env('UPLOADS_URL') . $upload_folder . '/' . $image,
+                        'image'                     => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $image,
                     ];
                     FaqSubCategory::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -123,7 +123,7 @@ class FaqSubCategoryController extends Controller
                             $uploadedFile   = $this->upload_single_file('image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $image = $uploadedFile['newFilename'];
-                                $faqSubImage = env('UPLOADS_URL') . $upload_folder . '/' . $image;
+                                $faqSubImage = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }

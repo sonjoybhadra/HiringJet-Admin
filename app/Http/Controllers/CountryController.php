@@ -83,7 +83,7 @@ class CountryController extends Controller
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
                         'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
                         'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),
-                        'country_flag'              => env('UPLOADS_URL') . $upload_folder . '/' . $country_flag,
+                        'country_flag'              => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $country_flag,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Country::insert($fields);
@@ -124,7 +124,7 @@ class CountryController extends Controller
                             $uploadedFile   = $this->upload_single_file('country_flag', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $country_flag = $uploadedFile['newFilename'];
-                                $countryFlag = env('UPLOADS_URL') . $upload_folder . '/' . $country_flag;
+                                $countryFlag = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $country_flag;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }

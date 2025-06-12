@@ -77,7 +77,7 @@ class OnlineProfileController extends Controller
                     /* logo */
                     $fields = [
                         'name'              => strip_tags($postData['name']),
-                        'logo'              => env('UPLOADS_URL') . $upload_folder . '/' . $logo,
+                        'logo'              => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $logo,
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     OnlineProfile::insert($fields);
@@ -115,7 +115,7 @@ class OnlineProfileController extends Controller
                             $uploadedFile   = $this->upload_single_file('logo', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $logo = $uploadedFile['newFilename'];
-                                $logoLink = env('UPLOADS_URL') . $upload_folder . '/' . $logo;
+                                $logoLink = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $logo;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
