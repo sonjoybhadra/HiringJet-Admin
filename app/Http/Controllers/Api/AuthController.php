@@ -93,7 +93,6 @@ class AuthController extends BaseApiController
                     ->with('user_certification')
                     ->with('user_online_profile')
                     ->with('user_work_sample')
-                    ->with('user_employment')
                     ->with('user_it_skill')
                     ->with('user_cv')
                     ->first();
