@@ -238,8 +238,8 @@ class EditProfessionalDetailsController extends BaseApiController
                                 ->with('country')
                                 ->with('city')
                                 ->with('skills')
-                                ->with('functional_areas')
-                                ->with('park_benefits')
+                                ->with('functionalareas')
+                                ->with('parkbenefits')
                                 ->first();
         try {
             return $this->sendResponse(
