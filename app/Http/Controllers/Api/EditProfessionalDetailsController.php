@@ -241,6 +241,7 @@ class EditProfessionalDetailsController extends BaseApiController
                                 ->with('city')
                                 ->with('skills')
                                 ->with('functional_areas')
+                                ->with('park_benefits')
                                 ->first()
             );
         } catch (\Exception $e) {
