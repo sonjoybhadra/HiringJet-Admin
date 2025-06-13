@@ -27,6 +27,13 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'linkedin_id',
+        'google_id',
+        'provider',
+        'provider_id',
+        'first_name',
+        'last_name',
+        'email_verified_at',
     ];
 
     /**
@@ -38,6 +45,22 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+
+     // Helper methods
+        public function hasLinkedInAccount()
+        {
+            return !empty($this->linkedin_id);
+        }
+
+        public function hasGoogleAccount()
+        {
+            return !empty($this->google_id);
+        }
+
+        public function getSocialProvider()
+        {
+            return $this->provider;
+        }
 
     /**
      * Get the attributes that should be cast.
