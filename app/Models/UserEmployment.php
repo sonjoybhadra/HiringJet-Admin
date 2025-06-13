@@ -55,11 +55,11 @@ class UserEmployment extends Model
     }
     public function functional_areas(): HasMany
     {
-        return $this->HasMany(UserEmploymentFunctionalArea::class, 'user_employment_id');
+        return $this->HasMany(UserEmploymentFunctionalArea::class, 'user_employment_id')->with('functional_areas');
     }
     public function park_benefits(): HasMany
     {
-        return $this->HasMany(UserEmploymentParkBenefit::class, 'user_employment_id');
+        return $this->HasMany(UserEmploymentParkBenefit::class, 'user_employment_id')->with('perk_benefit');
     }
 
 }
