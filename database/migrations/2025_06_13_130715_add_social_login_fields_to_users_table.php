@@ -21,8 +21,6 @@ return new class extends Migration
                 // General social login fields
                 $table->string('provider')->nullable();
                 $table->string('provider_id')->nullable();
-                $table->string('first_name')->nullable();
-                $table->string('last_name')->nullable();
 
                 // Add indexes for better performance
                 $table->index(['provider', 'provider_id']);
