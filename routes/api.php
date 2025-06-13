@@ -30,16 +30,20 @@ use App\Http\Controllers\Api\ReportBugController;
 
 use App\Http\Controllers\Api\JobSearchController;
 
-use App\Http\Controllers\Api\LinkedInAuthController;
+use App\Http\Controllers\Api\SocialAuthController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
 //Login with Google & Linkdin
-Route::post('/google-login', [AuthController::class, 'loginWithGoogle']);
-Route::post('/linkedin-login', [AuthController::class, 'loginWithLinkedIn']);
+// LinkedIn routes
+Route::post('/auth/linkedin/redirect', [SocialAuthController::class, 'redirectToLinkedIn']);
+Route::post('/auth/linkedin/callback', [SocialAuthController::class, 'handleLinkedInCallback']);
 
-Route::get('/linkedin/redirect', [LinkedInAuthController::class, 'redirect']);
-Route::get('/linkedin/callback', [LinkedInAuthController::class, 'callback']);
+// Google routes
+Route::post('/auth/google/redirect', [SocialAuthController::class, 'redirectToGoogle']);
+Route::post('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+
+
 
 Route::post('/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
