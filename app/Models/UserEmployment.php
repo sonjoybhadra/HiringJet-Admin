@@ -47,11 +47,11 @@ class UserEmployment extends Model
 
     public function skills(): HasMany
     {
-        return $this->HasMany(UserEmploymentSkill::class, 'user_employment_id');
+        return $this->HasMany(UserEmploymentSkill::class, 'user_employment_id')->with('skill');
     }
     public function industrys(): HasMany
     {
-        return $this->HasMany(UserEmploymentIndustry::class, 'user_employment_id');
+        return $this->HasMany(UserEmploymentIndustry::class, 'user_employment_id')->with('industry');
     }
     public function functional_areas(): HasMany
     {
