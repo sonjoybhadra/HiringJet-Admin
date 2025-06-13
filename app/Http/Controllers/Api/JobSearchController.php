@@ -17,6 +17,26 @@ class JobSearchController extends BaseApiController
     {
         try {
             $sql = PostJob::where('job_type', $job_type);
+            if(!empty($request->country)){
+                $sql->whereJsonContains('location_countries', $request->country);
+            }
+            if(!empty($request->city)){
+                $sql->whereJsonContains('location_cities', $request->city);
+            }
+            if(!empty($request->industry)){
+                $sql->whereIn('industry', $request->industry);
+            }
+            if(!empty($request->nationality)){
+                $sql->whereIn('nationality', $request->nationality);
+            }
+            if(!empty($request->employer)){
+                $sql->whereIn('employer_id', $request->employer);
+            }
+            if(!empty($request->salary)){
+                $sql->where('min_salary', '>=', $request->salary);
+                $sql->where('max_salary', '<=', $request->salary);
+            }
+
             $sql->latest();
             if($request->paginate){
                 $sql->paginate(15);
@@ -30,11 +50,11 @@ class JobSearchController extends BaseApiController
         }
     }
 
-    public function getJobDetails(Request $request, $job_type, $id)
+    public function getJobDetails(Request $request, $job_type, $slug)
     {
         try {
             return $this->sendResponse(
-                PostJob::findOrFail($id),
+                PostJob::where('job_no', $slug)->first(),
                 'Job details'
             );
         } catch (\Exception $e) {

@@ -90,7 +90,7 @@ Route::get('/get-city-by-param', [CommonController::class, 'get_city_by_param'])
 Route::get('/get-homepage', [CommonController::class, 'get_homepage']);
 Route::get('/get-general-settings', [CommonController::class, 'get_general_settings']);
 Route::get('/get-testimonials', [CommonController::class, 'get_testimonials']);
-Route::get('/get-testimonials/{id}', [CommonController::class, 'get_testimonials_details']);
+Route::get('/get-testimonials/{slug}', [CommonController::class, 'get_testimonials_details']);
 
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
