@@ -75,7 +75,7 @@ class EditPersonalDetailsController extends BaseApiController
                 'career_break'=> $request->career_break,
                 'career_break_reason'=> $request->career_break_reason,
                 'usa_working_permit'=> $request->career_break,
-                'other_working_permit_country'=> !empty($request->other_working_permit_country) ? json_encode($request->other_working_permit_country) : '',
+                'other_working_permit_country_id'=> !empty($request->other_working_permit_country) ? json_encode($request->other_working_permit_country) : '',
                 'address'=> $request->address,
                 'pincode'=> $request->pincode,
                 'alt_email'=> $request->alt_email,
