@@ -521,10 +521,13 @@ class CommonController extends BaseApiController
     }
 
     public function get_homepage(){
-        return $this->sendResponse(
-            HomePage::select('section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9', 'section10')
+        $list = HomePage::select('section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9', 'section10')
                     ->where('status', 1)
-                    ->latest()->first(),
+                    ->latest()->first();
+        $country_ids = json_decode($list->section4, true);
+        $list->country_list = Country::whereIn('id', $country_ids)->get();
+        return $this->sendResponse(
+            $list,
             'Home page details'
         );
     }

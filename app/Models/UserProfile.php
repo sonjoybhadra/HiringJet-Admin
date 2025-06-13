@@ -36,4 +36,14 @@ class UserProfile extends Model
         return $this->BelongsTo(Availability::class, 'availability_id');
     }
 
+    public function nationality(): BelongsTo
+    {
+        return $this->BelongsTo(Nationality::class, 'nationality_id');
+    }
+
+    public function religion(): BelongsTo
+    {
+        return $this->BelongsTo(Religion::class, 'religion_id');
+    }
+
 }
