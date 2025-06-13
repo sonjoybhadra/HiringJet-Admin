@@ -524,8 +524,13 @@ class CommonController extends BaseApiController
         $list = HomePage::select('section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9', 'section10')
                     ->where('status', 1)
                     ->latest()->first();
-        $country_ids = json_decode($list->section4->country, true);
-        $list->country_list = Country::whereIn('id', $country_ids)->get();
+        // Decode the JSON into a PHP array
+        $data = json_decode($list->section4, true);
+
+        // Decode the country string (which is itself a JSON array) into an actual PHP array
+        $country_id_array = json_decode($data['country'], true);
+        //dd(str_replace('"', "", $country_ids['country']));
+        $list->country_list = Country::whereIn('id', $country_id_array)->get();
         return $this->sendResponse(
             $list,
             'Home page details'
