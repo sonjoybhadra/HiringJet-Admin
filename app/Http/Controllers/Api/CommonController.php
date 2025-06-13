@@ -524,7 +524,7 @@ class CommonController extends BaseApiController
         $list = HomePage::select('section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9', 'section10')
                     ->where('status', 1)
                     ->latest()->first();
-        $country_ids = json_decode($list->section4, true);
+        $country_ids = json_decode($list->section4->country, true);
         $list->country_list = Country::whereIn('id', $country_ids)->get();
         return $this->sendResponse(
             $list,
