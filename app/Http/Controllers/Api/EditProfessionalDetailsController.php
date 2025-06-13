@@ -243,7 +243,7 @@ class EditProfessionalDetailsController extends BaseApiController
                                 ->first();
         try {
             return $this->sendResponse(
-
+                $data
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
