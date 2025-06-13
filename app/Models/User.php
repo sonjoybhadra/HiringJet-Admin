@@ -113,6 +113,7 @@ class User extends Authenticatable implements JWTSubject
                     ->with('country')
                     ->with('city')
                     ->with('pasport_country')
+                    ->with('other_working_permit_country')
                     ->with('availabilitie')
                     ->with('nationality')
                     ->with('religion');

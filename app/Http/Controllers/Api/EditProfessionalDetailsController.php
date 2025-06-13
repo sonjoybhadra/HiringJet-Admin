@@ -232,9 +232,7 @@ class EditProfessionalDetailsController extends BaseApiController
     */
     public function getProfessionalDetails()
     {
-        try {
-            return $this->sendResponse(
-                UserEmployment::where('user_id', auth()->user()->id)
+        $data = UserEmployment::where('user_id', auth()->user()->id)
                                 ->where('is_current_job', 1)
                                 ->with('employer')
                                 ->with('country')
@@ -242,7 +240,10 @@ class EditProfessionalDetailsController extends BaseApiController
                                 ->with('skills')
                                 ->with('functional_areas')
                                 ->with('park_benefits')
-                                ->first()
+                                ->first();
+        try {
+            return $this->sendResponse(
+
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());

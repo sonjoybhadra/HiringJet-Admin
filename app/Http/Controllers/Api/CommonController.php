@@ -529,8 +529,7 @@ class CommonController extends BaseApiController
 
         // Decode the country string (which is itself a JSON array) into an actual PHP array
         $country_id_array = json_decode($data['country'], true);
-        //dd(str_replace('"', "", $country_ids['country']));
-        $list->country_list = Country::whereIn('id', $country_id_array)->get();
+        $list->country_list = Country::select('id', 'name', 'country_short_code')->whereIn('id', $country_id_array)->get();
         return $this->sendResponse(
             $list,
             'Home page details'
