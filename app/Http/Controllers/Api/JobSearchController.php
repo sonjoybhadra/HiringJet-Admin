@@ -48,10 +48,8 @@ class JobSearchController extends BaseApiController
             }
 
             $sql->latest();
-            return $this->sendResponse([
+            return $this->sendResponse(
                 $sql->get(),
-                $sql->toSql()
-                ],
                 'Job list by params'
             );
         } catch (\Exception $e) {
