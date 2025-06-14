@@ -43,134 +43,113 @@ class SocialAuthController extends BaseApiController
     }
 
     /**
-     * Redirect to LinkedIn OAuth
+     * Redirect to LinkedIn OAuth (Stateless - Production Safe)
      */
     public function redirectToLinkedIn(Request $request)
     {
         try {
-            // Debug: Log configuration
-            \Log::info('LinkedIn OAuth Redirect Attempt', [
-                'config' => config('services.linkedin'),
-                'client_id_set' => !empty(config('services.linkedin.client_id')),
-                'client_secret_set' => !empty(config('services.linkedin.client_secret')),
-                'redirect_uri' => config('services.linkedin.redirect'),
+            // Validate configuration
+            $clientId = config('services.linkedin.client_id');
+            $clientSecret = config('services.linkedin.client_secret');
+            $redirectUri = config('services.linkedin.redirect');
+
+            if (empty($clientId) || empty($clientSecret) || empty($redirectUri)) {
+                \Log::error('LinkedIn OAuth configuration incomplete', [
+                    'client_id_set' => !empty($clientId),
+                    'client_secret_set' => !empty($clientSecret),
+                    'redirect_uri_set' => !empty($redirectUri),
+                ]);
+
+                throw new Exception('LinkedIn OAuth configuration is incomplete');
+            }
+
+            // Generate state for security
+            $state = Str::random(40);
+
+            // Build OAuth URL manually (stateless approach)
+            $authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' . http_build_query([
+                'response_type' => 'code',
+                'client_id' => $clientId,
+                'redirect_uri' => $redirectUri,
+                'state' => $state,
+                'scope' => 'r_liteprofile r_emailaddress'
             ]);
 
-            // Check if configuration is complete
-            if (empty(config('services.linkedin.client_id'))) {
-                throw new Exception('LinkedIn Client ID is not configured in services.php');
-            }
-
-            if (empty(config('services.linkedin.client_secret'))) {
-                throw new Exception('LinkedIn Client Secret is not configured in services.php');
-            }
-
-            if (empty(config('services.linkedin.redirect'))) {
-                throw new Exception('LinkedIn Redirect URI is not configured in services.php');
-            }
-
-            // Test if Socialite can access the driver
-            $driver = Socialite::driver('linkedin');
-            \Log::info('LinkedIn driver created successfully');
-
-            // Generate the redirect URL
-            $redirectUrl = $driver
-                ->scopes(['r_liteprofile', 'r_emailaddress'])
-                ->redirect()
-                ->getTargetUrl();
-
-            \Log::info('LinkedIn redirect URL generated successfully', [
-                'url' => $redirectUrl
-            ]);
+            \Log::info('LinkedIn OAuth redirect generated successfully');
 
             return response()->json([
                 'success' => true,
-                'redirect_url' => $redirectUrl
+                'redirect_url' => $authUrl,
+                'state' => $state // Return state for frontend validation
             ]);
 
         } catch (Exception $e) {
             \Log::error('LinkedIn Redirect Error: ' . $e->getMessage(), [
-                'exception' => $e->getTraceAsString(),
-                'config_check' => [
-                    'client_id' => config('services.linkedin.client_id') ? 'SET' : 'MISSING',
-                    'client_secret' => config('services.linkedin.client_secret') ? 'SET' : 'MISSING',
-                    'redirect' => config('services.linkedin.redirect'),
-                ]
+                'exception_class' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
 
             return response()->json([
                 'success' => false,
-                'error' => 'Failed to generate LinkedIn redirect URL',
-                'debug' => app()->environment('local') ? $e->getMessage() : null,
-                'config_status' => app()->environment('local') ? [
-                    'client_id' => config('services.linkedin.client_id') ? 'SET' : 'MISSING',
-                    'client_secret' => config('services.linkedin.client_secret') ? 'SET' : 'MISSING',
-                    'redirect' => config('services.linkedin.redirect'),
-                ] : null
+                'error' => 'Failed to generate LinkedIn redirect URL'
             ], 500);
         }
     }
 
     /**
-     * Redirect to Google OAuth
+     * Redirect to Google OAuth (Stateless - Production Safe)
      */
     public function redirectToGoogle(Request $request)
     {
         try {
-            // Debug: Log configuration
-            \Log::info('Google OAuth Redirect Attempt', [
-                'config' => config('services.google'),
-                'client_id_set' => !empty(config('services.google.client_id')),
-                'client_secret_set' => !empty(config('services.google.client_secret')),
-                'redirect_uri' => config('services.google.redirect'),
+            // Validate configuration
+            $clientId = config('services.google.client_id');
+            $clientSecret = config('services.google.client_secret');
+            $redirectUri = config('services.google.redirect');
+
+            if (empty($clientId) || empty($clientSecret) || empty($redirectUri)) {
+                \Log::error('Google OAuth configuration incomplete', [
+                    'client_id_set' => !empty($clientId),
+                    'client_secret_set' => !empty($clientSecret),
+                    'redirect_uri_set' => !empty($redirectUri),
+                ]);
+
+                throw new Exception('Google OAuth configuration is incomplete');
+            }
+
+            // Generate state for security
+            $state = Str::random(40);
+
+            // Build OAuth URL manually (stateless approach)
+            $authUrl = 'https://accounts.google.com/oauth/v2/auth?' . http_build_query([
+                'response_type' => 'code',
+                'client_id' => $clientId,
+                'redirect_uri' => $redirectUri,
+                'state' => $state,
+                'scope' => 'profile email',
+                'access_type' => 'offline',
+                'prompt' => 'consent'
             ]);
 
-            // Check if configuration is complete
-            if (empty(config('services.google.client_id'))) {
-                throw new Exception('Google Client ID is not configured in services.php');
-            }
-
-            if (empty(config('services.google.client_secret'))) {
-                throw new Exception('Google Client Secret is not configured in services.php');
-            }
-
-            if (empty(config('services.google.redirect'))) {
-                throw new Exception('Google Redirect URI is not configured in services.php');
-            }
-
-            $redirectUrl = Socialite::driver('google')
-                ->scopes(['profile', 'email'])
-                ->redirect()
-                ->getTargetUrl();
-
-            \Log::info('Google redirect URL generated successfully', [
-                'url' => $redirectUrl
-            ]);
+            \Log::info('Google OAuth redirect generated successfully');
 
             return response()->json([
                 'success' => true,
-                'redirect_url' => $redirectUrl
+                'redirect_url' => $authUrl,
+                'state' => $state // Return state for frontend validation
             ]);
 
         } catch (Exception $e) {
             \Log::error('Google Redirect Error: ' . $e->getMessage(), [
-                'exception' => $e->getTraceAsString(),
-                'config_check' => [
-                    'client_id' => config('services.google.client_id') ? 'SET' : 'MISSING',
-                    'client_secret' => config('services.google.client_secret') ? 'SET' : 'MISSING',
-                    'redirect' => config('services.google.redirect'),
-                ]
+                'exception_class' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
 
             return response()->json([
                 'success' => false,
-                'error' => 'Failed to generate Google redirect URL',
-                'debug' => app()->environment('local') ? $e->getMessage() : null,
-                'config_status' => app()->environment('local') ? [
-                    'client_id' => config('services.google.client_id') ? 'SET' : 'MISSING',
-                    'client_secret' => config('services.google.client_secret') ? 'SET' : 'MISSING',
-                    'redirect' => config('services.google.redirect'),
-                ] : null
+                'error' => 'Failed to generate Google redirect URL'
             ], 500);
         }
     }
