@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserEmploymentFunctionalArea extends Model
 {
-    public function functional_areas(): BelongsTo
+    public function emp_functional_areas(): BelongsTo
     {
         return $this->BelongsTo(FunctionalArea::class, 'functional_area');
     }

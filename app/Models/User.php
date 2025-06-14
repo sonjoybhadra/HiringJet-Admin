@@ -178,8 +178,8 @@ class User extends Authenticatable implements JWTSubject
                     ->with('notice_period')
                     ->with('skills')
                     ->with('industrys')
-                    ->with('functional_areas')
-                    ->with('park_benefits')
+                    ->with('functionalareas')
+                    ->with('parkbenefits')
                     ->orderBy('created_at', 'asc');
     }
     /**

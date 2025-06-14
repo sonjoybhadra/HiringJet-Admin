@@ -28,8 +28,8 @@ class EditEmploymentDetailsController extends BaseApiController
                                 ->with('skills')
                                 ->with('notice_period')
                                 ->with('industrys')
-                                ->with('functional_areas')
-                                ->with('park_benefits')
+                                ->with('functionalareas')
+                                ->with('parkbenefits')
                                 ->latest()
                                 ->get()
             );
@@ -53,8 +53,8 @@ class EditEmploymentDetailsController extends BaseApiController
                                 ->with('skills')
                                 ->with('notice_period')
                                 ->with('industrys')
-                                ->with('functional_areas')
-                                ->with('park_benefits')
+                                ->with('functionalareas')
+                                ->with('parkbenefits')
                                 ->first()
             );
         } catch (\Exception $e) {

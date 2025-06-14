@@ -53,13 +53,13 @@ class UserEmployment extends Model
     {
         return $this->HasMany(UserEmploymentIndustry::class, 'user_employment_id')->with('industry');
     }
-    public function functional_areas(): HasMany
+    public function functionalareas(): HasMany
     {
-        return $this->HasMany(UserEmploymentFunctionalArea::class, 'user_employment_id')->with('functional_areas');
+        return $this->HasMany(UserEmploymentFunctionalArea::class, 'user_employment_id')->with('emp_functional_areas');
     }
-    public function park_benefits(): HasMany
+    public function parkbenefits(): HasMany
     {
-        return $this->HasMany(UserEmploymentParkBenefit::class, 'user_employment_id')->with('perk_benefit');
+        return $this->HasMany(UserEmploymentParkBenefit::class, 'user_employment_id')->with('emp_perk_benefit');
     }
 
 }

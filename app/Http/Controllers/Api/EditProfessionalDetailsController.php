@@ -232,17 +232,19 @@ class EditProfessionalDetailsController extends BaseApiController
     */
     public function getProfessionalDetails()
     {
-        try {
-            return $this->sendResponse(
-                UserEmployment::where('user_id', auth()->user()->id)
+        $data = UserEmployment::where('user_id', auth()->user()->id)
                                 ->where('is_current_job', 1)
                                 ->with('employer')
                                 ->with('country')
                                 ->with('city')
                                 ->with('skills')
-                                ->with('functional_areas')
-                                ->with('park_benefits')
-                                ->first()
+                                ->with('functionalareas')
+                                ->with('parkbenefits')
+                                ->first();
+        $data->functionalareas = !empty($data->functionalareas) ? $data->functionalareas : NULL;
+        try {
+            return $this->sendResponse(
+                $data
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());

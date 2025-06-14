@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserEmploymentParkBenefit extends Model
 {
-    public function perk_benefit(): BelongsTo
+    public function emp_perk_benefit(): BelongsTo
     {
         return $this->BelongsTo(PerkBenefit::class, 'perk_benefit');
     }

@@ -18,10 +18,20 @@ class JobSearchController extends BaseApiController
         try {
             $sql = PostJob::where('job_type', $job_type);
             if(!empty($request->country)){
-                $sql->whereJsonContains('location_countries', $request->country);
+                $countrys = $request->country;
+                $sql->where(function ($q) use ($countrys) {
+                    foreach ($countrys as $tag) {
+                        $q->orWhereJsonContains('location_countries', $tag);
+                    }
+                });
             }
             if(!empty($request->city)){
-                $sql->whereJsonContains('location_cities', $request->city);
+                $citys = $request->city;
+                $sql->where(function ($q) use ($citys) {
+                    foreach ($citys as $tag) {
+                        $q->orWhereJsonContains('location_cities', $tag);
+                    }
+                });
             }
             if(!empty($request->industry)){
                 $sql->whereIn('industry', $request->industry);
@@ -32,15 +42,15 @@ class JobSearchController extends BaseApiController
             if(!empty($request->employer)){
                 $sql->whereIn('employer_id', $request->employer);
             }
+            if(!empty($request->experience)){
+                $sql->whereIn('experience_level', $request->experience);
+            }
             if(!empty($request->salary)){
                 $sql->where('min_salary', '>=', $request->salary);
                 $sql->where('max_salary', '<=', $request->salary);
             }
 
             $sql->latest();
-            if($request->paginate){
-                $sql->paginate(15);
-            }
             return $this->sendResponse(
                 $sql->get(),
                 'Job list by params'
