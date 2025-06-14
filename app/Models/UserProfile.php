@@ -30,10 +30,6 @@ class UserProfile extends Model
     {
         return $this->BelongsTo(Country::class, 'pasport_country_id');
     }
-    public function other_working_permit_country(): BelongsTo
-    {
-        return $this->BelongsTo(Country::class, 'other_working_permit_country_id');
-    }
 
     public function availabilitie(): BelongsTo
     {

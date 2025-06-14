@@ -31,7 +31,7 @@ return new class extends Migration
             $table->integer('nationality_id')->nullable()->constrained()->nullOnDelete();
             $table->string('cast_category')->nullable();
             $table->boolean('usa_working_permit')->default(false);
-            $table->integer('other_working_permit_country')->nullable()->constrained('countries')->nullOnDelete();
+            $table->string('other_working_permit_country')->nullable();
             $table->integer('pasport_country_id')->nullable()->constrained('countries')->nullOnDelete();
             $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
             $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
