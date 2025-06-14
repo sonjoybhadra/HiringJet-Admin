@@ -509,7 +509,8 @@ class CommonController extends BaseApiController
     {
         $sql = City::select('id', 'name')->where('status', 1)->with('country');
         if(!empty($request->country_id)){
-            $sql->where('country_id', $request->country_id);
+            $country_id_array = explode(',', $request->country_id);
+            $sql->whereIn('country_id', $country_id_array);
         }
         if(!empty($request->key)){
             $sql->where('name', 'ILIKE',  '%'.$request->key.'%');

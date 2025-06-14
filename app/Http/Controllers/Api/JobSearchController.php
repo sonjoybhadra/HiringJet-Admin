@@ -33,6 +33,14 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
+            if(!empty($request->skills)){
+                $skills = $request->skills;
+                $sql->where(function ($q) use ($skills) {
+                    foreach ($skills as $tag) {
+                        $q->orWhereJsonContains('skill_ids', $tag);
+                    }
+                });
+            }
             if(!empty($request->industry)){
                 $sql->whereIn('industry', $request->industry);
             }
