@@ -42,6 +42,9 @@ class JobSearchController extends BaseApiController
             if(!empty($request->employer)){
                 $sql->whereIn('employer_id', $request->employer);
             }
+            if(!empty($request->experience)){
+                $sql->whereIn('experience_level', $request->experience);
+            }
             if(!empty($request->salary)){
                 $sql->where('min_salary', '>=', $request->salary);
                 $sql->where('max_salary', '<=', $request->salary);
