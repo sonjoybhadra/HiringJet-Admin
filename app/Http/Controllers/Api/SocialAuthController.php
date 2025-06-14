@@ -15,26 +15,98 @@ use Exception;
 class SocialAuthController extends BaseApiController
 {
     /**
+     * Test configuration endpoint (for debugging)
+     */
+    public function testConfig()
+    {
+        if (!app()->environment('local')) {
+            return response()->json(['error' => 'Only available in development'], 403);
+        }
+
+        return response()->json([
+            'linkedin' => [
+                'client_id' => config('services.linkedin.client_id') ? 'SET (' . substr(config('services.linkedin.client_id'), 0, 8) . '...)' : 'MISSING',
+                'client_secret' => config('services.linkedin.client_secret') ? 'SET' : 'MISSING',
+                'redirect' => config('services.linkedin.redirect'),
+            ],
+            'google' => [
+                'client_id' => config('services.google.client_id') ? 'SET (' . substr(config('services.google.client_id'), 0, 8) . '...)' : 'MISSING',
+                'client_secret' => config('services.google.client_secret') ? 'SET' : 'MISSING',
+                'redirect' => config('services.google.redirect'),
+            ],
+            'environment' => [
+                'APP_ENV' => env('APP_ENV'),
+                'LINKEDIN_CLIENT_ID' => env('LINKEDIN_CLIENT_ID') ? 'SET' : 'MISSING',
+                'GOOGLE_CLIENT_ID' => env('GOOGLE_CLIENT_ID') ? 'SET' : 'MISSING',
+            ]
+        ]);
+    }
+
+    /**
      * Redirect to LinkedIn OAuth
      */
     public function redirectToLinkedIn(Request $request)
     {
         try {
-            $redirectUrl = Socialite::driver('linkedin')
+            // Debug: Log configuration
+            \Log::info('LinkedIn OAuth Redirect Attempt', [
+                'config' => config('services.linkedin'),
+                'client_id_set' => !empty(config('services.linkedin.client_id')),
+                'client_secret_set' => !empty(config('services.linkedin.client_secret')),
+                'redirect_uri' => config('services.linkedin.redirect'),
+            ]);
+
+            // Check if configuration is complete
+            if (empty(config('services.linkedin.client_id'))) {
+                throw new Exception('LinkedIn Client ID is not configured in services.php');
+            }
+
+            if (empty(config('services.linkedin.client_secret'))) {
+                throw new Exception('LinkedIn Client Secret is not configured in services.php');
+            }
+
+            if (empty(config('services.linkedin.redirect'))) {
+                throw new Exception('LinkedIn Redirect URI is not configured in services.php');
+            }
+
+            // Test if Socialite can access the driver
+            $driver = Socialite::driver('linkedin');
+            \Log::info('LinkedIn driver created successfully');
+
+            // Generate the redirect URL
+            $redirectUrl = $driver
                 ->scopes(['r_liteprofile', 'r_emailaddress'])
                 ->redirect()
                 ->getTargetUrl();
+
+            \Log::info('LinkedIn redirect URL generated successfully', [
+                'url' => $redirectUrl
+            ]);
 
             return response()->json([
                 'success' => true,
                 'redirect_url' => $redirectUrl
             ]);
+
         } catch (Exception $e) {
-            \Log::error('LinkedIn Redirect Error: ' . $e->getMessage());
+            \Log::error('LinkedIn Redirect Error: ' . $e->getMessage(), [
+                'exception' => $e->getTraceAsString(),
+                'config_check' => [
+                    'client_id' => config('services.linkedin.client_id') ? 'SET' : 'MISSING',
+                    'client_secret' => config('services.linkedin.client_secret') ? 'SET' : 'MISSING',
+                    'redirect' => config('services.linkedin.redirect'),
+                ]
+            ]);
 
             return response()->json([
                 'success' => false,
-                'error' => 'Failed to generate LinkedIn redirect URL'
+                'error' => 'Failed to generate LinkedIn redirect URL',
+                'debug' => app()->environment('local') ? $e->getMessage() : null,
+                'config_status' => app()->environment('local') ? [
+                    'client_id' => config('services.linkedin.client_id') ? 'SET' : 'MISSING',
+                    'client_secret' => config('services.linkedin.client_secret') ? 'SET' : 'MISSING',
+                    'redirect' => config('services.linkedin.redirect'),
+                ] : null
             ], 500);
         }
     }
@@ -45,21 +117,60 @@ class SocialAuthController extends BaseApiController
     public function redirectToGoogle(Request $request)
     {
         try {
+            // Debug: Log configuration
+            \Log::info('Google OAuth Redirect Attempt', [
+                'config' => config('services.google'),
+                'client_id_set' => !empty(config('services.google.client_id')),
+                'client_secret_set' => !empty(config('services.google.client_secret')),
+                'redirect_uri' => config('services.google.redirect'),
+            ]);
+
+            // Check if configuration is complete
+            if (empty(config('services.google.client_id'))) {
+                throw new Exception('Google Client ID is not configured in services.php');
+            }
+
+            if (empty(config('services.google.client_secret'))) {
+                throw new Exception('Google Client Secret is not configured in services.php');
+            }
+
+            if (empty(config('services.google.redirect'))) {
+                throw new Exception('Google Redirect URI is not configured in services.php');
+            }
+
             $redirectUrl = Socialite::driver('google')
                 ->scopes(['profile', 'email'])
                 ->redirect()
                 ->getTargetUrl();
 
+            \Log::info('Google redirect URL generated successfully', [
+                'url' => $redirectUrl
+            ]);
+
             return response()->json([
                 'success' => true,
                 'redirect_url' => $redirectUrl
             ]);
+
         } catch (Exception $e) {
-            \Log::error('Google Redirect Error: ' . $e->getMessage());
+            \Log::error('Google Redirect Error: ' . $e->getMessage(), [
+                'exception' => $e->getTraceAsString(),
+                'config_check' => [
+                    'client_id' => config('services.google.client_id') ? 'SET' : 'MISSING',
+                    'client_secret' => config('services.google.client_secret') ? 'SET' : 'MISSING',
+                    'redirect' => config('services.google.redirect'),
+                ]
+            ]);
 
             return response()->json([
                 'success' => false,
-                'error' => 'Failed to generate Google redirect URL'
+                'error' => 'Failed to generate Google redirect URL',
+                'debug' => app()->environment('local') ? $e->getMessage() : null,
+                'config_status' => app()->environment('local') ? [
+                    'client_id' => config('services.google.client_id') ? 'SET' : 'MISSING',
+                    'client_secret' => config('services.google.client_secret') ? 'SET' : 'MISSING',
+                    'redirect' => config('services.google.redirect'),
+                ] : null
             ], 500);
         }
     }
@@ -99,15 +210,27 @@ class SocialAuthController extends BaseApiController
         }
 
         try {
+            \Log::info("Processing {$provider} OAuth callback", [
+                'has_code' => !empty($request->code),
+                'has_state' => !empty($request->state),
+            ]);
+
             // Get user from social provider using Socialite
             $socialUser = Socialite::driver($provider)->stateless()->user();
 
             if (!$socialUser) {
+                \Log::error("Failed to retrieve user from {$provider}");
                 return response()->json([
                     'success' => false,
                     'error' => "Failed to retrieve user from {$provider}"
                 ], 400);
             }
+
+            \Log::info("Successfully retrieved user from {$provider}", [
+                'user_id' => $socialUser->getId(),
+                'user_email' => $socialUser->getEmail(),
+                'user_name' => $socialUser->getName(),
+            ]);
 
             // Extract user data
             $email = $socialUser->getEmail();
@@ -129,9 +252,11 @@ class SocialAuthController extends BaseApiController
                        ->first();
 
             if ($user) {
+                \Log::info("Existing user found for {$provider}", ['user_id' => $user->id]);
                 // Update existing user
                 $user = $this->updateExistingUser($user, $provider, $providerId, $firstName, $lastName, $avatar);
             } else {
+                \Log::info("Creating new user for {$provider}");
                 // Create new user
                 $user = $this->createNewUser($email, $provider, $providerId, $firstName, $lastName, $name, $avatar);
             }
@@ -141,6 +266,11 @@ class SocialAuthController extends BaseApiController
 
             // Load user with profile relationship
             $user->load('user_profile');
+
+            \Log::info("Successfully authenticated user via {$provider}", [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -159,7 +289,8 @@ class SocialAuthController extends BaseApiController
 
             return response()->json([
                 'success' => false,
-                'error' => "An error occurred during {$provider} authentication"
+                'error' => "An error occurred during {$provider} authentication",
+                'debug' => app()->environment('local') ? $e->getMessage() : null
             ], 500);
         }
     }
@@ -195,11 +326,13 @@ class SocialAuthController extends BaseApiController
 
         if (!empty($updateData)) {
             $user->update($updateData);
+            \Log::info("Updated existing user", ['user_id' => $user->id, 'updates' => array_keys($updateData)]);
         }
 
         // Update profile picture if not set
         if ($user->user_profile && !$user->user_profile->profile_picture && $avatar) {
             $user->user_profile->update(['profile_picture' => $avatar]);
+            \Log::info("Updated user profile picture", ['user_id' => $user->id]);
         }
 
         return $user;
@@ -235,6 +368,11 @@ class SocialAuthController extends BaseApiController
             'user_id' => $user->id,
             'profile_picture' => $avatar,
             'completed_steps' => 1, // Set initial completion step
+        ]);
+
+        \Log::info("Created new user from {$provider}", [
+            'user_id' => $user->id,
+            'email' => $user->email,
         ]);
 
         return $user;
