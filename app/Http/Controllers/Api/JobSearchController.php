@@ -16,7 +16,8 @@ class JobSearchController extends BaseApiController
     public function getJobsByParams(Request $request, $job_type)
     {
         try {
-            $sql = PostJob::where('job_type', $job_type);
+            $sql = PostJob::where('job_type', $job_type)
+                            ->where('posting_open_date', '>=', date('Y-m-d 00:00:01'));
             if(!empty($request->country)){
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
@@ -54,8 +55,7 @@ class JobSearchController extends BaseApiController
                 $sql->whereIn('experience_level', $request->experience);
             }
             if(!empty($request->salary)){
-                $sql->where('min_salary', '>=', $request->salary);
-                $sql->where('max_salary', '<=', $request->salary);
+                $sql->whereRaw('? BETWEEN min_salary AND max_salary', [$request->salary]);
             }
 
             $sql->latest();
