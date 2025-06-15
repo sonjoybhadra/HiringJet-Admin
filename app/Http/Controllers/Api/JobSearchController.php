@@ -57,7 +57,13 @@ class JobSearchController extends BaseApiController
             if(!empty($request->salary)){
                 $sql->whereRaw('? BETWEEN min_salary AND max_salary', [$request->salary]);
             }
-
+            $sql->with('employer');
+            $sql->with('industryRelation');
+            $sql->with('jobCategory');
+            $sql->with('nationalityRelation');
+            $sql->with('departmentRelation');
+            $sql->with('functionalArea');
+            $sql->with('experienceLevel');
             $sql->latest();
             return $this->sendResponse(
                 $sql->get(),
@@ -72,7 +78,15 @@ class JobSearchController extends BaseApiController
     {
         try {
             return $this->sendResponse(
-                PostJob::where('job_no', $slug)->first(),
+                PostJob::where('job_no', $slug)
+                        ->with('employer')
+                        ->with('industryRelation')
+                        ->with('jobCategory')
+                        ->with('nationalityRelation')
+                        ->with('departmentRelation')
+                        ->with('functionalArea')
+                        ->with('experienceLevel')
+                        ->first(),
                 'Job details'
             );
         } catch (\Exception $e) {
