@@ -171,12 +171,8 @@ Route::group([
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
     Route::post('/change-password', [AccountSettingsController::class, 'changePassword']);
 
-
     Route::post('/post-job-apply', [JobSearchController::class, 'postJobApply']);
     Route::get('/get-jobseeker-jobs', [JobSearchController::class, 'jobseekerAppliedJobs']);
-
-
-
 
 });
 

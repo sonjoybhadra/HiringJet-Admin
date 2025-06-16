@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Mail;
-
+use Validator;
 use App\Mail\NotificationEmail;
 
 use App\Models\PostJob;
