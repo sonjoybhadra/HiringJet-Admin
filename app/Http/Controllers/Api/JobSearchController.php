@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\NotificationEmail;
 
 use App\Models\PostJob;
+use App\Models\PostJobUserApplied;
 
 class JobSearchController extends BaseApiController
 {
@@ -91,6 +95,56 @@ class JobSearchController extends BaseApiController
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    public function postJobApply(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|integer'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $job_details = PostJob::find($request->job_id);
+            if($job_details && $job_details->posting_close_date <= date('Y-m-d')){
+                $has_data = PostJobUserApplied::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->count();
+                if($has_data == 0){
+                    PostJobUserApplied::create([
+                        'job_id'=> $request->job_id,
+                        'user_id'=> auth()->user()->id,
+                        'status'=> 1,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    ]);
+
+                    $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Password updated successfully done.', $full_name, 'Your password has been updated successfully. New password is: '.$request->password));
+                }else{
+                    return $this->sendError('Warning', 'You have already applied for this job.', 201);
+                }
+            }else{
+                return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
+            }
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function jobseekerAppliedJobs(Request $request)
+    {
+        try{
+            $data = PostJobUserApplied::where('user_id', auth()->user()->id)
+                                        ->with('job_details')
+                                        ->latest()->get();
+            return $this->sendResponse(
+                $data,
+                'Applied Jobs list'
+            );
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
