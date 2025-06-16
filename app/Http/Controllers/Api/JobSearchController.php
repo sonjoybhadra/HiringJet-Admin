@@ -21,7 +21,8 @@ class JobSearchController extends BaseApiController
     {
         try {
             $sql = PostJob::where('job_type', $job_type)
-                            ->where('posting_open_date', '>=', date('Y-m-d 00:00:01'));
+                            ->where('posting_open_date', '<=', date('Y-m-d 00:00:01'))
+                            ->where('posting_close_date', '>=', date('Y-m-d 23:59:59'));
             if(!empty($request->country)){
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
@@ -30,7 +31,7 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
-            if(!empty($request->city)){
+            if(!empty($request->city))
                 $citys = $request->city;
                 $sql->where(function ($q) use ($citys) {
                     foreach ($citys as $tag) {
