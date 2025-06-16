@@ -685,6 +685,7 @@ class AuthController extends Controller
                                 ];
                                 $footer_data['copyright_statement'] = strip_tags($postData[$key]);
                             }
+
                             if($key == 'footer_link_name'){
                                 $field = [
                                     'value'            => json_encode($footer_link_name)
@@ -697,6 +698,7 @@ class AuthController extends Controller
                                 ];
                                 $footer_data['column1']['link_url'] = json_encode($footer_link);
                             }
+
                             if($key == 'footer_link_name2'){
                                 $field = [
                                     'value'            => json_encode($footer_link_name2)
@@ -709,6 +711,7 @@ class AuthController extends Controller
                                 ];
                                 $footer_data['column2']['link_url'] = json_encode($footer_link2);
                             }
+
                             if($key == 'footer_link_name3'){
                                 $field = [
                                     'value'            => json_encode($footer_link_name3)
@@ -726,9 +729,55 @@ class AuthController extends Controller
                         }
                         $counter++;
                     }
-                    // Helper::pr($footer_data);
+                    $column1 = [];
+                    $column2 = [];
+                    $column3 = [];
+                    $final_footer_data = [];
+                    if($footer_data){
+                        $column1_link_name  = $footer_link_name;
+                        $column1_link_url   = $footer_link;
+                        if(!empty($column1_link_name)){
+                            for($k=0;$k<count($column1_link_name);$k++){
+                                $column1[] = [
+                                    'link_name' => $column1_link_name[$k],
+                                    'link_url'  => ((array_key_exists($k,$column1_link_url))?$column1_link_url[$k]:''),
+                                ];
+                            }
+                        }
+
+                        $column2_link_name  = $footer_link_name2;
+                        $column2_link_url   = $footer_link2;
+                        if(!empty($column2_link_name)){
+                            for($k=0;$k<count($column2_link_name);$k++){
+                                $column2[] = [
+                                    'link_name' => $column2_link_name[$k],
+                                    'link_url'  => ((array_key_exists($k,$column2_link_url))?$column2_link_url[$k]:''),
+                                ];
+                            }
+                        }
+
+                        $column3_link_name  = $footer_link_name3;
+                        $column3_link_url   = $footer_link3;
+                        if(!empty($column3_link_name)){
+                            for($k=0;$k<count($column3_link_name);$k++){
+                                $column3[] = [
+                                    'link_name' => $column3_link_name[$k],
+                                    'link_url'  => ((array_key_exists($k,$column3_link_url))?$column3_link_url[$k]:''),
+                                ];
+                            }
+                        }
+                    }
+                    $final_footer_data = [
+                        'footer_text'           => $footer_data['footer_text'],
+                        'copyright_statement'   => $footer_data['copyright_statement'],
+                        'column1'               => $column1,
+                        'column2'               => $column2,
+                        'column3'               => $column3,
+                    ];
+                    // Helper::pr($footer_data,0);
+                    // Helper::pr($final_footer_data);
                     // die;
-                    GeneralSetting::where('key', '=', 'footer_data')->where('is_active', '=', 1)->update(['value' => json_encode($footer_data)]);
+                    GeneralSetting::where('key', '=', 'footer_data')->where('is_active', '=', 1)->update(['value' => json_encode($final_footer_data)]);
                 }
                 return redirect()->back()->with('success_message', 'Footer Settings Updated Successfully');
             } else {
