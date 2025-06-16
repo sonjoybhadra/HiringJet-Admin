@@ -7,7 +7,7 @@ use App\Helpers\Helper;
   class="light-style layout-wide customizer-hide"
   dir="ltr"
   data-theme="theme-default"
-  data-assets-path="<?=env('ADMIN_ASSETS_URL')?>assets/"
+  data-assets-path="{{ config('constants.admin_assets_url') }}assets/"
   data-template="vertical-menu-template-no-customizer"
   data-style="light">
   <head>
@@ -52,14 +52,14 @@ use App\Helpers\Helper;
           <div class="d-none d-lg-flex col-lg-8 p-0">
             <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
               <img
-                src="<?=env('ADMIN_ASSETS_URL')?>assets/img/illustrations/auth-login-illustration-light.png"
+                src="{{ config('constants.admin_assets_url') }}assets/img/illustrations/auth-login-illustration-light.png"
                 alt="auth-login-cover"
                 class="my-5 auth-illustration"
                 data-app-light-img="illustrations/auth-login-illustration-light.png"
                 data-app-dark-img="illustrations/auth-login-illustration-dark.png" />
 
               <img
-                src="<?=env('ADMIN_ASSETS_URL')?>assets/img/illustrations/bg-shape-image-light.png"
+                src="{{ config('constants.admin_assets_url') }}assets/img/illustrations/bg-shape-image-light.png"
                 alt="auth-login-cover"
                 class="platform-bg"
                 data-app-light-img="illustrations/bg-shape-image-light.png"
@@ -80,29 +80,29 @@ use App\Helpers\Helper;
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
 
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/popper/popper.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/js/bootstrap.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/node-waves/node-waves.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/typeahead-js/typeahead.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/js/menu.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/popper/popper.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/js/bootstrap.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/js/menu.js"></script>
 
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/popular.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/@form-validation/popular.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/@form-validation/bootstrap5.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/vendor/libs/@form-validation/auto-focus.js"></script>
 
     <!-- Main JS -->
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/main.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/pages-auth.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/pages-auth-two-steps.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/js/pages-auth.js"></script>
+    <script src="{{ config('constants.admin_assets_url') }}assets/js/pages-auth-two-steps.js"></script>
     <script type="text/javascript">
       $(function(){
         $('.autohide').delay(5000).fadeOut('slow');
