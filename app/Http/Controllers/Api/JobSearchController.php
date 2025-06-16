@@ -114,7 +114,7 @@ class JobSearchController extends BaseApiController
             if($job_details && $job_details->posting_close_date <= date('Y-m-d')){
                 $has_data = PostJobUserApplied::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->count();
                 if($has_data == 0){
-                    PostJobUserApplied::create([
+                    $applied_job_id = PostJobUserApplied::insertGetId([
                         'job_id'=> $request->job_id,
                         'user_id'=> auth()->user()->id,
                         'status'=> 1,
@@ -122,7 +122,11 @@ class JobSearchController extends BaseApiController
                     ]);
 
                     $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
-                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Password updated successfully done.', $full_name, 'Your password has been updated successfully. New password is: '.$request->password));
+                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Job applied successfully.', $full_name, 'You have applied for this job successfully.'));
+                    return $this->sendResponse(
+                        ['applied_job_id'=> $applied_job_id],
+                        'Applied Jobs list'
+                    );
                 }else{
                     return $this->sendError('Warning', 'You have already applied for this job.', 201);
                 }

@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PostJobUserApplied extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['user_id', 'job_id', 'status', 'created_at'];
+
     /**
      * Get the job details of associated relation.
     */
