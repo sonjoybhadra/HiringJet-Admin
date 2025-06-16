@@ -111,7 +111,7 @@ class JobSearchController extends BaseApiController
 
         try{
             $job_details = PostJob::find($request->job_id);
-            if($job_details && $job_details->posting_close_date <= date('Y-m-d')){
+            if($job_details && $job_details->posting_close_date >= date('Y-m-d')){
                 $has_data = PostJobUserApplied::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->count();
                 if($has_data == 0){
                     $applied_job_id = PostJobUserApplied::insertGetId([
