@@ -220,34 +220,61 @@ class HomePageController extends Controller
                         'description'   => strip_tags($postData['section2_description']),
                         'button_text'   => strip_tags($postData['section2_button_text']),
                     ];
-                    $section3 = [
-                        'box_text'          => ((!empty($section3_box_text))?json_encode($section3_box_text):''),
-                        'box_number'        => ((!empty($section3_box_number))?json_encode($section3_box_number):''),
-                        'box_image'         => ((!empty($image_link3))?json_encode($image_link3):''),
-                    ];
+                    // $section3 = [
+                    //     'box_text'          => ((!empty($section3_box_text))?json_encode($section3_box_text):''),
+                    //     'box_number'        => ((!empty($section3_box_number))?json_encode($section3_box_number):''),
+                    //     'box_image'         => ((!empty($image_link3))?json_encode($image_link3):''),
+                    // ];
+                    if(!empty($section3_box_text)){
+                        for($k=0;$k<count($section3_box_text);$k++){
+                            $section3[] = [
+                                'box_text'      => $section3_box_text[$k],
+                                'box_number'    => $section3_box_number[$k],
+                                'box_image'     => $image_link3[$k],
+                            ];
+                        }
+                    }
                     $section4 = [
                         'title'         => strip_tags($postData['section4_title']),
                         'country'       => ((!empty($section4_country))?json_encode($section4_country):''),
                         'city'          => ((!empty($section4_city))?json_encode($section4_city):''),
                     ];
+                    
+                    $section_data = [];
+                    if(!empty($section5_box_name)){
+                        for($k=0;$k<count($section5_box_name);$k++){
+                            $section_data[] = [
+                                'box_text'      => $section5_box_name[$k],
+                                'box_image'     => $image_link5[$k],
+                            ];
+                        }
+                    }
                     $section5 = [
                         'title'                 => strip_tags($postData['section5_title']),
-                        'box_name'              => ((!empty($section5_box_name))?json_encode($section5_box_name):''),
-                        'box_image'             => ((!empty($image_link5))?json_encode($image_link5):''),
+                        'section_data'          => $section_data,
                     ];
                     $section6 = [
                         'title'                 => strip_tags($postData['section6_title']),
                         'description'           => strip_tags($postData['section6_description']),
                         'button_text'           => strip_tags($postData['section6_button_text']),
                     ];
+
+                    $section_data7 = [];
+                    if(!empty($section7_box_name)){
+                        for($k=0;$k<count($section7_box_name);$k++){
+                            $section_data7[] = [
+                                'box_name'              => $section7_box_name[$k],
+                                'box_link_name'         => $section7_box_link_name[$k],
+                                'box_link_url'          => $section7_box_link_url[$k],
+                                'box_description'       => $section7_box_description[$k],
+                                'box_image'             => $image_link7[$k],
+                            ];
+                        }
+                    }
                     $section7 = [
                         'title'                 => strip_tags($postData['section7_title']),
                         'description'           => strip_tags($postData['section7_description']),
-                        'box_name'              => ((!empty($section7_box_name))?json_encode($section7_box_name):''),
-                        'box_link_name'         => ((!empty($section7_box_link_name))?json_encode($section7_box_link_name):''),
-                        'box_link_url'          => ((!empty($section7_box_link_url))?json_encode($section7_box_link_url):''),
-                        'box_description'       => ((!empty($section7_box_description))?json_encode($section7_box_description):''),
-                        'box_image'             => ((!empty($image_link7))?json_encode($image_link7):''),
+                        'section_data'          => $section_data7,
                     ];
                     $section8 = [
                         'title'                    => strip_tags($postData['section8_title']),
@@ -264,6 +291,7 @@ class HomePageController extends Controller
                         'image2'                  => $section10Image2,
                         'image3'                  => $section10Image3,
                     ];
+                    // Helper::pr($section7);
 
                     $fields = [
                         'section1_title'                    => strip_tags($postData['section1_title']),
