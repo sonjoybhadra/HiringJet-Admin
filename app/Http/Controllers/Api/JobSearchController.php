@@ -169,12 +169,12 @@ class JobSearchController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
+        //try{
             $job_details = PostJob::find($request->job_id);
             if($job_details && $job_details->posting_close_date >= date('Y-m-d')){
                 $has_data = ShortlistedJob::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->first();
                 if(!$has_data){
-                    $applied_job_id = ShortlistedJob::insertGetId([
+                    ShortlistedJob::insertGetId([
                         'job_id'=> $request->job_id,
                         'user_id'=> auth()->user()->id,
                         'status'=> 1,
@@ -207,9 +207,9 @@ class JobSearchController extends BaseApiController
             }else{
                 return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
             }
-        }catch (\Exception $exception) {
-            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        // }catch (\Exception $exception) {
+        //     return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        // }
     }
 
     public function getShortlistedJob(Request $request)
