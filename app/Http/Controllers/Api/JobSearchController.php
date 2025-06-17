@@ -96,7 +96,7 @@ class JobSearchController extends BaseApiController
     public function getJobDetails(Request $request, $job_type, $slug)
     {
         try {
-            $sql = PostJob::where('job_no', $slug)
+            $sql = PostJob::select('post_jobs.*')->where('job_no', $slug)
                         ->with('employer')
                         ->with('industryRelation')
                         ->with('jobCategory')
