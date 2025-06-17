@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Mail\NotificationEmail;
 
@@ -21,7 +23,10 @@ class JobSearchController extends BaseApiController
     public function getJobsByParams(Request $request, $job_type)
     {
         try {
-            $sql = PostJob::where('job_type', $job_type);
+            $sql = PostJob::select('post_jobs.*')->where('job_type', $job_type);
+            if(Auth::check()){
+                $sql->select(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_applied_status'));
+            }
             if(!empty($request->country)){
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
@@ -88,16 +93,19 @@ class JobSearchController extends BaseApiController
     public function getJobDetails(Request $request, $job_type, $slug)
     {
         try {
-            return $this->sendResponse(
-                PostJob::where('job_no', $slug)
+            $sql = PostJob::where('job_no', $slug)
                         ->with('employer')
                         ->with('industryRelation')
                         ->with('jobCategory')
                         ->with('nationalityRelation')
                         ->with('departmentRelation')
                         ->with('functionalArea')
-                        ->with('experienceLevel')
-                        ->first(),
+                        ->with('experienceLevel');
+            if(Auth::check()){
+                $sql->select(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_applied_status'));
+            }
+            return $this->sendResponse(
+                $sql->first(),
                 'Job details'
             );
         } catch (\Exception $e) {
