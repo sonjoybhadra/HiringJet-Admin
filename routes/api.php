@@ -95,6 +95,8 @@ Route::get('/get-homepage', [CommonController::class, 'get_homepage']);
 Route::get('/get-general-settings', [CommonController::class, 'get_general_settings']);
 Route::get('/get-testimonials', [CommonController::class, 'get_testimonials']);
 Route::get('/get-testimonials/{slug}', [CommonController::class, 'get_testimonials_details']);
+Route::get('/get-designation-by-param', [CommonController::class, 'get_designation_by_param']);
+Route::get('/get-industry-by-param', [CommonController::class, 'get_industry_by_param']);
 
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
@@ -173,6 +175,8 @@ Route::group([
 
     Route::post('/post-job-apply', [JobSearchController::class, 'postJobApply']);
     Route::get('/get-jobseeker-jobs', [JobSearchController::class, 'jobseekerAppliedJobs']);
+    Route::post('/shortlisted-jobs', [JobSearchController::class, 'shortlistedJob']);
+    Route::get('/get-shortlisted-jobs', [JobSearchController::class, 'getShortlistedJob']);
 
 });
 
