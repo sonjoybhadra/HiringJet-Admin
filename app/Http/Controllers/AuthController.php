@@ -770,6 +770,10 @@ class AuthController extends Controller
                     $final_footer_data = [
                         'footer_text'           => $footer_data['footer_text'],
                         'copyright_statement'   => $footer_data['copyright_statement'],
+                        'address'               => Helper::getSettingValue('address'),
+                        'phone'                 => Helper::getSettingValue('site_phone') . '/' . Helper::getSettingValue('site_phone2'),
+                        'email'                 => Helper::getSettingValue('site_mail'),
+                        'logo'                  => url('/public/') . '/' . Helper::getSettingValue('site_footer_logo'),
                         'column1'               => $column1,
                         'column2'               => $column2,
                         'column3'               => $column3,
