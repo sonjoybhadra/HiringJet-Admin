@@ -201,7 +201,7 @@ class JobSearchController extends BaseApiController
                     ShortlistedJob::where('id', $has_data->id)->update($update_date);
                 }
                 return $this->sendResponse(
-                    ShortlistedJob::where('user_id', auth()->user()->id)->where('status', 1)->latest()->get(),
+                    ShortlistedJob::where('user_id', auth()->user()->id)->where('status', 1)->with('job_details')->latest()->get(),
                     'Job shortlisted successfully'
                 );
             }else{
