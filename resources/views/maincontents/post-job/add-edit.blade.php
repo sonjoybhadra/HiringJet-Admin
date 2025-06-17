@@ -517,17 +517,17 @@ $controllerRoute = $module['controller_route'];
 @endsection
 @section('scripts')
     <!-- Vendors JS -->
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/select2/select2.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/popular.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/select2/select2.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/@form-validation/popular.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
 
     <!-- Page JS -->
 
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-numbered.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-validation.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/js/form-wizard-numbered.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/js/form-wizard-validation.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
     <script>
         $(document).ready(function () {
