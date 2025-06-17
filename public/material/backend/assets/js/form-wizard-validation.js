@@ -33,15 +33,6 @@
           validators: {
             notEmpty: {
               message: 'Position Name is required'
-            },
-            stringLength: {
-              min: 6,
-              max: 30,
-              message: 'Position Name must be more than 6 and less than 30 characters long'
-            },
-            regexp: {
-              regexp: /^[a-zA-Z0-9 ]+$/,
-              message: 'Position Name can only consist of alphabetical, number and space'
             }
           }
         },
