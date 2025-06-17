@@ -1,13 +1,13 @@
 <?php
 use App\Helpers\Helper;
-$controllerRoute = $module['controller_route'];
+$user_type = session('type');
 ?>
 @extends('layouts.main')
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
       <h4><?=$page_header?></h4>
-      <h6 class="breadcrumb-wrapper">
+      <h6 class="py-3 breadcrumb-wrapper mb-4">
          <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span> <?=$page_header?>
       </h6>
       <div class="nav-align-top mb-4">
@@ -28,9 +28,6 @@ $controllerRoute = $module['controller_route'];
             </div>
          <?php }?>
          <div class="card mb-4">
-            <div class="card-header">
-                <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
-            </div>
             <div class="card-body">
                <div id="table-overlay-loader" class="text-loader">
                   Fetching data. Please wait <span id="dot-animation">.</span>
@@ -38,20 +35,26 @@ $controllerRoute = $module['controller_route'];
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
-                  'table' => 'online_profiles',
-                  'columns' => ['name', 'created_at', 'status'],
-                  'visibleColumns' => ['name', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Name', 'Created At'],
-                  'filename' => "Online_Profile",
+                  'table' => 'report_bugs',
+                  'columns' => ['user_id', 'email', 'phone', 'category', 'description', 'source', 'created_at'],
+                  'visibleColumns' => ['name', 'email', 'phone', 'category', 'description', 'source', 'created_at'],
+                  'headers' => ['#', 'Name', 'Email', 'Phone', 'Category', 'Description', 'Source', 'Created At'],
+                  'filename' => "Report_Bugs",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
+                  
                   ],
-                  'routePrefix' => 'online-profile',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'imageColumns' => ['logo']
+                  'routePrefix' => 'report-bugs',
+                  'showActions' => false,
+                  'joins' => [
+                     [
+                        'table' => 'users',
+                        'localKey' => 'user_id',
+                        'foreignKey' => 'id',
+                        'select' => ['name as first_name']
+                     ]
+                  ]
                 ])
             </div>
         </div>

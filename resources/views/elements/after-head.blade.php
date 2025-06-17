@@ -11,7 +11,7 @@ use App\Helpers\Helper;
 <meta name="title" content="<?=Helper::getSettingValue('meta_title')?>" />
 <meta name="description" content="<?=Helper::getSettingValue('meta_description')?>" />
 <meta name="keywords" content="<?=Helper::getSettingValue('meta_keywords')?>">
-<meta name="base-url" content="<?=config('constants.app_url') . config('constants.uploads_url_path')?>">
+<meta name="base-url" content="<?=url('public/')?>">
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="<?=((Helper::getSettingValue('site_favicon') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_favicon'):config('constants.no_image'))?>" />
 

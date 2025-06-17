@@ -54,6 +54,12 @@ class TableController extends Controller
         if ($table === 'users') {
             $query->leftJoin('roles', DB::raw("CAST($table.role_id AS TEXT)"), '=', DB::raw("CAST(roles.id AS TEXT)"));
         }
+        if ($table === 'contact_us') {
+            $query->leftJoin('cities', DB::raw("CAST($table.city_id AS TEXT)"), '=', DB::raw("CAST(cities.id AS TEXT)"));
+        }
+        if ($table === 'report_bugs') {
+            $query->leftJoin('users', DB::raw("CAST($table.user_id AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
+        }
 
         // Aliased select columns
         $columns = array_map(function ($col) use ($table) {
@@ -88,6 +94,12 @@ class TableController extends Controller
             }
             if ($table === 'users' && $col === 'role_id') {
                 return 'roles.role_name as role_name';
+            }
+            if ($table === 'contact_us' && $col === 'city_id') {
+                return 'cities.name as city_name';
+            }
+            if ($table === 'report_bugs' && $col === 'user_id') {
+                return 'users.first_name as name';
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);

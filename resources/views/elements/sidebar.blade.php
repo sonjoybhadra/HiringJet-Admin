@@ -344,6 +344,22 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     </a>
   </li>
 
+  <!-- Contact Us -->
+  <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
+    <a href="<?=url('/contact-us/list')?>" class="menu-link">
+      <i class="menu-icon fa-solid fa-file-lines"></i>
+      <div data-i18n="Contact Us">Contact Us</div>
+    </a>
+  </li>
+
+  <!-- Report Bugs -->
+  <li class="menu-item <?=(($pageSegment == 'report-bugs')?'active':'')?>">
+    <a href="<?=url('/report-bugs/list')?>" class="menu-link">
+      <i class="menu-icon fa-solid fa-file-lines"></i>
+      <div data-i18n="Report Bugs">Report Bugs</div>
+    </a>
+  </li>
+
   <!-- Email Logs -->
   <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
     <a href="<?=url('/email-logs')?>" class="menu-link">

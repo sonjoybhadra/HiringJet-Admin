@@ -44,6 +44,8 @@ use App\Http\Controllers\PostJobController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\ReportBugController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -377,4 +379,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('testimonial/delete/{id}', [TestimonialController::class, 'delete']);
         Route::get('testimonial/change-status/{id}', [TestimonialController::class, 'change_status']);
     /* testimonial */
+    /* contact us */
+        Route::get('contact-us/list', [ContactUsController::class, 'list']);
+    /* contact us */
+    /* report bugs */
+        Route::get('report-bugs/list', [ReportBugController::class, 'list']);
+    /* report bugs */
 });
