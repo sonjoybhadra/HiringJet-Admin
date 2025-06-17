@@ -24,8 +24,8 @@ class JobSearchController extends BaseApiController
     {
         try {
             $sql = PostJob::select('post_jobs.*')->where('job_type', $job_type);
-            if(Auth::check()){
-                $sql->select(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_applied_status'));
+            if($request->user()){
+                $sql->select(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.$request->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_applied_status'));
             }
             if(!empty($request->country)){
                 $countrys = $request->country;
@@ -101,8 +101,8 @@ class JobSearchController extends BaseApiController
                         ->with('departmentRelation')
                         ->with('functionalArea')
                         ->with('experienceLevel');
-            if(Auth::check()){
-                $sql->select(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_applied_status'));
+            if($request->user()){
+                $sql->select(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.$request->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_applied_status'));
             }
             return $this->sendResponse(
                 $sql->first(),
