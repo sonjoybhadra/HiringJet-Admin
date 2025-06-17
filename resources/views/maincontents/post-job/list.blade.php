@@ -60,5 +60,5 @@ $controllerRoute = $module['controller_route'];
 @endsection
 
 @section('scripts')
-<script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/table.js"></script>
+<script src="<?=config('constants.admin_assets_url')?>assets/js/table.js"></script>
 @endsection
