@@ -404,7 +404,7 @@
         href="javascript:void(0);"
         data-bs-toggle="dropdown">
         <div class="avatar avatar-online">
-          <img src="<?=(($user->profile_image != '')?env('APP_URL') . $user->profile_image:env('NO_IMAGE_AVATAR'))?>" alt="<?=$user->first_name . ' ' . $user->last_name?>" class="rounded-circle" />
+          <img src="<?=(($user->profile_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $user->profile_image:config('constants.no_image_avatar'))?>" alt="<?=$user->first_name . ' ' . $user->last_name?>" class="rounded-circle" />
         </div>
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
@@ -413,7 +413,7 @@
             <div class="d-flex align-items-center">
               <div class="flex-shrink-0 me-2">
                 <div class="avatar avatar-online">
-                  <img src="<?=(($user->profile_image != '')?env('APP_URL') . $user->profile_image:env('NO_IMAGE_AVATAR'))?>" alt="<?=$user->first_name . ' ' . $user->last_name?>" class="rounded-circle" />
+                  <img src="<?=(($user->profile_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $user->profile_image:config('constants.no_image_avatar'))?>" alt="<?=$user->first_name . ' ' . $user->last_name?>" class="rounded-circle" />
                 </div>
               </div>
               <div class="flex-grow-1">
