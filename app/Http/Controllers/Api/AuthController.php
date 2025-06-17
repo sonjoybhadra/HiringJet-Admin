@@ -47,7 +47,7 @@ class AuthController extends BaseApiController
         }
 
         $credentials = request(['email', 'password']);
-        $credentials['role_id'] = env('JOB_SEEKER_ROLE_ID');
+        $credentials['role_id'] = env('JOB_SEEKER_ROLE_ID')??3;
         try{
             if (! $token = auth('api')->attempt($credentials)) {
                 return $this->sendError('Unauthorized', 'Email or Password not matched.', Response::HTTP_UNAUTHORIZED);

@@ -109,4 +109,9 @@ class PostJob extends Model
     {
         return $this->belongsTo(CurrentWorkLevel::class, 'experience_level');
     }
+
+    public function applied_users()
+    {
+        return $this->belongsToMany(User::class, 'post_job_user_applieds', 'job_id', 'user_id');
+    }
 }
