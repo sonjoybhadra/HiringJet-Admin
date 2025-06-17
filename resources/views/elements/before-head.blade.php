@@ -11,7 +11,7 @@ use App\Helpers\Helper;
 <meta name="keywords" content="<?=Helper::getSettingValue('meta_keywords')?>">
 
 <!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="<?=((Helper::getSettingValue('site_favicon') != '')?env('APP_URL') . Helper::getSettingValue('site_favicon'):env('NO_IMAGE'))?>" />
+<link rel="icon" type="image/x-icon" href="<?=((Helper::getSettingValue('site_favicon') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_favicon'):config('constants.no_image'))?>" />
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />

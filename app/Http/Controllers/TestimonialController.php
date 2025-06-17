@@ -83,7 +83,7 @@ class TestimonialController extends Controller
                         'designation'               => strip_tags($postData['designation']),
                         'rating'                    => strip_tags($postData['rating']),
                         'review'                    => strip_tags($postData['review']),
-                        'user_image'                => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $user_image,
+                        'user_image'                => 'uploads/' . $upload_folder . '/' . $user_image,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Testimonial::insert($fields);
@@ -124,7 +124,7 @@ class TestimonialController extends Controller
                             $uploadedFile   = $this->upload_single_file('user_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $user_image = $uploadedFile['newFilename'];
-                                $userImage = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $user_image;
+                                $userImage = 'uploads/' . $upload_folder . '/' . $user_image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
