@@ -8,6 +8,7 @@ use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
@@ -43,7 +44,7 @@ class SocialAuthController extends BaseApiController
     }
 
     /**
-     * Redirect to LinkedIn OAuth (Stateless - Production Safe)
+     * Redirect to LinkedIn OpenID Connect (Updated for OpenID Connect)
      */
     public function redirectToLinkedIn(Request $request)
     {
@@ -66,16 +67,19 @@ class SocialAuthController extends BaseApiController
             // Generate state for security
             $state = Str::random(40);
 
-            // Build OAuth URL manually (stateless approach)
+            // Build OpenID Connect URL (Updated scopes and endpoint)
             $authUrl = 'https://www.linkedin.com/oauth/v2/authorization?' . http_build_query([
                 'response_type' => 'code',
                 'client_id' => $clientId,
                 'redirect_uri' => $redirectUri,
                 'state' => $state,
-                'scope' => 'r_liteprofile r_emailaddress'
+                'scope' => 'openid profile email' // OpenID Connect scopes
             ]);
 
-            \Log::info('LinkedIn OAuth redirect generated successfully');
+            \Log::info('LinkedIn OpenID Connect redirect generated successfully', [
+                'scope' => 'openid profile email',
+                'protocol' => 'OpenID Connect'
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -98,7 +102,7 @@ class SocialAuthController extends BaseApiController
     }
 
     /**
-     * Redirect to Google OAuth (Stateless - Production Safe)
+     * Redirect to Google OAuth (Unchanged)
      */
     public function redirectToGoogle(Request $request)
     {
@@ -192,10 +196,16 @@ class SocialAuthController extends BaseApiController
             \Log::info("Processing {$provider} OAuth callback", [
                 'has_code' => !empty($request->code),
                 'has_state' => !empty($request->state),
+                'protocol' => $provider === 'linkedin' ? 'OpenID Connect' : 'OAuth 2.0'
             ]);
 
-            // Get user from social provider using Socialite
-            $socialUser = Socialite::driver($provider)->stateless()->user();
+            // Handle LinkedIn with OpenID Connect, Google with regular OAuth
+            if ($provider === 'linkedin') {
+                $socialUser = $this->getLinkedInUserViaOpenID($request->code);
+            } else {
+                // Use Socialite for Google (unchanged)
+                $socialUser = Socialite::driver($provider)->stateless()->user();
+            }
 
             if (!$socialUser) {
                 \Log::error("Failed to retrieve user from {$provider}");
@@ -206,21 +216,18 @@ class SocialAuthController extends BaseApiController
             }
 
             \Log::info("Successfully retrieved user from {$provider}", [
-                'user_id' => $socialUser->getId(),
-                'user_email' => $socialUser->getEmail(),
-                'user_name' => $socialUser->getName(),
+                'user_id' => $socialUser['id'],
+                'user_email' => $socialUser['email'],
+                'user_name' => $socialUser['name'],
             ]);
 
-            // Extract user data
-            $email = $socialUser->getEmail();
-            $providerId = $socialUser->getId();
-            $name = $socialUser->getName();
-            $avatar = $socialUser->getAvatar();
-
-            // Parse name into first and last name
-            $nameParts = explode(' ', $name, 2);
-            $firstName = $nameParts[0] ?? '';
-            $lastName = $nameParts[1] ?? '';
+            // Extract user data (normalized format)
+            $email = $socialUser['email'];
+            $providerId = $socialUser['id'];
+            $name = $socialUser['name'];
+            $firstName = $socialUser['first_name'];
+            $lastName = $socialUser['last_name'];
+            $avatar = $socialUser['avatar'] ?? null;
 
             // Check if user exists by email or provider ID
             $user = User::where('email', $email)
@@ -271,6 +278,74 @@ class SocialAuthController extends BaseApiController
                 'error' => "An error occurred during {$provider} authentication",
                 'debug' => app()->environment('local') ? $e->getMessage() : null
             ], 500);
+        }
+    }
+
+    /**
+     * Get LinkedIn user data via OpenID Connect
+     */
+    private function getLinkedInUserViaOpenID($code)
+    {
+        try {
+            \Log::info('Starting LinkedIn OpenID Connect flow');
+
+            // Step 1: Exchange code for access token
+            $tokenResponse = Http::asForm()->post('https://www.linkedin.com/oauth/v2/accessToken', [
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'redirect_uri' => config('services.linkedin.redirect'),
+                'client_id' => config('services.linkedin.client_id'),
+                'client_secret' => config('services.linkedin.client_secret'),
+            ]);
+
+            if (!$tokenResponse->successful()) {
+                \Log::error('LinkedIn token exchange failed', [
+                    'status' => $tokenResponse->status(),
+                    'response' => $tokenResponse->body()
+                ]);
+                throw new Exception('Failed to exchange code for access token');
+            }
+
+            $tokenData = $tokenResponse->json();
+            $accessToken = $tokenData['access_token'];
+
+            \Log::info('LinkedIn access token obtained successfully');
+
+            // Step 2: Get user info using OpenID Connect userinfo endpoint
+            $userResponse = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $accessToken,
+            ])->get('https://api.linkedin.com/v2/userinfo');
+
+            if (!$userResponse->successful()) {
+                \Log::error('LinkedIn userinfo request failed', [
+                    'status' => $userResponse->status(),
+                    'response' => $userResponse->body()
+                ]);
+                throw new Exception('Failed to get user info from LinkedIn');
+            }
+
+            $userData = $userResponse->json();
+
+            \Log::info('LinkedIn user data retrieved', [
+                'fields' => array_keys($userData)
+            ]);
+
+            // Step 3: Normalize data format (OpenID Connect fields)
+            return [
+                'id' => $userData['sub'], // 'sub' is the standard OpenID Connect user ID
+                'email' => $userData['email'],
+                'name' => $userData['name'],
+                'first_name' => $userData['given_name'] ?? '',
+                'last_name' => $userData['family_name'] ?? '',
+                'avatar' => $userData['picture'] ?? null,
+                'email_verified' => $userData['email_verified'] ?? false,
+                'locale' => $userData['locale'] ?? null,
+                'raw' => $userData // Store raw data for debugging
+            ];
+
+        } catch (Exception $e) {
+            \Log::error('LinkedIn OpenID Connect error: ' . $e->getMessage());
+            throw $e;
         }
     }
 
@@ -363,16 +438,25 @@ class SocialAuthController extends BaseApiController
     public function getSocialUserData($provider)
     {
         try {
-            $user = Socialite::driver($provider)->stateless()->user();
-
-            return [
-                'id' => $user->getId(),
-                'email' => $user->getEmail(),
-                'name' => $user->getName(),
-                'nickname' => $user->getNickname(),
-                'avatar' => $user->getAvatar(),
-                'raw' => $user->getRaw()
-            ];
+            if ($provider === 'linkedin') {
+                // For LinkedIn, we'd need a code to test, so return config info instead
+                return [
+                    'provider' => 'linkedin',
+                    'protocol' => 'OpenID Connect',
+                    'endpoint' => 'https://api.linkedin.com/v2/userinfo',
+                    'scopes' => 'openid profile email'
+                ];
+            } else {
+                $user = Socialite::driver($provider)->stateless()->user();
+                return [
+                    'id' => $user->getId(),
+                    'email' => $user->getEmail(),
+                    'name' => $user->getName(),
+                    'nickname' => $user->getNickname(),
+                    'avatar' => $user->getAvatar(),
+                    'raw' => $user->getRaw()
+                ];
+            }
         } catch (Exception $e) {
             \Log::error("Error fetching {$provider} user data: " . $e->getMessage());
             return null;
