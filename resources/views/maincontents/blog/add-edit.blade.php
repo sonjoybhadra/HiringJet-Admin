@@ -101,7 +101,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <img src="<?=(($blog_image != '')?$blog_image:env('NO_IMAGE'))?>" alt="<?=$title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($blog_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $blog_image:config('constants.no_image'))?>" alt="<?=$title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <div class="mt-2">
