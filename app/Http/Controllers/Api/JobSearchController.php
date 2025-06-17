@@ -11,6 +11,7 @@ use App\Mail\NotificationEmail;
 
 use App\Models\PostJob;
 use App\Models\PostJobUserApplied;
+use App\Models\ShortlistedJob;
 
 class JobSearchController extends BaseApiController
 {
@@ -152,6 +153,74 @@ class JobSearchController extends BaseApiController
             return $this->sendResponse(
                 $data,
                 'Applied Jobs list'
+            );
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function shortlistedJob(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $job_details = PostJob::find($request->job_id);
+            if($job_details && $job_details->posting_close_date >= date('Y-m-d')){
+                $has_data = ShortlistedJob::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->find();
+                if(!$has_data){
+                    $applied_job_id = ShortlistedJob::insertGetId([
+                        'job_id'=> $request->job_id,
+                        'user_id'=> auth()->user()->id,
+                        'status'=> 1,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    ]);
+                    $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                    //Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
+                }else{
+                    if($has_data->status == 1){
+                        $update_date = [
+                            'status'=> 0,
+                            'deleted_at'=> date('Y-m-d H:i:s')
+                        ];
+                    }else{
+                        $update_date = [
+                            'status'=> 1,
+                            'deleted_at'=> null
+                        ];
+
+                        $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                        //Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
+                    }
+                    $update_date['updated_at'] = date('Y-m-d H:i:s');
+                    ShortlistedJob::where('id', $has_data->id)->update($update_date);
+                }
+                return $this->sendResponse(
+                    ShortlistedJob::where('id', $has_data->id)->where('status', 1)->latest()->get(),
+                    'Job shortlisted successfully'
+                );
+            }else{
+                return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
+            }
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getShortlistedJob(Request $request)
+    {
+        try{
+            $data = ShortlistedJob::where('user_id', auth()->user()->id)
+                                        ->with('job_details')
+                                        ->latest()->get();
+            return $this->sendResponse(
+                $data,
+                'Shortlisted Jobs list'
             );
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);

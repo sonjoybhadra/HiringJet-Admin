@@ -570,4 +570,28 @@ class CommonController extends BaseApiController
         );
     }
 
+    public function get_designation_by_param(Request $request)
+    {
+        $sql = Designation::select('id', 'name')->where('status', 1)->get();
+        if(!empty($request->key)){
+            $sql->where('name', 'ILIKE',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
+        );
+    }
+
+    public function get_industry_by_param(Request $request)
+    {
+        $sql = Industry::select('id', 'name')->where('status', 1)->get();
+        if(!empty($request->key)){
+            $sql->where('name', 'ILIKE',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
+        );
+    }
+
 }
