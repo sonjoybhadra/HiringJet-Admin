@@ -1,6 +1,6 @@
 <?php
 use App\Helpers\Helper;
-echo config('constants.app_url');
+// echo config('constants.app_url');
 echo config('constants.uploads_url_path');
 ?>
 <meta charset="utf-8" />
