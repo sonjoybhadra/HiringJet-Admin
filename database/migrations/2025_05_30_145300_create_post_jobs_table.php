@@ -28,13 +28,15 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female', 'Transgender', 'No Preference'])->nullable();
             $table->integer('open_position_number')->default(0);
             $table->foreignId('contract_type')->nullable()->constrained('contract_types')->onDelete('cascade');
+            $table->foreignId('designation')->nullable()->constrained('designations')->onDelete('cascade');
+            $table->foreignId('functional_area')->nullable()->constrained('functional_areas')->onDelete('cascade');
+            $table->integer('min_exp_year')->nullable();
+            $table->integer('max_exp_year')->nullable();
             $table->longText('job_description')->nullable();
             $table->longText('requirement')->nullable();
-            $table->foreignId('department')->nullable()->constrained('departments')->onDelete('cascade');
-            $table->foreignId('functional_area')->nullable()->constrained('functional_areas')->onDelete('cascade');
             $table->longText('skill_ids');
             $table->longText('skill_names');
-            $table->foreignId('experience_level')->nullable()->constrained('current_work_levels')->onDelete('cascade');
+            // $table->foreignId('experience_level')->nullable()->constrained('current_work_levels')->onDelete('cascade');
             $table->date('expected_close_date')->nullable();
             $table->string('currency')->nullable();
             $table->float('min_salary', 10, 2)->default(0.00);
@@ -42,8 +44,8 @@ return new class extends Migration
             $table->tinyInteger('is_salary_negotiable')->default(0);
             $table->date('posting_open_date')->nullable();
             $table->date('posting_close_date')->nullable();
+            $table->enum('application_through', ['Hiring Jet', 'Apply To Email', 'Apply To Link'])->nullable();
             $table->string('apply_on_email')->nullable();
-            $table->enum('application_through', ['Hiring Jet', 'Externally'])->nullable();
             $table->string('apply_on_link')->nullable();
             $table->string('walkin_address1')->nullable();
             $table->string('walkin_address2')->nullable();

@@ -9,8 +9,8 @@ class ExperienceLevel extends Model
 {
     use SoftDeletes;
 
-    public function postJobs()
-    {
-        return $this->hasMany(PostJob::class, 'experience_level');
-    }
+    // public function postJobs()
+    // {
+    //     return $this->hasMany(PostJob::class, 'experience_level');
+    // }
 }
