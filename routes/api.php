@@ -177,6 +177,7 @@ Route::group([
     Route::get('/get-jobseeker-jobs', [JobSearchController::class, 'jobseekerAppliedJobs']);
     Route::post('/shortlisted-jobs', [JobSearchController::class, 'shortlistedJob']);
     Route::get('/get-shortlisted-jobs', [JobSearchController::class, 'getShortlistedJob']);
+    Route::get('/get-matched-jobs', [JobSearchController::class, 'getMatchedJobsForJobseeker']);
 
 });
 
