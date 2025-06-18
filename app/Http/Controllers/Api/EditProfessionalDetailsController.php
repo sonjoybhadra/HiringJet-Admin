@@ -176,7 +176,7 @@ class EditProfessionalDetailsController extends BaseApiController
                 'exp_year'=> $request->exp_year,
                 'exp_month'=> $request->exp_month,
             ]);
-
+            $this->calculate_profile_completed_percentage(auth()->user()->id, 'it-skills'); //IT skills completes
             return $this->sendResponse($this->getUserDetails(), 'It skills added successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
@@ -292,6 +292,8 @@ class EditProfessionalDetailsController extends BaseApiController
                     'is_current_job'=> 1,
                 ]);
             }
+
+            $this->calculate_profile_completed_percentage(auth()->user()->id, 'professional-details'); //Professional details completes
 
             if(!empty($request->industry)){
                 UserEmploymentIndustry::where('user_employment_id', $id)->delete();

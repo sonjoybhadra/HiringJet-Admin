@@ -193,6 +193,8 @@ class JobSearchController extends BaseApiController
                         'status'=> 1,
                         'created_at'=> date('Y-m-d H:i:s')
                     ]);
+
+                    $msg = 'Job shortlisted successfully.';
                     $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
                     //Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
                 }else{
@@ -201,12 +203,13 @@ class JobSearchController extends BaseApiController
                             'status'=> 0,
                             'deleted_at'=> date('Y-m-d H:i:s')
                         ];
+                        $msg = 'Removed job from shortlisted.';
                     }else{
                         $update_date = [
                             'status'=> 1,
                             'deleted_at'=> null
                         ];
-
+                        $msg = 'Job shortlisted successfully.';
                         $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
                         //Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
                     }
@@ -215,7 +218,7 @@ class JobSearchController extends BaseApiController
                 }
                 return $this->sendResponse(
                     ShortlistedJob::where('user_id', auth()->user()->id)->where('status', 1)->with('job_details')->latest()->get(),
-                    'Job shortlisted successfully'
+                    $msg
                 );
             }else{
                 return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);

@@ -57,6 +57,8 @@ class EditProfileController extends BaseApiController
             ];
             if($image_path != ""){
                 $update_data['profile_image'] = $image_path;
+
+                $this->calculate_profile_completed_percentage(auth()->user()->id, 'upload-photo'); //Profile image completes
             }
             UserProfile::where('user_id', auth()->user()->id)->update($update_data);
 
