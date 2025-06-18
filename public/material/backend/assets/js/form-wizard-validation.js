@@ -91,6 +91,27 @@
               message: 'Contract Type is required'
             }
           }
+        },
+        designation: {
+          validators: {
+            notEmpty: {
+              message: 'Designation is required'
+            }
+          }
+        },
+        functional_area: {
+          validators: {
+            notEmpty: {
+              message: 'Functional Area is required'
+            }
+          }
+        },
+        min_exp_year: {
+          validators: {
+            notEmpty: {
+              message: 'Min Exp is required'
+            }
+          }
         }
       },
       plugins: {

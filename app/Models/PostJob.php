@@ -95,9 +95,9 @@ class PostJob extends Model
         return $this->belongsTo(ContractType::class, 'contract_type');
     }
 
-    public function departmentRelation()
+    public function designationRelation()
     {
-        return $this->belongsTo(Department::class, 'department');
+        return $this->belongsTo(Designation::class, 'designation');
     }
 
     public function functionalArea()
@@ -105,10 +105,10 @@ class PostJob extends Model
         return $this->belongsTo(FunctionalArea::class, 'functional_area');
     }
 
-    public function experienceLevel()
-    {
-        return $this->belongsTo(CurrentWorkLevel::class, 'experience_level');
-    }
+    // public function experienceLevel()
+    // {
+    //     return $this->belongsTo(CurrentWorkLevel::class, 'experience_level');
+    // }
 
     public function applied_users()
     {
