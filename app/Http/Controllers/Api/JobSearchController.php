@@ -282,7 +282,7 @@ class JobSearchController extends BaseApiController
             }
 
             if($jobseeker_designation){
-                $sql->whereIn('designation', $jobseeker_designation->last_designation);
+                $sql->where('designation', $jobseeker_designation->last_designation);
             }
 
             $sql->with('employer');
