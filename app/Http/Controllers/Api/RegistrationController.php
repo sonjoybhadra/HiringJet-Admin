@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Services\CVParserService;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserResume;
@@ -27,9 +28,15 @@ use App\Models\Industry;
 
 class RegistrationController extends BaseApiController
 {
+    /**
+     * @var CVParserService
+    */
+    protected CVParserService $cvParserService;
+
     private $job_seeker_role, $otp_validation_time;
-    public function __construct()
+    public function __construct(CVParserService $cvParserService)
     {
+        $this->cvParserService = $cvParserService;
         $this->job_seeker_role = env('JOB_SEEKER_ROLE_ID');
         $this->otp_validation_time = env('OTP_VALIDATION_DURATION_MINUTES');
     }
@@ -430,6 +437,40 @@ class RegistrationController extends BaseApiController
 
         } catch (\Exception $e) {
             return $this->sendError('Error', 'Sorry!! Unable to complete profile.'.$e->getMessage());
+        }
+    }
+
+    /**
+     * Registered member step 1.
+     *
+     * @return \Illuminate\Http\JsonResponse
+    */
+    public function test_cv_parse(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cv' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $image_path = "";
+            $cv_parse_result_array = [];
+            if (request()->hasFile('cv')) {
+                $file = request()->file('cv');
+                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/user/cv/'.$fileName, file_get_contents($file));
+                $image_path = 'public/storage/uploads/user/cv/'.$fileName;
+
+                // Call the CVParserService
+                $cv_parse_result_array = $this->cvParserService->parse($file);
+            }
+            return $this->sendResponse($cv_parse_result_array, 'Parsed CV data array.');
+
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
         }
     }
 

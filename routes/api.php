@@ -50,6 +50,8 @@ Route::post('/forgot-password/otp-verification', [ForgotpasswordController::clas
 Route::post('/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
 
 //Registration with complete profile
+Route::post('/signup/cv', [RegistrationController::class, 'test_cv_parse']);
+
 Route::post('/signup', [RegistrationController::class, 'registration']);
 Route::post('/signup/resend-otp', [RegistrationController::class, 'resendOtp']);
 Route::post('/signup/verification-top', [RegistrationController::class, 'registerVerification']);
