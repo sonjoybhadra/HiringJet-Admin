@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Services\CVParserService;
+use App\Http\Resources\CVResource;
+
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserResume;
@@ -457,17 +459,21 @@ class RegistrationController extends BaseApiController
 
         try{
             $image_path = "";
-            $cv_parse_result_array = [];
+            // $cv_parse_result_array = [];
             if (request()->hasFile('cv')) {
                 $file = request()->file('cv');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/user/cv/'.$fileName, file_get_contents($file));
-                $image_path = 'public/storage/uploads/user/cv/'.$fileName;
+                // $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                // Storage::disk('public')->put('uploads/user/cv/'.$fileName, file_get_contents($file));
+                // $image_path = 'public/storage/uploads/user/cv/'.$fileName;
 
                 // Call the CVParserService
                 $cv_parse_result_array = $this->cvParserService->parse($file);
             }
-            return $this->sendResponse($cv_parse_result_array, 'Parsed CV data array.');
+            if (!$cv_parse_result_array['success']) {
+                return $this->sendError('CV Parse Error', $cv_parse_result_array['error']);
+            }else{
+                return $this->sendResponse(new CVResource($cv_parse_result_array['data']), 'Parsed CV data array.');
+            }
 
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());

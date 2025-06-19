@@ -145,7 +145,7 @@ class JobSearchController extends BaseApiController
                     Mail::to(auth()->user()->email)->send(new NotificationEmail('Job applied successfully.', $full_name, 'You have applied for this job successfully.'));
                     return $this->sendResponse(
                         ['applied_job_id'=> $applied_job_id],
-                        'Applied Jobs list'
+                        'You have successfully applied for the job.'
                     );
                 }else{
                     return $this->sendError('Warning', 'You have already applied for this job.', 201);
