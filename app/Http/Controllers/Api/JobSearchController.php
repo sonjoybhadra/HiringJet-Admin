@@ -287,13 +287,12 @@ class JobSearchController extends BaseApiController
             if($jobseeker_designation){
                 $sql->where('designation', $jobseeker_designation->last_designation);
             }
-            print_r($user_skills);
             if(!empty($user_skills)){
-                $sql->orWhere(function ($q) use ($user_skills) {
+                // $sql->orWhere(function ($q) use ($user_skills) {
                     foreach ($user_skills as $tag) {
-                        $q->orWhereJsonContains('skill_ids', $tag);
+                        $sql->orWhereJsonContains('skill_ids', $tag);
                     }
-                });
+                // });
             }
             echo $sql->toSql();
             $sql->with('employer');
