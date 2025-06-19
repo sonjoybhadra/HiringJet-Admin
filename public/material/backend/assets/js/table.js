@@ -101,7 +101,15 @@ function loadTable(config) {
 
                 html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
                     <i class="fa-solid fa-trash"></i>
-                </a></td>`;
+                </a>`;
+
+                if(config.routePrefix == 'post-job'){
+                    html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
+                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
+                                </a>`;
+                }
+
+                html += `</td>`;
             }
 
             html += '</tr>';

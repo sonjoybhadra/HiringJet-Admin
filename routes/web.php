@@ -354,6 +354,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);
         Route::get('post-job/change-status/{id}', [PostJobController::class, 'change_status']);
         Route::post('/get-cities-by-countries', [PostJobController::class, 'getCitiesByCountries'])->name('get.cities.by.countries');
+        Route::match(['get', 'post'], 'post-job/applications/{id}', [PostJobController::class, 'applications']);
     /* post job */
 
     /* home page */
