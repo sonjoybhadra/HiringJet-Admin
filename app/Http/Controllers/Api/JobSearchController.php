@@ -294,7 +294,7 @@ class JobSearchController extends BaseApiController
                     }
                 // });
 
-                $sql->orWhereRaw("skill_ids @> '$user_skills'")->get();
+                // $sql->orWhereRaw("skill_ids @> '$user_skills'")->get();
             }
             echo $sql->toSql();
             $sql->with('employer');
