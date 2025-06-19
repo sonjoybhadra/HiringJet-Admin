@@ -180,6 +180,9 @@ $controllerRoute = $module['controller_route'];
             ?>
             <div class="card-body">
                 <div class="row">
+                    <div id="table-overlay-loader" class="text-loader" style="display: none;">
+                        Fetching cities. Please wait <span id="dot-animation">.</span>
+                    </div>
                     <!-- Validation Wizard -->
                     <div class="col-12 mb-6">
                     <!-- <small class="text-light fw-medium">Validation</small> -->
@@ -257,17 +260,25 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="location_countries">Location Country</label>
                                         <select class="select2" id="location_countries" name="location_countries[]" required multiple>
-                                            <?php if($currencies){ foreach($currencies as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $location_countries))?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
+                                            @foreach ($currencies as $select_row)
+                                                <option value="{{ $select_row->id }}" 
+                                                    {{ in_array($select_row->id, $location_countries ?? []) ? 'selected' : '' }}>
+                                                    {{ $select_row->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="location_cities">Location City</label>
                                         <select class="select2" id="location_cities" name="location_cities[]" required multiple>
-                                            <?php if($cities){ foreach($cities as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $location_cities))?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
+                                            <?php if($row){?>
+                                                @foreach ($cities as $select_row)
+                                                    <option value="{{ $select_row->id }}" 
+                                                        {{ in_array($select_row->id, $location_cities ?? []) ? 'selected' : '' }}>
+                                                        {{ $select_row->name }}
+                                                    </option>
+                                                @endforeach
+                                            <?php }?>
                                         </select>
                                     </div>
 
@@ -625,5 +636,69 @@ $controllerRoute = $module['controller_route'];
         //         $(this).removeClass('error');
         //     });
         // });
+        $(document).ready(function () {
+            $('.select2').select2();
+
+            let selectedCountries = @json($location_countries ?? []);
+            let selectedCities = @json($location_cities ?? []);
+
+            if (selectedCountries.length > 0) {
+                $.ajax({
+                    url: '{{ route("get.cities.by.countries") }}',
+                    type: 'POST',
+                    data: {
+                        country_ids: selectedCountries,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    beforeSend: function () {
+                        $('#location_cities').prop('disabled', true);
+                        $('#location_cities').html('<option>Loading...</option>');
+                    },
+                    success: function (data) {
+                        let citySelect = $('#location_cities');
+                        citySelect.empty();
+
+                        $.each(data, function (index, city) {
+                            let isSelected = selectedCities.includes(city.id);
+                            citySelect.append(`<option value="${city.id}" ${isSelected ? 'selected' : ''}>${city.name}</option>`);
+                        });
+
+                        citySelect.prop('disabled', false);
+                        citySelect.trigger('change'); // for select2 refresh
+                    },
+                    error: function () {
+                        $('#location_cities').html('<option disabled>Error loading cities</option>');
+                    }
+                });
+            }
+
+            $('#location_countries').on('change', function () {
+                let countryIds = $(this).val(); // get selected country IDs array
+                
+                $.ajax({
+                    url: '{{ route("get.cities.by.countries") }}',
+                    type: 'POST',
+                    data: {
+                        country_ids: countryIds,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    beforeSend: function () {
+                        // Show loading spinner or disable dropdown
+                        $('#table-overlay-loader').show();
+                    },
+                    success: function (data) {
+                        $('#table-overlay-loader').hide();
+                        let citySelect = $('#location_cities');
+                        citySelect.empty(); // clear previous
+
+                        $.each(data, function (key, city) {
+                            citySelect.append('<option value="'+ city.id +'">'+ city.name +'</option>');
+                        });
+
+                        citySelect.trigger('change'); // for select2
+                    }
+                });
+            });
+        });
     </script>
 @endsection

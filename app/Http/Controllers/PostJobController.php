@@ -204,6 +204,10 @@ class PostJobController extends Controller
             $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+
+            $data['location_countries']     = [];
+            $data['location_cities']        = [];
+
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -216,7 +220,7 @@ class PostJobController extends Controller
             $page_name                      = 'post-job.add-edit';
             $data['row']                    = PostJob::where('id', '=', $id)->first();
             $data['employers']              = Employer::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->limit(1000)->get();
+            // $data['cities']                 = City::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['nationalities']          = Nationality::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['contract_types']         = ContractType::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['keyskills']              = Keyskill::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
@@ -226,6 +230,16 @@ class PostJobController extends Controller
             $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+
+            $data['location_countries']     = json_decode($data['row']->location_countries ?? '[]', true);
+            $country_ids                    = json_decode($data['row']->location_countries ?? '[]', true);
+            $data['cities'] = City::select('id', 'name')
+                            ->where('status', 1)
+                            ->whereIn('country_id', $country_ids)
+                            ->orderBy('name', 'ASC')
+                            ->get();
+            $data['location_cities']        = json_decode($data['row']->location_cities ?? '[]', true);
+
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
@@ -413,4 +427,15 @@ class PostJobController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
+    public function getCitiesByCountries(Request $request)
+    {
+        $countryIds = $request->input('country_ids', []);
+
+        if (!empty($countryIds)) {
+            $cities = City::whereIn('country_id', $countryIds)->get(['id', 'name']);
+            return response()->json($cities);
+        }
+
+        return response()->json([]);
+    }
 }
