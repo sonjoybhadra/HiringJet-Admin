@@ -15,6 +15,7 @@ use App\Models\PostJob;
 use App\Models\PostJobUserApplied;
 use App\Models\ShortlistedJob;
 use App\Models\UserEmployment;
+use App\Models\UserSkill;
 
 class JobSearchController extends BaseApiController
 {
@@ -274,6 +275,8 @@ class JobSearchController extends BaseApiController
                                                     ->orderBy('is_current_job', 'DESC')
                                                     ->first();
 
+            $user_skills = UserSkill::where('user_id', auth()->user()->id)->get()->pluck('keyskill_id')->toArray();
+
             $sql = PostJob::select('post_jobs.*');
             if(Auth::guard('api')->check()){
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
@@ -283,6 +286,13 @@ class JobSearchController extends BaseApiController
 
             if($jobseeker_designation){
                 $sql->where('designation', $jobseeker_designation->last_designation);
+            }
+            if(!empty($user_skills)){
+                $sql->where(function ($q) use ($user_skills) {
+                    foreach ($user_skills as $tag) {
+                        $q->orWhereJsonContains('skill_ids', $tag);
+                    }
+                });
             }
 
             $sql->with('employer');
