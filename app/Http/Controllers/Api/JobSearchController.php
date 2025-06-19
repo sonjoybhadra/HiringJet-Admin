@@ -290,9 +290,11 @@ class JobSearchController extends BaseApiController
             if(!empty($user_skills)){
                 // $sql->orWhere(function ($q) use ($user_skills) {
                     foreach ($user_skills as $tag) {
-                        $sql->orWhereJsonContains('skill_ids', $tag);
+                        $sql->orWhereJsonContains('skill_ids', (string)$tag);
                     }
                 // });
+
+                $sql->orWhereRaw("skill_ids @> '$user_skills'")->get();
             }
             echo $sql->toSql();
             $sql->with('employer');
