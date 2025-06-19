@@ -12,8 +12,11 @@ return [
     |
     */
 
-    'admin_assets_url' => env('ADMIN_ASSETS_URL', 'https://default.com/admin/assets'),
-    'uploads_url' => env('UPLOADS_URL', 'https://default.com/admin/assets'),
-    'uploads_url_path' => env('UPLOADS_URL_PATH', 'https://default.com/admin/assets'),
+    'admin_assets_url'      => env('ADMIN_ASSETS_URL', 'https://default.com/admin/assets'),
+    'uploads_url'           => env('UPLOADS_URL', 'https://default.com/admin/assets'),
+    'uploads_url_path'      => env('UPLOADS_URL_PATH', 'https://default.com/admin/assets'),
+    'app_url'               => env('APP_URL', 'https://default.com/admin/assets'),
+    'no_image'              => env('NO_IMAGE', 'https://default.com/admin/assets'),
+    'no_image_avatar'       => env('NO_IMAGE_AVATAR', 'https://default.com/admin/assets'),
 
 ];

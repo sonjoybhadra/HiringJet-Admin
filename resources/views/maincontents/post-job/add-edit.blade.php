@@ -108,13 +108,15 @@ $controllerRoute = $module['controller_route'];
                 $gender                             = $row->gender;
                 $open_position_number               = $row->open_position_number;
                 $contract_type                      = $row->contract_type;
+                $designation                        = $row->designation;
+                $functional_area                    = $row->functional_area;
+                $min_exp_year                       = $row->min_exp_year;
+                $max_exp_year                       = $row->max_exp_year;
 
                 $job_description                    = $row->job_description;
                 $requirement                        = $row->requirement;
-                $department                         = $row->department;
-                $functional_area                    = $row->functional_area;
                 $skill_ids                          = (($row->skill_ids != '')?json_decode($row->skill_ids):[]);
-                $experience_level                   = $row->experience_level;
+                // $experience_level                   = $row->experience_level;
                 $expected_close_date                = $row->expected_close_date;
                 $currency                           = $row->currency;
                 $min_salary                         = $row->min_salary;
@@ -123,8 +125,8 @@ $controllerRoute = $module['controller_route'];
                 $posting_open_date                  = $row->posting_open_date;
                 $posting_close_date                 = $row->posting_close_date;
 
-                $apply_on_email                     = $row->apply_on_email;
                 $application_through                = $row->application_through;
+                $apply_on_email                     = $row->apply_on_email;
                 $apply_on_link                      = $row->apply_on_link;
                 $walkin_address1                    = $row->walkin_address1;
                 $walkin_address2                    = $row->walkin_address2;
@@ -146,13 +148,15 @@ $controllerRoute = $module['controller_route'];
                 $gender                             = '';
                 $open_position_number               = '';
                 $contract_type                      = '';
+                $designation                        = '';
+                $functional_area                    = '';
+                $min_exp_year                       = '';
+                $max_exp_year                       = '';
 
                 $job_description                    = '';
                 $requirement                        = '';
-                $department                         = '';
-                $functional_area                    = '';
                 $skill_ids                          = [];
-                $experience_level                   = '';
+                // $experience_level                   = '';
                 $expected_close_date                = '';
                 $currency                           = '';
                 $min_salary                         = '';
@@ -161,8 +165,8 @@ $controllerRoute = $module['controller_route'];
                 $posting_open_date                  = '';
                 $posting_close_date                 = '';
 
+                $application_through                = 'Hiring Jet';
                 $apply_on_email                     = '';
-                $application_through                = '';
                 $apply_on_link                      = '';
                 $walkin_address1                    = '';
                 $walkin_address2                    = '';
@@ -320,6 +324,44 @@ $controllerRoute = $module['controller_route'];
                                         </select>
                                     </div>
 
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="designation">Designation</label>
+                                        <select class="select2" id="designation" name="designation">
+                                            <option label="" selected></option>
+                                            <?php if($designations){ foreach($designations as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=(($designation == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="functional_area">Functional Area</label>
+                                        <select class="select2" id="functional_area" name="functional_area">
+                                            <option label="" selected></option>
+                                            <?php if($functionalareas){ foreach($functionalareas as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=(($functional_area == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="min_exp_year">Min Experience</label>
+                                        <select class="select2" id="min_exp_year" name="min_exp_year">
+                                            <option label="" selected></option>
+                                            <?php for($i=0;$i<=25;$i++){?>
+                                                <option value="<?=$i?>" <?=(($min_exp_year == $i)?'selected':'')?>><?=$i?> Years</option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="max_exp_year">Max Experience</label>
+                                        <select class="select2" id="max_exp_year" name="max_exp_year">
+                                            <option label="" selected></option>
+                                            <?php for($i=0;$i<=25;$i++){?>
+                                                <option value="<?=$i?>" <?=(($max_exp_year == $i)?'selected':'')?>><?=$i?> Years</option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+
                                     <div class="col-12 d-flex justify-content-between">
                                         <button class="btn btn-label-secondary btn-prev" disabled>
                                             <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
@@ -347,28 +389,9 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="requirement">Requirements</label>
                                         <textarea id="ckeditor2" name="requirement" class="form-control" placeholder="Requirements" rows="5"><?=$requirement?></textarea>
-                                    </div>
+                                    </div>                                    
 
                                     <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="department">Department</label>
-                                        <select class="select2" id="department" name="department">
-                                            <option label="" selected></option>
-                                            <?php if($departments){ foreach($departments as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=(($department == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="functional_area">Functional Area</label>
-                                        <select class="select2" id="functional_area" name="functional_area">
-                                            <option label="" selected></option>
-                                            <?php if($functionalareas){ foreach($functionalareas as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=(($functional_area == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="skill_ids">Skills</label>
                                         <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
@@ -376,16 +399,7 @@ $controllerRoute = $module['controller_route'];
                                             <?php } }?>
                                         </select>
                                     </div>
-
-                                    <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="experience_level">Experience Level</label>
-                                        <select class="select2" id="experience_level" name="experience_level">
-                                            <option label="" selected></option>
-                                            <?php if($experiences){ foreach($experiences as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=(($experience_level == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
-                                    </div>
+                                    
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="expected_close_date">Expected Close Date</label>
                                         <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" />
@@ -399,7 +413,7 @@ $controllerRoute = $module['controller_route'];
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4 mb-3">
+                                    <div class="col-sm-4 mb-3 salary">
                                         <label class="form-label" for="currency">Currency</label>
                                         <select class="select2" id="currency" name="currency">
                                             <option label="" selected></option>
@@ -445,19 +459,22 @@ $controllerRoute = $module['controller_route'];
                                     <small>Enter Your Step 3.</small>
                                 </div>
                                 <div class="row g-6 mt-3" id="step3">
-                                    <div class="col-sm-4 mb-3">
-                                        <label class="form-label" for="apply_on_email">Apply To (Email)</label>
-                                        <input type="text" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?=$apply_on_email?>" />
-                                    </div>
-                                    <div class="col-sm-4 mb-3">
+                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="application_through">Accept Application Through</label><br>
                                         <input type="radio" name="application_through" id="application_through1" value="Hiring Jet" <?=(($application_through == 'Hiring Jet')?'checked':'')?> />
                                         <label for="application_through1">Hiring Jet</label>
 
-                                        <input type="radio" name="application_through" id="application_through2" value="Externally" <?=(($application_through == 'Externally')?'checked':'')?> />
-                                        <label for="application_through2">Externally</label>
+                                        <input type="radio" name="application_through" id="application_through2" value="Apply To Email" <?=(($application_through == 'Apply To Email')?'checked':'')?> />
+                                        <label for="application_through2">Apply To Email</label>
+
+                                        <input type="radio" name="application_through" id="application_through3" value="Apply To Link" <?=(($application_through == 'Apply To Link')?'checked':'')?> />
+                                        <label for="application_through3">Apply To Link</label>
                                     </div>
-                                    <div class="col-sm-4 mb-3">
+                                    <div class="col-sm-12 mb-3" id="apply_on_email_row" style="display:none;">
+                                        <label class="form-label" for="apply_on_email">Apply To (Email)</label>
+                                        <input type="text" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?=$apply_on_email?>" />
+                                    </div>
+                                    <div class="col-sm-12 mb-3" id="apply_on_link_row" style="display:none;">
                                         <label class="form-label" for="apply_on_link">Apply To (Link)</label>
                                         <input type="text" name="apply_on_link" id="apply_on_link" class="form-control" placeholder="Apply To (Link)" value="<?=$apply_on_link?>" />
                                     </div>
@@ -517,17 +534,17 @@ $controllerRoute = $module['controller_route'];
 @endsection
 @section('scripts')
     <!-- Vendors JS -->
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/select2/select2.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/popular.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/select2/select2.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/@form-validation/popular.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
 
     <!-- Page JS -->
 
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-numbered.js"></script>
-    <script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/form-wizard-validation.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/js/form-wizard-numbered.js"></script>
+    <script src="<?=config('constants.admin_assets_url')?>assets/js/form-wizard-validation.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
     <script>
         $(document).ready(function () {
@@ -537,12 +554,42 @@ $controllerRoute = $module['controller_route'];
             } else {
                 $('.salary').show(); // Show salary range if not negotiable
             }
-
             $('#is_salary_negotiable').change(function () {
                 if ($(this).is(':checked')) {
                     $('.salary').hide(); // Hide salary range if negotiable
                 } else {
                     $('.salary').show(); // Show salary range if not negotiable
+                }
+            });
+
+            var application_through = '<?=$application_through?>';
+            // Hide all divs first
+            $('#apply_on_email_row, #apply_on_link_row').hide();
+            // Show based on selected value
+            if (application_through === 'Hiring Jet') {
+                $('#apply_on_email_row, #apply_on_link_row').hide();
+            } else if (application_through === 'Apply To Email') {
+                $('#apply_on_email_row').show();
+                $('#apply_on_link_row').hide();
+            } else if (application_through === 'Apply To Link') {
+                $('#apply_on_email_row').hide();
+                $('#apply_on_link_row').show();
+            }
+            $('input[name="application_through"]').change(function() {
+                var application_through = $(this).val();
+
+                // Hide all divs first
+                $('#apply_on_email_row, #apply_on_link_row').hide();
+
+                // Show based on selected value
+                if (application_through === 'Hiring Jet') {
+                    $('#apply_on_email_row, #apply_on_link_row').hide();
+                } else if (application_through === 'Apply To Email') {
+                    $('#apply_on_email_row').show();
+                    $('#apply_on_link_row').hide();
+                } else if (application_through === 'Apply To Link') {
+                    $('#apply_on_email_row').hide();
+                    $('#apply_on_link_row').show();
                 }
             });
         });

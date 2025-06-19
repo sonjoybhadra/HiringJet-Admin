@@ -304,6 +304,8 @@ class RegistrationController extends BaseApiController
                     'working_since_to_month'=> $request->working_since_to_month,
                     'is_current_job'=> 1,
                 ]);
+
+                $this->calculate_profile_completed_percentage($user->id, 'employment-details'); //Employment details completes
             }
 
             if($image_path != ""){
@@ -320,6 +322,9 @@ class RegistrationController extends BaseApiController
             }
             if(!empty($request->is_whatsapp)){
                 $this->calculate_profile_completed_percentage($user->id, 'whatsapp'); //WhatsApp completes
+            }
+            if(!empty($request->resume_headline)){
+                $this->calculate_profile_completed_percentage($user->id, 'cv-headline'); //CV headline completes
             }
 
             if(!empty($request->keyskills)){
@@ -405,7 +410,7 @@ class RegistrationController extends BaseApiController
                 $this->calculate_profile_completed_percentage($user->id, 'profile-summary'); //Profile Summary completes
             }
             if(!empty($preferred_designation)){
-                $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Education completes
+                $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Desired jobs
             }
             if(!empty($request->qualification)){
                 UserEducation::where('user_id', $user->id)->delete();

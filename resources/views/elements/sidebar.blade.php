@@ -34,7 +34,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
           fill="#7367F0" />
       </svg>
     </span> -->
-    <img src="<?=((Helper::getSettingValue('site_logo') != '')?env('APP_URL') . Helper::getSettingValue('site_logo'):env('NO_IMAGE'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block" style="margin-top: 10px;height: 50px;width: 150px;" />
+    <img src="<?=((Helper::getSettingValue('site_logo') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_logo'):config('constants.no_image'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block" style="margin-top: 10px;height: 50px;width: 150px;" />
     <!-- <span class="app-brand-text demo menu-text fw-bold"><?=Helper::getSettingValue('site_name')?></span> -->
   </a>
 
@@ -341,6 +341,22 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     <a href="<?=url('/post-job/list')?>" class="menu-link">
       <i class="menu-icon fa-solid fa-file-lines"></i>
       <div data-i18n="Jobs">Jobs</div>
+    </a>
+  </li>
+
+  <!-- Contact Us -->
+  <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
+    <a href="<?=url('/contact-us/list')?>" class="menu-link">
+      <i class="menu-icon fa-solid fa-file-lines"></i>
+      <div data-i18n="Contact Us">Contact Us</div>
+    </a>
+  </li>
+
+  <!-- Report Bugs -->
+  <li class="menu-item <?=(($pageSegment == 'report-bugs')?'active':'')?>">
+    <a href="<?=url('/report-bugs/list')?>" class="menu-link">
+      <i class="menu-icon fa-solid fa-file-lines"></i>
+      <div data-i18n="Report Bugs">Report Bugs</div>
     </a>
   </li>
 

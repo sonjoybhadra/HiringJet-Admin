@@ -39,9 +39,9 @@ $controllerRoute = $module['controller_route'];
                   'containerId' => 'table1',
                   'searchId' => 'search1',
                   'table' => 'online_profiles',
-                  'columns' => ['name', 'logo', 'created_at', 'status'],
-                  'visibleColumns' => ['name', 'logo', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Name', 'Logo', 'Created At'],
+                  'columns' => ['name', 'created_at', 'status'],
+                  'visibleColumns' => ['name', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Name', 'Created At'],
                   'filename' => "Online_Profile",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
@@ -60,5 +60,5 @@ $controllerRoute = $module['controller_route'];
 </div>
 @endsection
 @section('scripts')
-<script src="<?=env('ADMIN_ASSETS_URL')?>assets/js/table.js"></script>
+<script src="<?=config('constants.admin_assets_url')?>assets/js/table.js"></script>
 @endsection

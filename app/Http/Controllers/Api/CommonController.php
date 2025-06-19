@@ -530,10 +530,16 @@ class CommonController extends BaseApiController
                     ->latest()->first();
         // Decode the JSON into a PHP array
         $data = json_decode($list->section4, true);
-
         // Decode the country string (which is itself a JSON array) into an actual PHP array
         $country_id_array = json_decode($data['country'], true);
-        $list->country_list = Country::select('id', 'name', 'country_short_code')->whereIn('id', $country_id_array)->get();
+        $list->country_list = Country::select('id', 'name', 'country_short_code')
+                                    ->whereIn('id', $country_id_array)
+                                    ->get();
+
+        $city_id_array = json_decode($data['city'], true);
+        $list->city_list = City::select('id', 'name')
+                                ->whereIn('id', $city_id_array)
+                                ->get();
         return $this->sendResponse(
             $list,
             'Home page details'
@@ -567,6 +573,30 @@ class CommonController extends BaseApiController
         return $this->sendResponse(
             $data,
             'Testimonials details'
+        );
+    }
+
+    public function get_designation_by_param(Request $request)
+    {
+        $sql = Designation::select('id', 'name')->where('status', 1);
+        if(!empty($request->key)){
+            $sql->where('name', 'ILIKE',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
+        );
+    }
+
+    public function get_industry_by_param(Request $request)
+    {
+        $sql = Industry::select('id', 'name')->where('status', 1);
+        if(!empty($request->key)){
+            $sql->where('name', 'ILIKE',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
         );
     }
 

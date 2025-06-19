@@ -83,7 +83,7 @@ class BlogController extends Controller
                         'short_description'             => strip_tags($postData['short_description']),
                         'long_description'              => strip_tags($postData['long_description']),
                         'upload_date'                   => date_format(date_create($postData['upload_date']), "Y-m-d"),
-                        'blog_image'                    => env('UPLOADS_URL_PATH') . $upload_folder . '/' . $blog_image,
+                        'blog_image'                    => 'uploads/' . $upload_folder . '/' . $blog_image,
                         'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Blog::insert($fields);
@@ -123,7 +123,7 @@ class BlogController extends Controller
                             $uploadedFile   = $this->upload_single_file('blog_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $blog_image = $uploadedFile['newFilename'];
-                                $blogImage = env('UPLOADS_URL_PATH') . $upload_folder . '/' . $blog_image;
+                                $blogImage = 'uploads/' . $upload_folder . '/' . $blog_image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }

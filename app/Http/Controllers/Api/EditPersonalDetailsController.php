@@ -99,7 +99,7 @@ class EditPersonalDetailsController extends BaseApiController
                     ]);
                 }
             }
-
+            $this->calculate_profile_completed_percentage(auth()->user()->id, 'personal-details'); //Personal details completes
             return $this->sendResponse([
                 'personal_details'=> UserProfile::where('user_id', auth()->user()->id)
                                             ->with('marital_statuse')

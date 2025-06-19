@@ -6,11 +6,15 @@ use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Mail\NotificationEmail;
 
 use App\Models\PostJob;
 use App\Models\PostJobUserApplied;
+use App\Models\ShortlistedJob;
+use App\Models\UserEmployment;
 
 class JobSearchController extends BaseApiController
 {
@@ -20,7 +24,13 @@ class JobSearchController extends BaseApiController
     public function getJobsByParams(Request $request, $job_type)
     {
         try {
-            $sql = PostJob::where('job_type', $job_type);
+            $sql = PostJob::select('post_jobs.*')->where('job_type', $job_type);
+            if(Auth::guard('api')->check()){
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+            }
+
             if(!empty($request->country)){
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
@@ -55,7 +65,7 @@ class JobSearchController extends BaseApiController
                 $sql->whereIn('employer_id', $request->employer);
             }
             if(!empty($request->experience)){
-                $sql->whereIn('experience_level', $request->experience);
+                $sql->whereIn('min_exp_year', $request->experience);
             }
             if(!empty($request->gender)){
                 $sql->where('gender', $request->gender);
@@ -63,16 +73,16 @@ class JobSearchController extends BaseApiController
             if(!empty($request->freshness)){
                 $sql->where('created_at', '>=', date('Y-m-d', strtotime('-'.$request->freshness.' days')));
             }
-            if(!empty($request->salary)){
+            /* if(!empty($request->salary)){
                 $sql->whereRaw('? BETWEEN min_salary AND max_salary', [$request->salary]);
-            }
+            } */
             $sql->with('employer');
             $sql->with('industryRelation');
             $sql->with('jobCategory');
             $sql->with('nationalityRelation');
-            $sql->with('departmentRelation');
+            $sql->with('contractType');
+            $sql->with('designationRelation');
             $sql->with('functionalArea');
-            $sql->with('experienceLevel');
             // $sql->with('applied_users');
             $sql->latest();
             return $this->sendResponse(
@@ -87,16 +97,21 @@ class JobSearchController extends BaseApiController
     public function getJobDetails(Request $request, $job_type, $slug)
     {
         try {
+            $sql = PostJob::select('post_jobs.*')->where('job_no', $slug)
+                            ->with('employer')
+                            ->with('industryRelation')
+                            ->with('jobCategory')
+                            ->with('nationalityRelation')
+                            ->with('contractType')
+                            ->with('designationRelation')
+                            ->with('functionalArea');
+            if(Auth::guard('api')->check()){
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+            }
             return $this->sendResponse(
-                PostJob::where('job_no', $slug)
-                        ->with('employer')
-                        ->with('industryRelation')
-                        ->with('jobCategory')
-                        ->with('nationalityRelation')
-                        ->with('departmentRelation')
-                        ->with('functionalArea')
-                        ->with('experienceLevel')
-                        ->first(),
+                $sql->first(),
                 'Job details'
             );
         } catch (\Exception $e) {
@@ -127,7 +142,7 @@ class JobSearchController extends BaseApiController
                     ]);
 
                     $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
-                    //Mail::to(auth()->user()->email)->send(new NotificationEmail('Job applied successfully.', $full_name, 'You have applied for this job successfully.'));
+                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Job applied successfully.', $full_name, 'You have applied for this job successfully.'));
                     return $this->sendResponse(
                         ['applied_job_id'=> $applied_job_id],
                         'Applied Jobs list'
@@ -146,15 +161,145 @@ class JobSearchController extends BaseApiController
     public function jobseekerAppliedJobs(Request $request)
     {
         try{
-            $data = PostJobUserApplied::where('user_id', auth()->user()->id)
-                                        ->with('job_details')
-                                        ->latest()->get();
+            $job_ids = PostJobUserApplied::select('job_id')->where('user_id', auth()->user()->id)
+                                            ->get()->pluck('job_id')->toArray();
+            $data = [];
+            if(count($job_ids)){
+                $data = PostJob::whereIn('id', $job_ids)
+                            ->with('employer')
+                            ->with('industryRelation')
+                            ->with('jobCategory')
+                            ->with('nationalityRelation')
+                            ->with('contractType')
+                            ->with('designationRelation')
+                            ->with('functionalArea')
+                            ->latest()->get();
+            }
             return $this->sendResponse(
                 $data,
                 'Applied Jobs list'
             );
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function shortlistedJob(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $job_details = PostJob::find($request->job_id);
+            if($job_details && $job_details->posting_close_date >= date('Y-m-d')){
+                $has_data = ShortlistedJob::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->first();
+                if(!$has_data){
+                    ShortlistedJob::create([
+                        'job_id'=> $request->job_id,
+                        'user_id'=> auth()->user()->id,
+                        'status'=> 1,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    ]);
+
+                    $msg = 'Job shortlisted successfully.';
+                    $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
+                }else{
+                    if($has_data->status == 1){
+                        $update_date = [
+                            'status'=> 0,
+                            'deleted_at'=> date('Y-m-d H:i:s')
+                        ];
+                        $msg = 'Removed job from shortlisted.';
+                    }else{
+                        $update_date = [
+                            'status'=> 1,
+                            'deleted_at'=> null
+                        ];
+                        $msg = 'Job shortlisted successfully.';
+                        $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                        Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
+                    }
+                    $update_date['updated_at'] = date('Y-m-d H:i:s');
+                    ShortlistedJob::where('id', $has_data->id)->update($update_date);
+                }
+                return $this->sendResponse(
+                    ShortlistedJob::where('user_id', auth()->user()->id)->where('status', 1)->with('job_details')->latest()->get(),
+                    $msg
+                );
+            }else{
+                return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
+            }
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getShortlistedJob(Request $request)
+    {
+        try{
+            $job_ids = ShortlistedJob::select('job_id')->where('user_id', auth()->user()->id)
+                                        ->get()->pluck('job_id')->toArray();
+            $data = [];
+            if(count($job_ids)){
+                $data = PostJob::whereIn('id', $job_ids)
+                            ->with('employer')
+                            ->with('industryRelation')
+                            ->with('jobCategory')
+                            ->with('nationalityRelation')
+                            ->with('contractType')
+                            ->with('designationRelation')
+                            ->with('functionalArea')
+                            ->latest()->get();
+            }
+            return $this->sendResponse(
+                $data,
+                'Shortlisted Jobs list'
+            );
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getMatchedJobsForJobseeker(Request $request)
+    {
+        try {
+            $jobseeker_designation = UserEmployment::select('last_designation')
+                                                    ->where('user_id', auth()->user()->id)
+                                                    ->orderBy('is_current_job', 'DESC')
+                                                    ->first();
+
+            $sql = PostJob::select('post_jobs.*');
+            if(Auth::guard('api')->check()){
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+            }
+
+            if($jobseeker_designation){
+                $sql->where('designation', $jobseeker_designation->last_designation);
+            }
+
+            $sql->with('employer');
+            $sql->with('industryRelation');
+            $sql->with('jobCategory');
+            $sql->with('nationalityRelation');
+            $sql->with('contractType');
+            $sql->with('designationRelation');
+            $sql->with('functionalArea');
+            // $sql->with('applied_users');
+            $sql->latest();
+            return $this->sendResponse(
+                $sql->get(),
+                'Matched Job list'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
         }
     }
 

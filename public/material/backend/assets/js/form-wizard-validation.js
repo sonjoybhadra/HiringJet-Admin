@@ -33,15 +33,6 @@
           validators: {
             notEmpty: {
               message: 'Position Name is required'
-            },
-            stringLength: {
-              min: 6,
-              max: 30,
-              message: 'Position Name must be more than 6 and less than 30 characters long'
-            },
-            regexp: {
-              regexp: /^[a-zA-Z0-9 ]+$/,
-              message: 'Position Name can only consist of alphabetical, number and space'
             }
           }
         },
@@ -98,6 +89,27 @@
           validators: {
             notEmpty: {
               message: 'Contract Type is required'
+            }
+          }
+        },
+        designation: {
+          validators: {
+            notEmpty: {
+              message: 'Designation is required'
+            }
+          }
+        },
+        functional_area: {
+          validators: {
+            notEmpty: {
+              message: 'Functional Area is required'
+            }
+          }
+        },
+        min_exp_year: {
+          validators: {
+            notEmpty: {
+              message: 'Min Exp is required'
             }
           }
         }

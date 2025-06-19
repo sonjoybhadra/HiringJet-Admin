@@ -64,7 +64,7 @@ class EditEducationalDetailsController extends BaseApiController
                 'grade'=> $request->grade
                 // 'location_id' => $request->location,
             ]);
-
+            $this->calculate_profile_completed_percentage(auth()->user()->id, 'education'); //Education completes
             return $this->sendResponse([], 'Education details updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
@@ -105,7 +105,7 @@ class EditEducationalDetailsController extends BaseApiController
                 'grade'=> $request->grade
                 // 'location_id' => $request->location,
             ]);
-
+            $this->calculate_profile_completed_percentage(auth()->user()->id, 'education'); //Education completes
             return $this->sendResponse([], 'Education details added successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());

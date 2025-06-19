@@ -167,7 +167,7 @@ $controllerRoute = $module['controller_route'];
                                             <label class="form-label">Section 3 Box Image</label><br>
                                             <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                             <?php if(!empty($section3_box_image)) { if($section3_box_image[$k] != ''){?>
-                                                <img src="<?=(($section3_box_image[$k] != '')?env('APP_URL') . $section3_box_image[$k]:env('NO_IMAGE'))?>" alt="<?=$section3_box_text[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                <img src="<?=(($section3_box_image[$k] != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section3_box_image[$k]:config('constants.no_image'))?>" alt="<?=$section3_box_text[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
                                             <?php } }?>
                                         </div>
                                         <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
@@ -244,7 +244,7 @@ $controllerRoute = $module['controller_route'];
                                             <label class="form-label">Section 5 Box Image</label><br>
                                             <input type="file" class="account-file-input" name="section5_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                             <?php if(!empty($section5_box_image)) { if($section5_box_image[$k] != ''){?>
-                                                <img src="<?=(($section5_box_image[$k] != '')?env('APP_URL') . $section5_box_image[$k]:env('NO_IMAGE'))?>" alt="<?=$section5_box_name[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                <img src="<?=(($section5_box_image[$k] != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_box_image[$k]:config('constants.no_image'))?>" alt="<?=$section5_box_name[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
                                             <?php } }?>
                                         </div>
                                         <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
@@ -326,7 +326,7 @@ $controllerRoute = $module['controller_route'];
                                             <label class="form-label">Section 7 Box Image</label><br>
                                             <input type="file" class="account-file-input" name="section7_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                             <?php if(!empty($section7_box_image)) { if($section7_box_image[$k] != ''){?>
-                                                <img src="<?=(($section7_box_image[$k] != '')?env('APP_URL') . $section7_box_image[$k]:env('NO_IMAGE'))?>" alt="<?=$section7_box_name[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                <img src="<?=(($section7_box_image[$k] != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section7_box_image[$k]:config('constants.no_image'))?>" alt="<?=$section7_box_name[$k]?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
                                             <?php } }?>
                                         </div>
                                         <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
@@ -427,7 +427,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <img src="<?=(($section10_image1 != '')?env('APP_URL') . $section10_image1:env('NO_IMAGE'))?>" alt="<?=$section10_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($section10_image1 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section10_image1:config('constants.no_image'))?>" alt="<?=$section10_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
@@ -451,7 +451,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <img src="<?=(($section10_image2 != '')?env('APP_URL') . $section10_image2:env('NO_IMAGE'))?>" alt="<?=$section10_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($section10_image2 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section10_image2:config('constants.no_image'))?>" alt="<?=$section10_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
@@ -475,7 +475,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <img src="<?=(($section10_image3 != '')?env('APP_URL') . $section10_image3:env('NO_IMAGE'))?>" alt="<?=$section10_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            <img src="<?=(($section10_image3 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section10_image3:config('constants.no_image'))?>" alt="<?=$section10_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
                     </div>
                     <hr class="mt-2">

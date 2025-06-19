@@ -68,7 +68,7 @@ function loadTable(config) {
                 const val = row[col] ?? '';
 
                 if (config.imageColumns && config.imageColumns.includes(col)) {
-                    const imageUrl = baseUrl + val || 'https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg';
+                    const imageUrl = ((val != '')?baseUrl + val:'https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg');
                     html += `<td>
                         <a href="${imageUrl}" data-lightbox="table-images" data-title="${row.name ?? ''}">
                             <img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" style="width: 75px; height: 50px; cursor: zoom-in;">

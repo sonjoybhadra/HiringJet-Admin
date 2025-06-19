@@ -21,6 +21,7 @@ use App\Models\FunctionalArea;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
+use App\Models\Designation;
 use Auth;
 use Session;
 use Hash;
@@ -150,13 +151,15 @@ class PostJobController extends Controller
                         'gender'                    => $postData['gender'],
                         'open_position_number'      => strip_tags($postData['open_position_number']),
                         'contract_type'             => strip_tags($postData['contract_type']),
+                        'designation'               => $postData['designation'],
+                        'functional_area'           => $postData['functional_area'],
+                        'min_exp_year'              => $postData['min_exp_year'],
+                        'max_exp_year'              => $postData['max_exp_year'],
                         'job_description'           => $postData['job_description'],
                         'requirement'               => $postData['requirement'],
-                        'department'                => $postData['department'],
-                        'functional_area'           => $postData['functional_area'],
                         'skill_ids'                 => ((!empty($skill_ids))?$skill_ids:''),
                         'skill_names'               => ((!empty($skill_names))?json_encode($skill_names):''),
-                        'experience_level'          => $postData['experience_level'],
+                        // 'experience_level'          => $postData['experience_level'],
                         'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):''),
                         'currency'                  => $postData['currency'],
                         'min_salary'                => (($postData['min_salary'] != '')?$postData['min_salary']:0),
@@ -164,8 +167,8 @@ class PostJobController extends Controller
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
                         'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):''),
                         'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):''),
-                        'apply_on_email'            => strip_tags($postData['apply_on_email']),
                         'application_through'       => strip_tags($postData['application_through']),
+                        'apply_on_email'            => strip_tags($postData['apply_on_email']),
                         'apply_on_link'             => strip_tags($postData['apply_on_link']),
                         'walkin_address1'           => strip_tags($postData['walkin_address1']),
                         'walkin_address2'           => strip_tags($postData['walkin_address2']),
@@ -199,7 +202,7 @@ class PostJobController extends Controller
             $data['currencies']             = Country::select('id', 'name', 'currency_code')->where('status', 1)->where('currency_code', '!=', '')->orderBy('name', 'ASC')->get();
             $data['industries']             = Industry::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['departments']            = Department::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
@@ -221,7 +224,7 @@ class PostJobController extends Controller
             $data['currencies']             = Country::select('id', 'name', 'currency_code')->where('status', 1)->where('currency_code', '!=', '')->orderBy('name', 'ASC')->get();
             $data['industries']             = Industry::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['departments']            = Department::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             if($request->isMethod('post')){
                 $postData = $request->all();
@@ -305,13 +308,15 @@ class PostJobController extends Controller
                         'gender'                    => $postData['gender'],
                         'open_position_number'      => strip_tags($postData['open_position_number']),
                         'contract_type'             => strip_tags($postData['contract_type']),
+                        'designation'               => $postData['designation'],
+                        'functional_area'           => $postData['functional_area'],
+                        'min_exp_year'              => $postData['min_exp_year'],
+                        'max_exp_year'              => $postData['max_exp_year'],
                         'job_description'           => $postData['job_description'],
                         'requirement'               => $postData['requirement'],
-                        'department'                => $postData['department'],
-                        'functional_area'           => $postData['functional_area'],
                         'skill_ids'                 => ((!empty($skill_ids))?$skill_ids:''),
                         'skill_names'               => ((!empty($skill_names))?json_encode($skill_names):''),
-                        'experience_level'          => $postData['experience_level'],
+                        // 'experience_level'          => $postData['experience_level'],
                         'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):''),
                         'currency'                  => $postData['currency'],
                         'min_salary'                => (($postData['min_salary'] != '')?$postData['min_salary']:0),
@@ -319,8 +324,8 @@ class PostJobController extends Controller
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
                         'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):''),
                         'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):''),
-                        'apply_on_email'            => strip_tags($postData['apply_on_email']),
                         'application_through'       => strip_tags($postData['application_through']),
+                        'apply_on_email'            => strip_tags($postData['apply_on_email']),
                         'apply_on_link'             => strip_tags($postData['apply_on_link']),
                         'walkin_address1'           => strip_tags($postData['walkin_address1']),
                         'walkin_address2'           => strip_tags($postData['walkin_address2']),
