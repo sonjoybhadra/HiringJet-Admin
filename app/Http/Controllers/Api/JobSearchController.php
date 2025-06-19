@@ -36,7 +36,7 @@ class JobSearchController extends BaseApiController
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
                     foreach ($countrys as $tag) {
-                        $q->orWhereJsonContains('location_countries', $tag);
+                        $q->orWhereJsonContains('location_countries', (string)$tag);
                     }
                 });
             }
@@ -44,7 +44,7 @@ class JobSearchController extends BaseApiController
                 $citys = $request->city;
                 $sql->where(function ($q) use ($citys) {
                     foreach ($citys as $tag) {
-                        $q->orWhereJsonContains('location_cities', $tag);
+                        $q->orWhereJsonContains('location_cities', (string)$tag);
                     }
                 });
             }
@@ -52,9 +52,12 @@ class JobSearchController extends BaseApiController
                 $skills = $request->skills;
                 $sql->where(function ($q) use ($skills) {
                     foreach ($skills as $tag) {
-                        $q->orWhereJsonContains('skill_ids', $tag);
+                        $q->orWhereJsonContains('skill_ids', (string)$tag);
                     }
                 });
+            }
+            if($request->designation){
+                $sql->where('designation', $request->designation);
             }
             if(!empty($request->industry)){
                 $sql->whereIn('industry', $request->industry);
@@ -288,15 +291,10 @@ class JobSearchController extends BaseApiController
                 $sql->where('designation', $jobseeker_designation->last_designation);
             }
             if(!empty($user_skills)){
-                // $sql->orWhere(function ($q) use ($user_skills) {
-                    foreach ($user_skills as $tag) {
-                        $sql->orWhereJsonContains('skill_ids', (string)$tag);
-                    }
-                // });
-
-                // $sql->orWhereRaw("skill_ids @> '$user_skills'")->get();
+                foreach ($user_skills as $tag) {
+                    $sql->orWhereJsonContains('skill_ids', (string)$tag);
+                }
             }
-            echo $sql->toSql();
             $sql->with('employer');
             $sql->with('industryRelation');
             $sql->with('jobCategory');
