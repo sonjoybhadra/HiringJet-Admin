@@ -295,7 +295,7 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
-            echo $sql->toArray();
+            echo $sql->toSql();
             $sql->with('employer');
             $sql->with('industryRelation');
             $sql->with('jobCategory');
