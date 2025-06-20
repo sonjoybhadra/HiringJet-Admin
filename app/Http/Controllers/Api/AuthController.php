@@ -16,6 +16,8 @@ use Validator;
 use App\Models\User;
 use App\Models\UserEmployment;
 use App\Models\Designation;
+use App\Models\ShortlistedJob;
+use App\Models\PostJobUserApplied;
 
 class AuthController extends BaseApiController
 {
@@ -109,6 +111,9 @@ class AuthController extends BaseApiController
         }
         $data->current_designation = $user_employment ? Designation::find($user_employment->last_designation) : [];
         $data->current_company = $user_employment ? $user_employment->employer : [];
+        $data->shortlisted_jobs_count = ShortlistedJob::where('user_id', auth()->user()->id)->count();
+        $data->applied_jobs_count = PostJobUserApplied::where('user_id', auth()->user()->id)->count();
+        $data->job_alerts_count = 0;
         try {
             return $this->sendResponse(
                 $data,
