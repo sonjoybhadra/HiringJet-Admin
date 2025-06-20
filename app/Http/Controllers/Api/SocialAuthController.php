@@ -221,7 +221,6 @@ class SocialAuthController extends BaseApiController
                 'user_email' => $socialUser['email'],
                 'user_name' => $socialUser['name'],
             ]);
-            dd($socialUser);
             // Extract user data (normalized format)
             $email = $socialUser['email'];
             $providerId = $socialUser['id'];
@@ -412,7 +411,7 @@ class SocialAuthController extends BaseApiController
             'provider_id' => $providerId,
 
             'country_code' => '+971',
-            'phone' => 'required|max:15|unique:users',
+            'phone' => '0000000000',
         ];
 
         // Add provider-specific ID
@@ -424,12 +423,15 @@ class SocialAuthController extends BaseApiController
 
         $user = User::create($userData);
 
+        $this->calculate_profile_completed_percentage($user->id, 'full-name'); //Full name completes
         // Create user profile
         UserProfile::create([
             'user_id' => $user->id,
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
+            'country_code' => '+971',
+            'phone' => '0000000000',
             'profile_picture' => $avatar,
             'completed_steps' => 1, // Set initial completion step
         ]);
