@@ -9,6 +9,7 @@ $controllerRoute = $module['controller_route'];
       <h4><?=$page_header?></h4>
       <h6 class="breadcrumb-wrapper">
          <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span>
+         <span class="text-muted fw-light"><a href="<?=url($controllerRoute . '/list/')?>"><?=$module['title']?> List</a> /</span>
          <?=$page_header?>
       </h6>
       <div class="nav-align-top mb-4">
@@ -29,30 +30,29 @@ $controllerRoute = $module['controller_route'];
             </div>
          <?php }?>
          <div class="card mb-4">
-            <div class="card-header">
-                <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
-            </div>
             <div class="card-body">
-               <div id="table-overlay-loader" class="text-loader">
-                  Fetching data. Please wait <span id="dot-animation">.</span>
-               </div>
-                @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'post_jobs',
-                'columns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'status'],
-                'visibleColumns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at'],    // used for rendering
-                'headers' => ['#', 'Job No.', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At'],
-                'filename' => "Job",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
-                ],
-                'routePrefix' => 'post-job',
-                'showActions' => true, // set to false to hide actions
-                'statusColumn' => 'status' // optional, defaults to 'is_active'
-                ])
+                <table id="simpletable" class="table table-striped table-bordered nowrap">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Applied Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if(count($jobApplications)>0){ $sl=1; foreach($jobApplications as $jobApplication){?>
+                            <tr>
+                                <th scope="row"><?=$sl++?></th>
+                                <td><?=$jobApplication->first_name.' '.$jobApplication->last_name?></td>
+                                <td><?=$jobApplication->email?></td>
+                                <td><?=$jobApplication->phone?></td>
+                                <td><?=$jobApplication->created_at?></td>
+                            </tr>
+                        <?php } }?>
+                    </tbody>
+                    </table>
             </div>
         </div>
       </div>

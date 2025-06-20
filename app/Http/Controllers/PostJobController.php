@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\PostJob;
+use App\Models\PostJobUserApplied;
+use App\Models\ShortlistedJob;
 use App\Models\Employer;
 use App\Models\Country;
 use App\Models\City;
@@ -427,15 +429,39 @@ class PostJobController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
-    public function getCitiesByCountries(Request $request)
-    {
-        $countryIds = $request->input('country_ids', []);
+    /* get country wise city */
+        public function getCitiesByCountries(Request $request)
+        {
+            $countryIds = $request->input('country_ids', []);
 
-        if (!empty($countryIds)) {
-            $cities = City::whereIn('country_id', $countryIds)->get(['id', 'name']);
-            return response()->json($cities);
+            if (!empty($countryIds)) {
+                $cities = City::whereIn('country_id', $countryIds)->get(['id', 'name']);
+                return response()->json($cities);
+            }
+
+            return response()->json([]);
         }
-
-        return response()->json([]);
-    }
+    /* get country wise city */
+    /* job applications */
+        public function applications(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $page_name                      = 'post-job.application-list';
+            $data['row']                    = PostJob::where('id', '=', $id)->first();
+            $data['job_id']                 = $id;
+            $position_name                  = (($data['row'])?$data['row']->position_name:'');
+            $job_no                         = (($data['row'])?$data['row']->job_no:'');
+            $title                          = $this->data['title'].' Applications : '.$position_name.' ('.$job_no.')';
+            $data['jobApplications']        = DB::table('post_job_user_applieds')
+                                                ->join('users', 'post_job_user_applieds.user_id', '=', 'users.id')
+                                                ->select('post_job_user_applieds.*', 'users.first_name', 'users.last_name', 'users.email', 'users.phone')
+                                                ->where('post_job_user_applieds.status', '=', 1)
+                                                ->where('post_job_user_applieds.job_id', '=', $id)
+                                                ->orderBy('post_job_user_applieds.id', 'DESC')
+                                                ->get();
+            
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* job applications */
 }

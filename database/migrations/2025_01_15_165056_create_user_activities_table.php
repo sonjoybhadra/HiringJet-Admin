@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_email', 100)->nullable();
             $table->string('user_name', 100)->nullable();
-            $table->enum('user_type', ['ADMIN', 'USER']);
+            $table->enum('user_type', ['ADMIN', 'JOBSEEKER', 'EMPLOYER']);
             $table->string('ip_address', 50);
             $table->tinyInteger('activity_type')->comment('0=>failed login, 1=>success login, 2=>logout');
             $table->longText('activity_details');
