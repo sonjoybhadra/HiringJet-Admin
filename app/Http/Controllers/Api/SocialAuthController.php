@@ -421,7 +421,7 @@ class SocialAuthController extends BaseApiController
         } elseif ($provider === 'google') {
             $userData['google_id'] = $providerId;
         }
-
+        \Log::info("createNewUser:Creating new user for {$provider} with data:", $userData);
         $user = User::create($userData);
 
         $this->calculate_profile_completed_percentage($user->id, 'full-name'); //Full name completes
