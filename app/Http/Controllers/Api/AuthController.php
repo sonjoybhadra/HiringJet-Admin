@@ -18,6 +18,7 @@ use App\Models\UserEmployment;
 use App\Models\Designation;
 use App\Models\ShortlistedJob;
 use App\Models\PostJobUserApplied;
+use App\Models\PostJob;
 
 class AuthController extends BaseApiController
 {
@@ -114,6 +115,10 @@ class AuthController extends BaseApiController
         $data->shortlisted_jobs_count = ShortlistedJob::where('user_id', auth()->user()->id)->count();
         $data->applied_jobs_count = PostJobUserApplied::where('user_id', auth()->user()->id)->count();
         $data->job_alerts_count = 0;
+        $postJobObj = new PostJob();
+        $jobSql = $postJobObj->get_job_search_custom_sql();
+        $data->matched_jobs_count = $jobSql->count();
+
         try {
             return $this->sendResponse(
                 $data,

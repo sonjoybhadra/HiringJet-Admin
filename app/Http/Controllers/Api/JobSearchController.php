@@ -273,7 +273,7 @@ class JobSearchController extends BaseApiController
     public function getMatchedJobsForJobseeker(Request $request)
     {
         try {
-            $jobseeker_designation = UserEmployment::select('last_designation')
+            /* $jobseeker_designation = UserEmployment::select('last_designation')
                                                     ->where('user_id', auth()->user()->id)
                                                     ->orderBy('is_current_job', 'DESC')
                                                     ->first();
@@ -291,7 +291,9 @@ class JobSearchController extends BaseApiController
                 foreach ($user_skills as $tag) {
                     $sql->orWhereJsonContains('skill_ids', (string)$tag);
                 }
-            }
+            } */
+            $postJobObj = new PostJob();
+            $sql = $postJobObj->get_job_search_custom_sql();
             $sql->with('employer');
             $sql->with('industryRelation');
             $sql->with('jobCategory');
