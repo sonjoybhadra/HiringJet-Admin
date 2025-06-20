@@ -401,6 +401,7 @@ class SocialAuthController extends BaseApiController
     private function createNewUser($email, $provider, $providerId, $firstName, $lastName, $name, $avatar)
     {
         $userData = [
+            'role_id'=> env('JOB_SEEKER_ROLE_ID'),
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
