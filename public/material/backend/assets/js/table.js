@@ -109,6 +109,12 @@ function loadTable(config) {
                                 </a>`;
                 }
 
+                if(config.routePrefix == 'jobseeker'){
+                    html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
+                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
+                                </a>`;
+                }
+
                 html += `</td>`;
             }
 
