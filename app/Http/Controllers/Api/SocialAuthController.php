@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\BaseApiController as BaseApiController;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
@@ -220,7 +221,7 @@ class SocialAuthController extends BaseApiController
                 'user_email' => $socialUser['email'],
                 'user_name' => $socialUser['name'],
             ]);
-
+            dd($socialUser);
             // Extract user data (normalized format)
             $email = $socialUser['email'];
             $providerId = $socialUser['id'];
@@ -248,7 +249,10 @@ class SocialAuthController extends BaseApiController
             }
 
             // Generate token
-            $token = $user->createToken('hiringjet_token')->plainTextToken;
+            // $token = $user->createToken('hiringjet_token')->plainTextToken;
+            $token = JWTAuth::fromUser($user);
+            // Set guard to "api" for the current request
+            auth()->setUser($user);
 
             // Load user with profile relationship
             $user->load('user_profile');
@@ -401,11 +405,14 @@ class SocialAuthController extends BaseApiController
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'name' => $name,
+            // 'name' => $name,
             'password' => Hash::make(Str::random(32)), // Random password
             'email_verified_at' => now(), // Social provider emails are verified
             'provider' => $provider,
             'provider_id' => $providerId,
+
+            'country_code' => '+971',
+            'phone' => 'required|max:15|unique:users',
         ];
 
         // Add provider-specific ID
@@ -420,6 +427,9 @@ class SocialAuthController extends BaseApiController
         // Create user profile
         UserProfile::create([
             'user_id' => $user->id,
+            'email' => $email,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'profile_picture' => $avatar,
             'completed_steps' => 1, // Set initial completion step
         ]);

@@ -469,9 +469,8 @@ class RegistrationController extends BaseApiController
                 // Call the CVParserService
                 $cv_parse_result_array = $this->cvParserService->parse($file);
             }
-            dd($cv_parse_result_array);
             if (!$cv_parse_result_array['success']) {
-                return $this->sendError('CV Parse Error', $cv_parse_result_array['error']);
+                return $this->sendError('CV Parse Error', $cv_parse_result_array['message']);
             }else{
                 return $this->sendResponse(new CVResource($cv_parse_result_array['data']), 'Parsed CV data array.');
             }
