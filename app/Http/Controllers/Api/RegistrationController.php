@@ -25,8 +25,11 @@ use App\Models\UserProfileCompletedPercentage;
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Designation;
 use App\Models\Industry;
+use App\Models\Language;
+use App\Models\UserLanguage;
 
 class RegistrationController extends BaseApiController
 {
@@ -472,7 +475,52 @@ class RegistrationController extends BaseApiController
             if (!$cv_parse_result_array['success']) {
                 return $this->sendError('CV Parse Error', $cv_parse_result_array['message']);
             }else{
-                return $this->sendResponse(new CVResource($cv_parse_result_array['data']), 'Parsed CV data array.');
+                $parse_data = new CVResource($cv_parse_result_array['data']);
+                $profile_data_array = [];
+                // Personal information process to capture data
+                if(!empty($location = $parse_data['personal_information']['location'])){
+                    $city = City::select('id')->where('name', 'ILIKE',  '%'.$location.'%')->first();
+                    if($city){
+                        $profile_data_array['city_id']= $city->id;
+                    }else{
+                        $country = Country::select('id')->where('name', 'ILIKE',  '%'.$location.'%')->first();
+                        if($country){
+                            $profile_data_array['country_id']= $country->id;
+                        }
+                    }
+                }
+                if(!empty($parse_data['personal_information']['address'])){
+                    $profile_data_array['address']= $parse_data['personal_information']['address'];
+                }
+                if(!empty($parse_data['personal_information']['date_of_birth'])){
+                    $profile_data_array['date_of_birth']= $parse_data['personal_information']['date_of_birth'];
+                }
+                if(!empty($parse_data['personal_information']['nationality'])){
+                    $profile_data_array['nationality_id']= $parse_data['personal_information']['nationality'];
+                }
+
+                // Language information process to capture data
+                if(!empty($languages = $parse_data['languages'])){
+                    $languages = Language::select('id')->whereIn('name', $languages)->get();
+                    $profile_data_array['languages'] = $languages;
+                    /* if($languages->count() > 0){
+                        foreach($languages as $index => $language){
+                            UserLanguage::insert([
+                                'user_id'=> auth()->user()->id,
+                                'language_id'=> $language,
+                                'can_read'=> 0,
+                                'can_write'=> 0,
+                                'can_speak' => 0,
+                                'proficiency_level'=> 0,
+                                'is_default'=> false
+                            ]);
+                        }
+                    } */
+                }
+                return $this->sendResponse([
+                    'parse_data'=>$parse_data,
+                    'profile_data_array'=> $profile_data_array
+                ], 'Parsed CV data array.');
             }
 
         } catch (\Exception $e) {
