@@ -412,7 +412,7 @@ class SocialAuthController extends BaseApiController
             'provider_id' => $providerId,
 
             'country_code' => '+971',
-            'phone' => '0000000000',
+            'phone' => date('ymdhis'),
         ];
 
         // Add provider-specific ID
@@ -432,7 +432,7 @@ class SocialAuthController extends BaseApiController
             'first_name' => $firstName,
             'last_name' => $lastName,
             'country_code' => '+971',
-            'phone' => '0000000000',
+            'phone' => date('ymdhis'),
             'profile_picture' => $avatar,
             'completed_steps' => 1, // Set initial completion step
         ]);
