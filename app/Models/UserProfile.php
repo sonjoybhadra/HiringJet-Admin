@@ -7,7 +7,47 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserProfile extends Model
 {
-    //
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'country_code',
+        'phone',
+        'phone_verified_at',
+        'whatsapp_country_code',
+        'whatsapp_number',
+        'profile_image',
+        'date_of_birth',
+        'gender',
+        'merital_status_id',
+        'differently_abled',
+        'career_break',
+        'nationality_id',
+        'cast_category',
+        'usa_working_permit',
+        'other_working_permit_country',
+        'pasport_country_id',
+        'country_id',
+        'city_id',
+        'address',
+        'pincode',
+        'resume_headline',
+        'alt_email',
+        'alt_country_code',
+        'alt_phone',
+        'diverse_background',
+        'is_experienced',
+        'currently_employed',
+        'profile_summery',
+        'preferred_designation',
+        'preferred_location',
+        'preferred_industry',
+        'availability_id',
+        'religion_id',
+        'profile_completed_percentage',
+        'completed_steps',
+        'is_active',
+    ];
     /**
      * Get the role details of associated user.
     */
