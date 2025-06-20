@@ -46,6 +46,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\ReportBugController;
+use App\Http\Controllers\JobseekerController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -356,6 +357,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/get-cities-by-countries', [PostJobController::class, 'getCitiesByCountries'])->name('get.cities.by.countries');
         Route::match(['get', 'post'], 'post-job/applications/{id}', [PostJobController::class, 'applications']);
     /* post job */
+
+    /* jobseeker */
+        Route::get('jobseeker/list', [JobseekerController::class, 'list']);
+        Route::match(['get', 'post'], 'jobseeker/add', [JobseekerController::class, 'add']);
+        Route::match(['get', 'post'], 'jobseeker/edit/{id}', [JobseekerController::class, 'edit']);
+        Route::get('jobseeker/delete/{id}', [JobseekerController::class, 'delete']);
+        Route::get('jobseeker/change-status/{id}', [JobseekerController::class, 'change_status']);
+        Route::match(['get', 'post'], 'jobseeker/profile/{id}', [JobseekerController::class, 'profile']);
+    /* jobseeker */
 
     /* home page */
         Route::match(['get', 'post'], 'home-page/manage', [HomePageController::class, 'manage']);

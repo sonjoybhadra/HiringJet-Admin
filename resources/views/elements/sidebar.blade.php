@@ -344,6 +344,14 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
     </a>
   </li>
 
+  <!-- Posting Jobs -->
+  <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
+    <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+      <i class="menu-icon fa-solid fa-users"></i>
+      <div data-i18n="Jobseekers">Jobseekers</div>
+    </a>
+  </li>
+
   <!-- Contact Us -->
   <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
     <a href="<?=url('/contact-us/list')?>" class="menu-link">
