@@ -31,28 +31,28 @@ $controllerRoute = $module['controller_route'];
          <?php }?>
          <div class="card mb-4">
             <div class="card-body">
-                <table id="simpletable" class="table table-striped table-bordered nowrap">
-                    <thead>
-                        <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Applied Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if(count($jobApplications)>0){ $sl=1; foreach($jobApplications as $jobApplication){?>
-                            <tr>
-                                <th scope="row"><?=$sl++?></th>
-                                <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->first_name.' '.$jobApplication->last_name?></a></td>
-                                <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->email?></a></td>
-                                <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->phone?></a></td>
-                                <td><?=$jobApplication->created_at?></td>
-                            </tr>
-                        <?php } }?>
-                    </tbody>
-                    </table>
+               <table id="simpletable" class="table table-striped table-bordered nowrap">
+                  <thead>
+                     <tr>
+                     <th scope="col">#</th>
+                     <th scope="col">Name</th>
+                     <th scope="col">Email</th>
+                     <th scope="col">Phone</th>
+                     <th scope="col">Applied Date</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <?php if(count($jobApplications)>0){ $sl=1; foreach($jobApplications as $jobApplication){?>
+                           <tr>
+                              <th scope="row"><?=$sl++?></th>
+                              <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->first_name.' '.$jobApplication->last_name?></a></td>
+                              <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->email?></a></td>
+                              <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->phone?></a></td>
+                              <td><?=$jobApplication->created_at?></td>
+                           </tr>
+                     <?php } }?>
+                  </tbody>
+               </table>
             </div>
         </div>
       </div>
