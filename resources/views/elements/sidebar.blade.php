@@ -299,41 +299,49 @@ $user_id = session('user_id');
 
     </ul>
   </li>
+  
+  <?php if(in_array(8, $module_id) || in_array(9, $module_id) || in_array(10, $module_id)){?>
+    <!-- Home Page -->
+    <li class="menu-item active <?=(($pageSegment == 'home-page' || $pageSegment == 'article' || $pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-home"></i>
+        <div data-i18n="Home Page">Home Page</div>
+      </a>
+      <ul class="menu-sub">
 
-  <!-- Home Page -->
-  <li class="menu-item active <?=(($pageSegment == 'home-page' || $pageSegment == 'article' || $pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
-    <a href="javascript:void(0);" class="menu-link menu-toggle">
-      <i class="menu-icon fa-solid fa-home"></i>
-      <div data-i18n="Home Page">Home Page</div>
-    </a>
-    <ul class="menu-sub">
+        <?php if(in_array(8, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'home-page')?'active':'')?>">
+            <a href="<?=url('/home-page/manage')?>" class="menu-link">
+              <div data-i18n="Sections"><i class="fa-solid fa-arrow-right"></i> Sections</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'home-page')?'active':'')?>">
-        <a href="<?=url('/home-page/manage')?>" class="menu-link">
-          <div data-i18n="Sections"><i class="fa-solid fa-arrow-right"></i> Sections</div>
-        </a>
-      </li>
+        <!-- <li class="menu-item <?=(($pageSegment == 'blog')?'active':'')?>">
+          <a href="<?=url('/blog/list')?>" class="menu-link">
+            <div data-i18n="Blogs"><i class="fa-solid fa-arrow-right"></i> Blogs</div>
+          </a>
+        </li> -->
+        <!-- Articles -->
+        <?php if(in_array(9, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'article')?'active':'')?>">
+            <a href="<?=url('/article/list')?>" class="menu-link">
+              <div data-i18n="Articles"><i class="fa-solid fa-arrow-right"></i> Articles</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(10, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'testimonial')?'active':'')?>">
+            <a href="<?=url('/testimonial/list')?>" class="menu-link">
+              <div data-i18n="Testimonials"><i class="fa-solid fa-arrow-right"></i> Testimonials</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <!-- <li class="menu-item <?=(($pageSegment == 'blog')?'active':'')?>">
-        <a href="<?=url('/blog/list')?>" class="menu-link">
-          <div data-i18n="Blogs"><i class="fa-solid fa-arrow-right"></i> Blogs</div>
-        </a>
-      </li> -->
-      <!-- Articles -->
-      <li class="menu-item <?=(($pageSegment == 'article')?'active':'')?>">
-        <a href="<?=url('/article/list')?>" class="menu-link">
-          <div data-i18n="Articles"><i class="fa-solid fa-arrow-right"></i> Articles</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'testimonial')?'active':'')?>">
-        <a href="<?=url('/testimonial/list')?>" class="menu-link">
-          <div data-i18n="Testimonials"><i class="fa-solid fa-arrow-right"></i> Testimonials</div>
-        </a>
-      </li>
-
-    </ul>
-  </li>
+      </ul>
+    </li>
+  <?php }?>
 
   <?php if(in_array(11, $module_id)){?>
     <!-- CMS Pages -->
