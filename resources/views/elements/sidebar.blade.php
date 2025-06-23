@@ -270,35 +270,42 @@ $user_id = session('user_id');
 
     </ul>
   </li>
+  
+  <?php if(in_array(5, $module_id) || in_array(6, $module_id) || in_array(7, $module_id)){?>
+    <!-- FAQs -->
+    <li class="menu-item active <?=(($pageSegment == 'faq-category' || $pageSegment == 'faq-sub-category' || $pageSegment == 'faq')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-circle-question"></i>
+        <div data-i18n="FAQs">FAQs</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(5, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'faq-category')?'active':'')?>">
+            <a href="<?=url('/faq-category/list')?>" class="menu-link">
+              <div data-i18n="FAQ Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Categories</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(6, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'faq-sub-category')?'active':'')?>">
+            <a href="<?=url('/faq-sub-category/list')?>" class="menu-link">
+              <div data-i18n="FAQ Sub Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Sub Categories</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(7, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">
+            <a href="<?=url('/faq/list')?>" class="menu-link">
+              <div data-i18n="FAQs"><i class="fa-solid fa-arrow-right"></i> FAQs</div>
+            </a>
+          </li>
+        <?php }?>
 
-  <!-- FAQs -->
-  <li class="menu-item active <?=(($pageSegment == 'faq-category' || $pageSegment == 'faq-sub-category' || $pageSegment == 'faq')?'open':'')?>">
-    <a href="javascript:void(0);" class="menu-link menu-toggle">
-      <i class="menu-icon fa-solid fa-circle-question"></i>
-      <div data-i18n="FAQs">FAQs</div>
-    </a>
-    <ul class="menu-sub">
-
-      <li class="menu-item <?=(($pageSegment == 'faq-category')?'active':'')?>">
-        <a href="<?=url('/faq-category/list')?>" class="menu-link">
-          <div data-i18n="FAQ Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Categories</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'faq-sub-category')?'active':'')?>">
-        <a href="<?=url('/faq-sub-category/list')?>" class="menu-link">
-          <div data-i18n="FAQ Sub Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Sub Categories</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">
-        <a href="<?=url('/faq/list')?>" class="menu-link">
-          <div data-i18n="FAQs"><i class="fa-solid fa-arrow-right"></i> FAQs</div>
-        </a>
-      </li>
-
-    </ul>
-  </li>
+      </ul>
+    </li>
+  <?php }?>
   
   <?php if(in_array(8, $module_id) || in_array(9, $module_id) || in_array(10, $module_id)){?>
     <!-- Home Page -->
@@ -432,6 +439,7 @@ $user_id = session('user_id');
       </a>
     </li>
   <?php }?>
+
   <!-- Log Out -->
   <li class="menu-item">
     <a href="<?=url('/logout')?>" class="menu-link">
