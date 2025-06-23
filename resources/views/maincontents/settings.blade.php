@@ -161,31 +161,31 @@ $user_type = session('type');
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="topbar_text" class="form-label">Topbar Text</label>
-                              <textarea class="form-control" id="ckeditor15" name="topbar_text" required><?=Helper::getSettingValue('topbar_text')?></textarea>
+                              <textarea class="form-control" id="ckeditor15" name="topbar_text"><?=Helper::getSettingValue('topbar_text')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="address" class="form-label">Address</label>
-                              <textarea class="form-control" id="ckeditor8" name="address" required><?=Helper::getSettingValue('address')?></textarea>
+                              <textarea class="form-control" id="ckeditor8" name="address"><?=Helper::getSettingValue('address')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="description" class="form-label">Description</label>
-                              <textarea class="form-control" id="ckeditor9" name="description" required><?=Helper::getSettingValue('description')?></textarea>
+                              <textarea class="form-control" id="ckeditor9" name="description"><?=Helper::getSettingValue('description')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="google_map_api_code" class="form-label">Google Map API Code</label>
-                              <textarea class="form-control" id="ckeditor11" name="google_map_api_code" required><?=Helper::getSettingValue('google_map_api_code')?></textarea>
+                              <textarea class="form-control" id="ckeditor11" name="google_map_api_code"><?=Helper::getSettingValue('google_map_api_code')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="google_analytics_code" class="form-label">Google Analytics Code</label>
-                              <textarea class="form-control" id="ckeditor12" name="google_analytics_code" required><?=Helper::getSettingValue('google_analytics_code')?></textarea>
+                              <textarea class="form-control" id="ckeditor12" name="google_analytics_code"><?=Helper::getSettingValue('google_analytics_code')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="google_pixel_code" class="form-label">Google Pixel Code</label>
-                              <textarea class="form-control" id="ckeditor13" name="google_pixel_code" required><?=Helper::getSettingValue('google_pixel_code')?></textarea>
+                              <textarea class="form-control" id="ckeditor13" name="google_pixel_code"><?=Helper::getSettingValue('google_pixel_code')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="facebook_tracking_code" class="form-label">Facebook Tracking Code</label>
-                              <textarea class="form-control" id="ckeditor14" name="facebook_tracking_code" required><?=Helper::getSettingValue('facebook_tracking_code')?></textarea>
+                              <textarea class="form-control" id="ckeditor14" name="facebook_tracking_code"><?=Helper::getSettingValue('facebook_tracking_code')?></textarea>
                            </div>
                            <div class="mb-3 col-md-6">
                               <label for="theme_color" class="form-label">Theme Color</label>
