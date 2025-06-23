@@ -62,35 +62,42 @@ $user_id = session('user_id');
       </a>
     </li>
   <?php }?>
+  
+  <?php if(in_array(2, $module_id) || in_array(3, $module_id) || in_array(4, $module_id)){?>
+    <!-- Access & Permission -->
+    <li class="menu-item active <?=(($pageSegment == 'module' || $pageSegment == 'role' || $pageSegment == 'admin-user')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-lock"></i>
+        <div data-i18n="Access & Permission">Access & Permission</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(2, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'module')?'active':'')?>">
+            <a href="<?=url('/module/list')?>" class="menu-link">
+              <div data-i18n="Modules"><i class="fa-solid fa-arrow-right"></i> Modules</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(3, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'role')?'active':'')?>">
+            <a href="<?=url('/role/list')?>" class="menu-link">
+              <div data-i18n="Roles"><i class="fa-solid fa-arrow-right"></i> Roles</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(4, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'admin-user')?'active':'')?>">
+            <a href="<?=url('/admin-user/list')?>" class="menu-link">
+              <div data-i18n="Admin Users"><i class="fa-solid fa-arrow-right"></i> Admin Users</div>
+            </a>
+          </li>
+        <?php }?>
 
-  <!-- Access & Permission -->
-  <li class="menu-item active <?=(($pageSegment == 'module' || $pageSegment == 'role' || $pageSegment == 'admin-user')?'open':'')?>">
-    <a href="javascript:void(0);" class="menu-link menu-toggle">
-      <i class="menu-icon fa-solid fa-lock"></i>
-      <div data-i18n="Access & Permission">Access & Permission</div>
-    </a>
-    <ul class="menu-sub">
-
-      <li class="menu-item <?=(($pageSegment == 'module')?'active':'')?>">
-        <a href="<?=url('/module/list')?>" class="menu-link">
-          <div data-i18n="Modules"><i class="fa-solid fa-arrow-right"></i> Modules</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'role')?'active':'')?>">
-        <a href="<?=url('/role/list')?>" class="menu-link">
-          <div data-i18n="Roles"><i class="fa-solid fa-arrow-right"></i> Roles</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'admin-user')?'active':'')?>">
-        <a href="<?=url('/admin-user/list')?>" class="menu-link">
-          <div data-i18n="Admin Users"><i class="fa-solid fa-arrow-right"></i> Admin Users</div>
-        </a>
-      </li>
-
-    </ul>
-  </li>
+      </ul>
+    </li>
+  <?php }?>
 
   <!-- Masters -->
   <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization' || $pageSegment == 'job-category' || $pageSegment == 'functional-area' || $pageSegment == 'itskill' || $pageSegment == 'department' || $pageSegment == 'contract-type' || $pageSegment == 'experience-level')?'open':'')?>">
