@@ -9,7 +9,7 @@ $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
-print_r($module_id);
+// print_r($module_id);
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
@@ -345,7 +345,7 @@ print_r($module_id);
     </li>
   <?php }?>
 
-  <?php if(in_array(13, $module_id)){?>
+  <?php if(in_array(12, $module_id)){?>
     <!-- Posting Jobs -->
     <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
       <a href="<?=url('/post-job/list')?>" class="menu-link">
