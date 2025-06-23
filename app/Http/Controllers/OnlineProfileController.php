@@ -45,7 +45,6 @@ class OnlineProfileController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'           => 'required',
-                    'logo'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -72,7 +71,7 @@ class OnlineProfileController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' Logo']);
+                            $logo = '';
                         }
                     /* logo */
                     $fields = [

@@ -48,7 +48,6 @@ class TestimonialController extends Controller
                     'designation'               => 'required',
                     'rating'                    => 'required',
                     'review'                    => 'required',
-                    'user_image'                => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -75,7 +74,7 @@ class TestimonialController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' user image']);
+                            $user_image = '';
                         }
                     /* user_image */
                     $fields = [
