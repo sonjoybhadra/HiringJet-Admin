@@ -143,7 +143,7 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 
       <li class="menu-item <?=(($pageSegment == 'itskill')?'active':'')?>">
         <a href="<?=url('/itskill/list')?>" class="menu-link">
-          <div data-i18n="IT skill"><i class="fa-solid fa-arrow-right"></i> IT skill</div>
+          <div data-i18n="IT skill"><i class="fa-solid fa-arrow-right"></i> IT Skill</div>
         </a>
       </li>
 
@@ -245,19 +245,19 @@ $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 
       <li class="menu-item <?=(($pageSegment == 'department')?'active':'')?>">
         <a href="<?=url('/department/list')?>" class="menu-link">
-          <div data-i18n="Departments"><i class="fa-solid fa-arrow-right"></i> Departments</div>
+          <div data-i18n="Department"><i class="fa-solid fa-arrow-right"></i> Department</div>
         </a>
       </li>
 
       <li class="menu-item <?=(($pageSegment == 'contract-type')?'active':'')?>">
         <a href="<?=url('/contract-type/list')?>" class="menu-link">
-          <div data-i18n="Contract Types"><i class="fa-solid fa-arrow-right"></i> Contract Types</div>
+          <div data-i18n="Contract Type"><i class="fa-solid fa-arrow-right"></i> Contract Type</div>
         </a>
       </li>
 
       <li class="menu-item <?=(($pageSegment == 'experience-level')?'active':'')?>">
         <a href="<?=url('/experience-level/list')?>" class="menu-link">
-          <div data-i18n="Experience Levels"><i class="fa-solid fa-arrow-right"></i> Experience Levels</div>
+          <div data-i18n="Experience Level"><i class="fa-solid fa-arrow-right"></i> Experience Level</div>
         </a>
       </li>
 
