@@ -48,31 +48,33 @@ class JobCategoryController extends Controller
             return view('maincontents.' . $page_name, $data);
             if($request->isMethod('post')){
                 $postData = $request->all();
-                $rules = [
-                    'name'           => 'required',
-                ];
-                if($this->validate($request, $rules)){
-                    /* user activity */
-                        $activityData = [
-                            'user_email'        => session('user_data')['email'],
-                            'user_name'         => session('user_data')['name'],
-                            'user_type'         => 'ADMIN',
-                            'ip_address'        => $request->ip(),
-                            'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
-                            'platform_type'     => 'WEB',
-                        ];
-                        UserActivity::insert($activityData);
-                    /* user activity */
-                    $fields = [
-                        'name'              => strip_tags($postData['name']),
-                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                // Helper::pr($postData);
+                // $rules = [
+                //     'name'           => 'required',
+                // ];
+                // if($this->validate($request, $rules)){
+                    
+                // } else {
+                //     return redirect()->back()->with('error_message', 'All Fields Required !!!');
+                // }
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                        'platform_type'     => 'WEB',
                     ];
-                    JobCategory::insert($fields);
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
-                } else {
-                    return redirect()->back()->with('error_message', 'All Fields Required !!!');
-                }
+                    UserActivity::insert($activityData);
+                /* user activity */
+                $fields = [
+                    'name'              => strip_tags($postData['name']),
+                    'status'            => ((array_key_exists("status",$postData))?1:0),
+                ];
+                JobCategory::insert($fields);
+                return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
             }
         }
     /* add */

@@ -57,7 +57,7 @@ class IndustryController extends Controller
                             'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
                             'platform_type'     => 'WEB',
                         ];
-                        UserActivity::insert($activityData);
+                        UserActivity::create($activityData);
                     /* user activity */
                     $fields = [
                         'name'              => strip_tags($postData['name']),
