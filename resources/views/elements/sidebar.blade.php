@@ -8,8 +8,7 @@ $routeName    = Route::current();
 $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
-echo $user_id = session('user_id');
-Helper::pr($module_id);
+$user_id = session('user_id');
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
@@ -388,23 +387,25 @@ Helper::pr($module_id);
       <div data-i18n="Login Logs">Login Logs</div>
     </a>
   </li>
+  <?php if(in_array(19, $module_id)){?>
+    <!-- User Activity Logs -->
+    <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
+      <a href="<?=url('/user-activity-logs')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-chart-line"></i>
+        <div data-i18n="User Activity Logs">User Activity Logs</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- User Activity Logs -->
-  <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
-    <a href="<?=url('/user-activity-logs')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-chart-line"></i>
-      <div data-i18n="User Activity Logs">User Activity Logs</div>
-    </a>
-  </li>
-
-  <!-- Settings -->
-  <li class="menu-item <?=(($pageSegment == 'settings')?'active':'')?>">
-    <a href="<?=url('/settings')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-gear"></i>
-      <div data-i18n="Settings">Settings</div>
-    </a>
-  </li>
-
+  <?php if(in_array(20, $module_id)){?>
+    <!-- Settings -->
+    <li class="menu-item <?=(($pageSegment == 'settings')?'active':'')?>">
+      <a href="<?=url('/settings')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-gear"></i>
+        <div data-i18n="Settings">Settings</div>
+      </a>
+    </li>
+  <?php }?>
   <!-- Log Out -->
   <li class="menu-item">
     <a href="<?=url('/logout')?>" class="menu-link">
