@@ -1,10 +1,15 @@
 <?php
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Route;
+use App\Models\Role;
+use App\Models\User;
+
 $routeName    = Route::current();
 $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
+echo $user_id = session('user_id');
+Helper::pr($module_id);
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
