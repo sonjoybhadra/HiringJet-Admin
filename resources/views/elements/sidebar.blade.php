@@ -332,61 +332,76 @@ $user_id = session('user_id');
     </ul>
   </li>
 
-  <!-- CMS Pages -->
-  <li class="menu-item <?=(($pageSegment == 'page')?'active':'')?>">
-    <a href="<?=url('/page/list')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="CMS Pages">CMS Pages</div>
-    </a>
-  </li>
+  <?php if(in_array(11, $module_id)){?>
+    <!-- CMS Pages -->
+    <li class="menu-item <?=(($pageSegment == 'page')?'active':'')?>">
+      <a href="<?=url('/page/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <div data-i18n="CMS Pages">CMS Pages</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- Posting Jobs -->
-  <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
-    <a href="<?=url('/post-job/list')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="Jobs">Jobs</div>
-    </a>
-  </li>
+  <?php if(in_array(13, $module_id)){?>
+    <!-- Posting Jobs -->
+    <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
+      <a href="<?=url('/post-job/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <div data-i18n="Jobs">Jobs</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- Posting Jobs -->
-  <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
-    <a href="<?=url('/jobseeker/list')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-users"></i>
-      <div data-i18n="Jobseekers">Jobseekers</div>
-    </a>
-  </li>
+  <?php if(in_array(14, $module_id)){?>
+    <!-- Posting Jobs -->
+    <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
+      <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-users"></i>
+        <div data-i18n="Jobseekers">Jobseekers</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- Contact Us -->
-  <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
-    <a href="<?=url('/contact-us/list')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="Contact Us">Contact Us</div>
-    </a>
-  </li>
+  <?php if(in_array(15, $module_id)){?>
+    <!-- Contact Us -->
+    <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
+      <a href="<?=url('/contact-us/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <div data-i18n="Contact Us">Contact Us</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- Report Bugs -->
-  <li class="menu-item <?=(($pageSegment == 'report-bugs')?'active':'')?>">
-    <a href="<?=url('/report-bugs/list')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-file-lines"></i>
-      <div data-i18n="Report Bugs">Report Bugs</div>
-    </a>
-  </li>
+  <?php if(in_array(16, $module_id)){?>
+    <!-- Report Bugs -->
+    <li class="menu-item <?=(($pageSegment == 'report-bugs')?'active':'')?>">
+      <a href="<?=url('/report-bugs/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <div data-i18n="Report Bugs">Report Bugs</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- Email Logs -->
-  <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
-    <a href="<?=url('/email-logs')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-envelope"></i>
-      <div data-i18n="Email Logs">Email Logs</div>
-    </a>
-  </li>
+  <?php if(in_array(17, $module_id)){?>
+    <!-- Email Logs -->
+    <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
+      <a href="<?=url('/email-logs')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-envelope"></i>
+        <div data-i18n="Email Logs">Email Logs</div>
+      </a>
+    </li>
+  <?php }?>
 
-  <!-- Login Logs -->
-  <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
-    <a href="<?=url('/login-logs')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-right-to-bracket"></i>
-      <div data-i18n="Login Logs">Login Logs</div>
-    </a>
-  </li>
+  <?php if(in_array(18, $module_id)){?>
+    <!-- Login Logs -->
+    <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
+      <a href="<?=url('/login-logs')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-right-to-bracket"></i>
+        <div data-i18n="Login Logs">Login Logs</div>
+      </a>
+    </li>
+  <?php }?>
+
   <?php if(in_array(19, $module_id)){?>
     <!-- User Activity Logs -->
     <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
