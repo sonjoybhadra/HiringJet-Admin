@@ -9,6 +9,7 @@ $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
+print_r($module_id);
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
@@ -52,13 +53,15 @@ $user_id = session('user_id');
 
 <ul class="menu-inner py-1">
 
-  <!-- Dashboards -->
-  <li class="menu-item <?=(($pageSegment == 'dashboard')?'active':'')?>">
-    <a href="<?=url('/dashboard')?>" class="menu-link">
-      <i class="menu-icon fa-solid fa-house"></i>
-      <div data-i18n="Dashboard">Dashboard</div>
-    </a>
-  </li>
+  <?php if(in_array(1, $module_id)){?>
+    <!-- Dashboards -->
+    <li class="menu-item <?=(($pageSegment == 'dashboard')?'active':'')?>">
+      <a href="<?=url('/dashboard')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-house"></i>
+        <div data-i18n="Dashboard">Dashboard</div>
+      </a>
+    </li>
+  <?php }?>
 
   <!-- Access & Permission -->
   <li class="menu-item active <?=(($pageSegment == 'module' || $pageSegment == 'role' || $pageSegment == 'admin-user')?'open':'')?>">
