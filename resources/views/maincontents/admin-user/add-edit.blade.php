@@ -60,7 +60,9 @@ $controllerRoute = $module['controller_route'];
                             <select class="form-control" type="text" id="role_id" name="role_id" autofocus required>
                                 <option value="" selected>Select Role</option>
                                 <?php if($roles){ foreach($roles as $role){?>
-                                    <option value="<?=$role->id?>" <?=(($role->id == $role_id)?'selected':'')?>><?=$role->role_name?></option>
+                                    <?php if($role->id == 1 || $role->id == 4){?>
+                                        <option value="<?=$role->id?>" <?=(($role->id == $role_id)?'selected':'')?>><?=$role->role_name?></option>
+                                    <?php }?>
                                 <?php } }?>
                             </select>
                         </div>
@@ -83,7 +85,12 @@ $controllerRoute = $module['controller_route'];
 
                         <div class="col-md-6 mb-3">
                             <label for="country_code" class="form-label">Country Code <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="country_code" name="country_code" value="<?=$country_code?>" required placeholder="Country Code" />
+                            <select class="form-control" type="text" id="country_code" name="country_code" autofocus required>
+                                <option value="" selected>Select Country Code</option>
+                                <?php if($couns){ foreach($couns as $coun){?>
+                                    <option value="<?=$coun->country_code?>" <?=(($coun->country_code == $country_code)?'selected':'')?>><?=$coun->name?> (<?=$coun->country_code?>)</option>
+                                <?php } }?>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">Phone <small class="text-danger">*</small></label>

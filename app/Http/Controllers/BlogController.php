@@ -47,7 +47,6 @@ class BlogController extends Controller
                     'title'                     => 'required',
                     'short_description'         => 'required',
                     'upload_date'               => 'required',
-                    'blog_image'                => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -74,7 +73,7 @@ class BlogController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' image']);
+                            $blog_image = '';
                         }
                     /* blog_image */
                     $fields = [
