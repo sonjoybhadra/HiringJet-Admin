@@ -98,185 +98,240 @@ $user_id = session('user_id');
       </ul>
     </li>
   <?php }?>
+  
+  <?php if(in_array(21, $module_id) || in_array(22, $module_id) || in_array(23, $module_id) || in_array(24, $module_id) || in_array(25, $module_id) || in_array(26, $module_id) || in_array(27, $module_id) || in_array(28, $module_id) || in_array(29, $module_id) || in_array(30, $module_id) || in_array(31, $module_id) || in_array(32, $module_id) || in_array(33, $module_id) || in_array(34, $module_id) || in_array(35, $module_id) || in_array(36, $module_id) || in_array(37, $module_id) || in_array(38, $module_id) || in_array(39, $module_id) || in_array(40, $module_id) || in_array(41, $module_id) || in_array(42, $module_id) || in_array(43, $module_id) || in_array(44, $module_id) || in_array(45, $module_id) || in_array(46, $module_id)){?>
+    <!-- Masters -->
+    <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization' || $pageSegment == 'job-category' || $pageSegment == 'functional-area' || $pageSegment == 'itskill' || $pageSegment == 'department' || $pageSegment == 'contract-type' || $pageSegment == 'experience-level')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-database"></i>
+        <div data-i18n="Masters">Masters</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(21, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'job-category')?'active':'')?>">
+            <a href="<?=url('/job-category/list')?>" class="menu-link">
+              <div data-i18n="Job Category"><i class="fa-solid fa-arrow-right"></i> Job Category</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(22, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'industry')?'active':'')?>">
+            <a href="<?=url('/industry/list')?>" class="menu-link">
+              <div data-i18n="Industry"><i class="fa-solid fa-arrow-right"></i> Industry</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(23, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'designation')?'active':'')?>">
+            <a href="<?=url('/designation/list')?>" class="menu-link">
+              <div data-i18n="Designation"><i class="fa-solid fa-arrow-right"></i> Designation</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(24, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'employer')?'active':'')?>">
+            <a href="<?=url('/employer/list')?>" class="menu-link">
+              <div data-i18n="Employer"><i class="fa-solid fa-arrow-right"></i> Employer</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(25, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'country')?'active':'')?>">
+            <a href="<?=url('/country/list')?>" class="menu-link">
+              <div data-i18n="Country"><i class="fa-solid fa-arrow-right"></i> Country</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(26, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'city')?'active':'')?>">
+            <a href="<?=url('/city/list')?>" class="menu-link">
+              <div data-i18n="City"><i class="fa-solid fa-arrow-right"></i> City</div>
+            </a>
+          </li>
+        <?php }?>
 
-  <!-- Masters -->
-  <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization' || $pageSegment == 'job-category' || $pageSegment == 'functional-area' || $pageSegment == 'itskill' || $pageSegment == 'department' || $pageSegment == 'contract-type' || $pageSegment == 'experience-level')?'open':'')?>">
-    <a href="javascript:void(0);" class="menu-link menu-toggle">
-      <i class="menu-icon fa-solid fa-database"></i>
-      <div data-i18n="Masters">Masters</div>
-    </a>
-    <ul class="menu-sub">
+        <!-- <li class="menu-item <?=(($pageSegment == 'currency')?'active':'')?>">
+          <a href="<?=url('/currency/list')?>" class="menu-link">
+            <div data-i18n="Currency"><i class="fa-solid fa-arrow-right"></i> Currency</div>
+          </a>
+        </li> -->
 
-      <li class="menu-item <?=(($pageSegment == 'job-category')?'active':'')?>">
-        <a href="<?=url('/job-category/list')?>" class="menu-link">
-          <div data-i18n="Job Category"><i class="fa-solid fa-arrow-right"></i> Job Category</div>
-        </a>
-      </li>
+        <?php if(in_array(27, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'keyskill')?'active':'')?>">
+            <a href="<?=url('/keyskill/list')?>" class="menu-link">
+              <div data-i18n="Keyskill"><i class="fa-solid fa-arrow-right"></i> Keyskill</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'industry')?'active':'')?>">
-        <a href="<?=url('/industry/list')?>" class="menu-link">
-          <div data-i18n="Industry"><i class="fa-solid fa-arrow-right"></i> Industry</div>
-        </a>
-      </li>
+        <?php if(in_array(28, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'itskill')?'active':'')?>">
+            <a href="<?=url('/itskill/list')?>" class="menu-link">
+              <div data-i18n="IT skill"><i class="fa-solid fa-arrow-right"></i> IT Skill</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'designation')?'active':'')?>">
-        <a href="<?=url('/designation/list')?>" class="menu-link">
-          <div data-i18n="Designation"><i class="fa-solid fa-arrow-right"></i> Designation</div>
-        </a>
-      </li>
+        <?php if(in_array(29, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'benefit')?'active':'')?>">
+            <a href="<?=url('/benefit/list')?>" class="menu-link">
+              <div data-i18n="Perk & Benefit"><i class="fa-solid fa-arrow-right"></i> Perk & Benefit</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'employer')?'active':'')?>">
-        <a href="<?=url('/employer/list')?>" class="menu-link">
-          <div data-i18n="Employer"><i class="fa-solid fa-arrow-right"></i> Employer</div>
-        </a>
-      </li>
+        <?php if(in_array(30, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'availability')?'active':'')?>">
+            <a href="<?=url('/availability/list')?>" class="menu-link">
+              <div data-i18n="Availability To Join"><i class="fa-solid fa-arrow-right"></i> Availability To Join</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'country')?'active':'')?>">
-        <a href="<?=url('/country/list')?>" class="menu-link">
-          <div data-i18n="Country"><i class="fa-solid fa-arrow-right"></i> Country</div>
-        </a>
-      </li>
+        <?php if(in_array(31, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'current-work-level')?'active':'')?>">
+            <a href="<?=url('/current-work-level/list')?>" class="menu-link">
+              <div data-i18n="Current Work Level"><i class="fa-solid fa-arrow-right"></i> Current Work Level</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'city')?'active':'')?>">
-        <a href="<?=url('/city/list')?>" class="menu-link">
-          <div data-i18n="City"><i class="fa-solid fa-arrow-right"></i> City</div>
-        </a>
-      </li>
+        <?php if(in_array(32, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'functional-area')?'active':'')?>">
+            <a href="<?=url('/functional-area/list')?>" class="menu-link">
+              <div data-i18n="Functional Area"><i class="fa-solid fa-arrow-right"></i> Functional Area</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <!-- <li class="menu-item <?=(($pageSegment == 'currency')?'active':'')?>">
-        <a href="<?=url('/currency/list')?>" class="menu-link">
-          <div data-i18n="Currency"><i class="fa-solid fa-arrow-right"></i> Currency</div>
-        </a>
-      </li> -->
+        <?php if(in_array(33, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'online-profile')?'active':'')?>">
+            <a href="<?=url('/online-profile/list')?>" class="menu-link">
+              <div data-i18n="Online Profile"><i class="fa-solid fa-arrow-right"></i> Online Profile</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'keyskill')?'active':'')?>">
-        <a href="<?=url('/keyskill/list')?>" class="menu-link">
-          <div data-i18n="Keyskill"><i class="fa-solid fa-arrow-right"></i> Keyskill</div>
-        </a>
-      </li>
+        <?php if(in_array(34, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'qualification')?'active':'')?>">
+            <a href="<?=url('/qualification/list')?>" class="menu-link">
+              <div data-i18n="Qualification"><i class="fa-solid fa-arrow-right"></i> Qualification</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'itskill')?'active':'')?>">
-        <a href="<?=url('/itskill/list')?>" class="menu-link">
-          <div data-i18n="IT skill"><i class="fa-solid fa-arrow-right"></i> IT Skill</div>
-        </a>
-      </li>
+        <?php if(in_array(35, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'course')?'active':'')?>">
+            <a href="<?=url('/course/list')?>" class="menu-link">
+              <div data-i18n="Course"><i class="fa-solid fa-arrow-right"></i> Course</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'benefit')?'active':'')?>">
-        <a href="<?=url('/benefit/list')?>" class="menu-link">
-          <div data-i18n="Perk & Benefit"><i class="fa-solid fa-arrow-right"></i> Perk & Benefit</div>
-        </a>
-      </li>
+        <?php if(in_array(36, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'specialization')?'active':'')?>">
+            <a href="<?=url('/specialization/list')?>" class="menu-link">
+              <div data-i18n="Specialization"><i class="fa-solid fa-arrow-right"></i> Specialization</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'availability')?'active':'')?>">
-        <a href="<?=url('/availability/list')?>" class="menu-link">
-          <div data-i18n="Availability To Join"><i class="fa-solid fa-arrow-right"></i> Availability To Join</div>
-        </a>
-      </li>
+        <?php if(in_array(37, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'university')?'active':'')?>">
+            <a href="<?=url('/university/list')?>" class="menu-link">
+              <div data-i18n="University / Institute"><i class="fa-solid fa-arrow-right"></i> University / Institute</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'current-work-level')?'active':'')?>">
-        <a href="<?=url('/current-work-level/list')?>" class="menu-link">
-          <div data-i18n="Current Work Level"><i class="fa-solid fa-arrow-right"></i> Current Work Level</div>
-        </a>
-      </li>
+        <?php if(in_array(38, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'most-common-email')?'active':'')?>">
+            <a href="<?=url('/most-common-email/list')?>" class="menu-link">
+              <div data-i18n="Most Common Emails"><i class="fa-solid fa-arrow-right"></i> Most Common Emails</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'functional-area')?'active':'')?>">
-        <a href="<?=url('/functional-area/list')?>" class="menu-link">
-          <div data-i18n="Functional Area"><i class="fa-solid fa-arrow-right"></i> Functional Area</div>
-        </a>
-      </li>
+        <?php if(in_array(39, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'language')?'active':'')?>">
+            <a href="<?=url('/language/list')?>" class="menu-link">
+              <div data-i18n="Language Known"><i class="fa-solid fa-arrow-right"></i> Language Known</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'online-profile')?'active':'')?>">
-        <a href="<?=url('/online-profile/list')?>" class="menu-link">
-          <div data-i18n="Online Profile"><i class="fa-solid fa-arrow-right"></i> Online Profile</div>
-        </a>
-      </li>
+        <?php if(in_array(40, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'religion')?'active':'')?>">
+            <a href="<?=url('/religion/list')?>" class="menu-link">
+              <div data-i18n="Religion"><i class="fa-solid fa-arrow-right"></i> Religion</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'qualification')?'active':'')?>">
-        <a href="<?=url('/qualification/list')?>" class="menu-link">
-          <div data-i18n="Qualification"><i class="fa-solid fa-arrow-right"></i> Qualification</div>
-        </a>
-      </li>
+        <?php if(in_array(41, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'visa-status')?'active':'')?>">
+            <a href="<?=url('/visa-status/list')?>" class="menu-link">
+              <div data-i18n="Visa Status"><i class="fa-solid fa-arrow-right"></i> Visa Status</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'course')?'active':'')?>">
-        <a href="<?=url('/course/list')?>" class="menu-link">
-          <div data-i18n="Course"><i class="fa-solid fa-arrow-right"></i> Course</div>
-        </a>
-      </li>
+        <?php if(in_array(42, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'marital-status')?'active':'')?>">
+            <a href="<?=url('/marital-status/list')?>" class="menu-link">
+              <div data-i18n="Marital Status"><i class="fa-solid fa-arrow-right"></i> Marital Status</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'specialization')?'active':'')?>">
-        <a href="<?=url('/specialization/list')?>" class="menu-link">
-          <div data-i18n="Specialization"><i class="fa-solid fa-arrow-right"></i> Specialization</div>
-        </a>
-      </li>
+        <?php if(in_array(43, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'profile-complete')?'active':'')?>">
+            <a href="<?=url('/profile-complete/list')?>" class="menu-link">
+              <div data-i18n="Profile Complete Percentage"><i class="fa-solid fa-arrow-right"></i> Profile Complete Percentage</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'university')?'active':'')?>">
-        <a href="<?=url('/university/list')?>" class="menu-link">
-          <div data-i18n="University / Institute"><i class="fa-solid fa-arrow-right"></i> University / Institute</div>
-        </a>
-      </li>
+        <?php if(in_array(44, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'nationality')?'active':'')?>">
+            <a href="<?=url('/nationality/list')?>" class="menu-link">
+              <div data-i18n="Nationality"><i class="fa-solid fa-arrow-right"></i> Nationality</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'most-common-email')?'active':'')?>">
-        <a href="<?=url('/most-common-email/list')?>" class="menu-link">
-          <div data-i18n="Most Common Emails"><i class="fa-solid fa-arrow-right"></i> Most Common Emails</div>
-        </a>
-      </li>
+        <?php if(in_array(45, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'contract-type')?'active':'')?>">
+            <a href="<?=url('/contract-type/list')?>" class="menu-link">
+              <div data-i18n="Contract Type"><i class="fa-solid fa-arrow-right"></i> Contract Type</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'language')?'active':'')?>">
-        <a href="<?=url('/language/list')?>" class="menu-link">
-          <div data-i18n="Language Known"><i class="fa-solid fa-arrow-right"></i> Language Known</div>
-        </a>
-      </li>
+        <?php if(in_array(46, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'experience-level')?'active':'')?>">
+            <a href="<?=url('/experience-level/list')?>" class="menu-link">
+              <div data-i18n="Experience Level"><i class="fa-solid fa-arrow-right"></i> Experience Level</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'religion')?'active':'')?>">
-        <a href="<?=url('/religion/list')?>" class="menu-link">
-          <div data-i18n="Religion"><i class="fa-solid fa-arrow-right"></i> Religion</div>
-        </a>
-      </li>
+        <?php if(in_array(47, $module_id)){?>
+          <li class="menu-item <?=(($pageSegment == 'department')?'active':'')?>">
+            <a href="<?=url('/department/list')?>" class="menu-link">
+              <div data-i18n="Department"><i class="fa-solid fa-arrow-right"></i> Department</div>
+            </a>
+          </li>
+        <?php }?>
 
-      <li class="menu-item <?=(($pageSegment == 'visa-status')?'active':'')?>">
-        <a href="<?=url('/visa-status/list')?>" class="menu-link">
-          <div data-i18n="Visa Status"><i class="fa-solid fa-arrow-right"></i> Visa Status</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'marital-status')?'active':'')?>">
-        <a href="<?=url('/marital-status/list')?>" class="menu-link">
-          <div data-i18n="Marital Status"><i class="fa-solid fa-arrow-right"></i> Marital Status</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'profile-complete')?'active':'')?>">
-        <a href="<?=url('/profile-complete/list')?>" class="menu-link">
-          <div data-i18n="Profile Complete Percentage"><i class="fa-solid fa-arrow-right"></i> Profile Complete Percentage</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'nationality')?'active':'')?>">
-        <a href="<?=url('/nationality/list')?>" class="menu-link">
-          <div data-i18n="Nationality"><i class="fa-solid fa-arrow-right"></i> Nationality</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'department')?'active':'')?>">
-        <a href="<?=url('/department/list')?>" class="menu-link">
-          <div data-i18n="Department"><i class="fa-solid fa-arrow-right"></i> Department</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'contract-type')?'active':'')?>">
-        <a href="<?=url('/contract-type/list')?>" class="menu-link">
-          <div data-i18n="Contract Type"><i class="fa-solid fa-arrow-right"></i> Contract Type</div>
-        </a>
-      </li>
-
-      <li class="menu-item <?=(($pageSegment == 'experience-level')?'active':'')?>">
-        <a href="<?=url('/experience-level/list')?>" class="menu-link">
-          <div data-i18n="Experience Level"><i class="fa-solid fa-arrow-right"></i> Experience Level</div>
-        </a>
-      </li>
-
-    </ul>
-  </li>
+      </ul>
+    </li>
+  <?php }?>
   
   <?php if(in_array(5, $module_id) || in_array(6, $module_id) || in_array(7, $module_id)){?>
     <!-- FAQs -->
