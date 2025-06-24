@@ -15,6 +15,7 @@ use App\Models\PostJob;
 use App\Models\PostJobUserApplied;
 use App\Models\ShortlistedJob;
 use App\Models\UserEmployment;
+use App\Models\UserSkill;
 
 class JobSearchController extends BaseApiController
 {
@@ -35,7 +36,7 @@ class JobSearchController extends BaseApiController
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
                     foreach ($countrys as $tag) {
-                        $q->orWhereJsonContains('location_countries', $tag);
+                        $q->orWhereJsonContains('location_countries', (string)$tag);
                     }
                 });
             }
@@ -43,7 +44,7 @@ class JobSearchController extends BaseApiController
                 $citys = $request->city;
                 $sql->where(function ($q) use ($citys) {
                     foreach ($citys as $tag) {
-                        $q->orWhereJsonContains('location_cities', $tag);
+                        $q->orWhereJsonContains('location_cities', (string)$tag);
                     }
                 });
             }
@@ -51,9 +52,12 @@ class JobSearchController extends BaseApiController
                 $skills = $request->skills;
                 $sql->where(function ($q) use ($skills) {
                     foreach ($skills as $tag) {
-                        $q->orWhereJsonContains('skill_ids', $tag);
+                        $q->orWhereJsonContains('skill_ids', (string)$tag);
                     }
                 });
+            }
+            if($request->designation){
+                $sql->where('designation', $request->designation);
             }
             if(!empty($request->industry)){
                 $sql->whereIn('industry', $request->industry);
@@ -145,7 +149,7 @@ class JobSearchController extends BaseApiController
                     Mail::to(auth()->user()->email)->send(new NotificationEmail('Job applied successfully.', $full_name, 'You have applied for this job successfully.'));
                     return $this->sendResponse(
                         ['applied_job_id'=> $applied_job_id],
-                        'Applied Jobs list'
+                        'You have successfully applied for the job.'
                     );
                 }else{
                     return $this->sendError('Warning', 'You have already applied for this job.', 201);
@@ -269,22 +273,27 @@ class JobSearchController extends BaseApiController
     public function getMatchedJobsForJobseeker(Request $request)
     {
         try {
-            $jobseeker_designation = UserEmployment::select('last_designation')
+            /* $jobseeker_designation = UserEmployment::select('last_designation')
                                                     ->where('user_id', auth()->user()->id)
                                                     ->orderBy('is_current_job', 'DESC')
                                                     ->first();
 
-            $sql = PostJob::select('post_jobs.*');
-            if(Auth::guard('api')->check()){
-                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+            $user_skills = UserSkill::where('user_id', auth()->user()->id)->get()->pluck('keyskill_id')->toArray();
 
-                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
-            }
+            $sql = PostJob::select('post_jobs.*');
+            $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.auth()->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+            $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
 
             if($jobseeker_designation){
                 $sql->where('designation', $jobseeker_designation->last_designation);
             }
-
+            if(!empty($user_skills)){
+                foreach ($user_skills as $tag) {
+                    $sql->orWhereJsonContains('skill_ids', (string)$tag);
+                }
+            } */
+            $postJobObj = new PostJob();
+            $sql = $postJobObj->get_job_search_custom_sql();
             $sql->with('employer');
             $sql->with('industryRelation');
             $sql->with('jobCategory');

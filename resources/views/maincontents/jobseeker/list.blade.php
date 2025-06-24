@@ -8,8 +8,7 @@ $controllerRoute = $module['controller_route'];
    <div class="row g-6">
       <h4><?=$page_header?></h4>
       <h6 class="breadcrumb-wrapper">
-         <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span>
-         <?=$page_header?>
+         <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span> <?=$page_header?>
       </h6>
       <div class="nav-align-top mb-4">
          <?php if(session('success_message')){?>
@@ -29,9 +28,9 @@ $controllerRoute = $module['controller_route'];
             </div>
          <?php }?>
          <div class="card mb-4">
-            <div class="card-header">
+            <!-- <div class="card-header">
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
-            </div>
+            </div> -->
             <div class="card-body">
                <div id="table-overlay-loader" class="text-loader">
                   Fetching data. Please wait <span id="dot-animation">.</span>
@@ -39,17 +38,18 @@ $controllerRoute = $module['controller_route'];
                 @include('components.table', [
                 'containerId' => 'table1',
                 'searchId' => 'search1',
-                'table' => 'post_jobs',
-                'columns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'status'],
-                'visibleColumns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at'],    // used for rendering
-                'headers' => ['#', 'Job No.', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At'],
-                'filename' => "Job",
+                'table' => 'users',
+                'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'created_at', 'status'],
+                'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'created_at'],    // used for rendering
+                'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Created At'],
+                'filename' => "Jobseeker",
                 'orderBy' => 'id',
                 'orderType' => 'desc',
                 'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3]
+                    ['column' => 'status', 'operator' => '!=', 'value' => 3],
+                    ['column' => 'role_id', 'operator' => '=', 'value' => 3]
                 ],
-                'routePrefix' => 'post-job',
+                'routePrefix' => 'jobseeker',
                 'showActions' => true, // set to false to hide actions
                 'statusColumn' => 'status' // optional, defaults to 'is_active'
                 ])
@@ -59,7 +59,6 @@ $controllerRoute = $module['controller_route'];
    </div>
 </div>
 @endsection
-
 @section('scripts')
 <script src="<?=config('constants.admin_assets_url')?>assets/js/table.js"></script>
 @endsection

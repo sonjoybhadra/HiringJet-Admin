@@ -1,0 +1,65 @@
+<?php
+use App\Helpers\Helper;
+$controllerRoute = $module['controller_route'];
+?>
+@extends('layouts.main')
+@section('content')
+<div class="container-xxl flex-grow-1 container-p-y">
+   <div class="row g-6">
+      <h4><?=$page_header?></h4>
+      <h6 class="breadcrumb-wrapper">
+         <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span>
+         <span class="text-muted fw-light"><a href="<?=url($controllerRoute . '/list/')?>"><?=$module['title']?> List</a> /</span>
+         <?=$page_header?>
+      </h6>
+      <div class="nav-align-top mb-4">
+         <?php if(session('success_message')){?>
+            <div class="alert alert-success alert-dismissible autohide" role="alert">
+               <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-desktop align-top me-2"></i>Success!</h6>
+               <span><?=session('success_message')?></span>
+               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+               </button>
+            </div>
+         <?php }?>
+         <?php if(session('error_message')){?>
+            <div class="alert alert-danger alert-dismissible autohide" role="alert">
+               <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-store align-top me-2"></i>Error!</h6>
+               <span><?=session('error_message')?></span>
+               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+               </button>
+            </div>
+         <?php }?>
+         <div class="card mb-4">
+            <div class="card-body">
+               <table id="simpletable" class="table table-striped table-bordered nowrap">
+                  <thead>
+                     <tr>
+                     <th scope="col">#</th>
+                     <th scope="col">Name</th>
+                     <th scope="col">Email</th>
+                     <th scope="col">Phone</th>
+                     <th scope="col">Applied Date</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <?php if(count($jobApplications)>0){ $sl=1; foreach($jobApplications as $jobApplication){?>
+                           <tr>
+                              <th scope="row"><?=$sl++?></th>
+                              <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->first_name.' '.$jobApplication->last_name?></a></td>
+                              <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->email?></a></td>
+                              <td><a href="<?=url('jobseeker/profile/' . Helper::encoded($jobApplication->user_id))?>" class="btn btn-sm btn-info" title="Profile" target="_blank"><?=$jobApplication->phone?></a></td>
+                              <td><?=$jobApplication->created_at?></td>
+                           </tr>
+                     <?php } }?>
+                  </tbody>
+               </table>
+            </div>
+        </div>
+      </div>
+   </div>
+</div>
+@endsection
+
+@section('scripts')
+<script src="<?=config('constants.admin_assets_url')?>assets/js/table.js"></script>
+@endsection

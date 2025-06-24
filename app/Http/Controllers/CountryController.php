@@ -48,7 +48,6 @@ class CountryController extends Controller
                     'country_code'              => 'required',
                     'country_short_code'        => 'required',
                     'currency_code'             => 'required',
-                    'country_flag'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -75,7 +74,7 @@ class CountryController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' country_flag']);
+                            $country_flag = '';
                         }
                     /* country_flag */
                     $fields = [

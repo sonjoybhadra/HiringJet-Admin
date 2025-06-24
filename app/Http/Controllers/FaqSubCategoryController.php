@@ -47,7 +47,6 @@ class FaqSubCategoryController extends Controller
                     'faq_category_id'       => 'required',
                     'name'                  => 'required',
                     'description'           => 'required',
-                    'image'                 => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -74,7 +73,7 @@ class FaqSubCategoryController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' image']);
+                            $image = '';
                         }
                     /* image */
                     $fields = [

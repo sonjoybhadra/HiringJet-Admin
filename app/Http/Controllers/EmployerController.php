@@ -49,7 +49,6 @@ class EmployerController extends Controller
                     'description'       => 'required',
                     'industry_id'       => 'required',
                     'no_of_employee'    => 'required',
-                    'logo'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -76,7 +75,7 @@ class EmployerController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' Logo']);
+                            $logo = '';
                         }
                     /* logo */
                     $fields = [
@@ -84,7 +83,7 @@ class EmployerController extends Controller
                         'description'           => strip_tags($postData['description']),
                         'industry_id'           => strip_tags($postData['industry_id']),
                         'no_of_employee'        => strip_tags($postData['no_of_employee']),
-                        'logo'                  => 'uploads/' . $upload_folder . '/' . $logo,
+                        'logo'                  => '/uploads/' . $upload_folder . '/' . $logo,
                         'status'                => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Employer::insert($fields);
@@ -127,7 +126,7 @@ class EmployerController extends Controller
                             $uploadedFile   = $this->upload_single_file('logo', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $logo = $uploadedFile['newFilename'];
-                                $logoLink = 'uploads/' . $upload_folder . '/' . $logo;
+                                $logoLink = '/uploads/' . $upload_folder . '/' . $logo;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }

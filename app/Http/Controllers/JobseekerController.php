@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
-use App\Models\Page;
+use App\Models\User;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
@@ -15,25 +15,25 @@ use Session;
 use Hash;
 use DB;
 
-class PageController extends Controller
+class JobseekerController extends Controller
 {
     protected $siteAuthService;
     public function __construct()
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'CMS Page',
-            'controller'        => 'PageController',
-            'controller_route'  => 'page',
+            'title'             => 'Jobseekers',
+            'controller'        => 'JobseekerController',
+            'controller_route'  => 'jobseeker',
             'primary_key'       => 'id',
-            'table_name'        => 'pages',
+            'table_name'        => 'users',
         );
     }
     /* list */
         public function list(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
-            $page_name                      = 'page.list';
+            $page_name                      = 'jobseeker.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -44,7 +44,7 @@ class PageController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'page_name'                 => 'required',
+                    'name'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -54,53 +54,16 @@ class PageController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['page_name'] . ' ' . $this->data['title'] . ' Added',
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
-                    /* page banner image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_banner_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_banner_image = $uploadedFile['newFilename'];
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_banner_image = '';
-                        }
-                    /* page banner image */
-                    /* page image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_image = $uploadedFile['newFilename'];
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_image = '';
-                        }
-                    /* page image */
                     $fields = [
-                        'page_name'                 => strip_tags($postData['page_name']),
-                        'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
-                        'page_content'              => $postData['page_content'],
-                        'page_banner_image'         => 'uploads/' . $upload_folder . '/' . $page_banner_image,
-                        'page_image'                => 'uploads/' . $upload_folder . '/' . $page_image,
-                        'meta_title'                => strip_tags($postData['meta_title']),
-                        'meta_keywords'             => strip_tags($postData['meta_keywords']),
-                        'meta_description'          => strip_tags($postData['meta_description']),
-                        'status'                    => ((array_key_exists("status",$postData))?1:0),
+                        'name'              => strip_tags($postData['name']),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    Page::insert($fields);
+                    User::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -108,7 +71,7 @@ class PageController extends Controller
             }
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Add';
-            $page_name                      = 'page.add-edit';
+            $page_name                      = 'jobseeker.add-edit';
             $data['row']                    = [];
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
@@ -119,60 +82,19 @@ class PageController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
-            $page_name                      = 'page.add-edit';
-            $data['row']                    = Page::where('id', '=', $id)->first();
+            $page_name                      = 'jobseeker.add-edit';
+            $data['row']                    = User::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'page_name'                 => 'required',
+                    'name'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    /* page banner image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_banner_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_banner_image = $uploadedFile['newFilename'];
-                                $pageBannerImageLink = 'uploads/' . $upload_folder . '/' . $page_banner_image;
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_banner_image = $data['row']->page_banner_image;
-                            $pageBannerImageLink = $page_banner_image;
-                        }
-                    /* page banner image */
-                    /* page image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_image = $uploadedFile['newFilename'];
-                                $pageImageLink = 'uploads/' . $upload_folder . '/' . $page_image;
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_image = $data['row']->page_image;
-                            $pageImageLink = $page_image;
-                        }
-                    /* page image */
                     $fields = [
-                        'page_name'                 => strip_tags($postData['page_name']),
-                        'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
-                        'page_content'              => $postData['page_content'],
-                        'page_banner_image'         => $pageBannerImageLink,
-                        'page_image'                => $pageImageLink,
-                        'status'                    => ((array_key_exists("status",$postData))?1:0),
-                        'meta_title'                => strip_tags($postData['meta_title']),
-                        'meta_keywords'             => strip_tags($postData['meta_keywords']),
-                        'meta_description'          => strip_tags($postData['meta_description']),
+                        'name'              => strip_tags($postData['name']),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    Page::where($this->data['primary_key'], '=', $id)->update($fields);
+                    User::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -180,7 +102,7 @@ class PageController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['page_name'] . ' ' . $this->data['title'] . ' Updated',
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
@@ -197,12 +119,12 @@ class PageController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Page::find($id);
+            $model                          = User::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            Page::where($this->data['primary_key'], '=', $id)->update($fields);
+            User::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -221,7 +143,7 @@ class PageController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Page::find($id);
+            $model                          = User::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;
@@ -258,4 +180,18 @@ class PageController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
+    /* profile */
+        public function profile(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $page_name                      = 'jobseeker.profile';
+            $data['row']                    = User::where('id', '=', $id)->first();
+            $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
+            $phone                          = (($data['row'])?$data['row']->phone:'');
+            $title                          = $this->data['title'].' Profile : '.$name.' ('.$phone.')';
+            
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* profile */
 }

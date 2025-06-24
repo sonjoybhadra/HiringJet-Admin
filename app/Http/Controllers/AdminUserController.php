@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\Role;
+use App\Models\Country;
 use App\Models\User;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
@@ -65,18 +66,30 @@ class AdminUserController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
-                    $fields = [
-                        'role_id'               => strip_tags($postData['role_id']),
-                        'first_name'            => strip_tags($postData['first_name']),
-                        'last_name'             => strip_tags($postData['last_name']),
-                        'email'                 => strip_tags($postData['email']),
-                        'country_code'          => strip_tags($postData['country_code']),
-                        'phone'                 => strip_tags($postData['phone']),
-                        'password'              => Hash::make(strip_tags($postData['password'])),
-                        'status'                => ((array_key_exists("status",$postData))?1:0),
-                    ];
-                    User::insert($fields);
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                    $email = $postData['email'];
+                    $phone = $postData['phone'];
+                    $checkEmail = User::where('email', $email)->count();
+                    if($checkEmail > 0){
+                        return redirect()->back()->with('error_message', 'Email Alreadys Exists !!!');
+                    } else {
+                        $checkPhone = User::where('phone', $phone)->count();
+                        if($checkPhone > 0){
+                            return redirect()->back()->with('error_message', 'Phone Alreadys Exists !!!');
+                        } else {
+                            $fields = [
+                                'role_id'               => strip_tags($postData['role_id']),
+                                'first_name'            => strip_tags($postData['first_name']),
+                                'last_name'             => strip_tags($postData['last_name']),
+                                'email'                 => strip_tags($postData['email']),
+                                'country_code'          => strip_tags($postData['country_code']),
+                                'phone'                 => strip_tags($postData['phone']),
+                                'password'              => Hash::make(strip_tags($postData['password'])),
+                                'status'                => ((array_key_exists("status",$postData))?1:0),
+                            ];
+                            User::insert($fields);
+                            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                        }
+                    }
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
@@ -86,6 +99,7 @@ class AdminUserController extends Controller
             $page_name                      = 'admin-user.add-edit';
             $data['row']                    = [];
             $data['roles']                  = Role::select('id', 'role_name')->where('status', '=', 1)->get();
+            $data['couns']                  = Country::select('country_code', 'name')->where('status', '=', 1)->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -98,6 +112,7 @@ class AdminUserController extends Controller
             $page_name                      = 'admin-user.add-edit';
             $data['row']                    = User::where($this->data['primary_key'], '=', $id)->first();
             $data['roles']                  = Role::select('id', 'role_name')->where('status', '=', 1)->get();
+            $data['couns']                  = Country::select('country_code', 'name')->where('status', '=', 1)->get();
 
             if($request->isMethod('post')){
                 $postData = $request->all();
@@ -132,7 +147,21 @@ class AdminUserController extends Controller
                             'status'                => ((array_key_exists("status",$postData))?1:0),
                         ];
                     }
-                    User::where($this->data['primary_key'], '=', $id)->update($fields);
+
+                    $email = $postData['email'];
+                    $phone = $postData['phone'];
+                    $checkEmail = User::where('email', $email)->where('id', '!=', $id)->count();
+                    if($checkEmail > 0){
+                        return redirect()->back()->with('error_message', 'Email Alreadys Exists !!!');
+                    } else {
+                        $checkPhone = User::where('phone', $phone)->where('id', '!=', $id)->count();
+                        if($checkPhone > 0){
+                            return redirect()->back()->with('error_message', 'Phone Alreadys Exists !!!');
+                        } else {
+                            User::where($this->data['primary_key'], '=', $id)->update($fields);
+                        }
+                    }
+                    
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],

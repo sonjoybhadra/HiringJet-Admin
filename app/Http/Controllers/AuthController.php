@@ -54,54 +54,56 @@ class AuthController extends Controller
         public function login(Request $request)
         {
             $authData = $request->validate([
-                        'email'     => ['required', 'email'],
-                        'password'  => ['required'],
-                    ]);
+                'email'     => ['required', 'email'],
+                'password'  => ['required'],
+            ]);
 
-            // Add extra conditions to the authData array
-            $authData['status']  = 1;
-            $authData['role_id'] = 1;
+            // Fetch user by email with role_id 1 or 4 and status = 1
+            $user = \App\Models\User::where('email', $authData['email'])
+                        ->where('status', 1)
+                        ->whereIn('role_id', [1, 4])
+                        ->first();
 
-            if (Auth::attempt($authData)) {
+            if ($user && Hash::check($authData['password'], $user->password)) {
+                Auth::login($user);
                 $request->session()->regenerate();
 
                 // Store selected user info in session array
-                $user = Auth::user();
                 session([
-                        'user_data'     => [
-                            'user_id'       => $user->id,
-                            'name'          => $user->first_name . ' ' . $user->last_name,
-                            'email'         => $user->email,
-                            'role_id'       => $user->role_id,
-                            'is_user_login' => 1,
-                        ]
+                    'user_data' => [
+                        'user_id'       => $user->id,
+                        'name'          => $user->first_name . ' ' . $user->last_name,
+                        'email'         => $user->email,
+                        'role_id'       => $user->role_id,
+                        'is_user_login' => 1,
+                    ]
                 ]);
-                /* user activity */
-                    $activityData = [
-                        'user_email'        => $user->email,
-                        'user_name'         => $user->first_name . ' ' . $user->last_name,
-                        'user_type'         => 'ADMIN',
-                        'ip_address'        => $request->ip(),
-                        'activity_type'     => 1,
-                        'activity_details'  => 'Login Success',
-                        'platform_type'     => 'WEB',
-                    ];
-                    UserActivity::insert($activityData);
-                /* user activity */
-                return redirect('dashboard/')->with('success_message', 'Sign-in successfull');
+
+                // user activity
+                UserActivity::insert([
+                    'user_email'       => $user->email,
+                    'user_name'        => $user->first_name . ' ' . $user->last_name,
+                    'user_type'        => 'ADMIN',
+                    'ip_address'       => $request->ip(),
+                    'activity_type'    => 1,
+                    'activity_details' => 'Login Success',
+                    'platform_type'    => 'WEB',
+                ]);
+
+                return redirect('dashboard/')->with('success_message', 'Sign-in successful');
             }
-            /* user activity */
-                $activityData = [
-                    'user_email'        => $authData['email'],
-                    'user_name'         => 'Master Admin',
-                    'user_type'         => 'ADMIN',
-                    'ip_address'        => $request->ip(),
-                    'activity_type'     => 0,
-                    'activity_details'  => 'Invalid Email Or Password',
-                    'platform_type'     => 'WEB',
-                ];
-                UserActivity::insert($activityData);
-            /* user activity */
+
+            // user activity for failed attempt
+            UserActivity::insert([
+                'user_email'       => $authData['email'],
+                'user_name'        => 'Master Admin',
+                'user_type'        => 'ADMIN',
+                'ip_address'       => $request->ip(),
+                'activity_type'    => 0,
+                'activity_details' => 'Invalid Email Or Password',
+                'platform_type'    => 'WEB',
+            ]);
+
             return redirect()->back()->with('error_message', 'Invalid credentials or access denied.');
         }
         public function logout(Request $request)

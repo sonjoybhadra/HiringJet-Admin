@@ -45,8 +45,6 @@ class ArticleController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'page_name'                 => 'required',
-                    'page_banner_image'         => 'required',
-                    'page_image'                => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -73,7 +71,7 @@ class ArticleController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' Banner Image']);
+                            $page_banner_image = '';
                         }
                     /* page banner image */
                     /* page image */
@@ -88,7 +86,7 @@ class ArticleController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            return redirect()->back()->with(['error_message' => 'Please Upload ' . $this->data['title'] . ' Banner Image']);
+                            $page_image = '';
                         }
                     /* page image */
                     $fields = [

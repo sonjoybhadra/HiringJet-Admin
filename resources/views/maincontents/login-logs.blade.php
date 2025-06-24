@@ -29,18 +29,18 @@ $user_type = session('type');
          <?php }?>
          <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
            <li class="nav-item">
-             <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-1" aria-controls="navs-pills-justified-profile" aria-selected="true">Success Login</button>
+             <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-1" aria-controls="navs-pills-justified-profile" aria-selected="true">Admin Users</button>
            </li>
            <li class="nav-item">
-             <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-2" aria-controls="navs-pills-justified-general" aria-selected="false">Failed Login</button>
+             <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-2" aria-controls="navs-pills-justified-general" aria-selected="false">Job Seekers</button>
            </li>
            <li class="nav-item">
-             <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-0" aria-controls="navs-pills-justified-password" aria-selected="false">Log Out</button>
+             <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-0" aria-controls="navs-pills-justified-password" aria-selected="false">Employers</button>
            </li>
          </ul>
          <div class="tab-content">
             <div class="tab-pane fade show active" id="navs-pills-justified-1" role="tabpanel">
-               <h5>Success Login</h5>
+               <h5>Admin Users</h5>
                <div class="card mb-4">
                   <div class="card-body">
                      <div id="table-overlay-loader" class="text-loader">
@@ -53,11 +53,12 @@ $user_type = session('type');
                         'columns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
                         'visibleColumns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
                         'headers' => ['#', 'User Type', 'Name', 'Email', 'IP Address', 'Activity Details', 'Activity Date', 'Platform'],
-                        'filename' => "Success_Login_Logs",
+                        'filename' => "Admin_User_Login_Logs",
                         'orderBy' => 'id',
                         'orderType' => 'desc',
                         'conditions' => [
-                           ['column' => 'activity_type', 'operator' => '=', 'value' => 1]
+                           ['column' => 'activity_type', 'operator' => '!=', 'value' => 3],
+                           ['column' => 'user_type', 'operator' => '=', 'value' => 'ADMIN']
                         ],
                         'routePrefix' => 'login-logs',
                         'showActions' => false, // set to false to hide actions
@@ -67,12 +68,12 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-2" role="tabpanel">
-               <h5>Failed Login</h5>
+               <h5>Job Seekers</h5>
                <div class="card mb-4">
                   <div class="card-body">
-                     <div id="table-overlay-loader" class="text-loader">
+                     <!-- <div id="table-overlay-loader" class="text-loader">
                         Fetching data. Please wait <span id="dot-animation">.</span>
-                     </div>
+                     </div> -->
                      @include('components.table', [
                         'containerId' => 'table2',
                         'searchId' => 'search2',
@@ -80,11 +81,12 @@ $user_type = session('type');
                         'columns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
                         'visibleColumns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
                         'headers' => ['#', 'User Type', 'Name', 'Email', 'IP Address', 'Activity Details', 'Activity Date', 'Platform'],
-                        'filename' => "Failed_Login_Logs",
+                        'filename' => "Jobseeker_Login_Logs",
                         'orderBy' => 'id',
                         'orderType' => 'desc',
                         'conditions' => [
-                           ['column' => 'activity_type', 'operator' => '=', 'value' => 0]
+                           ['column' => 'activity_type', 'operator' => '!=', 'value' => 3],
+                           ['column' => 'user_type', 'operator' => '=', 'value' => 'JOBSEEKER']
                         ],
                         'routePrefix' => 'login-logs',
                         'showActions' => false, // set to false to hide actions
@@ -94,12 +96,12 @@ $user_type = session('type');
                </div>
             </div>
             <div class="tab-pane fade" id="navs-pills-justified-0" role="tabpanel">
-               <h5>Log Out</h5>
+               <h5>Employers</h5>
                <div class="card mb-4">
                   <div class="card-body">
-                     <div id="table-overlay-loader" class="text-loader">
+                     <!-- <div id="table-overlay-loader" class="text-loader">
                         Fetching data. Please wait <span id="dot-animation">.</span>
-                     </div>
+                     </div> -->
                      @include('components.table', [
                         'containerId' => 'table3',
                         'searchId' => 'search3',
@@ -107,11 +109,12 @@ $user_type = session('type');
                         'columns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
                         'visibleColumns' => ['user_type', 'user_name', 'user_email', 'ip_address', 'activity_details', 'created_at', 'platform_type'],
                         'headers' => ['#', 'User Type', 'Name', 'Email', 'IP Address', 'Activity Details', 'Activity Date', 'Platform'],
-                        'filename' => "Logout_Logs",
+                        'filename' => "Employer_Login_Logs",
                         'orderBy' => 'id',
                         'orderType' => 'desc',
                         'conditions' => [
-                           ['column' => 'activity_type', 'operator' => '=', 'value' => 2]
+                           ['column' => 'activity_type', 'operator' => '!=', 'value' => 3],
+                           ['column' => 'user_type', 'operator' => '=', 'value' => 'EMPLOYER']
                         ],
                         'routePrefix' => 'login-logs',
                         'showActions' => false, // set to false to hide actions
