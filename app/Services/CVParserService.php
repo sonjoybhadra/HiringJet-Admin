@@ -667,7 +667,6 @@ class CVParserService
                 }
             }
         }
-
         return null;
     }
 

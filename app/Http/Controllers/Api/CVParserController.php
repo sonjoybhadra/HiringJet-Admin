@@ -34,7 +34,10 @@ class CVParserController extends Controller
     public function parse(CVParseRequest $request): JsonResponse
     {
         $file = $request->file('cv_file');
+        // Parse CV from server file path
 
+        //$file= '/path/to/your/cv/file.pdf'; // or .docx, .doc, .txt
+        
         // Call the CVParserService
         $result = $this->cvParserService->parse($file);
 
@@ -42,7 +45,7 @@ class CVParserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to parse CV',
-                'error' => $result['error'],
+                'error' =>'error parsing cv',
             ], 500);
         }
 
