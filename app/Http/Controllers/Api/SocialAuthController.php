@@ -103,7 +103,7 @@ class SocialAuthController extends BaseApiController
     }
 
     /**
-     * Redirect to Google OAuth (Unchanged)
+     * Redirect to Google OAuth (FIXED - Use Socialite consistently)
      */
     public function redirectToGoogle(Request $request)
     {
@@ -126,22 +126,25 @@ class SocialAuthController extends BaseApiController
             // Generate state for security
             $state = Str::random(40);
 
-            // Build OAuth URL manually (stateless approach)
-            $authUrl = 'https://accounts.google.com/oauth/v2/auth?' . http_build_query([
-                'response_type' => 'code',
-                'client_id' => $clientId,
-                'redirect_uri' => $redirectUri,
-                'state' => $state,
-                'scope' => 'profile email',
-                'access_type' => 'offline',
-                'prompt' => 'consent'
-            ]);
+            // FIXED: Use Socialite for consistency
+            $redirectUrl = Socialite::driver('google')
+                ->stateless()
+                ->with([
+                    'state' => $state,
+                    'access_type' => 'offline',
+                    'prompt' => 'consent'
+                ])
+                ->redirect()
+                ->getTargetUrl();
 
-            \Log::info('Google OAuth redirect generated successfully');
+            \Log::info('Google OAuth redirect generated successfully', [
+                'redirect_url' => $redirectUrl,
+                'state' => $state
+            ]);
 
             return response()->json([
                 'success' => true,
-                'redirect_url' => $authUrl,
+                'redirect_url' => $redirectUrl,
                 'state' => $state // Return state for frontend validation
             ]);
 
@@ -150,11 +153,13 @@ class SocialAuthController extends BaseApiController
                 'exception_class' => get_class($e),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
             ]);
 
             return response()->json([
                 'success' => false,
-                'error' => 'Failed to generate Google redirect URL'
+                'error' => 'Failed to generate Google redirect URL',
+                'debug' => app()->environment('local') ? $e->getMessage() : null
             ], 500);
         }
     }
@@ -200,12 +205,12 @@ class SocialAuthController extends BaseApiController
                 'protocol' => $provider === 'linkedin' ? 'OpenID Connect' : 'OAuth 2.0'
             ]);
 
-            // Handle LinkedIn with OpenID Connect, Google with regular OAuth
+            // Handle LinkedIn with OpenID Connect, Google with Socialite
             if ($provider === 'linkedin') {
                 $socialUser = $this->getLinkedInUserViaOpenID($request->code);
             } else {
-                // Use Socialite for Google (unchanged)
-                $socialUser = Socialite::driver($provider)->stateless()->user();
+                // FIXED: Use Socialite for Google (consistent with redirect)
+                $socialUser = $this->getGoogleUserViaSocialite($request->code);
             }
 
             if (!$socialUser) {
@@ -221,6 +226,7 @@ class SocialAuthController extends BaseApiController
                 'user_email' => $socialUser['email'],
                 'user_name' => $socialUser['name'],
             ]);
+
             // Extract user data (normalized format)
             $email = $socialUser['email'];
             $providerId = $socialUser['id'];
@@ -248,7 +254,6 @@ class SocialAuthController extends BaseApiController
             }
 
             // Generate token
-            // $token = $user->createToken('hiringjet_token')->plainTextToken;
             $token = JWTAuth::fromUser($user);
             // Set guard to "api" for the current request
             auth()->setUser($user);
@@ -281,6 +286,42 @@ class SocialAuthController extends BaseApiController
                 'error' => "An error occurred during {$provider} authentication",
                 'debug' => app()->environment('local') ? $e->getMessage() : null
             ], 500);
+        }
+    }
+
+    /**
+     * FIXED: Get Google user data via Socialite (consistent approach)
+     */
+    private function getGoogleUserViaSocialite($code)
+    {
+        try {
+            \Log::info('Starting Google OAuth flow via Socialite');
+
+            // Use Socialite to get user (consistent with redirect)
+            $googleUser = Socialite::driver('google')->stateless()->user();
+
+            \Log::info('Google user data retrieved via Socialite', [
+                'user_id' => $googleUser->getId(),
+                'user_email' => $googleUser->getEmail()
+            ]);
+
+            // Normalize data format to match LinkedIn structure
+            return [
+                'id' => $googleUser->getId(),
+                'email' => $googleUser->getEmail(),
+                'name' => $googleUser->getName(),
+                'first_name' => $googleUser->user['given_name'] ?? '',
+                'last_name' => $googleUser->user['family_name'] ?? '',
+                'avatar' => $googleUser->getAvatar(),
+                'email_verified' => $googleUser->user['email_verified'] ?? true,
+                'raw' => $googleUser->getRaw()
+            ];
+
+        } catch (Exception $e) {
+            \Log::error('Google OAuth via Socialite error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
     }
 
@@ -405,12 +446,10 @@ class SocialAuthController extends BaseApiController
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            // 'name' => $name,
             'password' => Hash::make(Str::random(32)), // Random password
             'email_verified_at' => now(), // Social provider emails are verified
             'provider' => $provider,
             'provider_id' => $providerId,
-
             'country_code' => '+971',
             'phone' => date('ymdhis'),
         ];
@@ -421,10 +460,12 @@ class SocialAuthController extends BaseApiController
         } elseif ($provider === 'google') {
             $userData['google_id'] = $providerId;
         }
+
         \Log::info("createNewUser:Creating new user for {$provider} with data:", $userData);
         $user = User::create($userData);
 
         $this->calculate_profile_completed_percentage($user->id, 'full-name'); //Full name completes
+
         // Create user profile
         UserProfile::create([
             'user_id' => $user->id,
