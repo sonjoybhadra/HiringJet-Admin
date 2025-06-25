@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Services\SiteAuthService;
 use Illuminate\Validation\Rule;
-use App\Models\GeneralSetting;
-use App\Models\UserActivity;
 use Illuminate\Http\Request;
 
 use App\Models\EmailLog;
 use App\Models\User;
+use App\Models\GeneralSetting;
+use App\Models\UserActivity;
+use App\Models\PostJob;
+
+
 use App\Helpers\Helper;
 use Carbon\Carbon;
 use Session;
@@ -260,10 +263,177 @@ class AuthController extends Controller
     /* dashboard */
         public function dashboard()
         {
-            $data               = [];
-            $title              = 'Dashboard';
-            $page_name          = 'dashboard';
-            $data = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
+            $data['total_jobseeker']            = User::where('status', '!=', 3)->where('role_id', '=', 3)->count();
+            $data['total_job_posted']           = PostJob::where('status', '!=', 3)->count();
+            $data['active_jobseeker_30_days']   = User::where('status', 1)
+                                                    ->where('created_at', '>=', now()->subDays(30))
+                                                    ->count();
+            $data['active_jobs_30_days']        = PostJob::where('status', 1)
+                                                    ->where('created_at', '>=', now()->subDays(30))
+                                                    ->count();
+
+            /* top 5 countries with most jobseekers */
+                $topCountryJobseeker = DB::table('user_profiles as up')
+                                    ->join('countries as i', 'up.country_id', '=', 'i.id')
+                                    ->select('i.name as country_name', DB::raw('COUNT(*) as user_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('user_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_country_most_jobseeker']        = $topCountryJobseeker;
+            /* top 5 countries with most jobseekers */
+            /* top 5 countries with most jobs */
+                $jobs = DB::table('post_jobs')->pluck('location_countries');
+                // Flatten all country IDs from all jobs
+                $allCountryIds = [];
+                foreach ($jobs as $json) {
+                    $ids = json_decode($json, true);
+                    if (is_array($ids)) {
+                        $allCountryIds = array_merge($allCountryIds, $ids);
+                    }
+                }
+                // Count occurrences of each country
+                $countryCounts = array_count_values($allCountryIds);
+                // Sort by count descending and get top 5
+                arsort($countryCounts);
+                $top5 = array_slice($countryCounts, 0, 5, true);
+                $top5Ids = array_keys($top5);
+                $countryNames = DB::table('countries')
+                    ->whereIn('id', $top5Ids)
+                    ->pluck('name', 'id');
+
+                // Merge name with count
+                $finalResult = collect($top5)->mapWithKeys(function ($count, $id) use ($countryNames) {
+                    return [$countryNames[$id] ?? 'Unknown' => $count];
+                });
+                $data['top5_country_most_job']        = $finalResult;
+            /* top 5 countries with most jobs */
+
+            /* top 5 cities with most jobseekers */
+                $topCityJobseeker = DB::table('user_profiles as up')
+                                    ->join('cities as i', 'up.city_id', '=', 'i.id')
+                                    ->select('i.name as city_name', DB::raw('COUNT(*) as user_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('user_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_city_most_jobseekers']        = $topCityJobseeker;
+            /* top 5 cities with most jobseekers */
+            /* top 5 cities with most jobs */
+                $jobs = DB::table('post_jobs')->pluck('location_cities');
+                // Flatten all country IDs from all jobs
+                $allCityIds = [];
+                foreach ($jobs as $json) {
+                    $ids = json_decode($json, true);
+                    if (is_array($ids)) {
+                        $allCityIds = array_merge($allCityIds, $ids);
+                    }
+                }
+                // Count occurrences of each country
+                $cityCounts = array_count_values($allCityIds);
+                // Sort by count descending and get top 5
+                arsort($cityCounts);
+                $top5 = array_slice($cityCounts, 0, 5, true);
+                $top5Ids = array_keys($top5);
+                $cityNames = DB::table('cities')
+                    ->whereIn('id', $top5Ids)
+                    ->pluck('name', 'id');
+
+                // Merge name with count
+                $finalResult = collect($top5)->mapWithKeys(function ($count, $id) use ($cityNames) {
+                    return [$cityNames[$id] ?? 'Unknown' => $count];
+                });
+                $data['top5_city_most_job']        = $finalResult;
+            /* top 5 cities with most jobs */
+            
+            /* top 5 industries with most jobseekers */
+                $topIndustryJobseeker = DB::table('user_employment_industries as uei')
+                                                ->join('industries as i', 'uei.industry', '=', 'i.id')
+                                                ->select('i.name as industry_name', DB::raw('COUNT(*) as user_count'))
+                                                ->groupBy('i.id', 'i.name')
+                                                ->orderByDesc('user_count')
+                                                ->limit(5)
+                                                ->get();
+                $data['top5_industry_most_jobseekers']        = $topIndustryJobseeker;
+            /* top 5 industries with most jobseekers */
+            /* top 5 industries with most jobs */
+                $topIndustries = DB::table('post_jobs as pj')
+                                    ->join('industries as i', 'pj.industry', '=', 'i.id')
+                                    ->select('i.name as industry_name', DB::raw('COUNT(*) as job_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('job_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_industry_most_jobs']        = $topIndustries;
+            /* top 5 industries with most jobs */
+            
+            /* top 5 functional area with most jobseekers */
+                $topFunctionalAreaJobseeker = DB::table('user_employment_functional_areas as uefa')
+                                                ->join('functional_areas as i', 'uefa.functional_area', '=', 'i.id')
+                                                ->select('i.name as fa_name', DB::raw('COUNT(*) as user_count'))
+                                                ->groupBy('i.id', 'i.name')
+                                                ->orderByDesc('user_count')
+                                                ->limit(5)
+                                                ->get();
+                $data['top5_fa_most_jobseekers']        = $topFunctionalAreaJobseeker;
+            /* top 5 functional area with most jobseekers */
+            /* top 5 functional area with most jobs */
+                $topFunctionalArea = DB::table('post_jobs as pj')
+                                    ->join('functional_areas as i', 'pj.functional_area', '=', 'i.id')
+                                    ->select('i.name as fa_name', DB::raw('COUNT(*) as job_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('job_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_functional_area_most_jobs']        = $topFunctionalArea;
+            /* top 5 functional area with most jobs */
+            
+            /* top 5 designation with most jobseekers */
+                $topDesignationJobseeker = DB::table('user_employments as ue')
+                                                ->join('designations as i', DB::raw('CAST(ue.last_designation AS BIGINT)'), '=', DB::raw('i.id'))
+                                                ->whereRaw("ue.last_designation ~ '^\d+$'")
+                                                ->select('i.name as designation_name', DB::raw('COUNT(*) as user_count'))
+                                                ->groupBy('i.id', 'i.name')
+                                                ->orderByDesc('user_count')
+                                                ->limit(5)
+                                                ->get();
+                $data['top5_designation_most_jobseekers']        = $topDesignationJobseeker;
+            /* top 5 designation with most jobseekers */
+            /* top 5 designation with most jobs */
+                $topDesignation = DB::table('post_jobs as pj')
+                                    ->join('designations as i', 'pj.designation', '=', 'i.id')
+                                    ->select('i.name as designation_name', DB::raw('COUNT(*) as job_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('job_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_designation_most_jobs']        = $topDesignation;
+            /* top 5 designation with most jobs */
+
+            /* top 5 nationality with most jobseekers */
+                $topNationalityJobseeker = DB::table('user_profiles as up')
+                                    ->join('nationalities as i', 'up.nationality_id', '=', 'i.id')
+                                    ->select('i.name as nationality_name', DB::raw('COUNT(*) as user_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('user_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_nationality_most_jobseeker']        = $topNationalityJobseeker;
+            /* top 5 nationality with most jobseekers */
+            /* top 5 nationality with most jobs */
+                $topNationality = DB::table('post_jobs as pj')
+                                    ->join('nationalities as i', 'pj.nationality', '=', 'i.id')
+                                    ->select('i.name as nationality_name', DB::raw('COUNT(*) as job_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('job_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_nationality_most_jobs']        = $topNationality;
+            /* top 5 nationality with most jobs */
+
+            $title                      = 'Dashboard';
+            $page_name                  = 'dashboard';
+            $data                       = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
             return view('maincontents.' . $page_name, $data);
         }
         public function getMonthYearList($startDate) {
