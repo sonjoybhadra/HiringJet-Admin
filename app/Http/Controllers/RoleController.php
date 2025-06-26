@@ -34,7 +34,7 @@ class RoleController extends Controller
             $title                          = $this->data['title'].' List';
             $page_name                      = 'role.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-            $data['rows']                   = Role::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
+            $data['rows']                   = Role::where('status', '!=', 3)->whereNotIn('role_id', [2, 3])->orderBy('id', 'DESC')->get();
             return view('maincontents.' . $page_name, $data);
         }
     /* list */
