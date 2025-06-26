@@ -10,7 +10,7 @@ $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
 $role_id = (($user)?$user->role_id:0);
-Helper::pr($moduleIds);
+// Helper::pr($moduleIds);
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
