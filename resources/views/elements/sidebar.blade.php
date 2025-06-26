@@ -317,19 +317,19 @@ $role_id = (($user)?$user->role_id:0);
         <?php }?>
 
         <?php if(in_array(46, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'experience-level')?'active':'')?>">
+          <!-- <li class="menu-item <?=(($pageSegment == 'experience-level')?'active':'')?>">
             <a href="<?=url('/experience-level/list')?>" class="menu-link">
               <div data-i18n="Experience Level"><i class="fa-solid fa-arrow-right"></i> Experience Level</div>
             </a>
-          </li>
+          </li> -->
         <?php }?>
 
         <?php if(in_array(47, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'department')?'active':'')?>">
+          <!-- <li class="menu-item <?=(($pageSegment == 'department')?'active':'')?>">
             <a href="<?=url('/department/list')?>" class="menu-link">
               <div data-i18n="Department"><i class="fa-solid fa-arrow-right"></i> Department</div>
             </a>
-          </li>
+          </li> -->
         <?php }?>
 
       </ul>

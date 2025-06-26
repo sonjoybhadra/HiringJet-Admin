@@ -1,3 +1,6 @@
+<?php
+$role_id = (($user)?$user->role_id:0);
+?>
 <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
   <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
     <i class="ti ti-menu-2 ti-md"></i>
@@ -428,14 +431,16 @@
             </div>
           </a>
         </li>
-        <li>
-          <div class="dropdown-divider my-1 mx-n2"></div>
-        </li>
-        <li>
-          <a class="dropdown-item" href="<?=url('settings')?>">
-            <i class="fa-solid fa-gear me-3"></i><span class="align-middle">Settings</span>
-          </a>
-        </li>
+        <?php if(in_array(20, $moduleIds)){?>
+          <li>
+            <div class="dropdown-divider my-1 mx-n2"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="<?=url('settings')?>">
+              <i class="fa-solid fa-gear me-3"></i><span class="align-middle">Settings</span>
+            </a>
+          </li>
+        <?php }?>
         <li>
           <div class="dropdown-divider my-1 mx-n2"></div>
         </li>
