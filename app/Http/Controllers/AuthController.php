@@ -62,9 +62,13 @@ class AuthController extends Controller
             ]);
 
             // Fetch user by email with role_id 1 or 4 and status = 1
+            // $user = \App\Models\User::where('email', $authData['email'])
+            //             ->where('status', 1)
+            //             ->whereIn('role_id', [1, 4])
+            //             ->first();
             $user = \App\Models\User::where('email', $authData['email'])
                         ->where('status', 1)
-                        ->whereIn('role_id', [1, 4])
+                        ->whereNotIn('role_id', [2, 3])
                         ->first();
 
             if ($user && Hash::check($authData['password'], $user->password)) {
