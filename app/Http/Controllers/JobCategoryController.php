@@ -91,7 +91,7 @@ class JobCategoryController extends Controller
             if ($request->filled('id')) {
                 $category = JobCategory::find($request->id);
                 $category->update($validatedData);
-                return redirect()->back()->with('success_message', 'Job Category updated successfully.');
+                return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
             } else {
                 JobCategory::create($validatedData);
                 return redirect()->back()->with('success_message', 'Job Category added successfully.');
