@@ -94,7 +94,7 @@ class JobCategoryController extends Controller
                 return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
             } else {
                 JobCategory::create($validatedData);
-                return redirect()->back()->with('success_message', 'Job Category added successfully.');
+                return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
             }
         }
     /* add */
