@@ -47,6 +47,7 @@ class JobCategoryController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
             if($request->isMethod('post')){
+                echo 'sfasdfas';die;
                 $postData = $request->all();
                 $rules = [
                     'name'           => 'required',
