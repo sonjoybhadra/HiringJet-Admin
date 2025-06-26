@@ -9,7 +9,7 @@ $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
-$role_id = session('role_id');
+echo $role_id = session('role_id');
 // print_r($module_id);
 ?>
 <div class="app-brand demo">
