@@ -49,7 +49,7 @@ $controllerRoute = $module['controller_route'];
             }
             ?>
             <div class="card-body">
-                <form id="formAccountSettings" method="POST" enctype="multipart/form-data">
+                <form id="formAccountSettings" method="POST" action="{{ route('job-category.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">

@@ -80,6 +80,23 @@ class JobCategoryController extends Controller
                 }
             }
         }
+        public function store(Request $request)
+        {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                // ... other fields if any
+            ]);
+
+            // If ID exists, update — else create
+            if ($request->filled('id')) {
+                $category = JobCategory::find($request->id);
+                $category->update($validatedData);
+                return redirect()->back()->with('success_message', 'Job Category updated successfully.');
+            } else {
+                JobCategory::create($validatedData);
+                return redirect()->back()->with('success_message', 'Job Category added successfully.');
+            }
+        }
     /* add */
     /* edit */
         public function edit(Request $request, $id){
