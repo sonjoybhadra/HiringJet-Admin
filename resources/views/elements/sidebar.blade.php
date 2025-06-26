@@ -53,7 +53,7 @@ $role_id = (($user)?$user->role_id:0);
 
 <ul class="menu-inner py-1">
 
-  <?php if(in_array(1, $module_id)){?>
+  <?php if(in_array(1, $moduleIds)){?>
     <!-- Dashboards -->
     <li class="menu-item <?=(($pageSegment == 'dashboard')?'active':'')?>">
       <a href="<?=url('/dashboard')?>" class="menu-link">
@@ -63,7 +63,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
   
-  <?php //if(in_array(2, $module_id) || in_array(3, $module_id) || in_array(4, $module_id)){?>
+  <?php //if(in_array(2, $moduleIds) || in_array(3, $moduleIds) || in_array(4, $moduleIds)){?>
   <?php if($role_id == 1){?>
     <!-- Access & Permission -->
     <li class="menu-item active <?=(($pageSegment == 'module' || $pageSegment == 'role' || $pageSegment == 'admin-user')?'open':'')?>">
@@ -72,7 +72,7 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="Access & Permission">Access & Permission</div>
       </a>
       <ul class="menu-sub">
-        <?php if(in_array(2, $module_id)){?>
+        <?php if(in_array(2, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'module')?'active':'')?>">
             <a href="<?=url('/module/list')?>" class="menu-link">
               <div data-i18n="Modules"><i class="fa-solid fa-arrow-right"></i> Modules</div>
@@ -80,7 +80,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(3, $module_id)){?>
+        <?php if(in_array(3, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'role')?'active':'')?>">
             <a href="<?=url('/role/list')?>" class="menu-link">
               <div data-i18n="Roles"><i class="fa-solid fa-arrow-right"></i> Roles</div>
@@ -88,7 +88,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(4, $module_id)){?>
+        <?php if(in_array(4, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'admin-user')?'active':'')?>">
             <a href="<?=url('/admin-user/list')?>" class="menu-link">
               <div data-i18n="Admin Users"><i class="fa-solid fa-arrow-right"></i> Admin Users</div>
@@ -101,7 +101,7 @@ $role_id = (($user)?$user->role_id:0);
   <?php }?>
   <?php //}?>
   
-  <?php if(in_array(21, $module_id) || in_array(22, $module_id) || in_array(23, $module_id) || in_array(24, $module_id) || in_array(25, $module_id) || in_array(26, $module_id) || in_array(27, $module_id) || in_array(28, $module_id) || in_array(29, $module_id) || in_array(30, $module_id) || in_array(31, $module_id) || in_array(32, $module_id) || in_array(33, $module_id) || in_array(34, $module_id) || in_array(35, $module_id) || in_array(36, $module_id) || in_array(37, $module_id) || in_array(38, $module_id) || in_array(39, $module_id) || in_array(40, $module_id) || in_array(41, $module_id) || in_array(42, $module_id) || in_array(43, $module_id) || in_array(44, $module_id) || in_array(45, $module_id) || in_array(46, $module_id)){?>
+  <?php if(in_array(21, $moduleIds) || in_array(22, $moduleIds) || in_array(23, $moduleIds) || in_array(24, $moduleIds) || in_array(25, $moduleIds) || in_array(26, $moduleIds) || in_array(27, $moduleIds) || in_array(28, $moduleIds) || in_array(29, $moduleIds) || in_array(30, $moduleIds) || in_array(31, $moduleIds) || in_array(32, $moduleIds) || in_array(33, $moduleIds) || in_array(34, $moduleIds) || in_array(35, $moduleIds) || in_array(36, $moduleIds) || in_array(37, $moduleIds) || in_array(38, $moduleIds) || in_array(39, $moduleIds) || in_array(40, $moduleIds) || in_array(41, $moduleIds) || in_array(42, $moduleIds) || in_array(43, $moduleIds) || in_array(44, $moduleIds) || in_array(45, $moduleIds) || in_array(46, $moduleIds)){?>
     <!-- Masters -->
     <li class="menu-item active <?=(($pageSegment == 'industry' || $pageSegment == 'designation' || $pageSegment == 'keyskill' || $pageSegment == 'benefit' || $pageSegment == 'availability' || $pageSegment == 'university' || $pageSegment == 'most-common-email' || $pageSegment == 'language' || $pageSegment == 'religion' || $pageSegment == 'visa-status' || $pageSegment == 'marital-status' || $pageSegment == 'profile-complete' || $pageSegment == 'nationality' || $pageSegment == 'current-work-level' || $pageSegment == 'qualification' || $pageSegment == 'online-profile' || $pageSegment == 'employer' || $pageSegment == 'country' || $pageSegment == 'city' || $pageSegment == 'currency' || $pageSegment == 'course' || $pageSegment == 'specialization' || $pageSegment == 'job-category' || $pageSegment == 'functional-area' || $pageSegment == 'itskill' || $pageSegment == 'department' || $pageSegment == 'contract-type' || $pageSegment == 'experience-level')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -109,7 +109,7 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="Masters">Masters</div>
       </a>
       <ul class="menu-sub">
-        <?php if(in_array(21, $module_id)){?>
+        <?php if(in_array(21, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'job-category')?'active':'')?>">
             <a href="<?=url('/job-category/list')?>" class="menu-link">
               <div data-i18n="Job Category"><i class="fa-solid fa-arrow-right"></i> Job Category</div>
@@ -117,7 +117,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(22, $module_id)){?>
+        <?php if(in_array(22, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'industry')?'active':'')?>">
             <a href="<?=url('/industry/list')?>" class="menu-link">
               <div data-i18n="Industry"><i class="fa-solid fa-arrow-right"></i> Industry</div>
@@ -125,7 +125,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(23, $module_id)){?>
+        <?php if(in_array(23, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'designation')?'active':'')?>">
             <a href="<?=url('/designation/list')?>" class="menu-link">
               <div data-i18n="Designation"><i class="fa-solid fa-arrow-right"></i> Designation</div>
@@ -133,7 +133,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(24, $module_id)){?>
+        <?php if(in_array(24, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'employer')?'active':'')?>">
             <a href="<?=url('/employer/list')?>" class="menu-link">
               <div data-i18n="Employer"><i class="fa-solid fa-arrow-right"></i> Employer</div>
@@ -141,7 +141,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(25, $module_id)){?>
+        <?php if(in_array(25, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'country')?'active':'')?>">
             <a href="<?=url('/country/list')?>" class="menu-link">
               <div data-i18n="Country"><i class="fa-solid fa-arrow-right"></i> Country</div>
@@ -149,7 +149,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(26, $module_id)){?>
+        <?php if(in_array(26, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'city')?'active':'')?>">
             <a href="<?=url('/city/list')?>" class="menu-link">
               <div data-i18n="City"><i class="fa-solid fa-arrow-right"></i> City</div>
@@ -163,7 +163,7 @@ $role_id = (($user)?$user->role_id:0);
           </a>
         </li> -->
 
-        <?php if(in_array(27, $module_id)){?>
+        <?php if(in_array(27, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'keyskill')?'active':'')?>">
             <a href="<?=url('/keyskill/list')?>" class="menu-link">
               <div data-i18n="Keyskill"><i class="fa-solid fa-arrow-right"></i> Keyskill</div>
@@ -171,7 +171,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(28, $module_id)){?>
+        <?php if(in_array(28, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'itskill')?'active':'')?>">
             <a href="<?=url('/itskill/list')?>" class="menu-link">
               <div data-i18n="IT skill"><i class="fa-solid fa-arrow-right"></i> IT Skill</div>
@@ -179,7 +179,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(29, $module_id)){?>
+        <?php if(in_array(29, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'benefit')?'active':'')?>">
             <a href="<?=url('/benefit/list')?>" class="menu-link">
               <div data-i18n="Perk & Benefit"><i class="fa-solid fa-arrow-right"></i> Perk & Benefit</div>
@@ -187,7 +187,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(30, $module_id)){?>
+        <?php if(in_array(30, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'availability')?'active':'')?>">
             <a href="<?=url('/availability/list')?>" class="menu-link">
               <div data-i18n="Availability To Join"><i class="fa-solid fa-arrow-right"></i> Availability To Join</div>
@@ -195,7 +195,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(31, $module_id)){?>
+        <?php if(in_array(31, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'current-work-level')?'active':'')?>">
             <a href="<?=url('/current-work-level/list')?>" class="menu-link">
               <div data-i18n="Current Work Level"><i class="fa-solid fa-arrow-right"></i> Current Work Level</div>
@@ -203,7 +203,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(32, $module_id)){?>
+        <?php if(in_array(32, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'functional-area')?'active':'')?>">
             <a href="<?=url('/functional-area/list')?>" class="menu-link">
               <div data-i18n="Functional Area"><i class="fa-solid fa-arrow-right"></i> Functional Area</div>
@@ -211,7 +211,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(33, $module_id)){?>
+        <?php if(in_array(33, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'online-profile')?'active':'')?>">
             <a href="<?=url('/online-profile/list')?>" class="menu-link">
               <div data-i18n="Online Profile"><i class="fa-solid fa-arrow-right"></i> Online Profile</div>
@@ -219,7 +219,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(34, $module_id)){?>
+        <?php if(in_array(34, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'qualification')?'active':'')?>">
             <a href="<?=url('/qualification/list')?>" class="menu-link">
               <div data-i18n="Qualification"><i class="fa-solid fa-arrow-right"></i> Qualification</div>
@@ -227,7 +227,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(35, $module_id)){?>
+        <?php if(in_array(35, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'course')?'active':'')?>">
             <a href="<?=url('/course/list')?>" class="menu-link">
               <div data-i18n="Course"><i class="fa-solid fa-arrow-right"></i> Course</div>
@@ -235,7 +235,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(36, $module_id)){?>
+        <?php if(in_array(36, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'specialization')?'active':'')?>">
             <a href="<?=url('/specialization/list')?>" class="menu-link">
               <div data-i18n="Specialization"><i class="fa-solid fa-arrow-right"></i> Specialization</div>
@@ -243,7 +243,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(37, $module_id)){?>
+        <?php if(in_array(37, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'university')?'active':'')?>">
             <a href="<?=url('/university/list')?>" class="menu-link">
               <div data-i18n="University / Institute"><i class="fa-solid fa-arrow-right"></i> University / Institute</div>
@@ -251,7 +251,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(38, $module_id)){?>
+        <?php if(in_array(38, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'most-common-email')?'active':'')?>">
             <a href="<?=url('/most-common-email/list')?>" class="menu-link">
               <div data-i18n="Most Common Emails"><i class="fa-solid fa-arrow-right"></i> Most Common Emails</div>
@@ -259,7 +259,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(39, $module_id)){?>
+        <?php if(in_array(39, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'language')?'active':'')?>">
             <a href="<?=url('/language/list')?>" class="menu-link">
               <div data-i18n="Language Known"><i class="fa-solid fa-arrow-right"></i> Language Known</div>
@@ -267,7 +267,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(40, $module_id)){?>
+        <?php if(in_array(40, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'religion')?'active':'')?>">
             <a href="<?=url('/religion/list')?>" class="menu-link">
               <div data-i18n="Religion"><i class="fa-solid fa-arrow-right"></i> Religion</div>
@@ -275,7 +275,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(41, $module_id)){?>
+        <?php if(in_array(41, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'visa-status')?'active':'')?>">
             <a href="<?=url('/visa-status/list')?>" class="menu-link">
               <div data-i18n="Visa Status"><i class="fa-solid fa-arrow-right"></i> Visa Status</div>
@@ -283,7 +283,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(42, $module_id)){?>
+        <?php if(in_array(42, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'marital-status')?'active':'')?>">
             <a href="<?=url('/marital-status/list')?>" class="menu-link">
               <div data-i18n="Marital Status"><i class="fa-solid fa-arrow-right"></i> Marital Status</div>
@@ -291,7 +291,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(43, $module_id)){?>
+        <?php if(in_array(43, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'profile-complete')?'active':'')?>">
             <a href="<?=url('/profile-complete/list')?>" class="menu-link">
               <div data-i18n="Profile Complete Percentage"><i class="fa-solid fa-arrow-right"></i> Profile Complete Percentage</div>
@@ -299,7 +299,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(44, $module_id)){?>
+        <?php if(in_array(44, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'nationality')?'active':'')?>">
             <a href="<?=url('/nationality/list')?>" class="menu-link">
               <div data-i18n="Nationality"><i class="fa-solid fa-arrow-right"></i> Nationality</div>
@@ -307,7 +307,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(45, $module_id)){?>
+        <?php if(in_array(45, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'contract-type')?'active':'')?>">
             <a href="<?=url('/contract-type/list')?>" class="menu-link">
               <div data-i18n="Contract Type"><i class="fa-solid fa-arrow-right"></i> Contract Type</div>
@@ -315,7 +315,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(46, $module_id)){?>
+        <?php if(in_array(46, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'experience-level')?'active':'')?>">
             <a href="<?=url('/experience-level/list')?>" class="menu-link">
               <div data-i18n="Experience Level"><i class="fa-solid fa-arrow-right"></i> Experience Level</div>
@@ -323,7 +323,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
 
-        <?php if(in_array(47, $module_id)){?>
+        <?php if(in_array(47, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'department')?'active':'')?>">
             <a href="<?=url('/department/list')?>" class="menu-link">
               <div data-i18n="Department"><i class="fa-solid fa-arrow-right"></i> Department</div>
@@ -335,7 +335,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
   
-  <?php if(in_array(5, $module_id) || in_array(6, $module_id) || in_array(7, $module_id)){?>
+  <?php if(in_array(5, $moduleIds) || in_array(6, $moduleIds) || in_array(7, $moduleIds)){?>
     <!-- FAQs -->
     <li class="menu-item active <?=(($pageSegment == 'faq-category' || $pageSegment == 'faq-sub-category' || $pageSegment == 'faq')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -343,7 +343,7 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="FAQs">FAQs</div>
       </a>
       <ul class="menu-sub">
-        <?php if(in_array(5, $module_id)){?>
+        <?php if(in_array(5, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'faq-category')?'active':'')?>">
             <a href="<?=url('/faq-category/list')?>" class="menu-link">
               <div data-i18n="FAQ Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Categories</div>
@@ -351,7 +351,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(6, $module_id)){?>
+        <?php if(in_array(6, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'faq-sub-category')?'active':'')?>">
             <a href="<?=url('/faq-sub-category/list')?>" class="menu-link">
               <div data-i18n="FAQ Sub Categories"><i class="fa-solid fa-arrow-right"></i> FAQ Sub Categories</div>
@@ -359,7 +359,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(7, $module_id)){?>
+        <?php if(in_array(7, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'faq')?'active':'')?>">
             <a href="<?=url('/faq/list')?>" class="menu-link">
               <div data-i18n="FAQs"><i class="fa-solid fa-arrow-right"></i> FAQs</div>
@@ -371,7 +371,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
   
-  <?php if(in_array(8, $module_id) || in_array(9, $module_id) || in_array(10, $module_id)){?>
+  <?php if(in_array(8, $moduleIds) || in_array(9, $moduleIds) || in_array(10, $moduleIds)){?>
     <!-- Home Page -->
     <li class="menu-item active <?=(($pageSegment == 'home-page' || $pageSegment == 'article' || $pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -380,7 +380,7 @@ $role_id = (($user)?$user->role_id:0);
       </a>
       <ul class="menu-sub">
 
-        <?php if(in_array(8, $module_id)){?>
+        <?php if(in_array(8, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'home-page')?'active':'')?>">
             <a href="<?=url('/home-page/manage')?>" class="menu-link">
               <div data-i18n="Sections"><i class="fa-solid fa-arrow-right"></i> Sections</div>
@@ -394,7 +394,7 @@ $role_id = (($user)?$user->role_id:0);
           </a>
         </li> -->
         <!-- Articles -->
-        <?php if(in_array(9, $module_id)){?>
+        <?php if(in_array(9, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'article')?'active':'')?>">
             <a href="<?=url('/article/list')?>" class="menu-link">
               <div data-i18n="Articles"><i class="fa-solid fa-arrow-right"></i> Articles</div>
@@ -402,7 +402,7 @@ $role_id = (($user)?$user->role_id:0);
           </li>
         <?php }?>
         
-        <?php if(in_array(10, $module_id)){?>
+        <?php if(in_array(10, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'testimonial')?'active':'')?>">
             <a href="<?=url('/testimonial/list')?>" class="menu-link">
               <div data-i18n="Testimonials"><i class="fa-solid fa-arrow-right"></i> Testimonials</div>
@@ -414,7 +414,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(11, $module_id)){?>
+  <?php if(in_array(11, $moduleIds)){?>
     <!-- CMS Pages -->
     <li class="menu-item <?=(($pageSegment == 'page')?'active':'')?>">
       <a href="<?=url('/page/list')?>" class="menu-link">
@@ -424,7 +424,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(12, $module_id)){?>
+  <?php if(in_array(12, $moduleIds)){?>
     <!-- Posting Jobs -->
     <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
       <a href="<?=url('/post-job/list')?>" class="menu-link">
@@ -434,7 +434,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(14, $module_id)){?>
+  <?php if(in_array(14, $moduleIds)){?>
     <!-- Posting Jobs -->
     <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
       <a href="<?=url('/jobseeker/list')?>" class="menu-link">
@@ -444,7 +444,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(15, $module_id)){?>
+  <?php if(in_array(15, $moduleIds)){?>
     <!-- Contact Us -->
     <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
       <a href="<?=url('/contact-us/list')?>" class="menu-link">
@@ -454,7 +454,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(16, $module_id)){?>
+  <?php if(in_array(16, $moduleIds)){?>
     <!-- Report Bugs -->
     <li class="menu-item <?=(($pageSegment == 'report-bugs')?'active':'')?>">
       <a href="<?=url('/report-bugs/list')?>" class="menu-link">
@@ -464,7 +464,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(17, $module_id)){?>
+  <?php if(in_array(17, $moduleIds)){?>
     <!-- Email Logs -->
     <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
       <a href="<?=url('/email-logs')?>" class="menu-link">
@@ -474,7 +474,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(18, $module_id)){?>
+  <?php if(in_array(18, $moduleIds)){?>
     <!-- Login Logs -->
     <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
       <a href="<?=url('/login-logs')?>" class="menu-link">
@@ -484,7 +484,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(19, $module_id)){?>
+  <?php if(in_array(19, $moduleIds)){?>
     <!-- User Activity Logs -->
     <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
       <a href="<?=url('/user-activity-logs')?>" class="menu-link">
@@ -494,7 +494,7 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(20, $module_id)){?>
+  <?php if(in_array(20, $moduleIds)){?>
     <!-- Settings -->
     <li class="menu-item <?=(($pageSegment == 'settings')?'active':'')?>">
       <a href="<?=url('/settings')?>" class="menu-link">
