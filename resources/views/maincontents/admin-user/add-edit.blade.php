@@ -60,7 +60,7 @@ $controllerRoute = $module['controller_route'];
                             <select class="form-control" type="text" id="role_id" name="role_id" autofocus required>
                                 <option value="" selected>Select Role</option>
                                 <?php if($roles){ foreach($roles as $role){?>
-                                    <?php if($role->id == 2 || $role->id == 3){?>
+                                    <?php if($role->id != 2 || $role->id != 3){?>
                                         <option value="<?=$role->id?>" <?=(($role->id == $role_id)?'selected':'')?>><?=$role->role_name?></option>
                                     <?php }?>
                                 <?php } }?>
