@@ -47,32 +47,36 @@ class JobCategoryController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
             if($request->isMethod('post')){
-                echo 'sfasdfas';die;
-                $postData = $request->all();
-                $rules = [
-                    'name'           => 'required',
-                ];
-                if($this->validate($request, $rules)){
-                    /* user activity */
-                        $activityData = [
-                            'user_email'        => session('user_data')['email'],
-                            'user_name'         => session('user_data')['name'],
-                            'user_type'         => 'ADMIN',
-                            'ip_address'        => $request->ip(),
-                            'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
-                            'platform_type'     => 'WEB',
-                        ];
-                        UserActivity::create($activityData);
-                    /* user activity */
-                    $fields = [
-                        'name'              => strip_tags($postData['name']),
-                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                try {
+                    $postData = $request->all();
+                    $rules = [
+                        'name'           => 'required',
                     ];
-                    JobCategory::insert($fields);
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
-                } else {
-                    return redirect()->back()->with('error_message', 'All Fields Required !!!');
+                    if($this->validate($request, $rules)){
+                        /* user activity */
+                            $activityData = [
+                                'user_email'        => session('user_data')['email'],
+                                'user_name'         => session('user_data')['name'],
+                                'user_type'         => 'ADMIN',
+                                'ip_address'        => $request->ip(),
+                                'activity_type'     => 3,
+                                'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                                'platform_type'     => 'WEB',
+                            ];
+                            UserActivity::create($activityData);
+                        /* user activity */
+                        $fields = [
+                            'name'              => strip_tags($postData['name']),
+                            'status'            => ((array_key_exists("status",$postData))?1:0),
+                        ];
+                        JobCategory::insert($fields);
+                        return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                    } else {
+                        return redirect()->back()->with('error_message', 'All Fields Required !!!');
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Job Category Store Error: ' . $e->getMessage());
+                    return redirect()->back()->with('error_message', 'Something went wrong.');
                 }
             }
         }
