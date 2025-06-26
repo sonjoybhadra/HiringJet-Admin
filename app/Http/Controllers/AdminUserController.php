@@ -98,7 +98,7 @@ class AdminUserController extends Controller
             $title                          = $this->data['title'].' Add';
             $page_name                      = 'admin-user.add-edit';
             $data['row']                    = [];
-            $data['roles']                  = Role::select('id', 'role_name')->where('status', '=', 1)->get();
+            $data['roles']                  = Role::select('id', 'role_name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
             $data['couns']                  = Country::select('country_code', 'name')->where('status', '=', 1)->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
@@ -111,7 +111,7 @@ class AdminUserController extends Controller
             $title                          = $this->data['title'].' Update';
             $page_name                      = 'admin-user.add-edit';
             $data['row']                    = User::where($this->data['primary_key'], '=', $id)->first();
-            $data['roles']                  = Role::select('id', 'role_name')->where('status', '=', 1)->get();
+            $data['roles']                  = Role::select('id', 'role_name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
             $data['couns']                  = Country::select('country_code', 'name')->where('status', '=', 1)->get();
 
             if($request->isMethod('post')){
