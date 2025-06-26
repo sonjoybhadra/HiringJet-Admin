@@ -30,6 +30,15 @@ $controllerRoute = $module['controller_route'];
             </div>
          <?php }?>
          <div class="card mb-4">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <?php
             if($row){
                 $name           = $row->name;
