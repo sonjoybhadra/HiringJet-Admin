@@ -47,7 +47,7 @@ $controllerRoute = $module['controller_route'];
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                    ['column' => 'users.role_id', 'operator' => '=', 'value' => 4]
+                    ['column' => 'users.role_id', 'operator' => '!=', 'value' => 1]
                   ],
                   'routePrefix' => 'admin-user',
                   'showActions' => true, // set to false to hide actions
