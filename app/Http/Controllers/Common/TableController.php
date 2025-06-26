@@ -12,6 +12,7 @@ class TableController extends Controller
     {
         // Helper::pr($request->all());
         $table = $request->input('table');
+        $routes = $request->input('routes');
         $orderBy = $request->input('orderBy', 'id');
         $orderType = $request->input('orderType', 'desc');
         $rawColumns = explode(',', $request->input('columns'));
@@ -53,8 +54,10 @@ class TableController extends Controller
         }
         if ($table === 'users') {
             $query->leftJoin('roles', DB::raw("CAST($table.role_id AS TEXT)"), '=', DB::raw("CAST(roles.id AS TEXT)"));
-            // 🚫 Exclude users with role_id 2 and 3
-            $query->whereNotIn("$table.role_id", [2, 3]);
+            if($routes == 'admin-user'){
+                // 🚫 Exclude users with role_id 2 and 3
+                $query->whereNotIn("$table.role_id", [2, 3]);
+            }
         }
         if ($table === 'contact_us') {
             $query->leftJoin('cities', DB::raw("CAST($table.city_id AS TEXT)"), '=', DB::raw("CAST(cities.id AS TEXT)"));
