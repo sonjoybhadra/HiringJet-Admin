@@ -9,6 +9,7 @@ $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
+$role_id = session('role_id');
 // print_r($module_id);
 ?>
 <div class="app-brand demo">
@@ -63,7 +64,8 @@ $user_id = session('user_id');
     </li>
   <?php }?>
   
-  <?php if(in_array(2, $module_id) || in_array(3, $module_id) || in_array(4, $module_id)){?>
+  <?php //if(in_array(2, $module_id) || in_array(3, $module_id) || in_array(4, $module_id)){?>
+  <?php if($role_id == 1){?>
     <!-- Access & Permission -->
     <li class="menu-item active <?=(($pageSegment == 'module' || $pageSegment == 'role' || $pageSegment == 'admin-user')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -98,6 +100,7 @@ $user_id = session('user_id');
       </ul>
     </li>
   <?php }?>
+  <?php //}?>
   
   <?php if(in_array(21, $module_id) || in_array(22, $module_id) || in_array(23, $module_id) || in_array(24, $module_id) || in_array(25, $module_id) || in_array(26, $module_id) || in_array(27, $module_id) || in_array(28, $module_id) || in_array(29, $module_id) || in_array(30, $module_id) || in_array(31, $module_id) || in_array(32, $module_id) || in_array(33, $module_id) || in_array(34, $module_id) || in_array(35, $module_id) || in_array(36, $module_id) || in_array(37, $module_id) || in_array(38, $module_id) || in_array(39, $module_id) || in_array(40, $module_id) || in_array(41, $module_id) || in_array(42, $module_id) || in_array(43, $module_id) || in_array(44, $module_id) || in_array(45, $module_id) || in_array(46, $module_id)){?>
     <!-- Masters -->
