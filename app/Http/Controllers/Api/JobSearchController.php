@@ -240,7 +240,7 @@ class JobSearchController extends BaseApiController
                 return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
             }
         }catch (\Exception $exception) {
-            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendError('Internal Error', $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

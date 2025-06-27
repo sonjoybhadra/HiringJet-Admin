@@ -237,9 +237,9 @@ class SiteAuthService
         $role_id                    = (($data['user'])?$data['user']->role_id:0);
         $userAccess                 = Role::where('id', '=', $role_id)->where('status', '=', 1)->first();
         if($userAccess) {
-            $data['module_id']      = json_decode($userAccess->module_id);
+            $data['moduleIds']      = json_decode($userAccess->module_id);
         } else {
-            $data['module_id']      = [];
+            $data['moduleIds']      = [];
         }
         return $data;
     }

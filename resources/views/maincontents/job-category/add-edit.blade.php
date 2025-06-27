@@ -30,6 +30,15 @@ $controllerRoute = $module['controller_route'];
             </div>
          <?php }?>
          <div class="card mb-4">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <?php
             if($row){
                 $name           = $row->name;
@@ -40,7 +49,12 @@ $controllerRoute = $module['controller_route'];
             }
             ?>
             <div class="card-body">
-                <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
+                <?php if($row){?>
+                    <form id="formAccountSettings" method="POST" enctype="multipart/form-data">
+                <?php } else {?>
+                    <form id="formAccountSettings" method="POST" action="{{ route('job-category.store') }}" enctype="multipart/form-data">
+                <?php } ?>
+                
                     @csrf
                     <div class="row">
                         <div class="col-md-6">

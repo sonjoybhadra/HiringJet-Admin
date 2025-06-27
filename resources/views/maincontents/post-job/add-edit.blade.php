@@ -660,11 +660,17 @@ $controllerRoute = $module['controller_route'];
 
                         $.each(data, function (index, city) {
                             let isSelected = selectedCities.includes(city.id);
-                            citySelect.append(`<option value="${city.id}" ${isSelected ? 'selected' : ''}>${city.name}</option>`);
+                            //citySelect.append(`<option value="${city.id}" ${isSelected ? 'selected' : ''}>${city.name}</option>`);
+                            citySelect.append(`<option value="${city.id}">${city.name}</option>`);
                         });
 
+                        // citySelect.prop('disabled', false);
+                        // citySelect.trigger('change'); // for select2 refresh
+
+                        // Re-apply selected cities
+                        citySelect.val(selectedCities).trigger('change');
+
                         citySelect.prop('disabled', false);
-                        citySelect.trigger('change'); // for select2 refresh
                     },
                     error: function () {
                         $('#location_cities').html('<option disabled>Error loading cities</option>');

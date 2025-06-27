@@ -116,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
         /* job category */
             Route::get('job-category/list', [JobCategoryController::class, 'list']);
             Route::match(['get', 'post'], 'job-category/add', [JobCategoryController::class, 'add']);
+            Route::post('job-category/store', [JobCategoryController::class, 'store'])->name('job-category.store');
             Route::match(['get', 'post'], 'job-category/edit/{id}', [JobCategoryController::class, 'edit']);
             Route::get('job-category/delete/{id}', [JobCategoryController::class, 'delete']);
             Route::get('job-category/change-status/{id}', [JobCategoryController::class, 'change_status']);

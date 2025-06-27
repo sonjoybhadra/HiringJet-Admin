@@ -16,6 +16,7 @@ function loadTable(config) {
             method: 'GET',
             data: {
                 table: config.table,
+                routes: config.routePrefix,
                 columns: config.columns.join(','),
                 page: page,
                 perPage: perPage,
