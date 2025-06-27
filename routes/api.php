@@ -43,7 +43,9 @@ Route::post('/auth/linkedin/callback', [SocialAuthController::class, 'handleLink
 Route::post('/auth/google/redirect', [SocialAuthController::class, 'redirectToGoogle']);
 Route::post('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
-
+// The controller automatically detects which flow it is based on the state parameter
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+Route::get('/auth/linkedin/callback', [SocialAuthController::class, 'handleLinkedInCallback']);
 
 Route::post('/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
@@ -180,6 +182,19 @@ Route::group([
     Route::post('/shortlisted-jobs', [JobSearchController::class, 'shortlistedJob']);
     Route::get('/get-shortlisted-jobs', [JobSearchController::class, 'getShortlistedJob']);
     Route::get('/get-matched-jobs', [JobSearchController::class, 'getMatchedJobsForJobseeker']);
+
+    // Google Account Linking
+    Route::post('/auth/google/connect', [SocialAuthController::class, 'initiateGoogleConnect']);
+    Route::post('/auth/google/link', [SocialAuthController::class, 'linkGoogleAccount']);
+    Route::post('/auth/google/disconnect', [SocialAuthController::class, 'disconnectGoogleAccount']);
+
+    // LinkedIn Account Linking
+    Route::post('/auth/linkedin/connect', [SocialAuthController::class, 'initiateLinkedInConnect']);
+    Route::post('/auth/linkedin/link', [SocialAuthController::class, 'linkLinkedInAccount']);
+    Route::post('/auth/linkedin/disconnect', [SocialAuthController::class, 'disconnectLinkedInAccount']);
+
+    // Test configuration (optional - for debugging)
+    Route::get('/auth/test-config', [SocialAuthController::class, 'testConfig']);
 
 });
 
