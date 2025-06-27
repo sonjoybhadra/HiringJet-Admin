@@ -73,7 +73,7 @@ class BaseApiController extends Controller
     }
 
     public function getUserDetails(){
-        return User::where('id', auth()->user()->id??$user_id)
+        return User::where('id', auth()->user()->id)
                                 ->with('user_profile')
                                 ->with('user_skills')
                                 ->with('user_employments')
@@ -119,6 +119,12 @@ class BaseApiController extends Controller
                 ]);
             }
         }
+    }
+
+    public function getEmployerDetails(){
+        return User::where('id', auth()->user()->id)
+                                ->with('user_employer_details')
+                                ->first();
     }
 
 }

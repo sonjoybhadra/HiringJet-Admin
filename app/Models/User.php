@@ -209,5 +209,17 @@ class User extends Authenticatable implements JWTSubject
                     ->orderBy('created_at', 'asc');
     }
 
+    /**
+     * Get the profile details of associated user.
+    */
+    public function user_employer_details(): HasOne
+    {
+        return $this->hasOne(UserEmployer::class, 'user_id')
+                    ->with('designation')
+                    ->with('business')
+                    ->with('industry')
+                    ->with('country')
+                    ->with('city');
+    }
 
 }
