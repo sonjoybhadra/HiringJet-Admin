@@ -85,7 +85,7 @@ function loadTable(config) {
                 const encodedId = row.encoded_id;
                 const base = '/' + config.routePrefix;
 
-                if(config.routePrefix != 'post-job'){
+                if(config.routePrefix != 'jobseeker'){
                     html += `<td>
                         <a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
                             <i class="fas fa-edit"></i>

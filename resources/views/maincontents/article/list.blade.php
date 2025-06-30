@@ -39,9 +39,9 @@ $controllerRoute = $module['controller_route'];
                   'containerId' => 'table1',
                   'searchId' => 'search1',
                   'table' => 'articles',
-                  'columns' => ['page_name', 'page_image', 'created_at', 'status'],
-                  'visibleColumns' => ['page_name', 'page_image', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Name', 'Article Image', 'Created At'],
+                  'columns' => ['page_name', 'created_at', 'status'],
+                  'visibleColumns' => ['page_name', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Name', 'Created At'],
                   'filename' => "Article",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
@@ -50,8 +50,7 @@ $controllerRoute = $module['controller_route'];
                   ],
                   'routePrefix' => 'article',
                   'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'imageColumns' => ['page_image']
+                  'statusColumn' => 'status', // optional, defaults to 'is_active'
                 ])
             </div>
         </div>
