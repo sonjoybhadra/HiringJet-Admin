@@ -75,7 +75,7 @@ $controllerRoute = $module['controller_route'];
                             <textarea class="form-control" id="ckeditor1" name="page_content" placeholder="Page Content"><?=$page_content?></textarea>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    <!-- <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
                                 <div class="button-wrapper">
@@ -100,8 +100,8 @@ $controllerRoute = $module['controller_route'];
                         <div class="col-md-6">
                             <img src="<?=(($page_banner_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $page_banner_image:config('constants.no_image'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
-                    </div>
-                    <div class="row mt-3">
+                    </div> -->
+                    <!-- <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
                                 <div class="button-wrapper">
@@ -126,7 +126,7 @@ $controllerRoute = $module['controller_route'];
                         <div class="col-md-6">
                             <img src="<?=(($page_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $page_image:config('constants.no_image'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
-                    </div>
+                    </div> -->
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label for="ckeditor2" class="form-label">Meta Title <small class="text-danger">*</small></label>
