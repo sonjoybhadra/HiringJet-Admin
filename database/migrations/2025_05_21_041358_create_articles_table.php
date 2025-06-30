@@ -16,8 +16,8 @@ return new class extends Migration
             $table->longText('page_name');
             $table->longText('page_slug');
             $table->longText('page_content');
-            $table->longText('page_banner_image');
-            $table->longText('page_image');
+            $table->longText('page_banner_image')->nullable();
+            // $table->longText('page_image');
             $table->longText('meta_title');
             $table->longText('meta_keywords');
             $table->longText('meta_description');
