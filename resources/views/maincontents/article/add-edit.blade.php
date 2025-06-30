@@ -102,7 +102,7 @@ $controllerRoute = $module['controller_route'];
                         </div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
                                 <div class="button-wrapper">
                                     <label for="page_image" class="btn btn-primary me-2 mb-4" tabindex="0">
@@ -122,7 +122,7 @@ $controllerRoute = $module['controller_route'];
                                     <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-6">
                             <img src="<?=(($page_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $page_image:config('constants.no_image'))?>" alt="<?=$page_name?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                         </div>
