@@ -93,7 +93,7 @@ class ArticleController extends Controller
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
                         'page_content'              => strip_tags($postData['page_content']),
-                        'page_banner_image'         => 'uploads/' . $upload_folder . '/' . $page_banner_image,
+                        'page_banner_image'         => '/uploads/' . $upload_folder . '/' . $page_banner_image,
                         // 'page_image'                => 'uploads/' . $upload_folder . '/' . $page_image,
                         'meta_title'                => strip_tags($postData['meta_title']),
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),
@@ -135,7 +135,7 @@ class ArticleController extends Controller
                             $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
                             if($uploadedFile['status']){
                                 $page_banner_image = $uploadedFile['newFilename'];
-                                $pageBannerImageLink = 'uploads/' . $upload_folder . '/' . $page_banner_image;
+                                $pageBannerImageLink = '/uploads/' . $upload_folder . '/' . $page_banner_image;
                             } else {
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
