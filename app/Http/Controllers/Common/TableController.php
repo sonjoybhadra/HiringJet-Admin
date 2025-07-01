@@ -59,6 +59,9 @@ class TableController extends Controller
                 $query->whereNotIn("$table.role_id", [2, 3]);
             }
         }
+        if ($table === 'post_jobs') {
+            $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
+        }
         if ($table === 'contact_us') {
             $query->leftJoin('cities', DB::raw("CAST($table.city_id AS TEXT)"), '=', DB::raw("CAST(cities.id AS TEXT)"));
         }
@@ -105,6 +108,9 @@ class TableController extends Controller
             }
             if ($table === 'report_bugs' && $col === 'user_id') {
                 return 'users.first_name as name';
+            }
+            if ($table === 'post_jobs' && $col === 'created_by') {
+                return 'users.first_name as created_by_name';
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);

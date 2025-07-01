@@ -464,4 +464,21 @@ class PostJobController extends Controller
             return view('maincontents.' . $page_name, $data);
         }
     /* job applications */
+    /* user wise job list */
+        public function userWiseList(Request $request){
+            $data['module']                 = $this->data;
+            $page_name                      = 'post-job.user-wise-job-list';
+            $title                          = 'User Wise Job Posted';
+            $data['subusers']               = DB::table('users')
+                                                ->join('roles', 'roles.id', '=', 'users.role_id')
+                                                ->select('users.*', 'roles.role_name')
+                                                ->where('users.status', '!=', 3)
+                                                ->whereIn('users.role_id', [1, 3, 9, 10])
+                                                ->orderBy('users.id', 'DESC')
+                                                ->get();
+            
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* user wise job list */
 }
