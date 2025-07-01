@@ -68,11 +68,11 @@ class AdminUserController extends Controller
                     /* user activity */
                     $email = $postData['email'];
                     $phone = $postData['phone'];
-                    $checkEmail = User::where('email', $email)->count();
+                    $checkEmail = User::where('email', $email)->where('status', '!=', 3)->count();
                     if($checkEmail > 0){
                         return redirect()->back()->with('error_message', 'Email Alreadys Exists !!!');
                     } else {
-                        $checkPhone = User::where('phone', $phone)->count();
+                        $checkPhone = User::where('phone', '=', $phone)->where('status', '!=', 3)->count();
                         if($checkPhone > 0){
                             return redirect()->back()->with('error_message', 'Phone Alreadys Exists !!!');
                         } else {
@@ -150,11 +150,11 @@ class AdminUserController extends Controller
 
                     $email = $postData['email'];
                     $phone = $postData['phone'];
-                    $checkEmail = User::where('email', $email)->where('id', '!=', $id)->count();
+                    $checkEmail = User::where('email', $email)->where('id', '!=', $id)->where('status', '!=', 3)->count();
                     if($checkEmail > 0){
                         return redirect()->back()->with('error_message', 'Email Alreadys Exists !!!');
                     } else {
-                        $checkPhone = User::where('phone', $phone)->where('id', '!=', $id)->count();
+                        $checkPhone = User::where('phone', '=', $phone)->where('id', '!=', $id)->where('status', '!=', 3)->count();
                         if($checkPhone > 0){
                             return redirect()->back()->with('error_message', 'Phone Alreadys Exists !!!');
                         } else {
