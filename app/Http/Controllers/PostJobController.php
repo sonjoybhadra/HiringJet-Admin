@@ -473,7 +473,7 @@ class PostJobController extends Controller
                                                 ->join('roles', 'roles.id', '=', 'users.role_id')
                                                 ->select('users.*', 'roles.role_name')
                                                 ->where('users.status', '!=', 3)
-                                                ->whereIn('users.role_id', [1, 3, 9, 10])
+                                                ->whereIn('users.role_id', [1, 2, 9, 10])
                                                 ->orderBy('users.id', 'DESC')
                                                 ->get();
             
