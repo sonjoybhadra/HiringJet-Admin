@@ -10,7 +10,6 @@ $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
 $role_id = (($user)?$user->role_id:0);
-// Helper::pr($moduleIds,0);
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
@@ -427,10 +426,20 @@ $role_id = (($user)?$user->role_id:0);
 
   <?php if(in_array(12, $moduleIds)){?>
     <!-- Posting Jobs -->
-    <li class="menu-item <?=(($pageSegment == 'post-job')?'active':'')?>">
+    <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
       <a href="<?=url('/post-job/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-file-lines"></i>
         <div data-i18n="Jobs">Jobs</div>
+      </a>
+    </li>
+  <?php }?>
+
+  <?php if(in_array(12, $moduleIds)){?>
+    <!-- Posting Jobs User Wise -->
+    <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'user-wise-list')?'active':'')?>">
+      <a href="<?=url('/post-job/user-wise-list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <div data-i18n="User Wise Job Posted">User Wise Job Posted</div>
       </a>
     </li>
   <?php }?>

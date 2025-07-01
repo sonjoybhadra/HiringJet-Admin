@@ -94,12 +94,12 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">Phone <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="phone" name="phone" value="<?=$phone?>" required placeholder="Phone" />
+                            <input class="form-control" type="text" id="phone" name="phone" value="<?=$phone?>" required placeholder="Phone" minlength="8" maxlength="10" />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="email" name="email" value="<?=$email?>" required placeholder="Email" />
+                            <input class="form-control" type="email" id="email" name="email" value="<?=$email?>" required placeholder="Email" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password <small class="text-danger">*</small></label>

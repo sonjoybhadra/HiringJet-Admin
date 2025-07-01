@@ -40,15 +40,23 @@ $controllerRoute = $module['controller_route'];
                 'containerId' => 'table1',
                 'searchId' => 'search1',
                 'table' => 'post_jobs',
-                'columns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'status'],
-                'visibleColumns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at'],    // used for rendering
-                'headers' => ['#', 'Job No.', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At'],
+                'columns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by', 'status'],
+                'visibleColumns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by_name'],    // used for rendering
+                'headers' => ['#', 'Job No.', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At', 'Created By'],
                 'filename' => "Job",
                 'orderBy' => 'id',
                 'orderType' => 'desc',
                 'conditions' => [
                     ['column' => 'status', 'operator' => '!=', 'value' => 3]
                 ],
+                'joins' => [
+                     [
+                           'table' => 'users',
+                           'localKey' => 'created_by',
+                           'foreignKey' => 'id',
+                           'select' => ['first_name as created_by_name']
+                     ]
+                  ],
                 'routePrefix' => 'post-job',
                 'showActions' => true, // set to false to hide actions
                 'statusColumn' => 'status' // optional, defaults to 'is_active'
