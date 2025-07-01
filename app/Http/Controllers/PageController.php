@@ -60,41 +60,41 @@ class PageController extends Controller
                         UserActivity::insert($activityData);
                     /* user activity */
                     /* page banner image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_banner_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_banner_image = $uploadedFile['newFilename'];
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_banner_image = '';
-                        }
+                        // $upload_folder = 'page';
+                        // $imageFile      = $request->file('page_banner_image');
+                        // if($imageFile != ''){
+                        //     $imageName      = $imageFile->getClientOriginalName();
+                        //     $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
+                        //     if($uploadedFile['status']){
+                        //         $page_banner_image = $uploadedFile['newFilename'];
+                        //     } else {
+                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                        //     }
+                        // } else {
+                        //     $page_banner_image = '';
+                        // }
                     /* page banner image */
                     /* page image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_image = $uploadedFile['newFilename'];
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_image = '';
-                        }
+                        // $upload_folder = 'page';
+                        // $imageFile      = $request->file('page_image');
+                        // if($imageFile != ''){
+                        //     $imageName      = $imageFile->getClientOriginalName();
+                        //     $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
+                        //     if($uploadedFile['status']){
+                        //         $page_image = $uploadedFile['newFilename'];
+                        //     } else {
+                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                        //     }
+                        // } else {
+                        //     $page_image = '';
+                        // }
                     /* page image */
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
                         'page_content'              => $postData['page_content'],
-                        'page_banner_image'         => 'uploads/' . $upload_folder . '/' . $page_banner_image,
-                        'page_image'                => 'uploads/' . $upload_folder . '/' . $page_image,
+                        // 'page_banner_image'         => '/uploads/' . $upload_folder . '/' . $page_banner_image,
+                        // 'page_image'                => '/uploads/' . $upload_folder . '/' . $page_image,
                         'meta_title'                => strip_tags($postData['meta_title']),
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),
                         'meta_description'          => strip_tags($postData['meta_description']),
@@ -128,45 +128,45 @@ class PageController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     /* page banner image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_banner_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_banner_image = $uploadedFile['newFilename'];
-                                $pageBannerImageLink = 'uploads/' . $upload_folder . '/' . $page_banner_image;
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_banner_image = $data['row']->page_banner_image;
-                            $pageBannerImageLink = $page_banner_image;
-                        }
+                        // $upload_folder = 'page';
+                        // $imageFile      = $request->file('page_banner_image');
+                        // if($imageFile != ''){
+                        //     $imageName      = $imageFile->getClientOriginalName();
+                        //     $uploadedFile   = $this->upload_single_file('page_banner_image', $imageName, $upload_folder, 'image');
+                        //     if($uploadedFile['status']){
+                        //         $page_banner_image = $uploadedFile['newFilename'];
+                        //         $pageBannerImageLink = '/uploads/' . $upload_folder . '/' . $page_banner_image;
+                        //     } else {
+                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                        //     }
+                        // } else {
+                        //     $page_banner_image = $data['row']->page_banner_image;
+                        //     $pageBannerImageLink = $page_banner_image;
+                        // }
                     /* page banner image */
                     /* page image */
-                        $upload_folder = 'page';
-                        $imageFile      = $request->file('page_image');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $page_image = $uploadedFile['newFilename'];
-                                $pageImageLink = 'uploads/' . $upload_folder . '/' . $page_image;
-                            } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                            }
-                        } else {
-                            $page_image = $data['row']->page_image;
-                            $pageImageLink = $page_image;
-                        }
+                        // $upload_folder = 'page';
+                        // $imageFile      = $request->file('page_image');
+                        // if($imageFile != ''){
+                        //     $imageName      = $imageFile->getClientOriginalName();
+                        //     $uploadedFile   = $this->upload_single_file('page_image', $imageName, $upload_folder, 'image');
+                        //     if($uploadedFile['status']){
+                        //         $page_image = $uploadedFile['newFilename'];
+                        //         $pageImageLink = '/uploads/' . $upload_folder . '/' . $page_image;
+                        //     } else {
+                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                        //     }
+                        // } else {
+                        //     $page_image = $data['row']->page_image;
+                        //     $pageImageLink = $page_image;
+                        // }
                     /* page image */
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
                         'page_content'              => $postData['page_content'],
-                        'page_banner_image'         => $pageBannerImageLink,
-                        'page_image'                => $pageImageLink,
+                        // 'page_banner_image'         => $pageBannerImageLink,
+                        // 'page_image'                => $pageImageLink,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                         'meta_title'                => strip_tags($postData['meta_title']),
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),

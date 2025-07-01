@@ -832,6 +832,7 @@ class SocialAuthController extends BaseApiController
             'provider_id' => $providerId,
             'country_code' => '+971',
             'phone' => date('ymdhis'),
+            'linkedin_email'=> $email
         ];
 
         // Add provider-specific ID

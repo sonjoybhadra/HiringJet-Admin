@@ -46,9 +46,7 @@ class EmployerController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'              => 'required',
-                    'description'       => 'required',
                     'industry_id'       => 'required',
-                    'no_of_employee'    => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -113,9 +111,7 @@ class EmployerController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'              => 'required',
-                    'description'       => 'required',
                     'industry_id'       => 'required',
-                    'no_of_employee'    => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* logo */

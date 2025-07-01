@@ -68,12 +68,12 @@ $controllerRoute = $module['controller_route'];
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="description" class="form-label">Description <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="description" name="description" required placeholder="Description"><?=$description?></textarea>
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" placeholder="Description"><?=$description?></textarea>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="no_of_employee" class="form-label">No. Of Employee <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="no_of_employee" name="no_of_employee" value="<?=$no_of_employee?>" required placeholder="No. Of Employee" autofocus />
+                            <label for="no_of_employee" class="form-label">No. Of Employee</label>
+                            <input class="form-control" type="text" id="no_of_employee" name="no_of_employee" value="<?=$no_of_employee?>" placeholder="No. Of Employee" autofocus />
                         </div>
                         
                         <div class="col-md-3 mb-3">

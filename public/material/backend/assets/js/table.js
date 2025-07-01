@@ -85,10 +85,13 @@ function loadTable(config) {
                 const encodedId = row.encoded_id;
                 const base = '/' + config.routePrefix;
 
-                html += `<td>
-                    <a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
-                        <i class="fas fa-edit"></i>
-                    </a>`;
+                html += `<td>`;
+                
+                if(config.routePrefix != 'jobseeker'){
+                    html += `<a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>`;
+                }
 
                 if (status == 1) {
                     html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-success me-1" title="Deactivate">
