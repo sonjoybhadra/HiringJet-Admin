@@ -33,8 +33,6 @@ use App\Http\Controllers\Api\JobSearchController;
 use App\Http\Controllers\Api\SocialAuthController;
 
 Route::post('/login', [AuthController::class, 'login']);
-
-//Login with Google & Linkdin
 // LinkedIn routes
 Route::post('/auth/linkedin/redirect', [SocialAuthController::class, 'redirectToLinkedIn']);
 Route::post('/auth/linkedin/callback', [SocialAuthController::class, 'handleLinkedInCallback']);
