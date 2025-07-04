@@ -132,9 +132,11 @@ class PostJob extends Model
             $sql->where('designation', $jobseeker_designation->last_designation);
         }
         if(!empty($user_skills)){
-            foreach ($user_skills as $tag) {
-                $sql->orWhereJsonContains('skill_ids', (string)$tag);
-            }
+            $sql->where(function ($q) use ($user_skills) {
+                foreach ($user_skills as $tag) {
+                    $q->orWhereJsonContains('skill_ids', (string)$tag);
+                }
+            });
         }
 
         return $sql;
