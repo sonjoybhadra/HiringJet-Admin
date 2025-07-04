@@ -14,8 +14,9 @@ use App\Mail\NotificationEmail;
 use App\Models\PostJob;
 use App\Models\PostJobUserApplied;
 use App\Models\ShortlistedJob;
-use App\Models\UserEmployment;
-use App\Models\UserSkill;
+use App\Models\Designation;
+use App\Models\Industry;
+use App\Models\ItSkill;
 
 class JobSearchController extends BaseApiController
 {
@@ -32,6 +33,42 @@ class JobSearchController extends BaseApiController
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
             }
 
+            if(!empty($request->keywords) && !empty($request->location)){
+                $keywords_array = explode(',', $request->keywords);
+
+                $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                $itskills = ItSkill::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                if(count($designations) > 0){
+                    $sql->where(function ($q) use ($designations) {
+                        foreach ($designations as $tag) {
+                            $q->orWhere('designation', (string)$tag);
+                        }
+                    });
+                }
+                if(count($industries) > 0){
+                    $sql->orWhere(function ($q) use ($industries) {
+                        foreach ($industries as $tag) {
+                            $q->orWhere('industry', (string)$tag);
+                        }
+                    });
+                }
+                if(count($itskills) > 0){
+                    $sql->orWhere(function ($q) use ($itskills) {
+                        foreach ($itskills as $tag) {
+                            $q->orWhereJsonContains('skill_ids', (string)$tag);
+                        }
+                    });
+                }
+
+                $location_array = explode(',', $request->location);
+                $sql->orWhere(function ($q) use ($location_array) {
+                    foreach ($location_array as $tag) {
+                        $q->orWhereJsonContains('location_countries', (string)$tag);
+                        $q->orWhereJsonContains('location_cities', (string)$tag);
+                    }
+                });
+            }
             if(!empty($request->country)){
                 $countrys = $request->country;
                 $sql->where(function ($q) use ($countrys) {
