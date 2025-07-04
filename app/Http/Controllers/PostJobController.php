@@ -59,19 +59,23 @@ class PostJobController extends Controller
                 $postData = $request->all();
                 // Helper::pr($postData,0);
                 $rules = [
-                    'position_name'             => 'required',
+                    // 'position_name'             => 'required',
                     'employer_id'               => 'required',
                     'job_type'                  => 'required',
-                    'location_countries'        => 'required',
-                    'location_cities'           => 'required',
+                    // 'location_countries'        => 'required',
+                    // 'location_cities'           => 'required',
                     'industry'                  => 'required',
                     'job_category'              => 'required',
                     'nationality'               => 'required',
                     'gender'                    => 'required',
                     'open_position_number'      => 'required',
                     'contract_type'             => 'required',
+                    'min_exp_year'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    $getDesignation = Designation::select('name')->where('id', $postData['designation'])->first();
+                    $position_name = (($getDesignation)?$getDesignation->name:'');
+
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -79,7 +83,7 @@ class PostJobController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['position_name'] . ' ' . $this->data['title'] . ' Added',
+                            'activity_details'  => $position_name . ' ' . $this->data['title'] . ' Added',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
@@ -135,12 +139,12 @@ class PostJobController extends Controller
                                 $skill_names[] = (($getSkill)?$getSkill->name:'');
                             }
                         }
-                    }
+                    }                    
                     
                     $fields = [
                         'sl_no'                     => $next_sl_no,
                         'job_no'                    => $job_no,
-                        'position_name'             => strip_tags($postData['position_name']),
+                        'position_name'             => strip_tags($position_name),
                         'employer_id'               => strip_tags($postData['employer_id']),
                         'job_type'                  => strip_tags($postData['job_type']),
                         'location_countries'        => ((!empty($location_countries))?$location_countries:''),
@@ -162,13 +166,13 @@ class PostJobController extends Controller
                         'skill_ids'                 => ((!empty($skill_ids))?$skill_ids:''),
                         'skill_names'               => ((!empty($skill_names))?json_encode($skill_names):''),
                         // 'experience_level'          => $postData['experience_level'],
-                        'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):''),
+                        'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):null),
                         'currency'                  => $postData['currency'],
                         'min_salary'                => (($postData['min_salary'] != '')?$postData['min_salary']:0),
                         'max_salary'                => (($postData['max_salary'] != '')?$postData['max_salary']:0),
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
-                        'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):''),
-                        'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):''),
+                        'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):null),
+                        'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):null),
                         'application_through'       => strip_tags($postData['application_through']),
                         'apply_on_email'            => strip_tags($postData['apply_on_email']),
                         'apply_on_link'             => strip_tags($postData['apply_on_link']),
@@ -245,19 +249,23 @@ class PostJobController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'position_name'             => 'required',
+                    // 'position_name'             => 'required',
                     'employer_id'               => 'required',
                     'job_type'                  => 'required',
-                    'location_countries'        => 'required',
-                    'location_cities'           => 'required',
+                    // 'location_countries'        => 'required',
+                    // 'location_cities'           => 'required',
                     'industry'                  => 'required',
                     'job_category'              => 'required',
                     'nationality'               => 'required',
                     'gender'                    => 'required',
                     'open_position_number'      => 'required',
                     'contract_type'             => 'required',
+                    'min_exp_year'              => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    $getDesignation = Designation::select('name')->where('id', $postData['designation'])->first();
+                    $position_name = (($getDesignation)?$getDesignation->name:'');
+
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -265,7 +273,7 @@ class PostJobController extends Controller
                             'user_type'         => 'ADMIN',
                             'ip_address'        => $request->ip(),
                             'activity_type'     => 3,
-                            'activity_details'  => $postData['position_name'] . ' ' . $this->data['title'] . ' Updated',
+                            'activity_details'  => $position_name . ' ' . $this->data['title'] . ' Updated',
                             'platform_type'     => 'WEB',
                         ];
                         UserActivity::insert($activityData);
@@ -308,10 +316,10 @@ class PostJobController extends Controller
                                 $skill_names[] = (($getSkill)?$getSkill->name:'');
                             }
                         }
-                    }
+                    }                    
                     
                     $fields = [
-                        'position_name'             => strip_tags($postData['position_name']),
+                        'position_name'             => strip_tags($position_name),
                         'employer_id'               => strip_tags($postData['employer_id']),
                         'job_type'                  => strip_tags($postData['job_type']),
                         'location_countries'        => ((!empty($location_countries))?$location_countries:''),
@@ -333,13 +341,13 @@ class PostJobController extends Controller
                         'skill_ids'                 => ((!empty($skill_ids))?$skill_ids:''),
                         'skill_names'               => ((!empty($skill_names))?json_encode($skill_names):''),
                         // 'experience_level'          => $postData['experience_level'],
-                        'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):''),
+                        'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):null),
                         'currency'                  => $postData['currency'],
                         'min_salary'                => (($postData['min_salary'] != '')?$postData['min_salary']:0),
                         'max_salary'                => (($postData['max_salary'] != '')?$postData['max_salary']:0),
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
-                        'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):''),
-                        'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):''),
+                        'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):null),
+                        'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):null),
                         'application_through'       => strip_tags($postData['application_through']),
                         'apply_on_email'            => strip_tags($postData['apply_on_email']),
                         'apply_on_link'             => strip_tags($postData['apply_on_link']),

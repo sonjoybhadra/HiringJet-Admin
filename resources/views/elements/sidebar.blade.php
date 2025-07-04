@@ -57,7 +57,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- Dashboards -->
     <li class="menu-item <?=(($pageSegment == 'dashboard')?'active':'')?>">
       <a href="<?=url('/dashboard')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-house"></i>
+        <i class="menu-icon fa-solid fa-dashboard"></i>
         <div data-i18n="Dashboard">Dashboard</div>
       </a>
     </li>
@@ -428,7 +428,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- Posting Jobs -->
     <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
       <a href="<?=url('/post-job/list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <i class="menu-icon fa-solid fa-briefcase"></i>
         <div data-i18n="Jobs">Jobs</div>
       </a>
     </li>
@@ -438,7 +438,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- Posting Jobs User Wise -->
     <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'user-wise-list')?'active':'')?>">
       <a href="<?=url('/post-job/user-wise-list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <i class="menu-icon fa-solid fa-floppy-disk"></i>
         <div data-i18n="User Wise Job Posted">User Wise Job Posted</div>
       </a>
     </li>
@@ -458,7 +458,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- Contact Us -->
     <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
       <a href="<?=url('/contact-us/list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <i class="menu-icon fa-solid fa-address-book"></i>
         <div data-i18n="Contact Us">Contact Us</div>
       </a>
     </li>
@@ -468,7 +468,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- Report Bugs -->
     <li class="menu-item <?=(($pageSegment == 'report-bugs')?'active':'')?>">
       <a href="<?=url('/report-bugs/list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <i class="menu-icon fas fa-file"></i>
         <div data-i18n="Report Bugs">Report Bugs</div>
       </a>
     </li>
