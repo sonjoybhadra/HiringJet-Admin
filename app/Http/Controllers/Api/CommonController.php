@@ -600,4 +600,60 @@ class CommonController extends BaseApiController
         );
     }
 
+    public function get_jobsearch_keys(Request $request)
+    {
+        $keywords_array = $location_array = [];
+        if(!empty($request->keywords)){
+            $keywords_array = explode(',', $request->keywords);
+
+            $designations = Designation::select('id', 'name');
+            $industries = Industry::select('id', 'name');
+            $itskills = ItSkill::select('id', 'name');
+            foreach($keywords_array as $index => $key){
+                if($index > 0){
+                    $designations->orWhere('name', 'ILIKE', '%'.$key.'%');
+                    $industries->orWhere('name', 'ILIKE', '%'.$key.'%');
+                    $itskills->orWhere('name', 'ILIKE', '%'.$key.'%');
+                }else{
+                    $designations->where('name', 'ILIKE', '%'.$key.'%');
+                    $industries->where('name', 'ILIKE', '%'.$key.'%');
+                    $itskills->where('name', 'ILIKE', '%'.$key.'%');
+                }
+            }
+            $designations_array = $designations->orderBy('name', 'ASC')->get()->pluck('name')->toArray();
+            $industries_array = $industries->orderBy('name', 'ASC')->get()->pluck('name')->toArray();
+            $itskills_array = $itskills->orderBy('name', 'ASC')->get()->pluck('name')->toArray();
+
+            $keywords_array = array_merge($designations_array, $industries_array, $itskills_array);
+            $keywords_array = array_unique($keywords_array);
+        }
+        if(!empty($request->location)){
+            $location_array = explode(',', $request->location);
+            $country = Country::select('id', 'name');
+            $city = City::select('id', 'name');
+            foreach($location_array as $index => $key){
+                if($index > 0){
+                    $country->orWhere('name', 'ILIKE', '%'.$key.'%');
+                    $city->orWhere('name', 'ILIKE', '%'.$key.'%');
+                }else{
+                    $country->where('name', 'ILIKE', '%'.$key.'%');
+                    $city->where('name', 'ILIKE', '%'.$key.'%');
+                }
+            }
+            $country_array = $country->orderBy('name', 'ASC')->get()->pluck('name')->toArray();
+            $city_array = $city->orderBy('name', 'ASC')->get()->pluck('name')->toArray();
+
+            $location_array = array_merge($country_array, $city_array);
+            $location_array = array_unique($location_array);
+        }
+        return $this->sendResponse([
+            'keywords'=> $keywords_array,
+            'location'=> $location_array,
+        ],
+            'List'
+        );
+    }
+
+
+
 }

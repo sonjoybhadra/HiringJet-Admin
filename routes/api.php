@@ -100,6 +100,8 @@ Route::get('/get-testimonials/{slug}', [CommonController::class, 'get_testimonia
 Route::get('/get-designation-by-param', [CommonController::class, 'get_designation_by_param']);
 Route::get('/get-industry-by-param', [CommonController::class, 'get_industry_by_param']);
 
+Route::get('/get-jobsearch-keys', [CommonController::class, 'get_jobsearch_keys']);
+
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
 
@@ -123,6 +125,7 @@ Route::group([
     Route::post('/signup/complete-profile/{user}', [RegistrationController::class, 'completeProfile']);
 
     Route::post('/update-profile', [EditProfileController::class, 'updateProfileData']);
+    Route::delete('/delete-profile-picture', [EditProfileController::class, 'removeProfilePicture']);
 
     Route::get('/resume-headline', [EditProfessionalDetailsController::class, 'getResumeHeadline']);
     Route::post('/resume-headline', [EditProfessionalDetailsController::class, 'postResumeHeadline']);

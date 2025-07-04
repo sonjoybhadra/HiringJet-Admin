@@ -74,4 +74,19 @@ class EditProfileController extends BaseApiController
             return $this->sendError('Error', $e->getMessage());
         }
     }
+
+    public function remove_profile_picture(){
+        try{
+            $has_data = UserProfile::where('user_id', auth()->user()->id)->first();
+            if($has_data){
+                $data_path = str_replace("public/storage/", "", $has_data->resume);
+                UserProfile::find($has_data->id)->update(['profile_image'=> NULL]);
+                Storage::disk('public')->delete($data_path);
+            }
+
+            return $this->sendResponse([], 'Profile image deleted successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
 }

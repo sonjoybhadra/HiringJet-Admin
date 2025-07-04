@@ -32,6 +32,7 @@ class ContactUsController extends BaseApiController
                 'email'=> $request->email,
                 'phone'=> $request->phone,
                 'city_id'=> $request->city,
+                'country_id'=> $request->country_id,
                 'organization'=> $request->organization,
                 'interested_in'=> $request->interested_in,
             ]);
