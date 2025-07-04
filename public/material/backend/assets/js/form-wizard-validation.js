@@ -29,10 +29,24 @@
     // Account details
     const FormValidation1 = FormValidation.formValidation(wizardValidationFormStep1, {
       fields: {
-        position_name: {
+        // position_name: {
+        //   validators: {
+        //     notEmpty: {
+        //       message: 'Position Name is required'
+        //     }
+        //   }
+        // },
+        'location_countries[]': {
           validators: {
             notEmpty: {
-              message: 'Position Name is required'
+              message: 'Location Country is required'
+            }
+          }
+        },
+        'location_cities[]': {
+          validators: {
+            notEmpty: {
+              message: 'Location City is required'
             }
           }
         },
@@ -95,14 +109,7 @@
         designation: {
           validators: {
             notEmpty: {
-              message: 'Designation is required'
-            }
-          }
-        },
-        functional_area: {
-          validators: {
-            notEmpty: {
-              message: 'Functional Area is required'
+              message: 'Position Name is required'
             }
           }
         },
@@ -197,18 +204,39 @@
     }
 
     // select2
+    // if (select2.length) {
+    //   select2.each(function () {
+    //     var $this = $(this);
+    //     $this.wrap('<div class="position-relative"></div>');
+    //     $this
+    //       .select2({
+    //         placeholder: 'Select an country',
+    //         dropdownParent: $this.parent()
+    //       })
+    //       .on('change', function () {
+    //         // Revalidate the color field when an option is chosen
+    //         FormValidation2.revalidateField('formValidationCountry');
+    //       });
+    //   });
+    // }
     if (select2.length) {
       select2.each(function () {
         var $this = $(this);
         $this.wrap('<div class="position-relative"></div>');
         $this
           .select2({
-            placeholder: 'Select an country',
+            placeholder: 'Select an option',
             dropdownParent: $this.parent()
           })
           .on('change', function () {
-            // Revalidate the color field when an option is chosen
-            FormValidation2.revalidateField('formValidationCountry');
+            // Fix: check the `name` attribute and revalidate that field
+            var fieldName = $this.attr('name');
+
+            // For Step 1 validation
+            FormValidation1.revalidateField(fieldName);
+
+            // For Step 2 validation (only if needed)
+            // FormValidation2.revalidateField(fieldName);
           });
       });
     }
