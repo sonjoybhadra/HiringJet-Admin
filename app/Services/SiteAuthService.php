@@ -224,7 +224,8 @@ class SiteAuthService
         $data['generalSetting']     = GeneralSetting::select('key', 'value')->orderBy('id', 'ASC')->get();
         $data['title']              = $title.' - '.Helper::getSettingValue('site_name');
         $data['page_header']        = $title;
-        return view('layout-before-login', $data);
+        // return view('layout-before-login', $data);
+        return $data;
     }
     // admin after login layout
     public function admin_after_login_layout($title, $page_name, $data)
