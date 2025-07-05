@@ -1045,7 +1045,7 @@ class AuthController extends Controller
     /* settings */
     public function page(Request $request){
         $page_data                      = Page::where('page_slug', '=', 'terms-conditions')->first();
-        $data['page_content']           = (($page_data)?$page_data->page_content:'');
+        $data['page_content']           = (($page_data)?html_entity_decode($page_data->page_content):'');
         $title                          = 'Page';
         $page_name                      = 'page-content';
         $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);

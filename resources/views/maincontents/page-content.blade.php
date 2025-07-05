@@ -10,7 +10,7 @@ $page_data                  = Page::where('page_slug', '=', 'terms-conditions')-
     <h4 class="mb-1"><?=$page_header?></h4>
     <!-- Render somewhere -->
     <div>
-       {!! html_entity_decode($page_content) !!}
+       { $page_content }
     </div>
 </div>
 @endsection
