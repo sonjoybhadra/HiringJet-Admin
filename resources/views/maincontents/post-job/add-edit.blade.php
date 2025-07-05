@@ -453,7 +453,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_close_date">Posting Close Date</label>
-                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?= !empty($posting_close_date) ? date('Y-m-d', strtotime($posting_close_date)) : '' ?>" min="<?=date('Y-m-d')?>" max="<?=date('Y-m-d', strtotime('+6 days'))?>" />
+                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?= !empty($posting_close_date) ? date('Y-m-d', strtotime($posting_close_date)) : '' ?>" min="<?=date('Y-m-d')?>" max="<?=date('Y-m-d', strtotime('+30 days'))?>" />
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
@@ -698,7 +698,7 @@ $controllerRoute = $module['controller_route'];
             const today = new Date();
             const todayStr = formatDate(today);
             const plus7 = new Date(today);
-            plus7.setDate(plus7.getDate() + 6);
+            plus7.setDate(plus7.getDate() + 30);
             const plus7Str = formatDate(plus7);
 
             openDate.min = todayStr;
@@ -712,7 +712,7 @@ $controllerRoute = $module['controller_route'];
 
                 const newMin = formatDate(selectedOpenDate);
                 const newMaxDate = new Date(selectedOpenDate);
-                newMaxDate.setDate(newMaxDate.getDate() + 6);
+                newMaxDate.setDate(newMaxDate.getDate() + 30);
                 const newMax = formatDate(newMaxDate);
 
                 closeDate.min = newMin;
