@@ -72,7 +72,9 @@ $controllerRoute = $module['controller_route'];
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label for="ckeditor1" class="form-label">Page Content <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="ckeditor1" name="page_content" placeholder="Page Content"><?=$page_content?></textarea>
+                            <textarea class="form-control" id="ckeditor1" name="page_content" placeholder="Page Content">{!! old('page_content', $row->page_content ?? '') !!}</textarea>
+                            <!-- <textarea id="ckeditor1"></textarea>
+                            <input type="hidden" name="page_content" id="page_content" value="{{ old('page_content', $row->page_content ?? '') }}"> -->
                         </div>
                     </div>
                     <!-- <div class="row mt-3">
@@ -155,4 +157,9 @@ $controllerRoute = $module['controller_route'];
       </div>
    </div>
 </div>
+
+<!-- Render somewhere -->
+<!-- <div>
+    {!! html_entity_decode($page_content) !!}
+</div> -->
 @endsection
