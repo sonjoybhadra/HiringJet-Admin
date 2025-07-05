@@ -159,7 +159,4 @@ $controllerRoute = $module['controller_route'];
 </div>
 
 <!-- Render somewhere -->
-<!-- <div>
-    {!! html_entity_decode($page_content) !!}
-</div> -->
 @endsection
