@@ -75,7 +75,7 @@ class EditProfileController extends BaseApiController
         }
     }
 
-    public function remove_profile_picture(){
+    public function removeProfilePicture(){
         try{
             $has_data = UserProfile::where('user_id', auth()->user()->id)->first();
             if($has_data){
