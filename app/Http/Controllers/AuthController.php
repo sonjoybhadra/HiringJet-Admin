@@ -165,7 +165,7 @@ class AuthController extends Controller
             $data                           = [];
             $title                          = 'Forgot Password';
             $page_name                      = 'forgot-password';
-            $data = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
+            $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);
             return view('maincontents.' . $page_name, $data);
         }
         public function validateOtp(Request $request, $id){
@@ -210,7 +210,7 @@ class AuthController extends Controller
             }
             $title                          = 'Verify OTP';
             $page_name                      = 'validate-otp';
-            $data = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
+            $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);
             return view('maincontents.' . $page_name, $data);
         }
         public function resendOtp(Request $request, $id){
@@ -260,7 +260,7 @@ class AuthController extends Controller
             $data['user']                   = User::where('id','=',$ID)->first();
             $title                          = 'Reset Password';
             $page_name                      = 'reset-password';
-            $data = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
+            $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);
             return view('maincontents.' . $page_name, $data);
         }
     /* forgot password */
@@ -1048,7 +1048,7 @@ class AuthController extends Controller
 
         $title                          = 'Page';
         $page_name                      = 'page-content';
-        $data = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
+        $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);
         return view('maincontents.' . $page_name, $data);
     }
 }
