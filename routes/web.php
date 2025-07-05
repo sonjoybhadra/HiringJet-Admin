@@ -64,6 +64,7 @@ Route::match(['get','post'],'/forgot-password', [AuthController::class, 'forgotP
 Route::match(['get','post'],'/validate-otp/{id}', [AuthController::class, 'validateOtp'])->name('validateotp');
 Route::match(['get','post'],'/resend-otp/{id}', [AuthController::class, 'resendOtp']);
 Route::match(['get','post'],'/reset-password/{id}', [AuthController::class, 'resetPassword'])->name('resetpassword');
+Route::match(['get','post'],'/page', [AuthController::class, 'page'])->name('page');
 
 Route::get('/table/fetch', [TableController::class, 'fetch']);
 Route::get('/table/export', [TableController::class, 'export']);

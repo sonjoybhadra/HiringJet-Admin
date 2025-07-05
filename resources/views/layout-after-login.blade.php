@@ -141,13 +141,14 @@ use App\Helpers\Helper;
           CKBox,
           CKBoxImageEdit,
           SourceEditing,
-          ImageInsert
+          ImageInsert,
+          GeneralHtmlSupport
       } from 'ckeditor5';
 
       for (let i = 0; i <= 50; i++) {
         ClassicEditor
           .create( document.querySelector( '#ckeditor' + i ), {
-            plugins: [ Essentials, Bold, Italic, Strikethrough, Subscript, Superscript, CodeBlock, Font, Link, List, Paragraph, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, PictureEditing, ImageUpload, CloudServices, CKBox, CKBoxImageEdit, SourceEditing, ImageInsert ],
+            plugins: [ Essentials, Bold, Italic, Strikethrough, Subscript, Superscript, CodeBlock, Font, Link, List, Paragraph, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, PictureEditing, ImageUpload, CloudServices, CKBox, CKBoxImageEdit, SourceEditing, ImageInsert, GeneralHtmlSupport ],
             toolbar: {
               items: [
                 'undo', 'redo',
@@ -177,10 +178,27 @@ use App\Helpers\Helper;
             },
             menuBar: {
               isVisible: true
+            },
+            htmlSupport: {
+              allow: [
+                {
+                  name: /.*/,
+                  attributes: true,
+                  classes: true,
+                  styles: true
+                }
+              ]
             }
           })
-          .then( /* ... */ )
-          .catch( /* ... */ );
+          .then(editor => {
+            editor.setData(document.querySelector('#page_content').value);
+            document.querySelector('form').addEventListener('submit', function() {
+              document.querySelector('#page_content').value = editor.getData();
+            });
+          })
+          .catch(error => {
+            console.error(error);
+          });
       }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>

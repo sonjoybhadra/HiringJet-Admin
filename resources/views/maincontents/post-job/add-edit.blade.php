@@ -264,7 +264,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="open_position_number">Number of open positions <span class="text-danger">*</span></label>
-                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" placeholder="Number of open positions" min="1" value="<?=$open_position_number?>" required />
+                                        <input type="number" name="open_position_number" id="open_position_number" class="form-control" min="1" value="<?=$open_position_number?>" required />
                                     </div>
 
                                     <div class="col-sm-6 mb-3">
@@ -418,7 +418,7 @@ $controllerRoute = $module['controller_route'];
                                     
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="expected_close_date">Expected Close Date</label>
-                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" />
+                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" min="<?=date('Y-m-d')?>" />
                                     </div>
                                     
                                     <div class="col-sm-12 mb-3">
@@ -449,11 +449,11 @@ $controllerRoute = $module['controller_route'];
 
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_open_date">Posting Open Date</label>
-                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" value="<?= !empty($posting_open_date) ? date('Y-m-d', strtotime($posting_open_date)) : '' ?>" />
+                                        <input type="date" name="posting_open_date" id="posting_open_date" class="form-control" placeholder="Posting Open Date" value="<?= !empty($posting_open_date) ? date('Y-m-d', strtotime($posting_open_date)) : '' ?>" min="<?=date('Y-m-d')?>" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="posting_close_date">Posting Close Date</label>
-                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?= !empty($posting_close_date) ? date('Y-m-d', strtotime($posting_close_date)) : '' ?>" />
+                                        <input type="date" name="posting_close_date" id="posting_close_date" class="form-control" placeholder="Posting Close Date" value="<?= !empty($posting_close_date) ? date('Y-m-d', strtotime($posting_close_date)) : '' ?>" min="<?=date('Y-m-d')?>" max="<?=date('Y-m-d', strtotime('+6 days'))?>" />
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
@@ -677,6 +677,51 @@ $controllerRoute = $module['controller_route'];
                         citySelect.trigger('change'); // for select2
                     }
                 });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openDate = document.getElementById('posting_open_date');
+            const closeDate = document.getElementById('posting_close_date');
+
+            // Function to format date to YYYY-MM-DD
+            function formatDate(date) {
+                const d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+                return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
+            }
+
+            // Set initial min/max for close date on page load
+            const today = new Date();
+            const todayStr = formatDate(today);
+            const plus7 = new Date(today);
+            plus7.setDate(plus7.getDate() + 6);
+            const plus7Str = formatDate(plus7);
+
+            openDate.min = todayStr;
+            closeDate.min = todayStr;
+            closeDate.max = plus7Str;
+
+            // When open date changes
+            openDate.addEventListener('change', function() {
+                const selectedOpenDate = new Date(this.value);
+                if (isNaN(selectedOpenDate)) return;
+
+                const newMin = formatDate(selectedOpenDate);
+                const newMaxDate = new Date(selectedOpenDate);
+                newMaxDate.setDate(newMaxDate.getDate() + 6);
+                const newMax = formatDate(newMaxDate);
+
+                closeDate.min = newMin;
+                closeDate.max = newMax;
+
+                // Optional: If current close date is out of new range, reset it
+                if (closeDate.value < newMin || closeDate.value > newMax) {
+                    closeDate.value = newMin;
+                }
             });
         });
     </script>

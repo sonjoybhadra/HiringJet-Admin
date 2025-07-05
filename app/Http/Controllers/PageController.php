@@ -43,6 +43,8 @@ class PageController extends Controller
             $data['module']           = $this->data;
             if($request->isMethod('post')){
                 $postData = $request->all();
+                // dd($request->all());
+                // die;
                 $rules = [
                     'page_name'                 => 'required',
                 ];
@@ -92,7 +94,7 @@ class PageController extends Controller
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
-                        'page_content'              => $postData['page_content'],
+                        'page_content'              => $request->page_content,
                         // 'page_banner_image'         => '/uploads/' . $upload_folder . '/' . $page_banner_image,
                         // 'page_image'                => '/uploads/' . $upload_folder . '/' . $page_image,
                         'meta_title'                => strip_tags($postData['meta_title']),
@@ -123,6 +125,8 @@ class PageController extends Controller
             $data['row']                    = Page::where('id', '=', $id)->first();
             if($request->isMethod('post')){
                 $postData = $request->all();
+                // dd($request->all());
+                // die;
                 $rules = [
                     'page_name'                 => 'required',
                 ];
@@ -164,7 +168,7 @@ class PageController extends Controller
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
-                        'page_content'              => $postData['page_content'],
+                        'page_content'              => $request->page_content,
                         // 'page_banner_image'         => $pageBannerImageLink,
                         // 'page_image'                => $pageImageLink,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
@@ -172,6 +176,7 @@ class PageController extends Controller
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),
                         'meta_description'          => strip_tags($postData['meta_description']),
                     ];
+                    // Helper::pr($fields);
                     Page::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [

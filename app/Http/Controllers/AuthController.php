@@ -15,7 +15,7 @@ use App\Models\User;
 use App\Models\GeneralSetting;
 use App\Models\UserActivity;
 use App\Models\PostJob;
-
+use App\Models\Page;
 
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -1043,4 +1043,12 @@ class AuthController extends Controller
             }
         }
     /* settings */
+    public function page(Request $request){
+        $data = [];
+
+        $title                          = 'Page';
+        $page_name                      = 'page-content';
+        $data = $this->siteAuthService->admin_after_login_layout($title, $page_name, $data);
+        return view('maincontents.' . $page_name, $data);
+    }
 }
