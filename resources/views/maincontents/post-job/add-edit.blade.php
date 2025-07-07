@@ -97,7 +97,7 @@ $controllerRoute = $module['controller_route'];
          <div class="card mb-4">
             <?php
             if($row){
-                $position_name                      = $row->position_name;
+                $position_name                      = (($row->designation == 7037)?$row->position_name:'');
                 $employer_id                        = $row->employer_id;
                 $job_type                           = $row->job_type;
                 $location_countries                 = (($row->location_countries != '')?json_decode($row->location_countries):[]);
@@ -241,6 +241,7 @@ $controllerRoute = $module['controller_route'];
                                                 <option value="<?=$select_row->id?>" <?=(($designation == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
+                                        <input type="text" name="position_name" id="position_name" class="form-control mt-3" value="<?=$position_name?>" style="display: none;" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="employer_id">Employer <span class="text-danger">*</span></label>
@@ -606,6 +607,25 @@ $controllerRoute = $module['controller_route'];
                 } else if (application_through === 'Apply To Link') {
                     $('#apply_on_email_row').hide();
                     $('#apply_on_link_row').show();
+                }
+            });
+
+            var designation = '<?=$designation?>';
+            if(designation == 7037){
+                $('#position_name').show();
+                $('#position_name').attr('required', true);
+            } else {
+                $('#position_name').hide();
+                $('#position_name').attr('required', false);
+            }
+            $('#designation').on('change', function(){
+                var designation = $('#designation').val();
+                if(designation == 7037){
+                    $('#position_name').show();
+                    $('#position_name').attr('required', true);
+                } else {
+                    $('#position_name').hide();
+                    $('#position_name').attr('required', false);
                 }
             });
         });
