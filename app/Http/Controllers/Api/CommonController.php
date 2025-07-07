@@ -552,7 +552,6 @@ class CommonController extends BaseApiController
                                 ->count();
 
         $locationCounts = [];
-
         foreach ($live_jobs as $job) {
             $locationIds = json_decode($job->location_countries, true);
             if (is_array($locationIds)) {
@@ -561,7 +560,7 @@ class CommonController extends BaseApiController
                         $country = Country::find($locId);
                         $locationCounts[$locId] = ['name'=> $country->name, 'count'=> 0];
                     }
-                    $locationCounts[$locId]['count'] = $locationCounts[$locId]['count']++;
+                    $locationCounts[$locId]['count'] = $locationCounts[$locId]['count']+1;
                 }
             }
         }
@@ -570,8 +569,29 @@ class CommonController extends BaseApiController
         usort($locationCounts, function ($a, $b) {
             return $b['count'] <=> $a['count']; // descending
         });
-        $locationCounts = array_slice($locationCounts, 0, 8);
+        $locationCounts = array_slice($locationCounts, 0, 4);
         $list->posted_jobs_countries = $locationCounts;
+
+        $locationCitis = [];
+        foreach ($live_jobs as $job) {
+            $locationIds = json_decode($job->location_cities, true);
+            if (is_array($locationIds)) {
+                foreach ($locationIds as $locId) {
+                    if (!isset($locationCitis[$locId])) {
+                        $country = City::find($locId);
+                        $locationCitis[$locId] = ['name'=> $country->name, 'count'=> 0];
+                    }
+                    $locationCitis[$locId]['count'] = $locationCitis[$locId]['count']+1;
+                }
+            }
+        }
+
+        // Sort by count descending
+        usort($locationCitis, function ($a, $b) {
+            return $b['count'] <=> $a['count']; // descending
+        });
+        $locationCitis = array_slice($locationCitis, 0, 8);
+        $list->posted_jobs_cities = $locationCitis;
 
         $list->posted_jobs_category = PostJob::select('post_jobs.job_category', 'job_categories.name', DB::raw('COUNT(*) as total'))
                                             ->join('job_categories', 'post_jobs.job_category', '=', 'job_categories.id')
