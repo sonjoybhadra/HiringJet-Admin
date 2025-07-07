@@ -545,8 +545,8 @@ class CommonController extends BaseApiController
         $list->live_jobs= PostJob::where('status', 1)->count();
         $list->companies= Employer::where('status', 1)->count();
         $list->candidates= User::where('role_id', env('JOB_SEEKER_ROLE_ID'))->count();
-        $list->new_jobs= PostJob::where('posting_open_date', '>=', date('Y-m-d'))
-                                ->where('posting_close_date', '<=', date('Y-m-d'))
+        $list->new_jobs= PostJob::where('posting_open_date', '<=', date('Y-m-d'))
+                                ->where('posting_close_date', '>=', date('Y-m-d'))
                                 ->where('status', 1)
                                 ->count();
 
