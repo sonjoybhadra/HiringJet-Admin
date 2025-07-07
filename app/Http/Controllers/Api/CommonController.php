@@ -542,7 +542,8 @@ class CommonController extends BaseApiController
                                 ->whereIn('id', $city_id_array)
                                 ->get();
 
-        $list->live_jobs= PostJob::where('status', 1)->count();
+        $live_jobs = PostJob::where('status', 1)->get();
+        $list->live_jobs= $live_jobs->count();
         $list->companies= Employer::where('status', 1)->count();
         $list->candidates= User::where('role_id', env('JOB_SEEKER_ROLE_ID'))->count();
         $list->new_jobs= PostJob::where('posting_open_date', '<=', date('Y-m-d'))
@@ -552,7 +553,7 @@ class CommonController extends BaseApiController
 
         $locationCounts = [];
 
-        foreach ($list->live_jobs as $job) {
+        foreach ($live_jobs as $job) {
             $locationIds = json_decode($job->location_countries, true);
             if (is_array($locationIds)) {
                 foreach ($locationIds as $locId) {
@@ -566,6 +567,7 @@ class CommonController extends BaseApiController
 
         // Sort by count descending
         arsort($locationCounts);
+        $locationCounts = array_slice($locationCounts, 0, 8);
         $list->posted_jobs_countries = $locationCounts;
 
         $list->posted_jobs_category = PostJob::select('post_jobs.job_category', 'job_categories.name', DB::raw('COUNT(*) as total'))
