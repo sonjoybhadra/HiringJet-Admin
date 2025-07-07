@@ -408,7 +408,7 @@ $controllerRoute = $module['controller_route'];
                                         <textarea id="ckeditor2" name="requirement" class="form-control" placeholder="Requirements" rows="5"><?=$requirement?></textarea>
                                     </div>                                    
 
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="skill_ids">Skills</label>
                                         <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
@@ -417,10 +417,10 @@ $controllerRoute = $module['controller_route'];
                                         </select>
                                     </div>
                                     
-                                    <div class="col-sm-6 mb-3">
+                                    <!-- <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="expected_close_date">Expected Close Date</label>
                                         <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" min="<?=date('Y-m-d')?>" />
-                                    </div>
+                                    </div> -->
                                     
                                     <div class="col-sm-12 mb-3">
                                         <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
