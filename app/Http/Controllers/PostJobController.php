@@ -74,7 +74,11 @@ class PostJobController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     $getDesignation = Designation::select('name')->where('id', $postData['designation'])->first();
-                    $position_name = (($getDesignation)?$getDesignation->name:'');
+                    if($postData['designation'] == 7037){
+                        $position_name = $postData['position_name'];
+                    } else {
+                        $position_name = (($getDesignation)?$getDesignation->name:'');
+                    }
 
                     /* user activity */
                         $activityData = [
@@ -208,7 +212,7 @@ class PostJobController extends Controller
             $data['currencies']             = Country::select('id', 'name', 'currency_code')->where('status', 1)->where('currency_code', '!=', '')->orderBy('name', 'ASC')->get();
             $data['industries']             = Industry::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('id', 'ASC')->get();
             $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
 
             $data['location_countries']     = [];
@@ -234,7 +238,7 @@ class PostJobController extends Controller
             $data['currencies']             = Country::select('id', 'name', 'currency_code')->where('status', 1)->where('currency_code', '!=', '')->orderBy('name', 'ASC')->get();
             $data['industries']             = Industry::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
             $data['jobcats']                = JobCategory::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
-            $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
+            $data['designations']           = Designation::select('id', 'name')->where('status', 1)->orderBy('id', 'ASC')->get();
             $data['functionalareas']        = FunctionalArea::select('id', 'name')->where('status', 1)->orderBy('name', 'ASC')->get();
 
             $data['location_countries']     = json_decode($data['row']->location_countries ?? '[]', true);
@@ -264,7 +268,11 @@ class PostJobController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     $getDesignation = Designation::select('name')->where('id', $postData['designation'])->first();
-                    $position_name = (($getDesignation)?$getDesignation->name:'');
+                    if($postData['designation'] == 7037){
+                        $position_name = $postData['position_name'];
+                    } else {
+                        $position_name = (($getDesignation)?$getDesignation->name:'');
+                    }
 
                     /* user activity */
                         $activityData = [
