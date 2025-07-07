@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\JobCategory;
 use App\Models\Industry;
 use App\Models\Designation;
@@ -35,6 +35,7 @@ use App\Models\Nationality;
 use App\Models\HomePage;
 use App\Models\GeneralSetting;
 use App\Models\Testimonial;
+use App\Models\PostJob;
 
 
 class CommonController extends BaseApiController
@@ -540,6 +541,13 @@ class CommonController extends BaseApiController
         $list->city_list = City::select('id', 'name')
                                 ->whereIn('id', $city_id_array)
                                 ->get();
+
+        $list->posted_jobs_category = PostJob::select('post_jobs.job_category', 'job_categories.name', DB::raw('COUNT(*) as total'))
+                                            ->join('job_categories', 'post_jobs.job_category', '=', 'job_categories.id')
+                                            ->groupBy('post_jobs.job_category', 'job_categories.name')
+                                            ->orderByDesc('total')
+                                            ->take(8)
+                                            ->get();
         return $this->sendResponse(
             $list,
             'Home page details'

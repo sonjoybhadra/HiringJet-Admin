@@ -235,15 +235,15 @@ class RegistrationController extends BaseApiController
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'resume_headline' => 'required|string|max:255',
             'currently_employed' => 'required|in:1,0',//yes/no
-            'total_experience_years' => 'required_if:currently_employed,1|digits',
-            'total_experience_months' => 'required_if:currently_employed,1|digits',
+            'total_experience_years' => 'required_if:currently_employed,1',
+            'total_experience_months' => 'required_if:currently_employed,1',
             'last_designation' => 'required_if:currently_employed,1|string',
             'last_employer' => 'required_if:currently_employed,1|string',
             // 'last_employer_location' => 'required_if:currently_employed,1|string',
-            'working_since_from_year' => 'required_if:currently_employed,1|digits',
-            'working_since_from_month' => 'required_if:currently_employed,1|digits',
-            'working_since_to_year' => 'required_if:currently_employed,1|digits',
-            'working_since_to_month' => 'required_if:currently_employed,1|digits',
+            'working_since_from_year' => 'required_if:currently_employed,1',
+            'working_since_from_month' => 'required_if:currently_employed,1',
+            'working_since_to_year' => 'required_if:currently_employed,1',
+            'working_since_to_month' => 'required_if:currently_employed,1',
             'salary_currency' => 'required_if:currently_employed,1|integer',
             'current_salary' => 'required_if:currently_employed,1|integer',
 

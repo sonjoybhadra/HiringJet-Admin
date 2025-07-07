@@ -257,8 +257,8 @@ class EditProfessionalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'professional_id' => 'nullable|integer',
-            'total_experience_years' => 'required|digits',
-            'total_experience_months' => 'required|digits',
+            'total_experience_years' => 'required',
+            'total_experience_months' => 'required',
             'industry' => 'required|array',
             'functional_area' => 'required|array',
             'work_level' => 'required|integer',
