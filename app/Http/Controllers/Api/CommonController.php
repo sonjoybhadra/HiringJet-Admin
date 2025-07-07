@@ -558,15 +558,18 @@ class CommonController extends BaseApiController
             if (is_array($locationIds)) {
                 foreach ($locationIds as $locId) {
                     if (!isset($locationCounts[$locId])) {
-                        $locationCounts[$locId] = 0;
+                        $country = Country::find($locId);
+                        $locationCounts[$locId] = ['name'=> $country->name, 'count'=> 0];
                     }
-                    $locationCounts[$locId]++;
+                    $locationCounts[$locId]['count'] = $locationCounts[$locId]['count']++;
                 }
             }
         }
 
         // Sort by count descending
-        arsort($locationCounts);
+        usort($locationCounts, function ($a, $b) {
+            return $b['count'] <=> $a['count']; // descending
+        });
         $locationCounts = array_slice($locationCounts, 0, 8);
         $list->posted_jobs_countries = $locationCounts;
 
