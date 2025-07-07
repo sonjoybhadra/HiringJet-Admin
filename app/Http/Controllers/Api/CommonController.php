@@ -36,7 +36,7 @@ use App\Models\HomePage;
 use App\Models\GeneralSetting;
 use App\Models\Testimonial;
 use App\Models\PostJob;
-
+use App\Models\User;
 
 class CommonController extends BaseApiController
 {
@@ -541,6 +541,14 @@ class CommonController extends BaseApiController
         $list->city_list = City::select('id', 'name')
                                 ->whereIn('id', $city_id_array)
                                 ->get();
+
+        $list->live_jobs= PostJob::where('status', 1)->count();
+        $list->companies= Employer::where('status', 1)->count();
+        $list->candidates= User::where('role_id', env('JOB_SEEKER_ROLE_ID'))->count();
+        $list->new_jobs= PostJob::where('posting_open_date', '>=', date('Y-m-d'))
+                                ->where('posting_close_date', '<=', date('Y-m-d'))
+                                ->where('status', 1)
+                                ->count();
 
         $list->posted_jobs_category = PostJob::select('post_jobs.job_category', 'job_categories.name', DB::raw('COUNT(*) as total'))
                                             ->join('job_categories', 'post_jobs.job_category', '=', 'job_categories.id')

@@ -51,7 +51,7 @@ class EditPersonalDetailsController extends BaseApiController
             'differently_abled'=> 'required|boolean',
             'career_break'=> 'required|boolean',
             'usa_working_permit'=> 'required|boolean',
-            'other_working_permit_country'=> 'required|array',
+            // 'other_working_permit_country'=> 'required|array',
             'address'=> 'required|string',
             'pincode'=> 'required|integer',
             'language' => 'required|array',
