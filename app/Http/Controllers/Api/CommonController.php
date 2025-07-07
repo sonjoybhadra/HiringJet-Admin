@@ -550,6 +550,15 @@ class CommonController extends BaseApiController
                                 ->where('status', 1)
                                 ->count();
 
+        $list->posted_jobs_countries = DB::table('post_jobs')
+                                            ->selectRaw("countries.id as location_id, countries.name, COUNT(*) as total")
+                                            ->fromRaw("(SELECT jsonb_array_elements_text(location_countries::jsonb)::int as location_id FROM post_jobs) as job_locations")
+                                            ->join('countries', 'countries.id', '=', 'job_locations.location_id')
+                                            ->groupBy('countries.id', 'countries.name')
+                                            ->orderByDesc('total')
+                                            ->take(8)
+                                            ->get();
+
         $list->posted_jobs_category = PostJob::select('post_jobs.job_category', 'job_categories.name', DB::raw('COUNT(*) as total'))
                                             ->join('job_categories', 'post_jobs.job_category', '=', 'job_categories.id')
                                             ->groupBy('post_jobs.job_category', 'job_categories.name')
