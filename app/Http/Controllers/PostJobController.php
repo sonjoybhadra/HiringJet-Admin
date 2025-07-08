@@ -189,6 +189,7 @@ class PostJobController extends Controller
                         'walkin_pincode'            => strip_tags($postData['walkin_pincode']),
                         'walkin_latitude'           => strip_tags($postData['walkin_latitude']),
                         'walkin_longitude'          => strip_tags($postData['walkin_longitude']),
+                        'walkin_details'            => html_entity_decode($request->walkin_details),
                         'created_by'                => session('user_data')['user_id'],
                         'updated_by'                => session('user_data')['user_id'],
                         'status'                    => 1,
@@ -369,6 +370,7 @@ class PostJobController extends Controller
                         'walkin_pincode'            => strip_tags($postData['walkin_pincode']),
                         'walkin_latitude'           => strip_tags($postData['walkin_latitude']),
                         'walkin_longitude'          => strip_tags($postData['walkin_longitude']),
+                        'walkin_details'            => html_entity_decode($request->walkin_details),
                         'created_by'                => session('user_data')['user_id'],
                         'updated_by'                => session('user_data')['user_id'],
                     ];

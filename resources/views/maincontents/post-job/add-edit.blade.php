@@ -136,6 +136,7 @@ $controllerRoute = $module['controller_route'];
                 $walkin_pincode                     = $row->walkin_pincode;
                 $walkin_latitude                    = $row->walkin_latitude;
                 $walkin_longitude                   = $row->walkin_longitude;
+                $walkin_details                     = $row->walkin_details;
             } else {
                 $position_name                      = '';
                 $employer_id                        = '';
@@ -176,6 +177,7 @@ $controllerRoute = $module['controller_route'];
                 $walkin_pincode                     = '';
                 $walkin_latitude                    = '';
                 $walkin_longitude                   = '';
+                $walkin_details                     = '';
             }
             ?>
             <div class="card-body">
@@ -502,6 +504,10 @@ $controllerRoute = $module['controller_route'];
 
                                     <div class="col-sm-12">
                                         <h6>Office Address (for walk-ins)</h6>
+                                    </div>
+                                    <div class="col-sm-12 mb-3">
+                                        <label class="form-label" for="walkin_details">Walkin Details</label>
+                                        <textarea id="ckeditor1" name="walkin_details" class="form-control" placeholder="Walkin Details" rows="5"><?=$walkin_details?></textarea>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_address1">Address Line 1</label>
