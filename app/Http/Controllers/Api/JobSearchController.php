@@ -37,7 +37,7 @@ class JobSearchController extends BaseApiController
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
             }
 
-            if(!empty($request->keywords) && !empty($request->location)){
+            if(!empty($request->keywords)){
                 $keywords_array = explode(',', $request->keywords);
 
                 $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
@@ -70,7 +70,9 @@ class JobSearchController extends BaseApiController
                         }
                     });
                 }
+            }
 
+            if(!empty($request->location)){
                 $location_array = explode(',', $request->location);
                 $sql->orWhere(function ($q) use ($location_array) {
                     foreach ($location_array as $tag) {
@@ -95,6 +97,7 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
+
             if(!empty($request->job_category)){
                 $category = JobCategory::where('name', 'ILIKE', $request->job_category)->first();
                 if($category){
@@ -178,7 +181,8 @@ class JobSearchController extends BaseApiController
             $sql->latest();
             return $this->sendResponse(
                 $sql->get(),
-                $sql->toSql()
+                // $sql->toSql()
+                'List search jobs'
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
