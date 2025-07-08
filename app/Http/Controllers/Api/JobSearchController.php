@@ -50,14 +50,14 @@ class JobSearchController extends BaseApiController
                     });
                 }
                 if(count($industries) > 0){
-                    $sql->orWhere(function ($q) use ($industries) {
+                    $sql->where(function ($q) use ($industries) {
                         foreach ($industries as $tag) {
                             $q->orWhere('industry', (string)$tag);
                         }
                     });
                 }
                 if(count($itskills) > 0){
-                    $sql->orWhere(function ($q) use ($itskills) {
+                    $sql->where(function ($q) use ($itskills) {
                         foreach ($itskills as $tag) {
                             $q->orWhereJsonContains('skill_ids', (string)$tag);
                         }
@@ -65,10 +65,14 @@ class JobSearchController extends BaseApiController
                 }
 
                 $location_array = explode(',', $request->location);
-                $sql->orWhere(function ($q) use ($location_array) {
+                $sql->where(function ($q) use ($location_array) {
                     foreach ($location_array as $tag) {
-                        $q->orWhereJsonContains('location_countries', (string)$tag);
-                        $q->orWhereJsonContains('location_cities', (string)$tag);
+                        $q->orWhereJsonContains('location_country_names', (string)$tag);
+                    }
+                });
+                $sql->where(function ($q) use ($location_array) {
+                    foreach ($location_array as $tag) {
+                        $q->orWhereJsonContains('location_city_names', (string)$tag);
                     }
                 });
             }
