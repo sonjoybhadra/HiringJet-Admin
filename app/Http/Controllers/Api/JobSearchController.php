@@ -95,7 +95,7 @@ class JobSearchController extends BaseApiController
             //     }
             // }
             if(!empty($request->job_category)){
-                $sql->whereIn('job_category', $request->job_category);
+                $sql->where('job_category', $request->job_category);
             }
             if(!empty($request->country)){
                 $countrys = $request->country;
