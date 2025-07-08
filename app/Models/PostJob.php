@@ -116,7 +116,7 @@ class PostJob extends Model
         return $this->belongsToMany(User::class, 'post_job_user_applieds', 'job_id', 'user_id');
     }
 
-    public function get_job_search_custom_sql(){
+    public function get_job_search_custom_sql_old(){
         $jobseeker_designation = UserEmployment::select('last_designation')
                                                     ->where('user_id', auth()->user()->id)
                                                     ->orderBy('is_current_job', 'DESC')
@@ -144,6 +144,36 @@ class PostJob extends Model
             // $jobs = PostJob::whereRaw("?::jsonb @> to_jsonb(?)", ['locations', $searchLocation])->get();
             // // Or more explicitly checking for string containment within the array
             // $jobs = PostJob::whereRaw("locations::jsonb @> ?::jsonb", [json_encode([$searchLocation])])->get();
+        }
+
+        return $sql;
+    }
+
+    public function get_job_search_custom_sql()
+    {
+        $jobseeker_designation = UserEmployment::select('last_designation')
+                                                    ->where('user_id', auth()->user()->id)
+                                                    ->orderBy('is_current_job', 'DESC')
+                                                    ->first();
+
+        $user_skills = UserSkill::where('user_id', auth()->user()->id)->get()->pluck('keyskill_id')->toArray();
+
+        $sql = PostJob::select('post_jobs.*');
+        $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.auth()->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+        $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+
+        if($jobseeker_designation){
+            $sql->where('designation', $jobseeker_designation->last_designation);
+        }
+
+        if(!empty($user_skills)){
+            $skill_names = Keyskill::select('name')->whereIn('id', $user_skills)->get();
+            $sql->where(function ($q) use ($skill_names) {
+                foreach ($skill_names as $skill) {
+                    // FIXED: Removed ->get() and added proper null handling with ::jsonb casting
+                    $q->orWhereRaw("COALESCE(skill_names, '[]')::jsonb @> ?::jsonb", [json_encode([$skill->name])]);
+                }
+            });
         }
 
         return $sql;
