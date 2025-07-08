@@ -104,17 +104,17 @@ function loadTable(config) {
                     </a>`;
                 }
 
-                html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
+                html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger me-1" onclick="return confirm('Are you sure?')" title="Delete">
                     <i class="fa-solid fa-trash"></i>
                 </a>`;
 
                 if(config.routePrefix == 'post-job'){
+                    var job_no = row['job_no'];
+                    html += `<a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning" title="View Jobs" target="_blank">
+                                    <i class="fa-solid fa-eye"></i></a>`;
+
                     html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
-                                </a>`;
-                    var job_no = row['job_no'];
-                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning" title="View Jobs" target="_blank">
-                                    <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;View Job
                                 </a>`;
                 }
 

@@ -34,6 +34,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SEOPageController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\FunctionalAreaController;
@@ -348,6 +349,13 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'page/edit/{id}', [PageController::class, 'edit']);
         Route::get('page/delete/{id}', [PageController::class, 'delete']);
         Route::get('page/change-status/{id}', [PageController::class, 'change_status']);
+    /* page */
+    /* page */
+        Route::get('seo-page/list', [SEOPageController::class, 'list']);
+        Route::match(['get', 'post'], 'seo-page/add', [SEOPageController::class, 'add']);
+        Route::match(['get', 'post'], 'seo-page/edit/{id}', [SEOPageController::class, 'edit']);
+        Route::get('seo-page/delete/{id}', [SEOPageController::class, 'delete']);
+        Route::get('seo-page/change-status/{id}', [SEOPageController::class, 'change_status']);
     /* page */
     
     /* post job */
