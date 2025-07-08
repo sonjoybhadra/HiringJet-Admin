@@ -132,11 +132,12 @@ class PostJob extends Model
             $sql->where('designation', $jobseeker_designation->last_designation);
         }
         if(!empty($user_skills)){
-            $sql->where(function ($q) use ($user_skills) {
-                foreach ($user_skills as $tag) {
+            $skill_names = Keyskill::select('name')->whereIn('id', $user_skills)->get();
+            $sql->where(function ($q) use ($skill_names) {
+                foreach ($skill_names as $skill) {
                     // $q->orWhereJsonContains('skill_ids', (string)$tag);
                     // $q->orwhereRaw("skill_ids::jsonb @> ?::jsonb", [json_encode($tag)]);
-                    $q->orWhereRaw("CAST(skill_ids AS jsonb) @> ?", [json_encode([(string)$tag])])->get();
+                    $q->orWhereRaw("CAST(skill_names AS jsonb) @> ?", [json_encode([$skill->name])])->get();
                 }
             });
 
