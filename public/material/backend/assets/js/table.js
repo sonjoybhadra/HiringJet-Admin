@@ -4,6 +4,7 @@ function loadTable(config) {
     const exportBtns = $(config.exportButtons);
     let currentPage = 1;
     let baseUrl = document.querySelector('meta[name="base-url"]').getAttribute('content');
+    let frontendUrl = document.querySelector('meta[name="front-url"]').getAttribute('content');
 
     function fetchData(page = 1, search = '', perPageOverride = null) {
         $('#table-overlay-loader').fadeIn();
@@ -110,6 +111,10 @@ function loadTable(config) {
                 if(config.routePrefix == 'post-job'){
                     html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
+                                </a>`;
+                    var job_no = row['job_no'];
+                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning" title="View Jobs" target="_blank">
+                                    <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;View Job
                                 </a>`;
                 }
 

@@ -11,7 +11,7 @@ return [
     | flags, feature switches, versioning, etc.
     |
     */
-
+    'front_url'             => env('FRONTEND_URL', 'https://default.com/admin/assets'),
     'admin_assets_url'      => env('ADMIN_ASSETS_URL', 'https://default.com/admin/assets'),
     'uploads_url'           => env('UPLOADS_URL', 'https://default.com/admin/assets'),
     'uploads_url_path'      => env('UPLOADS_URL_PATH', 'https://default.com/admin/assets'),
