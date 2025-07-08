@@ -67,12 +67,12 @@ class JobSearchController extends BaseApiController
                 $location_array = explode(',', $request->location);
                 $sql->where(function ($q) use ($location_array) {
                     foreach ($location_array as $tag) {
-                        $q->orWhereJsonContains('location_country_names', (string)$tag);
+                        $q->orWhereJsonContains('location_country_names', $tag);
                     }
                 });
                 $sql->where(function ($q) use ($location_array) {
                     foreach ($location_array as $tag) {
-                        $q->orWhereJsonContains('location_city_names', (string)$tag);
+                        $q->orWhereJsonContains('location_city_names', $tag);
                     }
                 });
             }
@@ -138,7 +138,7 @@ class JobSearchController extends BaseApiController
             $sql->latest();
             return $this->sendResponse(
                 $sql->get(),
-                'Job list by params'
+                $sql->toSql()
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
