@@ -135,7 +135,7 @@ class PostJob extends Model
             $sql->where(function ($q) use ($user_skills) {
                 foreach ($user_skills as $tag) {
                     // $q->orWhereJsonContains('skill_ids', (string)$tag);
-                    $q->orwhereRaw("locations::jsonb @> ?::jsonb", [json_encode($tag)]);
+                    $q->orwhereRaw("skill_ids::jsonb @> ?::jsonb", [json_encode($tag)]);
                 }
             });
 
