@@ -36,72 +36,78 @@ class JobSearchController extends BaseApiController
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
             }
 
-            // if(!empty($request->keywords) && !empty($request->location)){
-            //     $keywords_array = explode(',', $request->keywords);
+            if(!empty($request->keywords) && !empty($request->location)){
+                $keywords_array = explode(',', $request->keywords);
 
-            //     $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
-            //     $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
-            //     $itskills = ItSkill::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
-            //     if(count($designations) > 0){
-            //         $sql->where(function ($q) use ($designations) {
-            //             foreach ($designations as $tag) {
-            //                 $q->orWhere('designation', (string)$tag);
-            //             }
-            //         });
-            //     }
-            //     if(count($industries) > 0){
-            //         $sql->where(function ($q) use ($industries) {
-            //             foreach ($industries as $tag) {
-            //                 $q->orWhere('industry', (string)$tag);
-            //             }
-            //         });
-            //     }
-            //     if(count($itskills) > 0){
-            //         $sql->where(function ($q) use ($itskills) {
-            //             foreach ($itskills as $tag) {
-            //                 $q->orWhereJsonContains('skill_ids', (string)$tag);
-            //             }
-            //         });
-            //     }
+                $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                $itskills = ItSkill::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                if(count($designations) > 0){
+                    $sql->where(function ($q) use ($designations) {
+                        foreach ($designations as $tag) {
+                            $q->orWhere('designation', (string)$tag);
+                        }
+                    });
+                }
+                if(count($industries) > 0){
+                    $sql->where(function ($q) use ($industries) {
+                        foreach ($industries as $tag) {
+                            $q->orWhere('industry', (string)$tag);
+                        }
+                    });
+                }
+                if(count($itskills) > 0){
+                    $sql->where(function ($q) use ($itskills) {
+                        foreach ($itskills as $tag) {
+                            $q->orWhereRaw(
+                            "CASE
+                                WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                ELSE skill_ids::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                        }
+                    });
+                }
 
-            //     $location_array = explode(',', $request->location);
-            //     if(count($location_array) > 1){
-            //         $sql->where(function ($q) use ($location_array) {
-            //             foreach ($location_array as $tag) {
-            //                 $q->orWhereJsonContains('location_country_names', $tag);
-            //             }
-            //         });
-            //         $sql->where(function ($q) use ($location_array) {
-            //             foreach ($location_array as $tag) {
-            //                 $q->orWhereJsonContains('location_city_names', $tag);
-            //             }
-            //         });
-            //     }else{
-            //         $req_loc = json_encode($location_array);
-            //         //  $sql->whereRaw("location_country_names::jsonb @> ?", [$req_loc])
-            //         //     ->orWhereRaw("location_city_names::jsonb @> ?", [$req_loc]);
-
-            //         // $sql->where(function ($q) use ($location_array) {
-            //         //     $q->where('location_country_names', '@>', json_encode($location_array));
-            //         //     $q->orWhere('location_city_names', '@>', json_encode($location_array));
-            //         // });
-
-            //         $value = json_encode($location_array); // Produces: '["UNITED ARAB EMIRATES"]'
-
-            //         $sql->where(function($query) use ($value) {
-            //             $query->whereRaw('location_country_names::jsonb @> ?', [$value])
-            //                     ->orWhereRaw('location_city_names::jsonb @> ?', [$value]);
-            //         });
-            //     }
-            // }
+                $location_array = explode(',', $request->location);
+                $sql->orWhere(function ($q) use ($location_array) {
+                    foreach ($location_array as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_country_names IS NULL OR location_country_names = '' THEN FALSE
+                                ELSE location_country_names::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
+                $sql->orWhere(function ($q) use ($location_array) {
+                    foreach ($location_array as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_city_names IS NULL OR location_city_names = '' THEN FALSE
+                                ELSE location_city_names::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
+            }
             if(!empty($request->job_category)){
                 $sql->where('job_category', $request->job_category);
             }
             if(!empty($request->country)){
                 $countrys = $request->country;
-                $sql->where(function ($q) use ($countrys) {
+                $sql->orWhere(function ($q) use ($countrys) {
                     foreach ($countrys as $tag) {
-                        $q->orWhereJsonContains('location_countries', (string)$tag);
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
+                                ELSE location_countries::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
                     }
                 });
             }
@@ -109,7 +115,13 @@ class JobSearchController extends BaseApiController
                 $citys = $request->city;
                 $sql->where(function ($q) use ($citys) {
                     foreach ($citys as $tag) {
-                        $q->orWhereJsonContains('location_cities', (string)$tag);
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
+                                ELSE location_cities::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
                     }
                 });
             }
@@ -117,7 +129,13 @@ class JobSearchController extends BaseApiController
                 $skills = $request->skills;
                 $sql->where(function ($q) use ($skills) {
                     foreach ($skills as $tag) {
-                        $q->orWhereJsonContains('skill_ids', (string)$tag);
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                ELSE skill_ids::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
                     }
                 });
             }
