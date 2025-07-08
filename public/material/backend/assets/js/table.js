@@ -104,7 +104,7 @@ function loadTable(config) {
                     </a>`;
                 }
 
-                html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger me-1" onclick="return confirm('Are you sure?')" title="Delete">
+                html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
                     <i class="fa-solid fa-trash"></i>
                 </a>`;
 
