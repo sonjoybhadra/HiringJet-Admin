@@ -136,6 +136,7 @@ $controllerRoute = $module['controller_route'];
                 $walkin_pincode                     = $row->walkin_pincode;
                 $walkin_latitude                    = $row->walkin_latitude;
                 $walkin_longitude                   = $row->walkin_longitude;
+                $walkin_details                     = $row->walkin_details;
             } else {
                 $position_name                      = '';
                 $employer_id                        = '';
@@ -176,6 +177,7 @@ $controllerRoute = $module['controller_route'];
                 $walkin_pincode                     = '';
                 $walkin_latitude                    = '';
                 $walkin_longitude                   = '';
+                $walkin_details                     = '';
             }
             ?>
             <div class="card-body">
@@ -241,7 +243,11 @@ $controllerRoute = $module['controller_route'];
                                                 <option value="<?=$select_row->id?>" <?=(($designation == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
                                         </select>
-                                        <input type="text" name="position_name" id="position_name" class="form-control mt-3" value="<?=$position_name?>" style="display: none;" />
+                                        
+                                    </div>
+                                    <div class="col-sm-6 mb-3" id="role_name_column">
+                                        <label class="form-label position_name" for="position_name" style="display: none;">Role Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="position_name" id="position_name" class="form-control position_name" placeholder="Enter Role Here" value="<?=$position_name?>" style="display: none;" />
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="employer_id">Employer <span class="text-danger">*</span></label>
@@ -408,7 +414,7 @@ $controllerRoute = $module['controller_route'];
                                         <textarea id="ckeditor2" name="requirement" class="form-control" placeholder="Requirements" rows="5"><?=$requirement?></textarea>
                                     </div>                                    
 
-                                    <div class="col-sm-6 mb-3">
+                                    <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="skill_ids">Skills</label>
                                         <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
@@ -417,10 +423,10 @@ $controllerRoute = $module['controller_route'];
                                         </select>
                                     </div>
                                     
-                                    <div class="col-sm-6 mb-3">
+                                    <!-- <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="expected_close_date">Expected Close Date</label>
                                         <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" min="<?=date('Y-m-d')?>" />
-                                    </div>
+                                    </div> -->
                                     
                                     <div class="col-sm-12 mb-3">
                                         <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
@@ -498,6 +504,10 @@ $controllerRoute = $module['controller_route'];
 
                                     <div class="col-sm-12">
                                         <h6>Office Address (for walk-ins)</h6>
+                                    </div>
+                                    <div class="col-sm-12 mb-3">
+                                        <label class="form-label" for="walkin_details">Walkin Details</label>
+                                        <textarea id="ckeditor1" name="walkin_details" class="form-control" placeholder="Walkin Details" rows="5"><?=$walkin_details?></textarea>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_address1">Address Line 1</label>
@@ -612,19 +622,19 @@ $controllerRoute = $module['controller_route'];
 
             var designation = '<?=$designation?>';
             if(designation == 7037){
-                $('#position_name').show();
+                $('.position_name').show();
                 $('#position_name').attr('required', true);
             } else {
-                $('#position_name').hide();
+                $('.position_name').hide();
                 $('#position_name').attr('required', false);
             }
             $('#designation').on('change', function(){
                 var designation = $('#designation').val();
                 if(designation == 7037){
-                    $('#position_name').show();
+                    $('.position_name').show();
                     $('#position_name').attr('required', true);
                 } else {
-                    $('#position_name').hide();
+                    $('.position_name').hide();
                     $('#position_name').attr('required', false);
                 }
             });
