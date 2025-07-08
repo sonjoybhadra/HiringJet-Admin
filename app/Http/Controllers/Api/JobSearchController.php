@@ -18,6 +18,8 @@ use App\Models\Designation;
 use App\Models\Industry;
 use App\Models\ItSkill;
 use App\Models\JobCategory;
+use App\Models\Country;
+use App\Models\City;
 
 class JobSearchController extends BaseApiController
 {
@@ -27,7 +29,8 @@ class JobSearchController extends BaseApiController
     public function getJobsByParams(Request $request, $job_type)
     {
         try {
-            $sql = PostJob::select('post_jobs.*');
+            $sql = PostJob::select('post_jobs.*')
+                            ->where('posting_close_date', '>=', date('Y-m-d'));
             if(strtolower($job_type) != 'all-jobs'){
                 $sql->where('job_type', $job_type);
             }
@@ -37,8 +40,8 @@ class JobSearchController extends BaseApiController
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
             }
 
-            if(!empty($request->keywords)){
-                $keywords_array = explode(',', $request->keywords);
+            if(!empty($request->keyword)){
+                $keywords_array = explode(',', $request->keyword);
 
                 $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
                 $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
@@ -74,28 +77,34 @@ class JobSearchController extends BaseApiController
 
             if(!empty($request->location)){
                 $location_array = explode(',', $request->location);
-                $sql->orWhere(function ($q) use ($location_array) {
-                    foreach ($location_array as $tag) {
-                        $q->orWhereRaw(
-                            "CASE
-                                WHEN location_country_names IS NULL OR location_country_names = '' THEN FALSE
-                                ELSE location_country_names::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$tag])]
-                        );
-                    }
-                });
-                $sql->orWhere(function ($q) use ($location_array) {
-                    foreach ($location_array as $tag) {
-                        $q->orWhereRaw(
-                            "CASE
-                                WHEN location_city_names IS NULL OR location_city_names = '' THEN FALSE
-                                ELSE location_city_names::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$tag])]
-                        );
-                    }
-                });
+                $country_ids = Country::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                $city_ids = City::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                if(!empty($country_ids)){
+                    $sql->where(function ($q) use ($location_array) {
+                        foreach ($location_array as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN location_country_names IS NULL OR location_country_names = '' THEN FALSE
+                                    ELSE location_country_names::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
+                        }
+                    });
+                }
+                if(!empty($city_ids)){
+                    $sql->where(function ($q) use ($location_array) {
+                        foreach ($location_array as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN location_city_names IS NULL OR location_city_names = '' THEN FALSE
+                                    ELSE location_city_names::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
+                        }
+                    });
+                }
             }
 
             if(!empty($request->job_category)){
@@ -246,7 +255,7 @@ class JobSearchController extends BaseApiController
                     return $this->sendError('Warning', 'You have already applied for this job.', 201);
                 }
             }else{
-                return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
+                return $this->sendError('Error', 'Sorry!! job apply date is over.', 201);
             }
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
