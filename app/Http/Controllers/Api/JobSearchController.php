@@ -17,6 +17,7 @@ use App\Models\ShortlistedJob;
 use App\Models\Designation;
 use App\Models\Industry;
 use App\Models\ItSkill;
+use App\Models\JobCategory;
 
 class JobSearchController extends BaseApiController
 {
@@ -95,7 +96,10 @@ class JobSearchController extends BaseApiController
                 });
             }
             if(!empty($request->job_category)){
-                $sql->where('job_category', $request->job_category);
+                $category = JobCategory::where('name', 'ILIKE', $request->job_category)->first();
+                if($category){
+                    $sql->where('job_category', $category->id);
+                }
             }
             if(!empty($request->country)){
                 $countrys = $request->country;
