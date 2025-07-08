@@ -134,9 +134,14 @@ class PostJob extends Model
         if(!empty($user_skills)){
             $sql->where(function ($q) use ($user_skills) {
                 foreach ($user_skills as $tag) {
-                    $q->orWhereJsonContains('skill_ids', (string)$tag);
+                    // $q->orWhereJsonContains('skill_ids', (string)$tag);
+                    $q->orwhereRaw("locations::jsonb @> ?::jsonb", [json_encode($tag)]);
                 }
             });
+
+            // $jobs = PostJob::whereRaw("?::jsonb @> to_jsonb(?)", ['locations', $searchLocation])->get();
+            // // Or more explicitly checking for string containment within the array
+            // $jobs = PostJob::whereRaw("locations::jsonb @> ?::jsonb", [json_encode([$searchLocation])])->get();
         }
 
         return $sql;
