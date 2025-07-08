@@ -77,11 +77,14 @@ class JobSearchController extends BaseApiController
                         }
                     });
                 }else{
-                    $req_loc = $request->location;
-                    $sql->where(function ($q) use ($location_array) {
-                        $q->where('location_country_names', '@>', json_encode($location_array));
-                        $q->orWhere('location_city_names', '@>', json_encode($location_array));
-                    });
+                    $req_loc = json_encode($location_array);
+                     $sql->whereRaw("location_country_names::jsonb @> ?", [$req_loc])
+                        ->orWhereRaw("location_city_names::jsonb @> ?", [$req_loc]);
+
+                    // $sql->where(function ($q) use ($location_array) {
+                    //     $q->where('location_country_names', '@>', json_encode($location_array));
+                    //     $q->orWhere('location_city_names', '@>', json_encode($location_array));
+                    // });
                 }
             }
             if(!empty($request->job_category)){
