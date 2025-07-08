@@ -86,7 +86,7 @@ class JobSearchController extends BaseApiController
                     //     $q->orWhere('location_city_names', '@>', json_encode($location_array));
                     // });
 
-                    $value = json_encode($request->location); // Produces: '["UNITED ARAB EMIRATES"]'
+                    $value = json_encode($location_array); // Produces: '["UNITED ARAB EMIRATES"]'
 
                     $sql->where(function($query) use ($value) {
                         $query->whereRaw('location_country_names::jsonb @> ?', [$value])
