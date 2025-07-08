@@ -149,7 +149,7 @@ class PostJob extends Model
         return $sql;
     }
 
-    public function get_job_search_custom_sql()
+    public function get_job_search_custom_sql_old_2()
     {
         $jobseeker_designation = UserEmployment::select('last_designation')
                                                     ->where('user_id', auth()->user()->id)
@@ -177,6 +177,65 @@ class PostJob extends Model
         }
 
         return $sql;
+    }
+
+    public function get_job_search_custom_sql()
+    {
+        $user_id = auth()->user()->id;
+
+        // Get jobseeker's last designation
+        $jobseeker_designation = UserEmployment::select('last_designation')
+                                                ->where('user_id', $user_id)
+                                                ->orderBy('is_current_job', 'DESC')
+                                                ->first();
+
+        // Get user's skills
+        $user_skills = UserSkill::where('user_id', $user_id)->get()->pluck('keyskill_id')->toArray();
+
+        // Build the main query
+        $sql = PostJob::select('post_jobs.*')
+            ->addSelect(DB::raw("
+                (SELECT COUNT(*) FROM post_job_user_applieds
+                WHERE post_job_user_applieds.user_id = {$user_id}
+                AND post_job_user_applieds.job_id = post_jobs.id
+                AND post_job_user_applieds.status = 1) AS job_applied_status
+            "))
+            ->addSelect(DB::raw("
+                (SELECT COUNT(*) FROM shortlisted_jobs
+                WHERE shortlisted_jobs.user_id = {$user_id}
+                AND shortlisted_jobs.job_id = post_jobs.id
+                AND shortlisted_jobs.status = 1) AS job_shortlisted_status
+            "));
+
+        // Filter by designation if available
+        if ($jobseeker_designation) {
+            $sql->where('designation', $jobseeker_designation->last_designation);
+        }
+
+        // Filter by skills if available
+        if (!empty($user_skills)) {
+            $skill_names = Keyskill::select('name')
+                                ->whereIn('id', $user_skills)
+                                ->pluck('name')
+                                ->toArray();
+
+            if (!empty($skill_names)) {
+                $sql->orWhere(function ($query) use ($skill_names) {
+                    foreach ($skill_names as $skill_name) {
+                        // Handle both null and empty string cases, cast to jsonb and check containment
+                        $query->orWhereRaw(
+                            "CASE
+                                WHEN skill_names IS NULL OR skill_names = '' THEN FALSE
+                                ELSE skill_names::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$skill_name])]
+                        );
+                    }
+                });
+            }
+        }
+
+        return  $sql;
     }
 
 }
