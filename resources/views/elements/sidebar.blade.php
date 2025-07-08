@@ -422,6 +422,13 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="CMS Pages">CMS Pages</div>
       </a>
     </li>
+    <!-- SEo Pages -->
+    <li class="menu-item <?=(($pageSegment == 'seo-page')?'active':'')?>">
+      <a href="<?=url('/seo-page/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-file-lines"></i>
+        <div data-i18n="SEO Pages">SEO Pages</div>
+      </a>
+    </li>
   <?php }?>
 
   <?php if(in_array(12, $moduleIds)){?>
