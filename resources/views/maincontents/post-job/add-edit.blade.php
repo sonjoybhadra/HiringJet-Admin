@@ -507,7 +507,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="walkin_details">Walkin Details</label>
-                                        <textarea id="ckeditor1" name="walkin_details" class="form-control" placeholder="Walkin Details" rows="5"><?=$walkin_details?></textarea>
+                                        <textarea id="ckeditor3" name="walkin_details" class="form-control" placeholder="Walkin Details" rows="5"><?=$walkin_details?></textarea>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="walkin_address1">Address Line 1</label>
