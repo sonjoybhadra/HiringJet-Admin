@@ -558,7 +558,7 @@ class CommonController extends BaseApiController
                 foreach ($locationIds as $locId) {
                     if (!isset($locationCounts[$locId])) {
                         $country = Country::find($locId);
-                        $locationCounts[$locId] = ['name'=> $country->name, 'count'=> 0];
+                        $locationCounts[$locId] = ['name'=> $country ? $country->name : '', 'count'=> 0];
                     }
                     $locationCounts[$locId]['count'] = $locationCounts[$locId]['count']+1;
                 }
@@ -578,8 +578,8 @@ class CommonController extends BaseApiController
             if (is_array($locationIds)) {
                 foreach ($locationIds as $locId) {
                     if (!isset($locationCitis[$locId])) {
-                        $country = City::find($locId);
-                        $locationCitis[$locId] = ['name'=> $country->name, 'count'=> 0];
+                        $city = City::find($locId);
+                        $locationCitis[$locId] = ['name'=> $city ? $city->name : '', 'count'=> 0];
                     }
                     $locationCitis[$locId]['count'] = $locationCitis[$locId]['count']+1;
                 }
