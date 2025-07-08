@@ -36,64 +36,64 @@ class JobSearchController extends BaseApiController
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
             }
 
-            if(!empty($request->keywords) && !empty($request->location)){
-                $keywords_array = explode(',', $request->keywords);
+            // if(!empty($request->keywords) && !empty($request->location)){
+            //     $keywords_array = explode(',', $request->keywords);
 
-                $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
-                $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
-                $itskills = ItSkill::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
-                if(count($designations) > 0){
-                    $sql->where(function ($q) use ($designations) {
-                        foreach ($designations as $tag) {
-                            $q->orWhere('designation', (string)$tag);
-                        }
-                    });
-                }
-                if(count($industries) > 0){
-                    $sql->where(function ($q) use ($industries) {
-                        foreach ($industries as $tag) {
-                            $q->orWhere('industry', (string)$tag);
-                        }
-                    });
-                }
-                if(count($itskills) > 0){
-                    $sql->where(function ($q) use ($itskills) {
-                        foreach ($itskills as $tag) {
-                            $q->orWhereJsonContains('skill_ids', (string)$tag);
-                        }
-                    });
-                }
+            //     $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+            //     $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+            //     $itskills = ItSkill::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+            //     if(count($designations) > 0){
+            //         $sql->where(function ($q) use ($designations) {
+            //             foreach ($designations as $tag) {
+            //                 $q->orWhere('designation', (string)$tag);
+            //             }
+            //         });
+            //     }
+            //     if(count($industries) > 0){
+            //         $sql->where(function ($q) use ($industries) {
+            //             foreach ($industries as $tag) {
+            //                 $q->orWhere('industry', (string)$tag);
+            //             }
+            //         });
+            //     }
+            //     if(count($itskills) > 0){
+            //         $sql->where(function ($q) use ($itskills) {
+            //             foreach ($itskills as $tag) {
+            //                 $q->orWhereJsonContains('skill_ids', (string)$tag);
+            //             }
+            //         });
+            //     }
 
-                $location_array = explode(',', $request->location);
-                if(count($location_array) > 1){
-                    $sql->where(function ($q) use ($location_array) {
-                        foreach ($location_array as $tag) {
-                            $q->orWhereJsonContains('location_country_names', $tag);
-                        }
-                    });
-                    $sql->where(function ($q) use ($location_array) {
-                        foreach ($location_array as $tag) {
-                            $q->orWhereJsonContains('location_city_names', $tag);
-                        }
-                    });
-                }else{
-                    $req_loc = json_encode($location_array);
-                    //  $sql->whereRaw("location_country_names::jsonb @> ?", [$req_loc])
-                    //     ->orWhereRaw("location_city_names::jsonb @> ?", [$req_loc]);
+            //     $location_array = explode(',', $request->location);
+            //     if(count($location_array) > 1){
+            //         $sql->where(function ($q) use ($location_array) {
+            //             foreach ($location_array as $tag) {
+            //                 $q->orWhereJsonContains('location_country_names', $tag);
+            //             }
+            //         });
+            //         $sql->where(function ($q) use ($location_array) {
+            //             foreach ($location_array as $tag) {
+            //                 $q->orWhereJsonContains('location_city_names', $tag);
+            //             }
+            //         });
+            //     }else{
+            //         $req_loc = json_encode($location_array);
+            //         //  $sql->whereRaw("location_country_names::jsonb @> ?", [$req_loc])
+            //         //     ->orWhereRaw("location_city_names::jsonb @> ?", [$req_loc]);
 
-                    // $sql->where(function ($q) use ($location_array) {
-                    //     $q->where('location_country_names', '@>', json_encode($location_array));
-                    //     $q->orWhere('location_city_names', '@>', json_encode($location_array));
-                    // });
+            //         // $sql->where(function ($q) use ($location_array) {
+            //         //     $q->where('location_country_names', '@>', json_encode($location_array));
+            //         //     $q->orWhere('location_city_names', '@>', json_encode($location_array));
+            //         // });
 
-                    $value = json_encode($location_array); // Produces: '["UNITED ARAB EMIRATES"]'
+            //         $value = json_encode($location_array); // Produces: '["UNITED ARAB EMIRATES"]'
 
-                    $sql->where(function($query) use ($value) {
-                        $query->whereRaw('location_country_names::jsonb @> ?', [$value])
-                                ->orWhereRaw('location_city_names::jsonb @> ?', [$value]);
-                    });
-                }
-            }
+            //         $sql->where(function($query) use ($value) {
+            //             $query->whereRaw('location_country_names::jsonb @> ?', [$value])
+            //                     ->orWhereRaw('location_city_names::jsonb @> ?', [$value]);
+            //         });
+            //     }
+            // }
             if(!empty($request->job_category)){
                 $sql->whereIn('job_category', $request->job_category);
             }
