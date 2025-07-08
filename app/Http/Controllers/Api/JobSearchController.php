@@ -26,7 +26,10 @@ class JobSearchController extends BaseApiController
     public function getJobsByParams(Request $request, $job_type)
     {
         try {
-            $sql = PostJob::select('post_jobs.*')->where('job_type', $job_type);
+            $sql = PostJob::select('post_jobs.*');
+            if(strtolower($job_type) != 'all-jobs'){
+                $sql->where('job_type', $job_type);
+            }
             if(Auth::guard('api')->check()){
                 $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
 
@@ -68,6 +71,9 @@ class JobSearchController extends BaseApiController
                         $q->orWhereJsonContains('location_cities', (string)$tag);
                     }
                 });
+            }
+            if(!empty($request->job_category)){
+                $sql->whereIn('job_category', $request->job_category);
             }
             if(!empty($request->country)){
                 $countrys = $request->country;
