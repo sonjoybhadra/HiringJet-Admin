@@ -133,9 +133,9 @@ class PostJob extends Model
         }
         if(!empty($user_skills)){
             $skill_names = Keyskill::select('name')->whereIn('id', $user_skills)->get(); //->pluck('name')->toArray();
-            $sql->where(function ($q) use ($skill_names) {
+            $sql->orWhere(function ($q) use ($skill_names) {
                 foreach ($skill_names as $skill) {
-                    $q->orWhereJsonContains('skill_ids', (string)$skill->name);
+                    $q->orWhereJsonContains('skill_names', (string)$skill->name);
                     // $q->orwhereRaw("skill_ids::jsonb @> ?::jsonb", [json_encode($tag)]);
                     // $q->orWhereRaw("CAST(skill_names AS jsonb) @> ?", [json_encode([$skill_names])])->get();
                 }
