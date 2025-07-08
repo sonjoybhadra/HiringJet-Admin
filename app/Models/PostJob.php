@@ -168,7 +168,7 @@ class PostJob extends Model
 
         if(!empty($user_skills)){
             $skill_names = Keyskill::select('name')->whereIn('id', $user_skills)->get();
-            $sql->where(function ($q) use ($skill_names) {
+            $sql->orWhere(function ($q) use ($skill_names) {
                 foreach ($skill_names as $skill) {
                     // FIXED: Removed ->get() and added proper null handling with ::jsonb casting
                     $q->orWhereRaw("COALESCE(skill_names, '[]')::jsonb @> ?::jsonb", [json_encode([$skill->name])]);

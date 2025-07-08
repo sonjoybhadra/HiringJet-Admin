@@ -118,6 +118,7 @@ class AuthController extends BaseApiController
         $postJobObj = new PostJob();
         $jobSql = $postJobObj->get_job_search_custom_sql();
         $data->matched_jobs_count = $jobSql->count();
+        $data->matched_jobs_sql = $jobSql->toSql();
 
         try {
             return $this->sendResponse(
