@@ -65,16 +65,24 @@ class JobSearchController extends BaseApiController
                 }
 
                 $location_array = explode(',', $request->location);
-                $sql->where(function ($q) use ($location_array) {
-                    foreach ($location_array as $tag) {
-                        $q->orWhereJsonContains('location_country_names', $tag);
-                    }
-                });
-                $sql->where(function ($q) use ($location_array) {
-                    foreach ($location_array as $tag) {
-                        $q->orWhereJsonContains('location_city_names', $tag);
-                    }
-                });
+                if(count($location_array) > 1){
+                    $sql->where(function ($q) use ($location_array) {
+                        foreach ($location_array as $tag) {
+                            $q->orWhereJsonContains('location_country_names', $tag);
+                        }
+                    });
+                    $sql->where(function ($q) use ($location_array) {
+                        foreach ($location_array as $tag) {
+                            $q->orWhereJsonContains('location_city_names', $tag);
+                        }
+                    });
+                }else{
+                    $req_loc = $request->location;
+                    $sql->where(function ($q) use ($req_loc) {
+                        $q->whereJsonContains('location_country_names', $req_loc);
+                        $q->orWhereJsonContains('location_city_names', $req_loc);
+                    });
+                }
             }
             if(!empty($request->job_category)){
                 $sql->whereIn('job_category', $request->job_category);
