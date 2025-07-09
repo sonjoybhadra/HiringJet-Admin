@@ -195,8 +195,9 @@ class PostJobController extends Controller
                         'status'                    => 1,
                     ];
                     // Helper::pr($fields);
-                    PostJob::insert($fields);
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                    $id = PostJob::insertGetId($fields);
+                    // return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                    return redirect($this->data['controller_route'] . "/preview/" . Helper::encoded($id))->with('success_message', $this->data['title'].' Preview !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
@@ -376,7 +377,8 @@ class PostJobController extends Controller
                     ];
                     // Helper::pr($fields);
                     PostJob::where('id', '=', $id)->update($fields);
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
+                    // return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
+                    return redirect($this->data['controller_route'] . "/preview/" . Helper::encoded($id))->with('success_message', $this->data['title'].' Preview !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
@@ -385,6 +387,18 @@ class PostJobController extends Controller
             return view('maincontents.' . $page_name, $data);
         }
     /* edit */
+    /* preview */
+        public function preview(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $page_name                      = 'post-job.preview';
+            $data['row']                    = PostJob::where('id', '=', $id)->first();
+            $title                          = $this->data['title'].' Preview: ' . (($data['row'])?$data['row']->job_no:'');
+
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* preview */
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
@@ -409,6 +423,30 @@ class PostJobController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
         }
     /* delete */
+    /* cancel */
+        public function cancel(Request $request, $id){
+            $id                             = Helper::decoded($id);
+            $model                          = PostJob::find($id);
+            $fields = [
+                'status'             => 3,
+                'deleted_at'         => date('Y-m-d H:i:s'),
+            ];
+            PostJob::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->position_name . ' ' . $this->data['title'] . ' Cancelled',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
+            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Cancelled Successfully !!!');
+        }
+    /* cancel */
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
