@@ -20,6 +20,7 @@ use App\Models\ShortlistedJob;
 use App\Models\PostJobUserApplied;
 use App\Models\PostJob;
 use App\Models\ProfileComplete;
+use App\Models\UserProfile;
 use App\Models\UserProfileCompletedPercentage;
 
 class AuthController extends BaseApiController
@@ -105,16 +106,27 @@ class AuthController extends BaseApiController
 
         $profileComplete = ProfileComplete::select('id', 'name', 'percentage')->get()->toArray();
         $profile_completed_percentages = [];
+        $total_completed_percentage = 0;
         foreach($profileComplete as $value){
             $has_user_data = UserProfileCompletedPercentage::where('user_id', auth()->user()->id)
                                                             ->where('profile_completes_id', $value['id'])
                                                             ->first();
             $value['completed_percentage'] = $has_user_data ? $value['percentage'] : 0;
             $value['has_completed'] = $has_user_data ? 1 : 0;
+            if($has_user_data){
+                $total_completed_percentage += $value['percentage'];
+            }
 
             array_push($profile_completed_percentages, $value);
         }
+        $data->user_profile->profile_completed_percentage = $total_completed_percentage;
+
+        UserProfile::where('user_id', auth()->user()->id)
+                    ->where('profile_completed_percentage', '!=', $total_completed_percentage)
+                    ->update(['profile_completed_percentage'=> $total_completed_percentage]);
+
         $data->user_profile_completed_percentages = $profile_completed_percentages;
+
 
         $user_employment = UserEmployment::where('user_id', auth()->user()->id)
                                             ->where('is_current_job', 1)
