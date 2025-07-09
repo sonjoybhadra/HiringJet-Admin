@@ -53,6 +53,7 @@ class JobSearchController extends BaseApiController
                         }
                     });
                 }
+
                 if(count($industries) > 0){
                     $sql->where(function ($q) use ($industries) {
                         foreach ($industries as $tag) {
@@ -60,16 +61,17 @@ class JobSearchController extends BaseApiController
                         }
                     });
                 }
+
                 if(count($itskills) > 0){
                     $sql->where(function ($q) use ($itskills) {
                         foreach ($itskills as $tag) {
                             $q->orWhereRaw(
-                            "CASE
-                                WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
-                                ELSE skill_ids::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$tag])]
-                        );
+                                "CASE
+                                    WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                    ELSE skill_ids::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
                         }
                     });
                 }
@@ -113,6 +115,7 @@ class JobSearchController extends BaseApiController
                     $sql->where('job_category', $category->id);
                 }
             }
+
             if(!empty($request->country)){
                 $countrys = $request->country;
                 $sql->orWhere(function ($q) use ($countrys) {
@@ -127,6 +130,7 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
+
             if(!empty($request->city)){
                 $citys = $request->city;
                 $sql->where(function ($q) use ($citys) {
@@ -141,6 +145,7 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
+
             if(!empty($request->skills)){
                 $skills = $request->skills;
                 $sql->where(function ($q) use ($skills) {
@@ -155,6 +160,7 @@ class JobSearchController extends BaseApiController
                     }
                 });
             }
+
             if($request->designation){
                 $sql->where('designation', $request->designation);
             }
