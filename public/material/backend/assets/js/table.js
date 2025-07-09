@@ -77,7 +77,22 @@ function loadTable(config) {
                         </a>
                     </td>`;
                 } else {
-                    html += `<td>${val}</td>`;
+                    if(config.routePrefix == 'post-job'){
+                        var job_no = row['job_no'];
+                        var job_id = row['id'];
+                        if(col == 'position_name'){
+                            html += `<td>
+                                        ${val}
+                                        <span id="textToCopy${job_id}" style="display:none;">${frontendUrl}job-details/${job_no}</span>
+                                        <span class="badge bg-secondary" style="margin-left:10px;" onclick="copyLink(${job_id});"><i class="fa-regular fa-copy" id="copyBtn" style="cursor:pointer;"></i></span>
+                                        <h6 class="text-success" id="copyStatus${job_id}"></h6>
+                                    </td>`;
+                        } else {
+                            html += `<td>${val}</td>`;
+                        }
+                    } else {
+                        html += `<td>${val}</td>`;
+                    }
                 }
             });
 
@@ -110,10 +125,10 @@ function loadTable(config) {
 
                 if(config.routePrefix == 'post-job'){
                     var job_no = row['job_no'];
-                    html += `<a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning" title="View Jobs" target="_blank">
+                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning me-1" title="View Jobs" target="_blank">
                                     <i class="fa-solid fa-eye"></i></a>`;
 
-                    html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
+                    html += `<a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
                                 </a>`;
                 }
@@ -220,4 +235,18 @@ function loadTable(config) {
     });
 
     fetchData();
+}
+
+function copyLink(jobID){
+    const text = document.getElementById('textToCopy' + jobID).innerText;
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            document.getElementById('copyStatus' + jobID).innerText = 'Copied!';
+            setTimeout(() => {
+                document.getElementById('copyStatus' + jobID).innerText = '';
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Failed to copy: ', err);
+        });
 }
