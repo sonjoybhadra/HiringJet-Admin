@@ -52,7 +52,7 @@ class EditProfessionalDetailsController extends BaseApiController
             UserProfile::where('user_id', auth()->user()->id)->update([
                 'resume_headline'=> $request->resume_headline,
             ]);
-
+            $this->calculate_profile_completed_percentage(auth()->user()->id, 'cv-headline'); //CV headline completes
             return $this->sendResponse($this->getUserDetails(), 'Resume Headline updated successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
