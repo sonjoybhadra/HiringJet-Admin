@@ -49,43 +49,49 @@ class EmployerController extends Controller
                     'industry_id'       => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    /* user activity */
-                        $activityData = [
-                            'user_email'        => session('user_data')['email'],
-                            'user_name'         => session('user_data')['name'],
-                            'user_type'         => 'ADMIN',
-                            'ip_address'        => $request->ip(),
-                            'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
-                            'platform_type'     => 'WEB',
-                        ];
-                        UserActivity::insert($activityData);
-                    /* user activity */
-                    /* logo */
-                        $upload_folder = 'employer';
-                        $imageFile      = $request->file('logo');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('logo', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $logo = $uploadedFile['newFilename'];
+                    $name = $postData['name'];
+                    $checkEmployer = Employer::where('name', '=', $name)->count();
+                    if($checkEmployer <= 0){
+                        /* user activity */
+                            $activityData = [
+                                'user_email'        => session('user_data')['email'],
+                                'user_name'         => session('user_data')['name'],
+                                'user_type'         => 'ADMIN',
+                                'ip_address'        => $request->ip(),
+                                'activity_type'     => 3,
+                                'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                                'platform_type'     => 'WEB',
+                            ];
+                            UserActivity::insert($activityData);
+                        /* user activity */
+                        /* logo */
+                            $upload_folder = 'employer';
+                            $imageFile      = $request->file('logo');
+                            if($imageFile != ''){
+                                $imageName      = $imageFile->getClientOriginalName();
+                                $uploadedFile   = $this->upload_single_file('logo', $imageName, $upload_folder, 'image');
+                                if($uploadedFile['status']){
+                                    $logo = $uploadedFile['newFilename'];
+                                } else {
+                                    return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                                }
                             } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                                $logo = '';
                             }
-                        } else {
-                            $logo = '';
-                        }
-                    /* logo */
-                    $fields = [
-                        'name'                  => strip_tags($postData['name']),
-                        'description'           => strip_tags($postData['description']),
-                        'industry_id'           => strip_tags($postData['industry_id']),
-                        'no_of_employee'        => strip_tags($postData['no_of_employee']),
-                        'logo'                  => '/uploads/' . $upload_folder . '/' . $logo,
-                        'status'                => ((array_key_exists("status",$postData))?1:0),
-                    ];
-                    Employer::insert($fields);
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                        /* logo */
+                        $fields = [
+                            'name'                  => strip_tags($postData['name']),
+                            'description'           => strip_tags($postData['description']),
+                            'industry_id'           => strip_tags($postData['industry_id']),
+                            'no_of_employee'        => strip_tags($postData['no_of_employee']),
+                            'logo'                  => '/uploads/' . $upload_folder . '/' . $logo,
+                            'status'                => ((array_key_exists("status",$postData))?1:0),
+                        ];
+                        Employer::insert($fields);
+                        return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                    } else {
+                        return redirect()->back()->with('error_message', 'Employer already exists with this name');
+                    }
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
@@ -114,45 +120,51 @@ class EmployerController extends Controller
                     'industry_id'       => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    /* logo */
-                        $upload_folder = 'employer';
-                        $imageFile      = $request->file('logo');
-                        if($imageFile != ''){
-                            $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('logo', $imageName, $upload_folder, 'image');
-                            if($uploadedFile['status']){
-                                $logo = $uploadedFile['newFilename'];
-                                $logoLink = '/uploads/' . $upload_folder . '/' . $logo;
+                    $name = $postData['name'];
+                    $checkEmployer = Employer::where('name', '=', $name)->where('id', '!=', $id)->count();
+                    if($checkEmployer <= 0){
+                        /* logo */
+                            $upload_folder = 'employer';
+                            $imageFile      = $request->file('logo');
+                            if($imageFile != ''){
+                                $imageName      = $imageFile->getClientOriginalName();
+                                $uploadedFile   = $this->upload_single_file('logo', $imageName, $upload_folder, 'image');
+                                if($uploadedFile['status']){
+                                    $logo = $uploadedFile['newFilename'];
+                                    $logoLink = '/uploads/' . $upload_folder . '/' . $logo;
+                                } else {
+                                    return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                                }
                             } else {
-                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                                $logo = $data['row']->logo;
+                                $logoLink = $logo;
                             }
-                        } else {
-                            $logo = $data['row']->logo;
-                            $logoLink = $logo;
-                        }
-                    /* logo */
-                    $fields = [
-                        'name'                  => strip_tags($postData['name']),
-                        'description'           => strip_tags($postData['description']),
-                        'industry_id'           => strip_tags($postData['industry_id']),
-                        'no_of_employee'        => strip_tags($postData['no_of_employee']),
-                        'logo'                  => $logoLink,
-                        'status'                => ((array_key_exists("status",$postData))?1:0),
-                    ];
-                    Employer::where($this->data['primary_key'], '=', $id)->update($fields);
-                    /* user activity */
-                        $activityData = [
-                            'user_email'        => session('user_data')['email'],
-                            'user_name'         => session('user_data')['name'],
-                            'user_type'         => 'ADMIN',
-                            'ip_address'        => $request->ip(),
-                            'activity_type'     => 3,
-                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
-                            'platform_type'     => 'WEB',
+                        /* logo */
+                        $fields = [
+                            'name'                  => strip_tags($postData['name']),
+                            'description'           => strip_tags($postData['description']),
+                            'industry_id'           => strip_tags($postData['industry_id']),
+                            'no_of_employee'        => strip_tags($postData['no_of_employee']),
+                            'logo'                  => $logoLink,
+                            'status'                => ((array_key_exists("status",$postData))?1:0),
                         ];
-                        UserActivity::insert($activityData);
-                    /* user activity */
-                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
+                        Employer::where($this->data['primary_key'], '=', $id)->update($fields);
+                        /* user activity */
+                            $activityData = [
+                                'user_email'        => session('user_data')['email'],
+                                'user_name'         => session('user_data')['name'],
+                                'user_type'         => 'ADMIN',
+                                'ip_address'        => $request->ip(),
+                                'activity_type'     => 3,
+                                'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                                'platform_type'     => 'WEB',
+                            ];
+                            UserActivity::insert($activityData);
+                        /* user activity */
+                        return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
+                    } else {
+                        return redirect()->back()->with('error_message', 'Employer already exists with this name');
+                    }
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }

@@ -62,12 +62,28 @@ class SEOPageController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
+                    /* og image*/
+                        $upload_folder = 'page';
+                        $imageFile      = $request->file('og_image');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('og_image', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $og_image = $uploadedFile['newFilename'];
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            $og_image = '';
+                        }
+                    /* og image*/
                     $fields = [
                         'title'                     => strip_tags($postData['title']),
                         'page_slug'                 => strip_tags($postData['page_slug']),
                         'meta_title'                => strip_tags($postData['meta_title']),
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),
                         'meta_description'          => strip_tags($postData['meta_description']),
+                        'og_image'                  => '/uploads/' . $upload_folder . '/' . $og_image,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     SeoPage::insert($fields);
@@ -100,12 +116,30 @@ class SEOPageController extends Controller
                     'page_slug'             => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    /* og image */
+                        $upload_folder = 'page';
+                        $imageFile      = $request->file('og_image');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('og_image', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $og_image = $uploadedFile['newFilename'];
+                                $ogImageLink = '/uploads/' . $upload_folder . '/' . $og_image;
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            $og_image = $data['row']->og_image;
+                            $ogImageLink = $og_image;
+                        }
+                    /* og image */
                     $fields = [
                         'title'                     => strip_tags($postData['title']),
                         'page_slug'                 => strip_tags($postData['page_slug']),
                         'meta_title'                => strip_tags($postData['meta_title']),
                         'meta_keywords'             => strip_tags($postData['meta_keywords']),
                         'meta_description'          => strip_tags($postData['meta_description']),
+                        'og_image'                  => $ogImageLink,
                         'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     // Helper::pr($fields);
