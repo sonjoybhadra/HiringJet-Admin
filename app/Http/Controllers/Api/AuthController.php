@@ -111,10 +111,10 @@ class AuthController extends BaseApiController
             $has_user_data = UserProfileCompletedPercentage::where('user_id', auth()->user()->id)
                                                             ->where('profile_completes_id', $value['id'])
                                                             ->first();
-            $value['completed_percentage'] = $has_user_data ? $value['percentage'] : 0;
+            $value['completed_percentage'] = $has_user_data ? (int)$value['percentage'] : 0;
             $value['has_completed'] = $has_user_data ? 1 : 0;
             if($has_user_data){
-                $total_completed_percentage += $value['percentage'];
+                $total_completed_percentage += (int)$value['percentage'];
             }
 
             array_push($profile_completed_percentages, $value);
