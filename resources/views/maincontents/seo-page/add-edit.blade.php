@@ -38,6 +38,7 @@ $controllerRoute = $module['controller_route'];
                 $meta_title             = $row->meta_title;
                 $meta_keywords          = $row->meta_keywords;
                 $meta_description       = $row->meta_description;
+                $og_image               = $row->og_image;
                 $status                 = $row->status;
             } else {
                 $id                     = '';
@@ -46,6 +47,7 @@ $controllerRoute = $module['controller_route'];
                 $meta_title             = '';
                 $meta_keywords          = '';
                 $meta_description       = '';
+                $og_image               = '';
                 $status                 = '';
             }
             ?>
@@ -88,6 +90,34 @@ $controllerRoute = $module['controller_route'];
                             <textarea class="form-control" id="meta_description" name="meta_description" placeholder="Meta Description" rows="5"><?=$meta_description?></textarea>
                         </div>
                     </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
+                                <div class="button-wrapper">
+                                    <label for="og_image" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                        <span class="d-none d-sm-block">Upload OG Image</span>
+                                        <i class="bx bx-upload d-block d-sm-none"></i>
+                                        <input type="file" id="og_image" class="account-file-input" name="og_image" hidden accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </label>
+                                    <?php
+                                    if(!empty($row)){
+                                        $pageLink = Request::url();
+                                    ?>
+                                        <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/seo_pages/og_image/id/' . $id)?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                            <i class="bx bx-reset d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Reset</span>
+                                        </a>
+                                    <?php }?>
+                                    <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="<?=(($og_image != '')?config('constants.app_url') . config('constants.uploads_url_path') . $og_image:config('constants.no_image'))?>" alt="<?=$title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                        </div>
+                    </div>
+
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary btn-sm me-2">Save Changes</button>
                         <a href="<?=url($controllerRoute . '/list/')?>" class="btn btn-label-secondary btn-sm">Cancel</a>
