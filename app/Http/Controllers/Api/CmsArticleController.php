@@ -33,7 +33,7 @@ class CmsArticleController extends BaseApiController
             $list = $sql->where('page_slug', $request->slug)->first();
             $list->page_content = html_entity_decode($list->page_content);
         }else{
-            $list = $sql->get();
+            $list = $sql->latest()->get();
         }
         return $this->sendResponse(
                 $list,
