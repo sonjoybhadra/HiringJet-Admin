@@ -50,7 +50,7 @@ class JobSearchController extends BaseApiController
             }
 
             $sql = PostJob::select('post_jobs.*');
-            $sql->where('posting_close_date', '>=', date('Y-m-d'));
+            // $sql->where('posting_close_date', '>=', date('Y-m-d'));
             if(strtolower($job_type) != 'all-jobs'){
                 $sql->where('job_type', $job_type);
             }
