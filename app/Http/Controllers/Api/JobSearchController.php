@@ -340,7 +340,7 @@ class JobSearchController extends BaseApiController
             $data_count_jobtype_array[$job->job_type]['count'] = $data_count_jobtype_array[$job->job_type]['count']+1;
 
             if (!isset($data_count_jobtype_array['all-jobs'])) {
-                $data_count_jobtype_array['all-jobs']['count'] = ['name'=> 'All Jobs', 'count'=> 0, 'id'=> 'all-jobs'];
+                $data_count_jobtype_array['all-jobs'] = ['name'=> 'All Jobs', 'count'=> 0, 'id'=> 'all-jobs'];
             }
             $data_count_jobtype_array['all-jobs']['count'] = $data_count_jobtype_array['all-jobs']['count']+1;
             // end job_type
