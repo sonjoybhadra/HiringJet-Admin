@@ -238,9 +238,10 @@ class JobSearchController extends BaseApiController
     }
 
     private function getFilterParametersArray($data_array){
-        $data_count_country_array = $data_count_city_array = $data_count_industry_array = $data_count_designation_array = $data_count_nationality_array = $data_count_gender_array = $data_count_employers_array = $data_count_freshness_array = $data_count_experience_array = [];
+        $data_count_country_array = $data_count_city_array = $data_count_industry_array = $data_count_designation_array = $data_count_nationality_array = $data_count_gender_array = $data_count_employers_array = $data_count_freshness_array = $data_count_experience_array = $data_count_jobtype_array = [];
         $freshness = [1, 3, 7, 15, 30, 60];
         $experience = ['0-1', '2-5', '6-10', '11-15', '16-20', '21'];
+        $job_types = ['walk-in-jobs', 'remote-jobs', 'on-site-jobs', 'temp-role-jobs'];
         foreach ($data_array as $job) {
             // get location Country list
             $data_ids = json_decode($job->location_countries, true);
@@ -321,7 +322,7 @@ class JobSearchController extends BaseApiController
                 }
             }
             // end freshness
-            // get freshness list
+            // get experience list
             foreach($experience as $value){
                 $min_max_year = explode('-', $value);
                 if((count($min_max_year) > 1 && $job->min_exp_year >= (int)$min_max_year[0] && $job->max_exp_year <= (int)$min_max_year[1]) || ($job->max_exp_year >= (int)$min_max_year[0])){
@@ -331,7 +332,15 @@ class JobSearchController extends BaseApiController
                     $data_count_experience_array[$value]['count'] = $data_count_experience_array[$value]['count']+1;
                 }
             }
-            // end freshness
+            // end experience
+            // get job_type list
+            if (!isset($data_count_jobtype_array[$job->job_type])) {
+                $data_count_jobtype_array[$job->job_type] = ['name'=> ucwords(str_replace("-", " ",$job->job_type)), 'count'=> 0, 'id'=> $job->job_type];
+                $data_count_jobtype_array['all-jobs']['count'] = ['name'=> 'All Jobs', 'count'=> 0, 'id'=> 'all-jobs'];
+            }
+            $data_count_jobtype_array[$job->job_type]['count'] = $data_count_jobtype_array[$job->job_type]['count']+1;
+            $data_count_jobtype_array['all-jobs']['count'] = $data_count_jobtype_array['all-jobs']['count']+1;
+            // end job_type
         }   //end foreach
 
         return [
@@ -343,7 +352,8 @@ class JobSearchController extends BaseApiController
             'employers' => $data_count_employers_array,
             'gender'=> $data_count_gender_array,
             'freshness'=> $data_count_freshness_array,
-            'experience'=> $data_count_experience_array
+            'experience'=> $data_count_experience_array,
+            'jobtypes'=> $data_count_jobtype_array
         ];
     }
 
