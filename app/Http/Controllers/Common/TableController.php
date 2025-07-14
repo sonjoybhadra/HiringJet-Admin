@@ -31,6 +31,7 @@ class TableController extends Controller
         // JOINs (PostgreSQL-safe with CAST)
         if ($table === 'employers') {
             $query->leftJoin('industries', DB::raw("CAST($table.industry_id AS TEXT)"), '=', DB::raw("CAST(industries.id AS TEXT)"));
+            $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
         }
         if ($table === 'faq_sub_categories') {
             $query->leftJoin('faq_categories', DB::raw("CAST($table.faq_category_id AS TEXT)"), '=', DB::raw("CAST(faq_categories.id AS TEXT)"));
@@ -71,8 +72,13 @@ class TableController extends Controller
 
         // Aliased select columns
         $columns = array_map(function ($col) use ($table) {
-            if ($table === 'employers' && $col === 'industry_id') {
-                return 'industries.name as industry_name';
+            if ($table === 'employers') {
+                if($col === 'industry_id'){
+                    return 'industries.name as industry_name';
+                }
+                if($col === 'created_by'){
+                    return 'users.first_name as created_by_user';
+                }
             }
             if ($table === 'faq_sub_categories' && $col === 'faq_category_id') {
                 return 'faq_categories.name as faq_category_name';
@@ -214,7 +220,11 @@ class TableController extends Controller
                 return Excel::download(new \App\Exports\ArrayExport($columns, $data), 'export.xlsx');
 
             case 'pdf':
+                ini_set('memory_limit', '1024M'); // 👈 Increase memory limit
                 $pdf = PDF::loadView('exports.table', ['columns' => $headers, 'data' => $data]);
+                // // Option 1: Stream it in browser
+                // return $pdf->stream('filename.pdf');
+                // die;
                 return $pdf->download($filename . '.pdf');
         }
 

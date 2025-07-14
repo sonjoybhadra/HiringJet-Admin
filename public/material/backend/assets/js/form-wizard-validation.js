@@ -148,34 +148,27 @@
     // Personal info
     const FormValidation2 = FormValidation.formValidation(wizardValidationFormStep2, {
       fields: {
-        // formValidationFirstName: {
+        // 'skill_ids[]': {
         //   validators: {
         //     notEmpty: {
-        //       message: 'The first name is required'
+        //       message: 'Skill is required'
         //     }
         //   }
         // },
-        // formValidationLastName: {
-        //   validators: {
-        //     notEmpty: {
-        //       message: 'The last name is required'
-        //     }
-        //   }
-        // },
-        // formValidationCountry: {
-        //   validators: {
-        //     notEmpty: {
-        //       message: 'The Country is required'
-        //     }
-        //   }
-        // },
-        // formValidationLanguage: {
-        //   validators: {
-        //     notEmpty: {
-        //       message: 'The Languages is required'
-        //     }
-        //   }
-        // }
+        posting_open_date: {
+          validators: {
+            notEmpty: {
+              message: 'Posting Open Date is required'
+            }
+          }
+        },
+        posting_close_date: {
+          validators: {
+            notEmpty: {
+              message: 'Posting Close Date is required'
+            }
+          }
+        }
       },
       plugins: {
         trigger: new FormValidation.plugins.Trigger(),

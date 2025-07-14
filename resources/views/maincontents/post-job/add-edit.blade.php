@@ -416,7 +416,7 @@ $controllerRoute = $module['controller_route'];
 
                                     <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="skill_ids">Skills</label>
-                                        <select class="select2" id="skill_ids" name="skill_ids[]" multiple>
+                                        <select class="select2" id="skill_ids" name="skill_ids[]" required multiple>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $skill_ids))?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -750,7 +750,7 @@ $controllerRoute = $module['controller_route'];
 
                 // Optional: If current close date is out of new range, reset it
                 if (closeDate.value < newMin || closeDate.value > newMax) {
-                    closeDate.value = newMin;
+                    closeDate.value = newMax;
                 }
             });
         });

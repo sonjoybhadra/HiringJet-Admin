@@ -78,7 +78,7 @@ class CountryController extends Controller
                         }
                     /* country_flag */
                     $fields = [
-                        'name'                      => strtoupper(strip_tags($postData['name'])),
+                        'name'                      => ucwords(strip_tags($postData['name'])),
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
                         'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
                         'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),
@@ -133,7 +133,7 @@ class CountryController extends Controller
                         }
                     /* country_flag */
                     $fields = [
-                        'name'                      => strtoupper(strip_tags($postData['name'])),
+                        'name'                      => ucwords(strip_tags($postData['name'])),
                         'country_code'              => strtoupper(strip_tags($postData['country_code'])),
                         'country_short_code'        => strtoupper(strip_tags($postData['country_short_code'])),
                         'currency_code'             => strtoupper(strip_tags($postData['currency_code'])),

@@ -45,7 +45,7 @@ use App\Models\PostJob;
                      </tr>
                   </thead>
                   <tbody>
-                     <?php if(count($subusers)>0){ $sl=1; foreach($subusers as $subuser){?>
+                     <?php if(count($subusers)>0){ $sl=1;$total_job=0; foreach($subusers as $subuser){?>
                            <tr>
                               <th scope="row"><?=$sl++?></th>
                               <td><?=$subuser->role_name?></td>
@@ -56,11 +56,18 @@ use App\Models\PostJob;
                               <td>
                                 <?php
                                 echo $job_count = PostJob::where('status', '!=', 3)->where('created_by', '=', $subuser->id)->count();
+                                $total_job += $job_count;
                                 ?>
                               </td>
                            </tr>
                      <?php } }?>
                   </tbody>
+                  <tfoot>
+                     <tr>
+                        <th colspan="6" style="text-align: right;">TOTAL</th>
+                        <th><?=$total_job?></th>
+                     </tr>
+                  </tfoot>
                </table>
             </div>
         </div>
