@@ -1,4 +1,6 @@
 <?php
+use App\Models\Country;
+use App\Models\City;
 use App\Helpers\Helper;
 $controllerRoute = $module['controller_route'];
 ?>
@@ -40,41 +42,55 @@ $controllerRoute = $module['controller_route'];
               <!-- Header -->
               <div class="row">
                 <div class="col-12">
+                  <?php if($row){?>
+                    <?php
+                    $getCountry = Country::select('name')->where('id', $row->country_id)->first();
+                    $getCity = City::select('name')->where('id', $row->city_id)->first();
+                    ?>
                   <div class="card mb-6">
                     <!-- <div class="user-profile-header-banner">
                       <img src="{{ config('constants.admin_assets_url') }}assets/img/pages/profile-banner.png" alt="Banner image" class="rounded-top" />
                     </div> -->
                     <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-3">
                       <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
-                        <img
-                          src="{{ config('constants.admin_assets_url') }}assets/img/avatars/1.png"
-                          alt="user image"
-                          class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" />
+                        <?php if($row->profile_image == null){?>
+                          <img src="{{ config('constants.admin_assets_url') }}assets/img/avatars/1.png" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" />
+                        <?php } else {?>
+                          <img src="<?=url('/').'/'.$row->profile_image?>" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" style="width: 100px;" />
+                        <?php }?>
                       </div>
                       <div class="flex-grow-1 mt-3 mt-lg-5">
                         <div
                           class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-5 flex-md-row flex-column gap-4">
                           <div class="user-profile-info">
-                            <h4 class="mb-2 mt-lg-6">John Doe</h4>
+                            <h4 class="mb-2 mt-lg-6"><?=$row->first_name.' '.$row->last_name?></h4>
                             <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2">
                               <li class="list-inline-item d-flex gap-2 align-items-center">
-                                <i class="ti ti-palette ti-lg"></i><span class="fw-medium">UX Designer</span>
+                                <i class="ti ti-palette ti-lg"></i><span class="fw-medium"><?=$row->resume_headline?></span>
                               </li>
                               <li class="list-inline-item d-flex gap-2 align-items-center">
-                                <i class="ti ti-map-pin ti-lg"></i><span class="fw-medium">Kolkata, INDIA</span>
+                                <i class="ti ti-map-pin ti-lg"></i><span class="fw-medium"><?=(($getCity)?$getCity->name:'')?>, <?=(($getCountry)?$getCountry->name:'')?></span>
                               </li>
                               <li class="list-inline-item d-flex gap-2 align-items-center">
-                                <i class="ti ti-calendar ti-lg"></i><span class="fw-medium"> Joined April 2021</span>
+                                <i class="ti ti-calendar ti-lg"></i><span class="fw-medium"> Joined <?=date_format(date_create($row->created_at), "F Y")?></span>
                               </li>
                             </ul>
                             <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2">
                               <li class="list-inline-item d-flex gap-2 align-items-center">
-                                <i class="ti ti-phone ti-lg"></i><span class="fw-medium"> +101 - 9830098300</span>
-                                <small class="text-danger" style="font-size:10px;"><i class="fa fa-times-circle"></i> Not Verified</small>
+                                <i class="ti ti-phone ti-lg"></i><span class="fw-medium"> <?=$row->country_code?> - <?=$row->phone?></span>
+                                <?php if($row->phone_verified_at != null){?>
+                                  <small class="text-success" style="font-size:10px;"><i class="fa fa-check-circle"></i> Verified</small>
+                                <?php } else {?>
+                                  <small class="text-danger" style="font-size:10px;"><i class="fa fa-times-circle"></i> Not Verified</small>
+                                <?php } ?>
                               </li>
                               <li class="list-inline-item d-flex gap-2 align-items-center">
-                                <i class="ti ti-envelope ti-lg"></i><span class="fw-medium"> john@yopmail.com</span>
-                                <small class="text-success" style="font-size:10px;"><i class="fa fa-check-circle"></i> Verified</small>
+                                <i class="ti ti-envelope ti-lg"></i><span class="fw-medium"> <?=$row->email?></span>
+                                <?php if($row->email_verified_at != null){?>
+                                  <small class="text-success" style="font-size:10px;"><i class="fa fa-check-circle"></i> Verified</small>
+                                <?php } else {?>
+                                  <small class="text-danger" style="font-size:10px;"><i class="fa fa-times-circle"></i> Not Verified</small>
+                                <?php } ?>
                               </li>
                             </ul>
                           </div>
@@ -120,7 +136,7 @@ $controllerRoute = $module['controller_route'];
                             <div class="card mb-4">
                               <div class="card-body">
                                 <h5>CV Headline</h5>
-                                <span>Accountant with 5 years experience</span>
+                                <span><?=$row->resume_headline?></span>
                               </div>
                             </div>
                             <div class="card mb-4">
@@ -168,7 +184,7 @@ $controllerRoute = $module['controller_route'];
                             <div class="card mb-4">
                               <div class="card-body">
                                 <h5>Profile Summary</h5>
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <p><?=$row->profile_summery?></p>
                               </div>
                             </div>
                             <div class="card mb-4">
@@ -654,13 +670,11 @@ $controllerRoute = $module['controller_route'];
                             </div>
                         </div>
                     </div>
-
                   </div>
+                <?php }?>
                 </div>
               </div>
               <!--/ Header -->
-
-              
             </div>
             <!-- / Content -->
             </div>
