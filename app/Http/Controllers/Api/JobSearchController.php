@@ -37,14 +37,12 @@ class JobSearchController extends BaseApiController
                 'ip'=> $_SERVER['REMOTE_ADDR'],
                 'search_string'=> json_encode($request->all())
             ];
-            dd($job_search_data);
             if(Auth::guard('api')->check()){
                 $job_search_data['user_id'] = auth()->user()->id;
                 $saved_jobs = UserJobSearchHistory::where('user_id', auth()->user()->id)->latest()->get();
             }else{
                 $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
             }
-            dd($saved_jobs);
             if($saved_jobs->count() < 5){
                 UserJobSearchHistory::create($job_search_data);
             }else{
@@ -52,7 +50,7 @@ class JobSearchController extends BaseApiController
             }
 
             $sql = PostJob::select('post_jobs.*');
-            //$sql->where('posting_close_date', '>=', date('Y-m-d'));
+            $sql->where('posting_close_date', '>=', date('Y-m-d'));
             if(strtolower($job_type) != 'all-jobs'){
                 $sql->where('job_type', $job_type);
             }
@@ -217,7 +215,7 @@ class JobSearchController extends BaseApiController
             // $sql->with('applied_users');
             $all_data_sql = $pagination_sql = $sql->latest();
 
-            $limit = 5;
+            $limit = 25;
             $offset = 0;
             if($request->page && $request->page > 1){
                 $limit += 10;
