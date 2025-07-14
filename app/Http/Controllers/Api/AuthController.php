@@ -55,8 +55,27 @@ class AuthController extends BaseApiController
         $credentials = request(['email', 'password']);
         $credentials['role_id'] = env('JOB_SEEKER_ROLE_ID')??3;
         try{
+            $has_login_failed = false;
             if (! $token = auth('api')->attempt($credentials)) {
-                return $this->sendError('Unauthorized', 'Email or Password not matched.', Response::HTTP_UNAUTHORIZED);
+                if($request->country_code){
+                    $credentials = request(['country_code', 'password']);
+                    $credentials['phone'] = $request->email;
+                    $credentials['role_id'] = env('JOB_SEEKER_ROLE_ID')??3;
+                    if (! $token = auth('api')->attempt($credentials)) {
+                        //return $this->sendError('Unauthorized', 'Login credentials not matched.', Response::HTTP_UNAUTHORIZED);
+                        $has_login_failed = true;
+                    }else{
+                        $has_login_failed = false;
+                    }
+                }else{
+                    $has_login_failed = true;
+                }
+                // return $this->sendError('Unauthorized', 'Email or Password not matched.', Response::HTTP_UNAUTHORIZED);
+            }else{
+                $has_login_failed = false;
+            }
+            if($has_login_failed == false){
+                return $this->sendError('Unauthorized', 'Login credentials not matched.', Response::HTTP_UNAUTHORIZED);
             }
             // Set guard to "api" for the current request
             auth()->shouldUse('api');

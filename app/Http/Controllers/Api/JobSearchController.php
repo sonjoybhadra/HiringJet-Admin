@@ -20,6 +20,9 @@ use App\Models\ItSkill;
 use App\Models\JobCategory;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Employer;
+use App\Models\Nationality;
+use App\Models\UserJobSearchHistory;
 
 class JobSearchController extends BaseApiController
 {
@@ -29,8 +32,27 @@ class JobSearchController extends BaseApiController
     public function getJobsByParams(Request $request, $job_type)
     {
         try {
-            $sql = PostJob::select('post_jobs.*')
-                            ->where('posting_close_date', '>=', date('Y-m-d'));
+            $job_search_data = [
+                'user_id'=> NULL,
+                'ip'=> $_SERVER['REMOTE_ADDR'],
+                'search_string'=> json_encode($request->all())
+            ];
+            dd($job_search_data);
+            if(Auth::guard('api')->check()){
+                $job_search_data['user_id'] = auth()->user()->id;
+                $saved_jobs = UserJobSearchHistory::where('user_id', auth()->user()->id)->latest()->get();
+            }else{
+                $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
+            }
+            dd($saved_jobs);
+            if($saved_jobs->count() < 5){
+                UserJobSearchHistory::create($job_search_data);
+            }else{
+                UserJobSearchHistory::where('id', $saved_jobs[0]->id)->update($job_search_data);
+            }
+
+            $sql = PostJob::select('post_jobs.*');
+            //$sql->where('posting_close_date', '>=', date('Y-m-d'));
             if(strtolower($job_type) != 'all-jobs'){
                 $sql->where('job_type', $job_type);
             }
@@ -193,15 +215,138 @@ class JobSearchController extends BaseApiController
             $sql->with('designationRelation');
             $sql->with('functionalArea');
             // $sql->with('applied_users');
-            $sql->latest();
-            return $this->sendResponse(
-                $sql->get(),
-                // $sql->toSql()
+            $all_data_sql = $pagination_sql = $sql->latest();
+
+            $limit = 5;
+            $offset = 0;
+            if($request->page && $request->page > 1){
+                $limit += 10;
+                //$offset = 25 + (($request->page - 2) * $limit);
+            }
+
+            $list = $pagination_sql->limit($limit)->offset($offset)->get();
+            $filter_data_array = $this->getFilterParametersArray($all_data_sql->get());
+            return $this->sendResponse([
+                    'jobs'=> $list,
+                    'filter_array'=> $filter_data_array,
+                    'page'=> $request->page,
+                    'take'=> ['limit'=> $limit, 'offset'=> $offset]
+                ],
                 'List search jobs'
             );
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
+    }
+
+    private function getFilterParametersArray($data_array){
+        $data_count_country_array = $data_count_city_array = $data_count_industry_array = $data_count_designation_array = $data_count_nationality_array = $data_count_gender_array = $data_count_employers_array = $data_count_freshness_array = $data_count_experience_array = [];
+        $freshness = [1, 3, 7, 15, 30, 60];
+        $experience = ['0-1', '2-5', '6-10', '11-15', '16-20', '21'];
+        foreach ($data_array as $job) {
+            // get location Country list
+            $data_ids = json_decode($job->location_countries, true);
+            if (is_array($data_ids)) {
+                foreach ($data_ids as $id) {
+                    if (!isset($data_count_country_array[$id])) {
+                        $data = Country::find($id);
+                        $data_count_country_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                    }
+                    $data_count_country_array[$id]['count'] = $data_count_country_array[$id]['count']+1;
+                }
+            }
+            // end location country
+            // get location Clty list
+            $data_ids = json_decode($job->location_cities, true);
+            if (is_array($data_ids)) {
+                foreach ($data_ids as $id) {
+                    if (!isset($data_count_city_array[$id])) {
+                        $data = City::find($id);
+                        $data_count_city_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                    }
+                    $data_count_city_array[$id]['count'] = $data_count_city_array[$id]['count']+1;
+                }
+            }
+            // end location Clty
+            // get industry list
+            if (!empty($job->industry)) {
+                if (!isset($data_count_industry_array[$job->industry])) {
+                    $data = Industry::find($job->industry);
+                    $data_count_industry_array[$job->industry] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                }
+                $data_count_industry_array[$job->industry]['count'] = $data_count_industry_array[$job->industry]['count']+1;
+            }
+            // end industry
+            // get nationality list
+            if (!empty($job->nationality)) {
+                if (!isset($data_count_nationality_array[$job->nationality])) {
+                    $data = Nationality::find($job->nationality);
+                    $data_count_nationality_array[$job->nationality] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_nationality_array[$job->nationality]['count'] = $data_count_nationality_array[$job->nationality]['count']+1;
+            }
+            // end nationality
+            // get designation list
+            if (!empty($job->designation)) {
+                if (!isset($data_count_designation_array[$job->designation])) {
+                    $data = Designation::find($job->designation);
+                    $data_count_designation_array[$job->designation] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_designation_array[$job->designation]['count'] = $data_count_designation_array[$job->designation]['count']+1;
+            }
+            // end designation
+            // get gender list
+            if (!empty($job->gender)) {
+                if (!isset($data_count_gender_array[$job->gender])) {
+                    $data_count_gender_array[$job->gender] = ['name'=> $job->gender, 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_gender_array[$job->gender]['count'] = $data_count_gender_array[$job->gender]['count']+1;
+            }
+            // end gender
+            // get employers list
+            if (!empty($job->employer_id)) {
+                if (!isset($data_count_employers_array[$job->employer_id])) {
+                     $data = Employer::find($job->employer_id);
+                    $data_count_employers_array[$job->employer_id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_employers_array[$job->employer_id]['count'] = $data_count_employers_array[$job->employer_id]['count']+1;
+            }
+            // end employers
+            // get freshness list
+            foreach($freshness as $day){
+                $freshness_day = date('Y-m-d', strtotime('-'.$day.' days'));
+                if($job->created_at >= $freshness_day){
+                    if (!isset($data_count_freshness_array[$day])) {
+                        $data_count_freshness_array[$day] = ['name'=> $day.' days old', 'count'=> 0, 'id'=> $day];
+                    }
+                    $data_count_freshness_array[$day]['count'] = $data_count_freshness_array[$day]['count']+1;
+                }
+            }
+            // end freshness
+            // get freshness list
+            foreach($experience as $value){
+                $min_max_year = explode('-', $value);
+                if((count($min_max_year) > 1 && $job->min_exp_year >= (int)$min_max_year[0] && $job->max_exp_year <= (int)$min_max_year[1]) || ($job->max_exp_year >= (int)$min_max_year[0])){
+                    if (!isset($data_count_experience_array[$value])) {
+                        $data_count_experience_array[$value] = ['name'=> $value.' years', 'count'=> 0, 'id'=> $value];
+                    }
+                    $data_count_experience_array[$value]['count'] = $data_count_experience_array[$value]['count']+1;
+                }
+            }
+            // end freshness
+        }   //end foreach
+
+        return [
+            'country' => $data_count_country_array,
+            'city' => $data_count_city_array,
+            'industry' => $data_count_industry_array,
+            'designation' => $data_count_designation_array,
+            'nationality' => $data_count_nationality_array,
+            'employers' => $data_count_employers_array,
+            'gender'=> $data_count_gender_array,
+            'freshness'=> $data_count_freshness_array,
+            'experience'=> $data_count_experience_array
+        ];
     }
 
     public function getJobDetails(Request $request, $job_type, $slug)
