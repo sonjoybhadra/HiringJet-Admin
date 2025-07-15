@@ -44,7 +44,7 @@ class AuthController extends BaseApiController
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
@@ -57,7 +57,8 @@ class AuthController extends BaseApiController
         try{
             $has_login_failed = false;
             if (! $token = auth('api')->attempt($credentials)) {
-                if($request->country_code){
+                $has_login_failed = true;
+                if(!empty($request->country_code)){
                     $credentials = request(['country_code', 'password']);
                     $credentials['phone'] = $request->email;
                     $credentials['role_id'] = env('JOB_SEEKER_ROLE_ID')??3;
@@ -67,14 +68,11 @@ class AuthController extends BaseApiController
                     }else{
                         $has_login_failed = false;
                     }
-                }else{
-                    $has_login_failed = true;
                 }
                 // return $this->sendError('Unauthorized', 'Email or Password not matched.', Response::HTTP_UNAUTHORIZED);
-            }else{
-                $has_login_failed = false;
             }
-            if($has_login_failed == false){
+
+            if($has_login_failed == true){
                 return $this->sendError('Unauthorized', 'Login credentials not matched.', Response::HTTP_UNAUTHORIZED);
             }
             // Set guard to "api" for the current request
