@@ -185,6 +185,7 @@ class JobseekerController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $page_name                      = 'jobseeker.profile';
+            $data['id']                     = $id;
             $data['row']                    = DB::table('users')
                                                 ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
                                                 ->select('users.*', 'user_profiles.*')
