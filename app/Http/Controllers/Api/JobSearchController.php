@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 use Validator;
 use App\Mail\NotificationEmail;
 
@@ -136,62 +137,104 @@ class JobSearchController extends BaseApiController
                 }
             }
 
-            if(!empty($request->country)){
+            if(!empty($request->country) && count($request->country) > 0){
                 $countrys = $request->country;
-                $sql->orWhere(function ($q) use ($countrys) {
-                    foreach ($countrys as $tag) {
-                        $q->orWhereRaw(
-                            "CASE
-                                WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
-                                ELSE location_countries::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$tag])]
-                        );
-                    }
-                });
+                $collection = collect($countrys);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->orWhere(function ($q) use ($countrys) {
+                        foreach ($countrys as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
+                                    ELSE location_countries::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
+                        }
+                    });
+                }
             }
 
-            if(!empty($request->city)){
+            if(!empty($request->city) && count($request->city) > 0){
                 $citys = $request->city;
-                $sql->where(function ($q) use ($citys) {
-                    foreach ($citys as $tag) {
-                        $q->orWhereRaw(
-                            "CASE
-                                WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
-                                ELSE location_cities::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$tag])]
-                        );
-                    }
-                });
+                $collection = collect($citys);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->where(function ($q) use ($citys) {
+                        foreach ($citys as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
+                                    ELSE location_cities::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
+                        }
+                    });
+                }
             }
 
-            if(!empty($request->skills)){
+            if(!empty($request->skills) && count($request->skills) > 0){
                 $skills = $request->skills;
-                $sql->where(function ($q) use ($skills) {
-                    foreach ($skills as $tag) {
-                        $q->orWhereRaw(
-                            "CASE
-                                WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
-                                ELSE skill_ids::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$tag])]
-                        );
-                    }
-                });
+                $collection = collect($skills);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->where(function ($q) use ($skills) {
+                        foreach ($skills as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                    ELSE skill_ids::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
+                        }
+                    });
+                }
             }
 
-            if($request->designation){
-                $sql->where('designation', $request->designation);
+            if(!empty($request->designation) && count($request->designation) > 0){
+                $collection = collect($request->designation);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->whereIn('designation', $request->designation);
+                }
             }
-            if(!empty($request->industry)){
-                $sql->whereIn('industry', $request->industry);
+            if(!empty($request->industry) && count($request->industry) > 0){
+                $collection = collect($request->industry);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->whereIn('industry', $request->industry);
+                }
             }
-            if(!empty($request->nationality)){
-                $sql->whereIn('nationality', $request->nationality);
+            if(!empty($request->nationality) && count($request->nationality) > 0){
+                $collection = collect($request->nationality);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->whereIn('nationality', $request->nationality);
+                }
             }
             if(!empty($request->employer)){
-                $sql->whereIn('employer_id', $request->employer);
+                $collection = collect($request->employer);
+
+                if ($collection->every(fn($value) => is_null($value))) {
+                    // All values are null — skip foreach
+                } else {
+                    $sql->whereIn('employer_id', $request->employer);
+                }
             }
             if(!empty($request->experience)){
                 $sql->whereIn('min_exp_year', $request->experience);
@@ -226,6 +269,7 @@ class JobSearchController extends BaseApiController
             $filter_data_array = $this->getFilterParametersArray($all_data_sql->get());
             return $this->sendResponse([
                     'jobs'=> $list,
+                    'sql'=> $pagination_sql->toSql(),
                     'filter_array'=> $filter_data_array,
                     'page'=> $request->page,
                     'take'=> ['limit'=> $limit, 'offset'=> $offset]
@@ -271,7 +315,7 @@ class JobSearchController extends BaseApiController
             if (!empty($job->industry)) {
                 if (!isset($data_count_industry_array[$job->industry])) {
                     $data = Industry::find($job->industry);
-                    $data_count_industry_array[$job->industry] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                    $data_count_industry_array[$job->industry] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $job->industry];
                 }
                 $data_count_industry_array[$job->industry]['count'] = $data_count_industry_array[$job->industry]['count']+1;
             }
