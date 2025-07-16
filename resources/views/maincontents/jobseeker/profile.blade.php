@@ -130,7 +130,7 @@ $controllerRoute = $module['controller_route'];
                       <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-3">
                         <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
                           <?php if($row->profile_image == null){?>
-                            <img src="{{ config('constants.admin_assets_url') }}assets/img/avatars/1.png" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" />
+                            <img src="{{ config('constants.admin_assets_url') }}assets/img/avatars/no-image.jpg" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" style="width: 100px;height: 100px;" />
                           <?php } else {?>
                             <img src="<?=url('/').'/'.$row->profile_image?>" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" style="width: 100px;" />
                           <?php }?>
