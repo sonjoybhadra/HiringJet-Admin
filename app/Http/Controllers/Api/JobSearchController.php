@@ -618,4 +618,22 @@ class JobSearchController extends BaseApiController
         }
     }
 
+    public function getSavedJobs(Request $request)
+    {
+        try {
+            if(Auth::guard('api')->check()){
+                $saved_jobs = UserJobSearchHistory::where('user_id', auth()->user()->id)->latest()->get();
+            }else{
+                $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
+            }
+
+            return $this->sendResponse(
+                $saved_jobs,
+                'Saved Jobs list'
+            );
+        }catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
 }
