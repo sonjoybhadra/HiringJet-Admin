@@ -32,15 +32,15 @@ class JobSearchController extends BaseApiController
     */
     public function getJobsByParams(Request $request, $job_type)
     {
-        //try {
+        try {
             $job_search_data = [
                 'user_id'=> NULL,
                 'ip'=> $_SERVER['REMOTE_ADDR'],
                 'search_string'=> json_encode($request->all())
             ];
             if(Auth::guard('api')->check()){
-                $job_search_data['user_id'] = auth()->user()->id;
-                $saved_jobs = UserJobSearchHistory::where('user_id', auth()->user()->id)->latest()->get();
+                $job_search_data['user_id'] = Auth::guard('api')->user()->id;
+                $saved_jobs = UserJobSearchHistory::where('user_id', Auth::guard('api')->user()->id)->latest()->get();
             }else{
                 $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
             }
@@ -136,6 +136,7 @@ class JobSearchController extends BaseApiController
                     $sql->where('job_category', $category->id);
                 }
             }
+
             $countrys = $this->filterRequestParam($request->country);
             if(!empty($countrys) && count($countrys) > 0){
                 $sql->orWhere(function ($q) use ($countrys) {
@@ -244,9 +245,9 @@ class JobSearchController extends BaseApiController
                 ],
                 'List search jobs'
             );
-        // } catch (\Exception $e) {
-        //     return $this->sendError('Error', $e->getMessage());
-        // }
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
     }
 
     private function getFilterParametersArray($data_array){
@@ -606,7 +607,7 @@ class JobSearchController extends BaseApiController
     {
         try {
             if(Auth::guard('api')->check()){
-                $saved_jobs = UserJobSearchHistory::where('user_id', auth()->user()->id)->latest()->get();
+                $saved_jobs = UserJobSearchHistory::where('user_id', Auth::guard('api')->user()->id)->latest()->get();
             }else{
                 $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
             }
