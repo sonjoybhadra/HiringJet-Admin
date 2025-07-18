@@ -117,6 +117,32 @@
           validators: {
             notEmpty: {
               message: 'Min Exp is required'
+            },
+            numeric: {
+              message: 'Min Exp must be a number'
+            }
+          }
+        },
+        max_exp_year: {
+          validators: {
+            notEmpty: {
+              message: 'Max Exp is required'
+            },
+            numeric: {
+              message: 'Max Exp must be a number'
+            },
+            callback: {
+              message: 'Max Exp must be greater than Min Exp',
+              callback: function(input) {
+                const minExp = parseFloat(wizardValidationFormStep1.querySelector('[name="min_exp_year"]').value);
+                const maxExp = parseFloat(input.value);
+
+                if (isNaN(minExp) || isNaN(maxExp)) {
+                  return true; // skip if not a number yet
+                }
+
+                return maxExp > minExp;
+              }
             }
           }
         }

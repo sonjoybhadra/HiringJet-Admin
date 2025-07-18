@@ -53,7 +53,7 @@
             table: '{{ $table }}',
             columns: @json($columns),
             visibleColumns: @json($visibleColumns),
-            headers: @json($headers ?? $columns),
+            headers: @json($headers),
             filename: '{{ $filename }}',
             orderBy: '{{ $orderBy ?? 'id' }}',
             orderType: '{{ $orderType ?? 'desc' }}',

@@ -9562,7 +9562,7 @@ div:not(.nav-align-left):not(.nav-align-right) > .nav-tabs {
 }
 
 .nav-pills .nav-link {
-  padding: 0.5435rem 1.375rem;
+  padding: 0.5435rem 1.175rem;
 }
 .nav-pills .nav-item .nav-link:not(.active):hover {
   border-bottom: none;

@@ -211,6 +211,7 @@ function loadTable(config) {
         const url = new URL('/table/export', window.location.origin);
         url.searchParams.set('table', config.table);
         url.searchParams.set('columns', config.columns.join(','));
+        url.searchParams.set('headers', config.headers.join(','));
         url.searchParams.set('format', format);
         url.searchParams.set('search', $(config.searchInput).val());
 

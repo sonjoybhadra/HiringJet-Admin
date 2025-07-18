@@ -11,11 +11,16 @@
     font-size: 10px; /* Smaller font if you have many columns */
   }
 </style>
+<?php
+$titles[] = 'Status';
+// echo '<pre>';print_r($titles);
+// echo '<pre>';print_r($columns);
+?>
 <table width="100%" border="1" cellspacing="0" cellpadding="5">
     <thead>
         <tr>
-            @foreach ($columns as $column)
-                <th>{{ $column }}</th>
+            @foreach ($titles as $title)
+                <th>{{ $title }}</th>
             @endforeach
         </tr>
     </thead>
@@ -23,7 +28,8 @@
         @foreach ($data as $row)
             <tr>
                 @foreach ($columns as $col)
-                    <td>{{ $row[$col] ?? '' }}</td>
+                    <!-- <td><?=(($col != 'status')?$row[$col]:(($row[$col])?'Active':'Deactive'))?></td> -->
+                    <td><?=$row[$col]?></td>
                 @endforeach
             </tr>
         @endforeach

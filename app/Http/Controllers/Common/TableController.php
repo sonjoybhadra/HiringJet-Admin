@@ -167,13 +167,17 @@ class TableController extends Controller
 
     public function export(Request $request)
     {
+        // echo '<pre>';print_r($request->all());die;
+
         $table = $request->input('table');
         $columns = explode(',', $request->input('columns'));
-        $titles = explode(',', $request->input('headers', '')); // <-- NEW
+        $titles = explode(',', $request->input('headers')); // <-- NEW
         $format = $request->input('format', 'csv');
         $search = $request->input('search');
 
         $filename = $request->input('filename'); // Optional
+        $orderBy = $request->input('orderBy', 'id');
+        $orderType = $request->input('orderType', 'desc');
         $defaultName = $table . '_export_' . now()->format('Y-m-d_H-i-s');
         $filename = $filename ?: $defaultName;
 
@@ -198,30 +202,54 @@ class TableController extends Controller
             });
         }
 
-        $rawData = $query->get()->toArray();
+        $rawData = $query->orderBy("$table.$orderBy", $orderType)->get()->toArray();
 
         // Add Sl. No. to data
         $data = [];
+        // foreach ($rawData as $index => $row) {
+        //     $data[] = array_merge(['Sl. No.' => $index + 1], (array) $row);
+        //     // echo '<pre>';print_r($data);
+        //     // Loop through each row and update status
+        //     // foreach ($data as &$row_2) {
+        //     //     if (isset($row_2['status'])) {
+        //     //         $row_2['status'] = (($row_2['status'] == 1)?'Active' : 'Deactive');
+        //     //     }
+        //     // }
+        //     // echo '<pre>';print_r($data);die;
+        // }
         foreach ($rawData as $index => $row) {
-            $data[] = array_merge(['Sl. No.' => $index + 1], (array) $row);
+            $row = (array) $row;
+
+            // Fix status first
+            if (isset($row['status'])) {
+                $row['status'] = $row['status'] == 1 ? 'Active' : 'Deactive';
+            }
+
+            // Make Sl. No. the first key
+            $newRow = array_merge(['Sl. No.' => $index + 1], $row);
+
+            $data[] = $newRow;
         }
+        // echo '<pre>';print_r($data);die;
 
         // Add Sl. No. to headings
         $columns = array_merge(['Sl. No.'], $columns);
-
+        
         // Fallback to raw column names if no custom titles given
         $headers = count($titles) === count($columns) ? $titles : $columns;
 
+        
+
         switch ($format) {
             case 'csv':
-                return $this->exportCsv($headers, $data, $filename . '.csv');
+                return $this->exportCsv($titles, $data, $filename . '.csv');
 
             case 'excel':
                 return Excel::download(new \App\Exports\ArrayExport($columns, $data), 'export.xlsx');
 
             case 'pdf':
                 ini_set('memory_limit', '1024M'); // 👈 Increase memory limit
-                $pdf = PDF::loadView('exports.table', ['columns' => $headers, 'data' => $data]);
+                $pdf = PDF::loadView('exports.table', ['columns' => $headers, 'data' => $data, 'titles' => $titles]);
                 // // Option 1: Stream it in browser
                 // return $pdf->stream('filename.pdf');
                 // die;
@@ -233,6 +261,7 @@ class TableController extends Controller
 
     protected function exportCsv($columns, $data, $filename)
     {
+        $columns[] = 'Status';
         // $filename = 'export.csv';
         $handle = fopen('php://output', 'w');
 
