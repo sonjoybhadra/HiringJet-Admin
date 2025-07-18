@@ -158,19 +158,13 @@
                 '|',
                 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
                 '|',
-                'link', 'uploadImage', 'blockQuote', 'codeBlock',
+                'link', 'blockQuote', 'codeBlock',
                 '|',
                 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent',
                 '|',
-                'ckbox', 'ckboxImageEdit', 'toggleImageCaption', 'imageTextAlternative', 'ckboxImageEdit',
+                'ckbox',
                 '|',
-                'imageStyle:block',
-                'imageStyle:side',
-                '|',
-                'toggleImageCaption',
-                'imageTextAlternative',
-                '|',
-                'linkImage', 'insertImage', 'insertImageViaUrl'
+                'insertImageViaUrl'
               ]
             },
             menuBar: {

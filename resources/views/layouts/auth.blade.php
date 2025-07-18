@@ -44,26 +44,26 @@ use App\Helpers\Helper;
                 fill="#7367F0" />
             </svg>
           </span> -->
-          <span class="app-brand-text demo text-heading fw-bold"><?=Helper::getSettingValue('site_name')?></span>
+          <span class="app-brand-text demo text-heading fw-bold" style="color: #FFF !important;"><?=Helper::getSettingValue('site_name')?></span>
         </a>
         <!-- /Logo -->
         <div class="authentication-inner row m-0">
           <!-- /Left Text -->
           <div class="d-none d-lg-flex col-lg-8 p-0">
-            <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
-              <img
-                src="{{ config('constants.admin_assets_url') }}assets/img/illustrations/auth-login-illustration-light.png"
+            <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center" style="background-image: url('https://hjadmin.hiringjet.com/public/material/backend/assets/img/illustrations/interconnected-globe.png'); background-size: cover; background-position: center;">
+              <!-- <img
+                src="{{ config('constants.admin_assets_url') }}assets/img/illustrations/interconnected-globe.png"
                 alt="auth-login-cover"
                 class="my-5 auth-illustration"
-                data-app-light-img="illustrations/auth-login-illustration-light.png"
-                data-app-dark-img="illustrations/auth-login-illustration-dark.png" />
+                data-app-light-img="illustrations/interconnected-globe.png"
+                data-app-dark-img="illustrations/interconnected-globe.png" />
 
               <img
                 src="{{ config('constants.admin_assets_url') }}assets/img/illustrations/bg-shape-image-light.png"
                 alt="auth-login-cover"
                 class="platform-bg"
                 data-app-light-img="illustrations/bg-shape-image-light.png"
-                data-app-dark-img="illustrations/bg-shape-image-dark.png" />
+                data-app-dark-img="illustrations/bg-shape-image-dark.png" /> -->
             </div>
           </div>
           <!-- /Left Text -->

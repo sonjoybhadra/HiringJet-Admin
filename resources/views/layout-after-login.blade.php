@@ -107,7 +107,7 @@ use App\Helpers\Helper;
       }
     </script>
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css" />
-    <script type="importmap">
+    <!-- <script type="importmap">
       {
           "imports": {
               "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.js",
@@ -129,17 +129,7 @@ use App\Helpers\Helper;
           Link,
           List,
           Paragraph,
-          Image,
-          ImageCaption,
-          ImageResize,
-          ImageStyle,
-          ImageToolbar,
-          LinkImage,
-          PictureEditing,
-          ImageUpload,
-          CloudServices,
           CKBox,
-          CKBoxImageEdit,
           SourceEditing,
           ImageInsert,
           GeneralHtmlSupport
@@ -148,7 +138,7 @@ use App\Helpers\Helper;
       for (let i = 0; i <= 50; i++) {
         ClassicEditor
           .create( document.querySelector( '#ckeditor' + i ), {
-            plugins: [ Essentials, Bold, Italic, Strikethrough, Subscript, Superscript, CodeBlock, Font, Link, List, Paragraph, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, PictureEditing, ImageUpload, CloudServices, CKBox, CKBoxImageEdit, SourceEditing, ImageInsert, GeneralHtmlSupport ],
+            plugins: [ Essentials, Bold, Italic, Strikethrough, Subscript, Superscript, CodeBlock, Font, Link, List, Paragraph, LinkImage, CKBox, SourceEditing, ImageInsert, GeneralHtmlSupport ],
             toolbar: {
               items: [
                 'undo', 'redo',
@@ -161,19 +151,16 @@ use App\Helpers\Helper;
                 '|',
                 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
                 '|',
-                'link', 'uploadImage', 'blockQuote', 'codeBlock',
+                'link', 'blockQuote', 'codeBlock',
                 '|',
                 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent',
                 '|',
-                'ckbox', 'ckboxImageEdit', 'toggleImageCaption', 'imageTextAlternative', 'ckboxImageEdit',
+                'ckbox',
                 '|',
                 'imageStyle:block',
                 'imageStyle:side',
                 '|',
-                'toggleImageCaption',
-                'imageTextAlternative',
-                '|',
-                'linkImage', 'insertImage', 'insertImageViaUrl'
+                'insertImageViaUrl'
               ]
             },
             menuBar: {
@@ -200,7 +187,7 @@ use App\Helpers\Helper;
             console.error(error);
           });
       }
-    </script>
+    </script> -->
     <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
   </body>
 </html>
