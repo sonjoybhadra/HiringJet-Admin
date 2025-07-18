@@ -138,7 +138,6 @@ class JobSearchController extends BaseApiController
             }
             $countrys = $this->filterRequestParam($request->country);
             if(!empty($countrys) && count($countrys) > 0){
-                $countrys = $request->country;
                 $sql->orWhere(function ($q) use ($countrys) {
                     foreach ($countrys as $tag) {
                         $q->orWhereRaw(
@@ -154,7 +153,6 @@ class JobSearchController extends BaseApiController
 
             $citys = $this->filterRequestParam($request->city);
             if(!empty($citys) && count($citys) > 0){
-                $citys = $request->city;
                 $sql->where(function ($q) use ($citys) {
                     foreach ($citys as $tag) {
                         $q->orWhereRaw(
@@ -166,6 +164,26 @@ class JobSearchController extends BaseApiController
                         );
                     }
                 });
+            }
+
+            $designation = $this->filterRequestParam($request->designation);
+            if(!empty($designation) && count($designation) > 0){
+                $sql->whereIn('designation', $designation);
+            }
+
+            $employer = $this->filterRequestParam($request->employer);
+            if(!empty($employer)){
+                $sql->whereIn('employer_id', $employer);
+            }
+
+            $industry = $this->filterRequestParam($request->industry);
+            if(!empty($industry) && count($industry) > 0){
+                $sql->whereIn('industry', $industry);
+            }
+
+            $nationality = $this->filterRequestParam($request->nationality);
+            if(!empty($nationality) && count($nationality) > 0){
+                $sql->whereIn('nationality', $nationality);
             }
 
             $skills = $this->filterRequestParam($request->skills);
@@ -184,29 +202,8 @@ class JobSearchController extends BaseApiController
                 });
             }
 
-            $designation = $this->filterRequestParam($request->designation);
-            if(!empty($designation) && count($designation) > 0){
-                $sql->whereIn('designation', $request->designation);
-            }
-
-            $industry = $this->filterRequestParam($request->industry);
-            if(!empty($industry) && count($industry) > 0){
-                $sql->whereIn('industry', $request->industry);
-            }
-
-            $nationality = $this->filterRequestParam($request->nationality);
-            if(!empty($nationality) && count($nationality) > 0){
-                $sql->whereIn('nationality', $request->nationality);
-            }
-
-            $employer = $this->filterRequestParam($request->employer);
-            if(!empty($employer)){
-                $sql->whereIn('employer_id', $request->employer);
-            }
-
-            $experience = $this->filterRequestParam($request->experience);
-            if(!empty($experience)){
-                $sql->whereIn('min_exp_year', $request->experience);
+            if(!empty($request->experience)){
+                $sql->where('min_exp_year', $request->experience);
             }
 
             if(!empty($request->gender)){
@@ -378,9 +375,11 @@ class JobSearchController extends BaseApiController
     private function filterRequestParam($data){
         if(is_array($data)){
             $filter_array = [];
-            foreach($data as $d){
-                if(!empty($d) && $d != NULL){
-                    array_push($filter_array, $d);
+            if(!empty($data)){
+                foreach($data as $d){
+                    if(!empty($d) && $d != NULL){
+                        array_push($filter_array, $d);
+                    }
                 }
             }
             return $filter_array;
