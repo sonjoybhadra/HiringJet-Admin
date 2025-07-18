@@ -136,112 +136,83 @@ class JobSearchController extends BaseApiController
                     $sql->where('job_category', $category->id);
                 }
             }
-
-            if(!empty($request->country) && count($request->country) > 0){
+            $countrys = $this->filterRequestParam($request->country);
+            if(!empty($countrys) && count($countrys) > 0){
                 $countrys = $request->country;
-                $collection = collect($countrys);
-
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->orWhere(function ($q) use ($countrys) {
-                        foreach ($countrys as $tag) {
-                            $q->orWhereRaw(
-                                "CASE
-                                    WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
-                                    ELSE location_countries::jsonb @> ?::jsonb
-                                END",
-                                [json_encode([$tag])]
-                            );
-                        }
-                    });
-                }
+                $sql->orWhere(function ($q) use ($countrys) {
+                    foreach ($countrys as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
+                                ELSE location_countries::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
             }
 
-            if(!empty($request->city) && count($request->city) > 0){
+            $citys = $this->filterRequestParam($request->city);
+            if(!empty($citys) && count($citys) > 0){
                 $citys = $request->city;
-                $collection = collect($citys);
-
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->where(function ($q) use ($citys) {
-                        foreach ($citys as $tag) {
-                            $q->orWhereRaw(
-                                "CASE
-                                    WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
-                                    ELSE location_cities::jsonb @> ?::jsonb
-                                END",
-                                [json_encode([$tag])]
-                            );
-                        }
-                    });
-                }
+                $sql->where(function ($q) use ($citys) {
+                    foreach ($citys as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
+                                ELSE location_cities::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
             }
 
-            if(!empty($request->skills) && count($request->skills) > 0){
+            $skills = $this->filterRequestParam($request->skills);
+            if(!empty($skills) && count($skills) > 0){
                 $skills = $request->skills;
-                $collection = collect($skills);
-
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->where(function ($q) use ($skills) {
-                        foreach ($skills as $tag) {
-                            $q->orWhereRaw(
-                                "CASE
-                                    WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
-                                    ELSE skill_ids::jsonb @> ?::jsonb
-                                END",
-                                [json_encode([$tag])]
-                            );
-                        }
-                    });
-                }
+                $sql->where(function ($q) use ($skills) {
+                    foreach ($skills as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                ELSE skill_ids::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
             }
 
-            if(!empty($request->designation) && count($request->designation) > 0){
-                $collection = collect($request->designation);
-
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->whereIn('designation', $request->designation);
-                }
+            $designation = $this->filterRequestParam($request->designation);
+            if(!empty($designation) && count($designation) > 0){
+                $sql->whereIn('designation', $request->designation);
             }
-            if(!empty($request->industry) && count($request->industry) > 0){
-                $collection = collect($request->industry);
 
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->whereIn('industry', $request->industry);
-                }
+            $industry = $this->filterRequestParam($request->industry);
+            if(!empty($industry) && count($industry) > 0){
+                $sql->whereIn('industry', $request->industry);
             }
-            if(!empty($request->nationality) && count($request->nationality) > 0){
-                $collection = collect($request->nationality);
 
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->whereIn('nationality', $request->nationality);
-                }
+            $nationality = $this->filterRequestParam($request->nationality);
+            if(!empty($nationality) && count($nationality) > 0){
+                $sql->whereIn('nationality', $request->nationality);
             }
-            if(!empty($request->employer)){
-                $collection = collect($request->employer);
 
-                if ($collection->every(fn($value) => is_null($value))) {
-                    // All values are null — skip foreach
-                } else {
-                    $sql->whereIn('employer_id', $request->employer);
-                }
+            $employer = $this->filterRequestParam($request->employer);
+            if(!empty($employer)){
+                $sql->whereIn('employer_id', $request->employer);
             }
-            if(!empty($request->experience)){
+
+            $experience = $this->filterRequestParam($request->experience);
+            if(!empty($experience)){
                 $sql->whereIn('min_exp_year', $request->experience);
             }
+
             if(!empty($request->gender)){
                 $sql->where('gender', $request->gender);
             }
+
             if(!empty($request->freshness)){
                 $sql->where('created_at', '>=', date('Y-m-d', strtotime('-'.$request->freshness.' days')));
             }
@@ -402,6 +373,20 @@ class JobSearchController extends BaseApiController
             'experience'=> $data_count_experience_array,
             'jobtypes'=> $data_count_jobtype_array
         ];
+    }
+
+    private function filterRequestParam($data){
+        if(is_array($data)){
+            $filter_array = [];
+            foreach($data as $d){
+                if(!empty($d) && $d != NULL){
+                    array_push($filter_array, $d);
+                }
+            }
+            return $filter_array;
+        }else{
+            return $data;
+        }
     }
 
     public function getJobDetails(Request $request, $job_type, $slug)
