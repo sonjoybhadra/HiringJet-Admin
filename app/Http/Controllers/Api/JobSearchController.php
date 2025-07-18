@@ -607,9 +607,9 @@ class JobSearchController extends BaseApiController
     {
         try {
             if(Auth::guard('api')->check()){
-                $saved_jobs = UserJobSearchHistory::where('user_id', Auth::guard('api')->user()->id)->latest()->get();
+                $saved_jobs = UserJobSearchHistory::where('user_id', Auth::guard('api')->user()->id)->latest()->take(5)->get();
             }else{
-                $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
+                $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->take(5)->get();
             }
 
             return $this->sendResponse(
