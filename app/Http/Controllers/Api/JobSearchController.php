@@ -32,7 +32,7 @@ class JobSearchController extends BaseApiController
     */
     public function getJobsByParams(Request $request, $job_type)
     {
-        try {
+        //try {
             $job_search_data = [
                 'user_id'=> NULL,
                 'ip'=> $_SERVER['REMOTE_ADDR'],
@@ -247,9 +247,9 @@ class JobSearchController extends BaseApiController
                 ],
                 'List search jobs'
             );
-        } catch (\Exception $e) {
-            return $this->sendError('Error', $e->getMessage());
-        }
+        // } catch (\Exception $e) {
+        //     return $this->sendError('Error', $e->getMessage());
+        // }
     }
 
     private function getFilterParametersArray($data_array){
