@@ -238,7 +238,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="designation">Position Name <span class="text-danger">*</span></label>
                                         <select class="select2" id="designation" name="designation">
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($designations){ foreach($designations as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($designation == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -252,7 +252,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="employer_id">Employer <span class="text-danger">*</span></label>
                                         <select class="select2" id="employer_id" name="employer_id" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($employers){ foreach($employers as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($select_row->id == $employer_id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -262,7 +262,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="job_type">Job Type <span class="text-danger">*</span></label>
                                         <select class="select2" id="job_type" name="job_type" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <option value="walk-in-jobs" <?=(($job_type == 'walk-in-jobs')?'selected':'')?>>Walk-in</option>
                                             <option value="remote-jobs" <?=(($job_type == 'remote-jobs')?'selected':'')?>>Remote</option>
                                             <option value="on-site-jobs" <?=(($job_type == 'on-site-jobs')?'selected':'')?>>On-Site</option>
@@ -302,7 +302,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="industry">Industry <span class="text-danger">*</span></label>
                                         <select class="select2" id="industry" name="industry" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($industries){ foreach($industries as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($industry == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -311,7 +311,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="job_category">Job Category <span class="text-danger">*</span></label>
                                         <select class="select2" id="job_category" name="job_category" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($jobcats){ foreach($jobcats as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($job_category == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -321,7 +321,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="nationality">Nationality <span class="text-danger">*</span></label>
                                         <select class="select2" id="nationality" name="nationality" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($nationalities){ foreach($nationalities as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($nationality == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -330,7 +330,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="gender">Gender <span class="text-danger">*</span></label>
                                         <select class="select2" id="gender" name="gender" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <option value="Male" <?=(($gender == 'Male')?'selected':'')?>>Male</option>
                                             <option value="Female" <?=(($gender == 'Female')?'selected':'')?>>Female</option>
                                             <!-- <option value="Transgender" <?=(($gender == 'Transgender')?'selected':'')?>>Transgender</option> -->
@@ -341,7 +341,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="contract_type">Contract Type <span class="text-danger">*</span></label>
                                         <select class="select2" id="contract_type" name="contract_type" required>
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($contract_types){ foreach($contract_types as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($contract_type == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -350,7 +350,7 @@ $controllerRoute = $module['controller_route'];
                                     <!-- <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="designation">Designation</label>
                                         <select class="select2" id="designation" name="designation">
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($designations){ foreach($designations as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($designation == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -359,7 +359,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="functional_area">Functional Area</label>
                                         <select class="select2" id="functional_area" name="functional_area">
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($functionalareas){ foreach($functionalareas as $select_row){?>
                                                 <option value="<?=$select_row->id?>" <?=(($functional_area == $select_row->id)?'selected':'')?>><?=$select_row->name?></option>
                                             <?php } }?>
@@ -369,7 +369,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="min_exp_year">Min Experience <span class="text-danger">*</span></label>
                                         <select class="select2" id="min_exp_year" name="min_exp_year">
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php for($i=0;$i<=25;$i++){?>
                                                 <option value="<?=$i?>" <?=(($min_exp_year == $i)?'selected':'')?>><?=$i?> Years</option>
                                             <?php }?>
@@ -378,7 +378,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="max_exp_year">Max Experience</label>
                                         <select class="select2" id="max_exp_year" name="max_exp_year">
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php for($i=0;$i<=25;$i++){?>
                                                 <option value="<?=$i?>" <?=(($max_exp_year == $i)?'selected':'')?>><?=$i?> Years</option>
                                             <?php }?>
@@ -439,7 +439,7 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-4 mb-3 salary">
                                         <label class="form-label" for="currency">Currency</label>
                                         <select class="select2" id="currency" name="currency">
-                                            <option label="" selected></option>
+                                            <option label="" value="" selected disabled>Select an option</option>
                                             <?php if($currencies){ foreach($currencies as $select_row){?>
                                                 <option value="<?=$select_row->currency_code?>" <?=(($currency == $select_row->currency_code)?'selected':'')?>><?=$select_row->currency_code?> (<?=$select_row->name?>)</option>
                                             <?php } }?>
@@ -464,7 +464,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
-                                        <button class="btn btn-label-secondary btn-prev">
+                                        <button class="btn btn-primary btn-prev">
                                             <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
                                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                                         </button>
@@ -539,7 +539,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
-                                        <button class="btn btn-label-secondary btn-prev">
+                                        <button class="btn btn-primary btn-prev">
                                             <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
                                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                                         </button>
@@ -753,6 +753,32 @@ $controllerRoute = $module['controller_route'];
                     closeDate.value = newMax;
                 }
             });
+
+            
         });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const dateFields = ['posting_open_date', 'posting_close_date'];
+
+        dateFields.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            // Block all typing
+            el.addEventListener('keydown', e => e.preventDefault());
+
+            // Block pasting
+            el.addEventListener('paste', e => e.preventDefault());
+
+            // Fallback: clear value if manual input somehow sneaks in
+            el.addEventListener('input', e => {
+              const val = el.value;
+              if (val && isNaN(new Date(val).getTime())) {
+                el.value = '';
+              }
+            });
+          }
+        });
+      });
     </script>
 @endsection

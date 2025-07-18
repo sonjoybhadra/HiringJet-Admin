@@ -32,6 +32,8 @@ use App\Models\UserResume;
 use App\Models\UserCertification;
 use App\Models\UserOnlineProfile;
 use App\Models\UserWorkSample;
+use App\Models\UserProfileCompletedPercentage;
+use App\Models\ProfileComplete;
 
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -122,6 +124,21 @@ $controllerRoute = $module['controller_route'];
                           }
                         }
                       }
+
+                      $total_completed_percentage = 0;
+                      $profile_completes_id = [];
+                      $getProfilePercentages = DB::table('user_profile_completed_percentages')
+                                                              ->join('profile_completes', 'user_profile_completed_percentages.profile_completes_id', '=', 'profile_completes.id')
+                                                              ->select('profile_completes.percentage', 'profile_completes.name as percentage_name', 'user_profile_completed_percentages.profile_completes_id')
+                                                              ->where('user_profile_completed_percentages.user_id', '=', $id)
+                                                              ->orderBy('user_profile_completed_percentages.id', 'DESC')
+                                                              ->get();
+                      if($getProfilePercentages){
+                        foreach($getProfilePercentages as $getProfilePercentage){
+                          $total_completed_percentage += $getProfilePercentage->percentage;
+                          $profile_completes_id[] = $getProfilePercentage->profile_completes_id;
+                        }
+                      }
                       ?>
                     <div class="card mb-6">
                       <!-- <div class="user-profile-header-banner">
@@ -130,7 +147,7 @@ $controllerRoute = $module['controller_route'];
                       <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-3">
                         <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
                           <?php if($row->profile_image == null){?>
-                            <img src="{{ config('constants.admin_assets_url') }}assets/img/avatars/1.png" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" />
+                            <img src="{{ config('constants.admin_assets_url') }}assets/img/avatars/no-image.jpg" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" style="width: 100px;height: 100px;" />
                           <?php } else {?>
                             <img src="<?=url('/').'/'.$row->profile_image?>" alt="<?=$row->first_name.' '.$row->last_name?>" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" style="width: 100px;" />
                           <?php }?>
@@ -139,7 +156,19 @@ $controllerRoute = $module['controller_route'];
                           <div
                             class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-5 flex-md-row flex-column gap-4">
                             <div class="user-profile-info">
-                              <h4 class="mb-2 mt-lg-6"><?=$row->first_name.' '.$row->last_name?></h4>
+                              <h4 class="mb-2 mt-lg-6"><?=$row->first_name.' '.$row->last_name?>
+                                <div class="progress" style="height: 16px">
+                                  <div
+                                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                                    role="progressbar"
+                                    style="width: <?=$total_completed_percentage?>%"
+                                    aria-valuenow="<?=$total_completed_percentage?>"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100">
+                                    Profile percentage :<?=$total_completed_percentage?>%
+                                  </div>
+                                </div>
+                              </h4>
                               <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2">
                                 <li class="list-inline-item d-flex gap-2 align-items-center">
                                   <i class="ti ti-palette ti-lg"></i><span class="fw-medium"><?=$row->resume_headline?></span>
@@ -179,16 +208,16 @@ $controllerRoute = $module['controller_route'];
 
                       <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
                         <li class="nav-item">
-                          <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-1" aria-controls="navs-pills-justified-profile" aria-selected="true">Professional Info</button>
+                          <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-1" aria-controls="navs-pills-justified-profile" aria-selected="true">Professional</button>
                         </li>
                         <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-2" aria-controls="navs-pills-justified-general" aria-selected="false">Personal Info</button>
+                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-2" aria-controls="navs-pills-justified-general" aria-selected="false">Personal</button>
                         </li>
                         <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-3" aria-controls="navs-pills-justified-password" aria-selected="false">Educational Info</button>
+                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-3" aria-controls="navs-pills-justified-password" aria-selected="false">Educational</button>
                         </li>
                         <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-4" aria-controls="navs-pills-justified-password" aria-selected="false">Employment Info</button>
+                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-4" aria-controls="navs-pills-justified-password" aria-selected="false">Employment</button>
                         </li>
                         <li class="nav-item">
                           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-5" aria-controls="navs-pills-justified-password" aria-selected="false">Accomplishments</button>
@@ -204,6 +233,9 @@ $controllerRoute = $module['controller_route'];
                         </li>
                         <li class="nav-item">
                           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-9" aria-controls="navs-pills-justified-password" aria-selected="false">Shortlisted Jobs</button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-10" aria-controls="navs-pills-justified-password" aria-selected="false">Profile Percentage</button>
                         </li>
                       </ul>
                       <div class="tab-content">
@@ -783,6 +815,80 @@ $controllerRoute = $module['controller_route'];
                                     </table>
                                   </div>
                               </div>
+                          </div>
+                          <div class="tab-pane fade show active" id="navs-pills-justified-1" role="tabpanel">
+                            <h5>Profile Percentage</h5>
+                            <div class="card mb-4">
+                              <div class="card-body">
+                                <table id="simpletable" class="table table-striped table-bordered nowrap">
+                                  <thead>
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Parameter Name</th>
+                                    <th scope="col">Percentage</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <?php if(count($getProfilePercentages)>0){ $sl=1;$total=0; foreach($getProfilePercentages as $getProfilePercentage){ ?>
+                                      <?php $total += $getProfilePercentage->percentage; ?>
+                                      <tr>
+                                        <th scope="row"><?=$sl++?></th>
+                                        <td><?=$getProfilePercentage->percentage_name?></td>
+                                        <td><?=$getProfilePercentage->percentage?>%</td>
+                                      </tr>
+                                    <?php } } else {?>
+                                      <tr>
+                                        <td colspan="3" style="text-align: center; color: red;">No profile percentage parameters found</td>
+                                      </tr>
+                                    <?php }?>
+                                  </tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col" style="float: right;">Total <i class="fa fa-arrow-right"></i></th>
+                                      <th scope="col"><?=$total?>%</th>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+
+                                <h5>Pending Points</h5>
+                                <table id="simpletable" class="table table-striped table-bordered nowrap">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Parameter Name</th>
+                                      <th scope="col">Percentage</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <?php
+                                    $profile_completes = ProfileComplete::select('id', 'name', 'percentage')->where('status', '=', 1)->get();
+                                    if(count($profile_completes)>0){ $sl=1;$total=0; foreach($profile_completes as $profile_complete){
+                                    ?>
+                                      <?php $total += $profile_complete->percentage; ?>
+                                      <?php if(!in_array($profile_complete->id, $profile_completes_id)){?>
+                                        <tr>
+                                          <th scope="row"><?=$sl++?></th>
+                                          <td><?=$profile_complete->name?></td>
+                                          <td><?=$profile_complete->percentage?>%</td>
+                                        </tr>
+                                      <?php }?>
+                                    <?php } } else {?>
+                                      <tr>
+                                        <td colspan="3" style="text-align: center; color: red;">No profile percentage parameters found</td>
+                                      </tr>
+                                    <?php }?>
+                                  </tbody>
+                                  <!-- <tfoot>
+                                    <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col" style="float: right;">Total <i class="fa fa-arrow-right"></i></th>
+                                      <th scope="col"><?=$total?>%</th>
+                                    </tr>
+                                  </tfoot> -->
+                                </table>
+                              </div>
+                            </div>
                           </div>
                       </div>
                     </div>
