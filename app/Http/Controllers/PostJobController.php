@@ -194,7 +194,7 @@ class PostJobController extends Controller
                         'updated_by'                => session('user_data')['user_id'],
                         'status'                    => 1,
                     ];
-                    Helper::pr($fields);
+                    // Helper::pr($fields);
                     $id = PostJob::insertGetId($fields);
                     // return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                     return redirect($this->data['controller_route'] . "/preview/" . Helper::encoded($id))->with('success_message', $this->data['title'].' Preview !!!');
