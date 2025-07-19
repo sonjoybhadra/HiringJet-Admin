@@ -375,7 +375,7 @@ class PostJobController extends Controller
                         'created_by'                => session('user_data')['user_id'],
                         'updated_by'                => session('user_data')['user_id'],
                     ];
-                    Helper::pr($fields);
+                    // Helper::pr($fields);
                     PostJob::where('id', '=', $id)->update($fields);
                     // return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
                     return redirect($this->data['controller_route'] . "/preview/" . Helper::encoded($id))->with('success_message', $this->data['title'].' Preview !!!');
