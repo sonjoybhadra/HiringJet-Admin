@@ -353,7 +353,7 @@ class JobSearchController extends BaseApiController
                 $range = explode('-', $value);
                 $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
                 if(count($range) > 1){
-                    if($job->min_salary >= $range[0] && $job->max_salary <= $range[1]){
+                    if(($job->min_salary >= $range[0] && $job->min_salary <= $range[1]) || ($job->max_salary >= $range[0] && $job->max_salary <= $range[1])){
                         $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
                     }
                 }else{
