@@ -251,9 +251,10 @@ class JobSearchController extends BaseApiController
     }
 
     private function getFilterParametersArray($data_array){
-        $data_count_country_array = $data_count_city_array = $data_count_industry_array = $data_count_designation_array = $data_count_nationality_array = $data_count_gender_array = $data_count_employers_array = $data_count_freshness_array = $data_count_experience_array = $data_count_jobtype_array = [];
+        $data_count_country_array = $data_count_city_array = $data_count_industry_array = $data_count_designation_array = $data_count_nationality_array = $data_count_gender_array = $data_count_employers_array = $data_count_freshness_array = $data_count_experience_array = $data_count_jobtype_array = $data_count_salary_array = [];
         $freshness = [1, 3, 7, 15, 30, 60];
         $experience = ['0-1', '2-5', '6-10', '11-15', '16-20', '21'];
+        $salary_list = ['<35000', '35000-70000', '70000-140000', '140000-210000', '210000-300000', '300001-420000', '>420000'];
         $job_types = ['walk-in-jobs', 'remote-jobs', 'on-site-jobs', 'temp-role-jobs'];
         foreach ($data_array as $job) {
             // get location Country list
@@ -346,6 +347,39 @@ class JobSearchController extends BaseApiController
                 }
             }
             // end experience
+            // get salary list
+            $has_insert = false;
+            foreach($salary_list as $value){
+                $range = explode('-', $value);
+                if(count($range) > 1){
+                    if($job->min_salary >= $range[0] && $job->max_salary <= $range[1]){
+                        if (!isset($data_count_salary_array[$value])) {
+                            $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
+                        }
+                        $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
+                    }
+                }else{
+                    $max_range = explode('<', $value);
+                    $min_range = explode('>', $value);
+                    if(strpos('<', $value)){
+                        if($job->max_salary < $max_range[0]){
+                            $has_insert = true;
+                        }
+                    }else if(strpos('>', $value)){
+                        if($job->min_salary > $min_range[0]){
+                            $has_insert = true;
+                        }
+                    }
+
+                    if($has_insert){
+                        if (!isset($data_count_salary_array[$value])) {
+                            $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
+                        }
+                        $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
+                    }
+                }
+            }
+            // end salary
             // get job_type list
             if (!isset($data_count_jobtype_array[$job->job_type])) {
                 $data_count_jobtype_array[$job->job_type] = ['name'=> ucwords(str_replace("-", " ",$job->job_type)), 'count'=> 0, 'id'=> $job->job_type];
@@ -369,7 +403,8 @@ class JobSearchController extends BaseApiController
             'gender'=> $data_count_gender_array,
             'freshness'=> $data_count_freshness_array,
             'experience'=> $data_count_experience_array,
-            'jobtypes'=> $data_count_jobtype_array
+            'jobtypes'=> $data_count_jobtype_array,
+            'salary_range'=> $data_count_salary_array
         ];
     }
 
