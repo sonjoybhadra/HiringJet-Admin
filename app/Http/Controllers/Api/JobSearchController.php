@@ -351,11 +351,9 @@ class JobSearchController extends BaseApiController
             $has_insert = false;
             foreach($salary_list as $value){
                 $range = explode('-', $value);
+                $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
                 if(count($range) > 1){
                     if($job->min_salary >= $range[0] && $job->max_salary <= $range[1]){
-                        if (!isset($data_count_salary_array[$value])) {
-                            $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
-                        }
                         $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
                     }
                 }else{
@@ -372,9 +370,6 @@ class JobSearchController extends BaseApiController
                     }
 
                     if($has_insert){
-                        if (!isset($data_count_salary_array[$value])) {
-                            $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
-                        }
                         $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
                     }
                 }
