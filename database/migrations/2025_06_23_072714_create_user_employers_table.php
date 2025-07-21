@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('profile_image')->nullable();
             $table->text('description')->nullable();
             $table->string('web_url')->nullable();
+            $table->integer('completed_steps')->nullable();
             $table->integer('is_active')->default(1);
             $table->softDeletes();
             $table->timestamps();

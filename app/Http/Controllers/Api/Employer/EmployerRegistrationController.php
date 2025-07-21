@@ -73,7 +73,8 @@ class EmployerRegistrationController extends BaseApiController
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'business_id'=> $request->is_experienced
+                    'business_id'=> $request->is_experienced,
+                    'completed_steps'=> 0
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
@@ -169,8 +170,7 @@ class EmployerRegistrationController extends BaseApiController
         $user_obj->email_verified_at = date('Y-m-d H:i:s');
         $user_obj->save();
 
-        $this->calculate_profile_completed_percentage($user->id, 'signup-step-1'); //Signup step 1 completes
-        UserProfile::where('user_id', $user->id)->update([
+        UserEmployer::where('user_id', $user->id)->update([
             'completed_steps'=> 1,
         ]);
 
@@ -196,12 +196,13 @@ class EmployerRegistrationController extends BaseApiController
             'address' => 'required|string|max:255',
             'address_line_2' => 'nullable|string|max:255',
             'pincode' => 'required|string|max:10',
+            'country_code' => 'required|max:5',
             'landline' => 'nullable|string|max:20',
-            'industry_id' => 'required|integer',
             'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'description' => 'required|string',
+            'industry_id' => 'required|integer',
             'web_url' => 'required|url'
         ]);
 
