@@ -364,14 +364,12 @@ class RegistrationController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'profile_summery' => 'required|string',// Max:5MB
-
             'qualification' => 'required|integer',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
             'university' => 'required|integer',
             'passing_year' => 'required|integer',
             'location' => 'required|integer',
-
             'preferred_designation' => 'nullable|array',
             'preferred_location' => 'nullable|array',
             'preferred_industry' => 'nullable|array',
@@ -411,6 +409,14 @@ class RegistrationController extends BaseApiController
 
             UserProfile::where('user_id', $user->id)
                         ->update([
+                            'job_type_temp'=> $request->job_type_temp,
+                            'job_type_permanent'=> $request->job_type_permanent,
+                            'temp_remote'=> $request->temp_remote,
+                            'temp_onsite'=> $request->temp_onsite,
+                            'temp_hybrid'=> $request->temp_hybrid,
+                            'permanent_remote'=> $request->permanent_remote,
+                            'permanent_onsite'=> $request->permanent_onsite,
+                            'permanent_hybrid'=> $request->permanent_hybrid,
                             'profile_summery'=> $request->profile_summery,
                             'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
                             'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,

@@ -15,13 +15,13 @@ use App\Models\Industry;
 class EditDesiredJobsController extends BaseApiController
 {
     /**
-     * Get resume headline.
+        * Get resume headline.
     */
     public function getDesiredJobs()
     {
         try {
             return $this->sendResponse(
-                UserProfile::select('preferred_designation', 'preferred_location', 'preferred_industry', 'availability_id')
+                UserProfile::select('job_type_temp', 'job_type_permanent', 'temp_remote','temp_onsite','temp_hybrid','permanent_remote', 'permanent_onsite', 'permanent_hybrid', 'profile_summery', 'preferred_designation', 'preferred_location', 'preferred_industry', 'availability_id')
                             ->where('user_id', auth()->user()->id)
                             ->with('availabilitie')
                             ->first(),
@@ -32,7 +32,7 @@ class EditDesiredJobsController extends BaseApiController
         }
     }
     /**
-     * Post resume headline.
+        * Post resume headline.
     */
     public function postDesiredJobs(Request $request)
     {
@@ -75,6 +75,14 @@ class EditDesiredJobsController extends BaseApiController
 
             UserProfile::where('user_id', auth()->user()->id)
                         ->update([
+                            'job_type_temp'=> $request->job_type_temp,
+                            'job_type_permanent'=> $request->job_type_permanent,
+                            'temp_remote'=> $request->temp_remote,
+                            'temp_onsite'=> $request->temp_onsite,
+                            'temp_hybrid'=> $request->temp_hybrid,
+                            'permanent_remote'=> $request->permanent_remote,
+                            'permanent_onsite'=> $request->permanent_onsite,
+                            'permanent_hybrid'=> $request->permanent_hybrid,
                             'preferred_designation' => !empty($preferred_designation) ? json_encode($preferred_designation) : NULL,
                             'preferred_location' => !empty($preferred_location) ? json_encode($preferred_location) : NULL,
                             'preferred_industry' => !empty($preferred_industry) ? json_encode($preferred_industry) : NULL,
