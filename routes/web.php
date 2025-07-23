@@ -42,6 +42,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\ExperienceLevelController;
 use App\Http\Controllers\PostJobController;
+use App\Http\Controllers\UploadPostJobController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\HomePageController;
@@ -370,6 +371,10 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'post-job/preview/{id}', [PostJobController::class, 'preview']);
         Route::get('post-job/cancel/{id}', [PostJobController::class, 'cancel']);
     /* post job */
+
+    /* upload post job */
+        Route::match(['get', 'post'], 'upload-post-job/list', [UploadPostJobController::class, 'list']);
+    /* upload post job */
 
     /* jobseeker */
         Route::get('jobseeker/list', [JobseekerController::class, 'list']);
