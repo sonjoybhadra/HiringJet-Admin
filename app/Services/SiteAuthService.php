@@ -95,6 +95,14 @@ class SiteAuthService
                     $message = 'Upload ok';
                     $status = 1;
                 }
+            } elseif($uploadType == 'csv') {
+                if($imageFileType1 != "csv" && $imageFileType1 != "CSV") {
+                    $message = 'Sorry, only CSV files are allowed';
+                    $status = 0;
+                } else {
+                    $message = 'Upload ok';
+                    $status = 1;
+                }
             } elseif($uploadType == 'powerpoint') {
                 if($imageFileType1 != "ppt" && $imageFileType1 != "PPT" && $imageFileType1 != "pptx" && $imageFileType1 != "PPTX") {
                     $message = 'Sorry, only PPT files are allowed';
