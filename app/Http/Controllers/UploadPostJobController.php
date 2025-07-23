@@ -59,7 +59,8 @@ class UploadPostJobController extends Controller
                         $imageFile      = $request->file('upload_file');
                         if($imageFile != ''){
                             $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('upload_file', $imageName, $upload_folder, 'image');
+                            $uploadedFile   = $this->upload_single_file('upload_file', $imageName, $upload_folder, 'csv');
+                            // Helper::pr($uploadedFile);
                             if($uploadedFile['status']){
                                 $upload_file = $uploadedFile['newFilename'];
                             } else {
@@ -86,7 +87,7 @@ class UploadPostJobController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = JobCategory::find($id);
+            $model                          = UploadJob::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
