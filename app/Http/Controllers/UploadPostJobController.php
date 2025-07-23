@@ -59,7 +59,7 @@ class UploadPostJobController extends Controller
                         $imageFile      = $request->file('upload_file');
                         if($imageFile != ''){
                             $imageName      = $imageFile->getClientOriginalName();
-                            $uploadedFile   = $this->upload_single_file('upload_file', $imageName, $upload_folder, 'csv');
+                            $uploadedFile   = $this->siteAuthService->upload_single_file('upload_file', $imageName, $upload_folder, 'csv');
                             // Helper::pr($uploadedFile);
                             if($uploadedFile['status']){
                                 $upload_file = $uploadedFile['newFilename'];
