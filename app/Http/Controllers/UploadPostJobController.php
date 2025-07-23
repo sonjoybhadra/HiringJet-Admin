@@ -29,21 +29,17 @@ class UploadPostJobController extends Controller
         );
     }
     /* list */
-        public function list(){
+        public function list(Request $request){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'upload-post-job.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-            return view('maincontents.' . $page_name, $data);
-        }
-    /* list */
-    /* add */
-        public function add(Request $request){
-            $data['module']           = $this->data;
+
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'name'           => 'required',
+                    'name'                  => 'required',
+                    'upload_file'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -58,23 +54,35 @@ class UploadPostJobController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
+                    /* upload_file */
+                        $upload_folder = 'post-job';
+                        $imageFile      = $request->file('upload_file');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('upload_file', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $upload_file = $uploadedFile['newFilename'];
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            return redirect()->back()->with(['error_message' => 'Please upload job file']);
+                        }
+                    /* upload_file */
                     $fields = [
-                        'name'         => strip_tags($postData['name']),
+                        'name'                  => strip_tags($postData['name']),
+                        'upload_file'           => $upload_file,
                     ];
-                    Module::insert($fields);
+                    $upload_id = UploadJob::insertGetId($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-            $data['module']                 = $this->data;
-            $title                          = $this->data['title'].' Add';
-            $page_name                      = 'module.add-edit';
-            $data['row']                    = [];
-            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+
             return view('maincontents.' . $page_name, $data);
         }
-    /* add */
+    /* list */
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
@@ -83,7 +91,7 @@ class UploadPostJobController extends Controller
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            Module::where($this->data['primary_key'], '=', $id)->update($fields);
+            UploadJob::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -102,7 +110,7 @@ class UploadPostJobController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Module::find($id);
+            $model                          = UploadJob::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;
