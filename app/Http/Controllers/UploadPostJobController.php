@@ -33,6 +33,7 @@ class UploadPostJobController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'upload-post-job.list';
+            $data['rows']                   = UploadJob::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
 
             if($request->isMethod('post')){

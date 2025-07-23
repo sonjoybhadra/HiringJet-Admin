@@ -374,6 +374,7 @@ Route::middleware(['auth'])->group(function () {
 
     /* upload post job */
         Route::match(['get', 'post'], 'upload-post-job/list', [UploadPostJobController::class, 'list']);
+        Route::get('upload-post-job/delete/{id}', [UploadPostJobController::class, 'delete']);
     /* upload post job */
 
     /* jobseeker */

@@ -59,12 +59,18 @@ $controllerRoute = $module['controller_route'];
                      </tr>
                   </thead>
                   <tbody>
-                     <tr>
-                        <td>1</td>
-                        <td>Sample File</td>
-                        <td></td>
-                        <td></td>
-                     </tr>
+                     <?php $sl=1; if($rows){ foreach($rows as $row){?>
+                        <tr>
+                           <td><?=$sl++?></td>
+                           <td><?=$row->name?></td>
+                           <td>
+                              <a href="<?=url('/public/uploads/post-job/' . $row->upload_file)?>" target="_blank" class="badge bg-info"><i class="fas fa-file"></i> View File</a>
+                           </td>
+                           <td>
+                              <a href="<?=url('/upload-post-job/delete/' . Helper::encoded($row->id))?>" onclick="return confirm('Do you want to delete this ?');"><i class="fas fa-trash text-danger"></i></a>
+                           </td>
+                        </tr>
+                     <?php } }?>
                   </tbody>
                </table>
             </div>
