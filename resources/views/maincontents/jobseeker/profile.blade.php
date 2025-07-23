@@ -829,7 +829,7 @@ $controllerRoute = $module['controller_route'];
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <?php if(count($getProfilePercentages)>0){ $sl=1;$total=0; foreach($getProfilePercentages as $getProfilePercentage){ ?>
+                                    <?php $sl=1;$total=0; if(count($getProfilePercentages)>0){ foreach($getProfilePercentages as $getProfilePercentage){ ?>
                                       <?php $total += $getProfilePercentage->percentage; ?>
                                       <tr>
                                         <th scope="row"><?=$sl++?></th>
