@@ -1,4 +1,5 @@
 <?php
+use App\Models\PostJob;
 use App\Helpers\Helper;
 $controllerRoute = $module['controller_route'];
 ?>
@@ -54,15 +55,21 @@ $controllerRoute = $module['controller_route'];
                      <tr>
                         <th>#</th>
                         <th>Title</th>
+                        <th>Uploaded Job Count</th>
                         <th>Upload File</th>
                         <th>Action</th>
                      </tr>
                   </thead>
                   <tbody>
-                     <?php $sl=1; if($rows){ foreach($rows as $row){?>
+                     <?php $sl=1; if(count($rows) > 0){ foreach($rows as $row){?>
                         <tr>
                            <td><?=$sl++?></td>
                            <td><?=$row->name?></td>
+                           <td>
+                              <?php
+                              echo $getJobCount = PostJob::where('upload_id', '=', $row->id)->count();
+                              ?>
+                           </td>
                            <td>
                               <a href="<?=url('/public/uploads/post-job/' . $row->upload_file)?>" target="_blank" class="badge bg-info"><i class="fas fa-file"></i> View File</a>
                            </td>
@@ -70,7 +77,11 @@ $controllerRoute = $module['controller_route'];
                               <a href="<?=url('/upload-post-job/delete/' . Helper::encoded($row->id))?>" onclick="return confirm('Do you want to delete this ?');"><i class="fas fa-trash text-danger"></i></a>
                            </td>
                         </tr>
-                     <?php } }?>
+                     <?php } } else {?>
+                        <tr>
+                           <td colspan="4" style="text-align: center; color:red;">No uploads available</td>
+                        </tr>
+                     <?php }?>
                   </tbody>
                </table>
             </div>

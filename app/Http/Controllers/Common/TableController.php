@@ -69,6 +69,9 @@ class TableController extends Controller
         if ($table === 'report_bugs') {
             $query->leftJoin('users', DB::raw("CAST($table.user_id AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
         }
+        if ($table === 'users' && $routes == 'jobseeker') {
+            $query->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
+        }       
 
         // Aliased select columns
         $columns = array_map(function ($col) use ($table) {
@@ -117,6 +120,9 @@ class TableController extends Controller
             }
             if ($table === 'post_jobs' && $col === 'created_by') {
                 return 'users.first_name as created_by_name';
+            }
+            if ($table === 'users' && $col == 'user_id') {
+                return 'user_profiles.profile_completed_percentage';
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);
