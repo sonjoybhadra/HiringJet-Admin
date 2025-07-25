@@ -39,9 +39,9 @@ $controllerRoute = $module['controller_route'];
                   'containerId' => 'table1',
                   'searchId' => 'search1',
                   'table' => 'users',
-                  'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'created_at', 'status'],
-                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'created_at'],
-                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Created At'],
+                  'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'profile_completed_percentage', 'created_at', 'status'],
+                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'profile_completed_percentage', 'created_at'],
+                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Profile Complete (%)', 'Created At'],
                   'filename' => "Jobseeker",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
@@ -51,7 +51,15 @@ $controllerRoute = $module['controller_route'];
                   ],
                   'routePrefix' => 'jobseeker',
                   'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status'
+                  'statusColumn' => 'status',
+                  'joins' => [
+                     [
+                        'table' => 'user_profiles',
+                        'localKey' => 'id',
+                        'foreignKey' => 'user_id',
+                        'select' => ['profile_completed_percentage as profile_completed_percentage']
+                     ]
+                  ]
                 ])
             </div>
         </div>
