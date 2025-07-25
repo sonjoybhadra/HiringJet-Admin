@@ -31,6 +31,7 @@ use App\Models\Religion;
 use App\Models\MaritalStatus;
 use App\Models\ItSkill;
 use App\Models\Nationality;
+use App\Models\State;
 
 use App\Models\HomePage;
 use App\Models\GeneralSetting;
@@ -512,6 +513,22 @@ class CommonController extends BaseApiController
     public function get_city_by_param(Request $request)
     {
         $sql = City::select('id', 'name')->where('status', 1)->with('country');
+        if(!empty($request->country_id)){
+            $country_id_array = explode(',', $request->country_id);
+            $sql->whereIn('country_id', $country_id_array);
+        }
+        if(!empty($request->key)){
+            $sql->where('name', 'ILIKE',  '%'.$request->key.'%');
+        }
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
+        );
+    }
+
+    public function get_state_by_param(Request $request)
+    {
+        $sql = State::select('id', 'name')->where('status', 1)->with('country');
         if(!empty($request->country_id)){
             $country_id_array = explode(',', $request->country_id);
             $sql->whereIn('country_id', $country_id_array);

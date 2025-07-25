@@ -42,12 +42,12 @@ Route::post('/auth/google/redirect', [SocialAuthController::class, 'redirectToGo
 Route::post('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 
 // The controller automatically detects which flow it is based on the state parameter
-Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+/* Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
 Route::get('/auth/linkedin/callback', [SocialAuthController::class, 'handleLinkedInCallback']);
 
 Route::post('/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
-Route::post('/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
+Route::post('/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']); */
 
 //Registration with complete profile
 Route::post('/signup/cv', [RegistrationController::class, 'test_cv_parse']);
@@ -56,6 +56,9 @@ Route::post('/signup', [RegistrationController::class, 'registration']);
 Route::post('/signup/resend-otp', [RegistrationController::class, 'resendOtp']);
 Route::post('/signup/verification-top', [RegistrationController::class, 'registerVerification']);
 
+Route::post('/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
+Route::post('/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
+Route::post('/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
 
 /**
  * Common master data
@@ -197,6 +200,45 @@ Route::group([
 
     // Test configuration (optional - for debugging)
     Route::get('/auth/test-config', [SocialAuthController::class, 'testConfig']);
+
+});
+
+/**
+ * Starts employer auth section
+*/
+use App\Http\Controllers\Api\Employer\EmployerRegistrationController;
+use App\Http\Controllers\Api\Employer\EmployerAuthController;
+use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
+// use App\Http\Controllers\Api\Employer\ForgotpasswordController as EmployerForgotpasswordController;
+use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
+
+Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
+Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
+Route::post('/employer/signup/verification-top', [EmployerRegistrationController::class, 'registerVerification']);
+
+Route::post('/employer/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
+Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
+Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
+
+Route::post('/employer/login', [EmployerAuthController::class, 'login']);
+
+Route::group([
+    'middleware' => ['auth:api'],
+    'prefix' => 'employer',
+], function () {
+    Route::post('/logout', [EmployerAuthController::class, 'logout']);
+    Route::get('/profile', [EmployerAuthController::class, 'getUser']);
+    Route::post('/change-password', [EmployerAuthController::class, 'changePassword']);
+    Route::post('/signup/setup-company-profile/{user}', [EmployerRegistrationController::class, 'setupCompanyProfile']);
+
+    Route::post('/update-profile', [EditEmployerProfileController::class, 'updateProfileData']);
+
+    Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
+    Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
+    Route::post('/change-password', [AccountSettingsController::class, 'changePassword']);
+
+
+    Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
 });
 
