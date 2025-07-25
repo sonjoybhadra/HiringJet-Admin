@@ -157,7 +157,7 @@ $controllerRoute = $module['controller_route'];
                             class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-5 flex-md-row flex-column gap-4">
                             <div class="user-profile-info">
                               <h4 class="mb-2 mt-lg-6"><?=$row->first_name.' '.$row->last_name?>
-                                <div class="progress" style="height: 16px">
+                                <div class="progress" style="height: 20px">
                                   <div
                                     class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
                                     role="progressbar"
