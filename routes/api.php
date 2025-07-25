@@ -197,6 +197,8 @@ Route::post('/employer/forgot-password', [ForgotpasswordController::class, 'forg
 Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
 Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
 
+Route::post('/employer/login', [EmployerAuthController::class, 'login']);
+
 Route::group([
     'middleware' => ['auth:api'],
     'prefix' => 'employer',

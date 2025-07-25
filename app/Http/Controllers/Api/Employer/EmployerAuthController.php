@@ -50,7 +50,7 @@ class EmployerAuthController extends BaseApiController
         }
 
         $credentials = request(['email', 'password']);
-        // $credentials['role_id'] = env('EMPLOYER_ROLE_ID')??3;
+        $credentials['role_id'] = env('EMPLOYER_ROLE_ID')??2;
         try{
             if (! $token = auth('api')->attempt($credentials)) {
                 return $this->sendError('Unauthorized', 'Email or Password not matched.', Response::HTTP_UNAUTHORIZED);
@@ -66,6 +66,11 @@ class EmployerAuthController extends BaseApiController
                                         'token' => $token,
                                         'user' => $this->getEmployerDetails(),
                                         'expires_in' => config('jwt.ttl') * 60,
+                                        'completed_steps'=> [
+                                            '0' => 'Registration step 1 completed but OTP verification is pending',
+                                            '1' => 'OTP verification is done but setup profile is pending',
+                                            '2' => 'Registration process is completed'
+                                        ]
                                     ], 'Login successfully done.');
         } catch (JWTException $e) {
             return $this->sendError('Error', 'Login failed.',  Response::HTTP_UNAUTHORIZED);

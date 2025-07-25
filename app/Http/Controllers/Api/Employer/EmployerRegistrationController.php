@@ -73,7 +73,8 @@ class EmployerRegistrationController extends BaseApiController
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'business_id'=> $request->is_experienced,
+                    'business_id'=> $request->business_id,
+                    'designation_id'=> $request->designation_id,
                     'completed_steps'=> 0
                 ]);
 
@@ -189,34 +190,35 @@ class EmployerRegistrationController extends BaseApiController
     public function setupCompanyProfile(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'country_id' => 'required|integer',
-            'city_id' => 'required|integer',
-            'state_id' => 'required|integer',
+            // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'address' => 'required|string|max:255',
-            'address_line_2' => 'nullable|string|max:255',
+            'country_id' => 'required|integer',
+            'state_id' => 'required|integer',
+            'city_id' => 'required|integer',
+            // 'address_line_2' => 'nullable|string|max:255',
             'pincode' => 'required|string|max:10',
-            'country_code' => 'required|max:5',
+            'country_code' => 'nullable|required|max:5',
             'landline' => 'nullable|string|max:20',
             'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'description' => 'required|string',
-            'industry_id' => 'required|integer',
-            'web_url' => 'required|url'
+            'industrie_id' => 'required|integer',
+            'web_url' => 'required|url',
+            'employe_type' => 'required|in:company,agency'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
-            $image_path = $trade_license = $vat_registration = $logo = "";
+        // try{
+            $profile_image = $trade_license = $vat_registration = $logo = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                 Storage::disk('public')->put('uploads/employer/profile_image/'.$fileName, file_get_contents($file));
-                $image_path = 'public/storage/uploads/employer/profile_image/'.$fileName;
+                $profile_image = 'public/storage/uploads/employer/profile_image/'.$fileName;
             }
             if (request()->hasFile('trade_license')) {
                 $file = request()->file('trade_license');
@@ -245,19 +247,22 @@ class EmployerRegistrationController extends BaseApiController
                 'address_line_2'=> $request->address_line_2,
                 'pincode' => $request->pincode,
                 'landline'=> $request->landline,
-                'industry_id'=> $request->industry_id,
+                'industrie_id'=> $request->industrie_id,
+                'profile_image'=> $profile_image,
                 'trade_license'=> $trade_license,
                 'vat_registration'=> $vat_registration,
                 'logo'=> $logo,
                 'description'=> $request->description,
-                'web_url'=> $request->web_url
+                'web_url'=> $request->web_url,
+                'employe_type'=> $request->employe_type,
+                'completed_steps'=> 2,
             ]);
 
-            return $this->sendResponse($this->getUserDetails(), 'Setup company profile has successfully done.');
+            return $this->sendResponse($this->getEmployerDetails(), 'Setup company profile has successfully done.');
 
-        } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
-        }
+        // } catch (\Exception $e) {
+        //     return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
+        // }
     }
 
 }

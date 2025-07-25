@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('phone', 15)->unique();
             $table->foreignId('business_id')->constrained('employers');
             $table->foreignId('designation_id')->constrained('designations');
-            $table->foreignId('industrie_id')->constrained('industries');
+            $table->foreignId('industrie_id')->constrained('industries')->nullable()->nullOnDelete();
             $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
             $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
             $table->foreignId('state_id')->nullable()->constrained('states')->nullOnDelete();
@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('profile_image')->nullable();
             $table->text('description')->nullable();
             $table->string('web_url')->nullable();
+            $table->enum('employe_type', ['company', 'agency'])->default('company');
             $table->integer('completed_steps')->nullable();
             $table->integer('is_active')->default(1);
             $table->softDeletes();
