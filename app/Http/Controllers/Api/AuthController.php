@@ -170,7 +170,7 @@ class AuthController extends BaseApiController
             $data = User::where('id', auth()->user()->id)
                     ->with('user_employer_details')
                     ->with('user_cv')
-                    ->toArray();
+                    ->first()->toArray();
 
             // Convert to array to manipulate keys
             // $array = (array) $data;
