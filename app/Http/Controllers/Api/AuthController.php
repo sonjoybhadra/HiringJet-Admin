@@ -170,18 +170,18 @@ class AuthController extends BaseApiController
             $data = User::where('id', auth()->user()->id)
                     ->with('user_employer_details')
                     ->with('user_cv')
-                    ->first();
+                    ->toArray();
 
             // Convert to array to manipulate keys
-            $array = (array) $data;
+            // $array = (array) $data;
 
-            if (array_key_exists('user_employer_details', $array)) {
-                $array['user_profile'] = $array['user_employer_details'];
-                unset($array['user_employer_details']);
+            if (array_key_exists('user_employer_details', $data)) {
+                $data['user_profile'] = $data['user_employer_details'];
+                unset($data['user_employer_details']);
             }
 
             // Convert back to object
-            $data = (object) $array;
+            // $data = (object) $array;
         }
 
         try {
