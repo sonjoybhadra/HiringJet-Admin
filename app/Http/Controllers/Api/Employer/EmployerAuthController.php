@@ -96,6 +96,17 @@ class EmployerAuthController extends BaseApiController
                     ->with('user_employer_details')
                     ->with('user_cv')
                     ->first();
+
+        // Convert to array to manipulate keys
+        $array = (array) $data;
+
+        if (array_key_exists('user_employer_details', $array)) {
+            $array['user_profile'] = $array['user_employer_details'];
+            unset($array['user_employer_details']);
+        }
+
+        // Convert back to object
+        $data = (object) $array;
         try {
             return $this->sendResponse(
                 $data,

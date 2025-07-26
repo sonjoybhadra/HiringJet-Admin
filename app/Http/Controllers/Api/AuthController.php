@@ -107,7 +107,9 @@ class AuthController extends BaseApiController
     */
     public function getUser()
     {
-        $data = User::where('id', auth()->user()->id)
+        $data = [];
+        if(auth()->user()->role_id == env('JOB_SEEKER_ROLE_ID')){
+            $data = User::where('id', auth()->user()->id)
                     ->with('user_profile')
                     ->with('user_skills')
                     ->with('user_employments')
@@ -121,49 +123,66 @@ class AuthController extends BaseApiController
                     ->with('user_cv')
                     ->first();
 
-        $profileComplete = ProfileComplete::select('id', 'name', 'percentage')->get()->toArray();
-        $profile_completed_percentages = [];
-        $total_completed_percentage = 0;
-        foreach($profileComplete as $value){
-            $has_user_data = UserProfileCompletedPercentage::where('user_id', auth()->user()->id)
-                                                            ->where('profile_completes_id', $value['id'])
-                                                            ->first();
-            $value['completed_percentage'] = $has_user_data ? (int)$value['percentage'] : 0;
-            $value['has_completed'] = $has_user_data ? 1 : 0;
-            if($has_user_data){
-                $total_completed_percentage += (int)$value['percentage'];
+            $profileComplete = ProfileComplete::select('id', 'name', 'percentage')->get()->toArray();
+            $profile_completed_percentages = [];
+            $total_completed_percentage = 0;
+            foreach($profileComplete as $value){
+                $has_user_data = UserProfileCompletedPercentage::where('user_id', auth()->user()->id)
+                                                                ->where('profile_completes_id', $value['id'])
+                                                                ->first();
+                $value['completed_percentage'] = $has_user_data ? (int)$value['percentage'] : 0;
+                $value['has_completed'] = $has_user_data ? 1 : 0;
+                if($has_user_data){
+                    $total_completed_percentage += (int)$value['percentage'];
+                }
+
+                array_push($profile_completed_percentages, $value);
+            }
+            $data->user_profile->profile_completed_percentage = $total_completed_percentage;
+
+            UserProfile::where('user_id', auth()->user()->id)
+                        ->where('profile_completed_percentage', '!=', $total_completed_percentage)
+                        ->update(['profile_completed_percentage'=> $total_completed_percentage]);
+
+            $data->user_profile_completed_percentages = $profile_completed_percentages;
+
+
+            $user_employment = UserEmployment::where('user_id', auth()->user()->id)
+                                                ->where('is_current_job', 1)
+                                                ->with('employer')
+                                                ->first();
+            if(!$user_employment){
+                $user_employment = UserEmployment::where('user_id', auth()->user()->id)
+                                                ->latest()
+                                                ->with('employer')
+                                                ->first();
+            }
+            $data->current_designation = $user_employment ? Designation::find($user_employment->last_designation) : [];
+            $data->current_company = $user_employment ? $user_employment->employer : [];
+            $data->shortlisted_jobs_count = ShortlistedJob::where('user_id', auth()->user()->id)->count();
+            $data->applied_jobs_count = PostJobUserApplied::where('user_id', auth()->user()->id)->count();
+            $data->job_alerts_count = 0;
+            $postJobObj = new PostJob();
+            $jobSql = $postJobObj->get_job_search_custom_sql();
+            $data->matched_jobs_count = $jobSql->count();
+            // $data->matched_jobs_sql = $jobSql->toSql();
+        }else if(auth()->user()->role_id == env('EMPLOYER_ROLE_ID')){
+            $data = User::where('id', auth()->user()->id)
+                    ->with('user_employer_details')
+                    ->with('user_cv')
+                    ->first();
+
+            // Convert to array to manipulate keys
+            $array = (array) $data;
+
+            if (array_key_exists('user_employer_details', $array)) {
+                $array['user_profile'] = $array['user_employer_details'];
+                unset($array['user_employer_details']);
             }
 
-            array_push($profile_completed_percentages, $value);
+            // Convert back to object
+            $data = (object) $array;
         }
-        $data->user_profile->profile_completed_percentage = $total_completed_percentage;
-
-        UserProfile::where('user_id', auth()->user()->id)
-                    ->where('profile_completed_percentage', '!=', $total_completed_percentage)
-                    ->update(['profile_completed_percentage'=> $total_completed_percentage]);
-
-        $data->user_profile_completed_percentages = $profile_completed_percentages;
-
-
-        $user_employment = UserEmployment::where('user_id', auth()->user()->id)
-                                            ->where('is_current_job', 1)
-                                            ->with('employer')
-                                            ->first();
-        if(!$user_employment){
-            $user_employment = UserEmployment::where('user_id', auth()->user()->id)
-                                            ->latest()
-                                            ->with('employer')
-                                            ->first();
-        }
-        $data->current_designation = $user_employment ? Designation::find($user_employment->last_designation) : [];
-        $data->current_company = $user_employment ? $user_employment->employer : [];
-        $data->shortlisted_jobs_count = ShortlistedJob::where('user_id', auth()->user()->id)->count();
-        $data->applied_jobs_count = PostJobUserApplied::where('user_id', auth()->user()->id)->count();
-        $data->job_alerts_count = 0;
-        $postJobObj = new PostJob();
-        $jobSql = $postJobObj->get_job_search_custom_sql();
-        $data->matched_jobs_count = $jobSql->count();
-        // $data->matched_jobs_sql = $jobSql->toSql();
 
         try {
             return $this->sendResponse(

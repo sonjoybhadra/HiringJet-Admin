@@ -123,6 +123,9 @@ Route::group([
     'middleware' => ['auth:api'],
 ], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    /**
+        * same endpoint for jobseekers and Employers
+    */
     Route::get('/profile', [AuthController::class, 'getUser']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::post('/signup/setup-profile/{user}', [RegistrationController::class, 'setupProfile']);
@@ -228,7 +231,7 @@ Route::group([
     'prefix' => 'employer',
 ], function () {
     Route::post('/logout', [EmployerAuthController::class, 'logout']);
-    Route::get('/profile', [EmployerAuthController::class, 'getUser']);
+    // Route::get('/profile', [EmployerAuthController::class, 'getUser']);
     Route::post('/change-password', [EmployerAuthController::class, 'changePassword']);
     Route::post('/signup/setup-company-profile/{user}', [EmployerRegistrationController::class, 'setupCompanyProfile']);
 
