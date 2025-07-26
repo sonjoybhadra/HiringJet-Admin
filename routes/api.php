@@ -211,6 +211,7 @@ use App\Http\Controllers\Api\Employer\EmployerAuthController;
 use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
 // use App\Http\Controllers\Api\Employer\ForgotpasswordController as EmployerForgotpasswordController;
 use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
+use App\Http\Controllers\Api\Employer\EmployerFolderController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -237,8 +238,9 @@ Route::group([
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
     Route::post('/change-password', [AccountSettingsController::class, 'changePassword']);
 
-
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
+
+    Route::resource('/cv-folder', EmployerFolderController::class);
 
 });
 

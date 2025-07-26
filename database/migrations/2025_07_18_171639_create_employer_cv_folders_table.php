@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('user_employer_id')->constrained('user_employers');
             $table->string('folder_name');
+            $table->foreignId('owner_id')->constrained('users');
+            $table->integer('status');
             $table->softDeletes();
             $table->timestamps();
         });

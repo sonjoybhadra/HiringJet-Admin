@@ -93,41 +93,13 @@ class EmployerAuthController extends BaseApiController
     public function getUser()
     {
         $data = User::where('id', auth()->user()->id)
-                    ->with('user_profile')
-                    ->with('user_skills')
-                    ->with('user_employments')
-                    ->with('user_education')
-                    ->with('user_profile_completed_percentages')
-                    ->with('user_languages')
-                    ->with('user_certification')
-                    ->with('user_online_profile')
-                    ->with('user_work_sample')
-                    ->with('user_it_skill')
+                    ->with('user_employer_details')
                     ->with('user_cv')
                     ->first();
-        $user_employment = UserEmployment::where('user_id', auth()->user()->id)
-                                            ->where('is_current_job', 1)
-                                            ->with('employer')
-                                            ->first();
-        if(!$user_employment){
-            $user_employment = UserEmployment::where('user_id', auth()->user()->id)
-                                            ->latest()
-                                            ->with('employer')
-                                            ->first();
-        }
-        $data->current_designation = $user_employment ? Designation::find($user_employment->last_designation) : [];
-        $data->current_company = $user_employment ? $user_employment->employer : [];
-        $data->shortlisted_jobs_count = ShortlistedJob::where('user_id', auth()->user()->id)->count();
-        $data->applied_jobs_count = PostJobUserApplied::where('user_id', auth()->user()->id)->count();
-        $data->job_alerts_count = 0;
-        $postJobObj = new PostJob();
-        $jobSql = $postJobObj->get_job_search_custom_sql();
-        $data->matched_jobs_count = $jobSql->count();
-
         try {
             return $this->sendResponse(
                 $data,
-                'User Details'
+                'Employer Details'
             );
         } catch (JWTException $exception) {
             return $this->sendError('Error', 'Sorry, something went wrong, unable to fetch user details.',  Response::HTTP_INTERNAL_SERVER_ERROR);
