@@ -53,12 +53,13 @@ class TableController extends Controller
             $query->leftJoin('courses', DB::raw("CAST($table.course_id AS TEXT)"), '=', DB::raw("CAST(courses.id AS TEXT)"));
             $query->leftJoin('qualifications', DB::raw("CAST($table.qualification_id AS TEXT)"), '=', DB::raw("CAST(qualifications.id AS TEXT)"));
         }
-        if ($table === 'users') {
+        if ($table === 'users' && $routes == 'admin-user') {
             $query->leftJoin('roles', DB::raw("CAST($table.role_id AS TEXT)"), '=', DB::raw("CAST(roles.id AS TEXT)"));
-            if($routes == 'admin-user'){
-                // 🚫 Exclude users with role_id 2 and 3
-                $query->whereNotIn("$table.role_id", [2, 3]);
-            }
+            // 🚫 Exclude users with role_id 2 and 3
+            $query->whereNotIn("$table.role_id", [2, 3]);
+        }
+        if ($table === 'users' && $routes == 'jobseeker') {
+            $query->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
         }
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
@@ -68,7 +69,7 @@ class TableController extends Controller
         }
         if ($table === 'report_bugs') {
             $query->leftJoin('users', DB::raw("CAST($table.user_id AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
-        }
+        }    
 
         // Aliased select columns
         $columns = array_map(function ($col) use ($table) {
@@ -117,6 +118,9 @@ class TableController extends Controller
             }
             if ($table === 'post_jobs' && $col === 'created_by') {
                 return 'users.first_name as created_by_name';
+            }
+            if ($table === 'users' && $col == 'profile_completed_percentage') {
+                return 'user_profiles.profile_completed_percentage';
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);

@@ -36,22 +36,30 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'users',
-                'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'created_at', 'status'],
-                'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'created_at'],    // used for rendering
-                'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Created At'],
-                'filename' => "Jobseeker",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'status', 'operator' => '!=', 'value' => 3],
-                    ['column' => 'role_id', 'operator' => '=', 'value' => 3]
-                ],
-                'routePrefix' => 'jobseeker',
-                'showActions' => true, // set to false to hide actions
-                'statusColumn' => 'status' // optional, defaults to 'is_active'
+                  'containerId' => 'table1',
+                  'searchId' => 'search1',
+                  'table' => 'users',
+                  'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'profile_completed_percentage', 'created_at', 'status'],
+                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'profile_completed_percentage', 'created_at'],
+                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Profile Complete (%)', 'Created At'],
+                  'filename' => "Jobseeker",
+                  'orderBy' => 'id',
+                  'orderType' => 'desc',
+                  'conditions' => [
+                     ['column' => 'status', 'operator' => '!=', 'value' => 3],
+                     ['column' => 'role_id', 'operator' => '=', 'value' => 3]
+                  ],
+                  'routePrefix' => 'jobseeker',
+                  'showActions' => true, // set to false to hide actions
+                  'statusColumn' => 'status',
+                  'joins' => [
+                     [
+                        'table' => 'user_profiles',
+                        'localKey' => 'id',
+                        'foreignKey' => 'user_id',
+                        'select' => ['profile_completed_percentage as profile_completed_percentage']
+                     ]
+                  ]
                 ])
             </div>
         </div>
