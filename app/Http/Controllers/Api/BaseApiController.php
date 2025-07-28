@@ -122,9 +122,17 @@ class BaseApiController extends Controller
     }
 
     public function getEmployerDetails(){
-        return User::where('id', auth()->user()->id)
-                                ->with('user_employer_details')
-                                ->first();
+        $data = User::where('id', auth()->user()->id)
+                    ->with('user_employer_details')
+                    ->with('user_folders')
+                    ->first()->toArray();
+
+        if (array_key_exists('user_employer_details', $data)) {
+            $data['user_profile'] = $data['user_employer_details'];
+            unset($data['user_employer_details']);
+        }
+
+        return $data;
     }
 
 }

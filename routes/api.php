@@ -243,6 +243,8 @@ Route::group([
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
+    Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);
+    Route::post('/cv-folder/status/{id}', [EmployerFolderController::class, 'changeStatus']);
     Route::resource('/cv-folder', EmployerFolderController::class);
 
 });

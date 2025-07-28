@@ -17,4 +17,18 @@ class City extends Model
     {
         return $this->BelongsTo(Country::class, 'country_id');
     }
+
+    public function getCityId ($name, $country_id){
+        $city = City::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        if($city){
+            return $city->id;
+        }
+
+        return City::getInsertId([
+                    'name' => $name,
+                    'country_id' => $country_id,
+                    'status'=> 1
+                ]);
+    }
+
 }

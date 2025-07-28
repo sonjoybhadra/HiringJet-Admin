@@ -13,6 +13,10 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 use App\Models\User;
 use App\Models\UserEmployer;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
+
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
 
@@ -192,9 +196,9 @@ class EmployerRegistrationController extends BaseApiController
         $validator = Validator::make($request->all(), [
             // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'address' => 'required|string|max:255',
-            'country_id' => 'required|integer',
-            'state_id' => 'required|integer',
-            'city_id' => 'required|integer',
+            'country' => 'required|string',
+            'state' => 'required|string',
+            'city' => 'required|string',
             // 'address_line_2' => 'nullable|string|max:255',
             'pincode' => 'required|string|max:10',
             'country_code' => 'nullable|required|max:5',
@@ -212,7 +216,7 @@ class EmployerRegistrationController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
+        // try{
             $profile_image = $trade_license = $vat_registration = $logo = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
@@ -239,10 +243,17 @@ class EmployerRegistrationController extends BaseApiController
                 $logo = 'public/storage/uploads/employer/logo/'.$fileName;
             }
 
+            $city = new City();
+            $country = new Country();
+            $state = new State();
+            $country_id = $country->getCountryId($request->country);
+            $state_id = $state->getStateId($request->state, $country_id);
+            $city_id = $city->getCityId($request->city, $country_id);
+
             UserEmployer::where('user_id', $user->id)->update([
-                'country_id'=> $request->country_id,
-                'city_id'=> $request->city_id,
-                'state_id'=> $request->state_id,
+                'country_id'=> $country_id,
+                'city_id'=> $city_id,
+                'state_id'=> $state_id,
                 'address'=> $request->address,
                 'address_line_2'=> $request->address_line_2,
                 'pincode' => $request->pincode,
@@ -260,9 +271,10 @@ class EmployerRegistrationController extends BaseApiController
 
             return $this->sendResponse($this->getEmployerDetails(), 'Setup company profile has successfully done.');
 
-        } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
-        }
+        // } catch (\Exception $e) {
+        //     \Log::info("employerCompleteProfile::", $e->getMessage());
+        //     return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
+        // }
     }
 
 }

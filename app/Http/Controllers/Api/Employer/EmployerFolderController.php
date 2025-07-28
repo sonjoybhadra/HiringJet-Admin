@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
 use App\Models\EmployerCvFolder;
+use App\Models\EmployerCvProfile;
+use App\Models\User;
 
 class EmployerFolderController extends BaseApiController
 {
@@ -16,10 +18,7 @@ class EmployerFolderController extends BaseApiController
     */
     public function index()
     {
-        $list = EmployerCvFolder::where('user_id', auth()->user()->id)
-                                ->orderBy('folder_name', 'ASC')
-                                ->get();
-        return $this->sendResponse($list, 'List of CV folders');
+        return $this->sendResponse($this->getList(), 'List of CV folders');
     }
 
     /**
@@ -51,10 +50,7 @@ class EmployerFolderController extends BaseApiController
                 'status'=> 1
             ]);
 
-            $list = EmployerCvFolder::where('user_id', auth()->user()->id)
-                                ->orderBy('folder_name', 'ASC')
-                                ->get();
-            return $this->sendResponse($list, 'CV folder created successfully.');
+            return $this->sendResponse($this->getList(), 'CV folder created successfully.');
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -65,7 +61,12 @@ class EmployerFolderController extends BaseApiController
      */
     public function show(string $id)
     {
-        $data = EmployerCvFolder::find($id);
+        $data = EmployerCvFolder::where('id', $id)->first()->with('profile_cv')->first();
+        $jobseeker_id = $data->profile_cv ? $data->profile_cv->pluck('jobseeker_id')->toArray() : [];
+        $data->profile_cv_jobseeker = [];
+        if(count($jobseeker_id) > 0){
+            $data->profile_cv_jobseeker = User::with('user_profile')->whereIn('id', $jobseeker_id)->get();
+        }
         return $this->sendResponse($data, 'Details CV folders');
     }
 
@@ -91,7 +92,7 @@ class EmployerFolderController extends BaseApiController
                 return $this->sendError('Error', 'Same name folder is already exists.', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            EmployerCvFolder::where('id', $id)->upate([
+            EmployerCvFolder::where('id', $id)->update([
                 'user_id'=> auth()->user()->id,
                 'user_employer_id'=> auth()->user()->user_employer_details->id,
                 'folder_name'=> strtolower($request->folder_name),
@@ -99,10 +100,7 @@ class EmployerFolderController extends BaseApiController
                 'status'=> 1
             ]);
 
-            $list = EmployerCvFolder::where('user_id', auth()->user()->id)
-                                ->orderBy('folder_name', 'ASC')
-                                ->get();
-            return $this->sendResponse($list, 'CV folder updated successfully.');
+            return $this->sendResponse($this->getList(), 'CV folder updated successfully.');
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -116,9 +114,77 @@ class EmployerFolderController extends BaseApiController
         $data = EmployerCvFolder::findOrFail($id);
         $data->delete();
 
-        $list = EmployerCvFolder::where('user_id', auth()->user()->id)
+        return $this->sendResponse($this->getList(), 'CV folder deleted successfully.');
+    }
+
+    /**
+     * Change the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function changeStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|int'
+        ]);
+
+        $data = EmployerCvFolder::findOrFail($id);
+        $data->status = $request->status;
+        $data->updated_at = date('Y-m-d H:i:s');
+        $data->save();
+
+        return $this->sendResponse($this->getList(), 'CV folder status updated successfully.');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+    */
+    public function saveProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'jobseeker_id' => 'required|integer',
+            'folder_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $has_data = EmployerCvProfile::where('user_id', auth()->user()->id)
+                                        ->where('cv_folders_id', $request->folder_id)
+                                        ->where('jobseeker_id', $request->jobseeker_id)
+                                        ->count();
+            if($has_data > 0){
+                return $this->sendError('Error', 'Same name profile is already present in this folder.', Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            EmployerCvProfile::create([
+                'user_id'=> auth()->user()->id,
+                'cv_folders_id'=> $request->folder_id,
+                'jobseeker_id'=> $request->jobseeker_id
+            ]);
+
+
+            return $this->sendResponse([], 'Profile added in selected folder successfully.');
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private function getList(){
+        $list = EmployerCvFolder::with('profile_cv')
+                                ->where('user_id', auth()->user()->id)
                                 ->orderBy('folder_name', 'ASC')
                                 ->get();
-        return $this->sendResponse($list, 'CV folder deleted successfully.');
+        if($list->count() > 0){
+            foreach($list as $index => $val){
+                $list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
+            }
+        }
+
+        return $list;
     }
+
 }

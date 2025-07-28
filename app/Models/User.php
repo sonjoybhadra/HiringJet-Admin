@@ -219,7 +219,17 @@ class User extends Authenticatable implements JWTSubject
                     ->with('business')
                     ->with('industry')
                     ->with('country')
+                    ->with('state')
                     ->with('city');
+    }
+
+       /**
+     * Get the profile details of associated user.
+    */
+    public function user_folders(): HasMany
+    {
+        return $this->hasMany(EmployerCvFolder::class, 'user_id')
+                    ->with('profile_cv');
     }
 
 }

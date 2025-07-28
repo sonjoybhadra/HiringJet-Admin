@@ -17,4 +17,22 @@ class State extends Model
     {
         return $this->BelongsTo(Country::class, 'country_id');
     }
+
+    public function getStateId ($name, $country_id){
+        $state = State::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        if($state){
+            return $state->id;
+        }
+
+        $country = Country::find($country_id);
+        return State::getInsertId([
+                    'name' => $name,
+                    'country_id' => $country_id,
+                    'country_code' => $country->country_code,
+                    'country_name' => $country->name,
+                    'state_code' => $name,
+                    'is_active'=> 1
+                ]);
+    }
+
 }

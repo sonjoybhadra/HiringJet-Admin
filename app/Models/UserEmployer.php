@@ -61,4 +61,9 @@ class UserEmployer extends Model
         return $this->BelongsTo(City::class, 'city_id');
     }
 
+    public function state(): BelongsTo
+    {
+        return $this->BelongsTo(State::class, 'state_id');
+    }
+
 }
