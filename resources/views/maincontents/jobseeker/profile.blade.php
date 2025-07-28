@@ -683,28 +683,58 @@ $controllerRoute = $module['controller_route'];
                             <h5>Desired Jobs</h5>
                             <div class="card mb-4">
                                 <div class="card-body">
-                                  <h6 class="mt-3">Prefered Designation</h6>
-                                  <?php
-                                  $preferred_designations = (($row->preferred_designation != '')?json_decode($row->preferred_designation):[]);
-                                  $preferred_locations = (($row->preferred_location != '')?json_decode($row->preferred_location):[]);
-                                  $preferred_industries = (($row->preferred_industry != '')?json_decode($row->preferred_industry):[]);
-                                  ?>
-                                  <?php if(!empty($preferred_designations)){ foreach($preferred_designations as $preferred_designation){?>
-                                    <button type="button" class="btn rounded-pill btn-outline-secondary waves-effect mr-5"><?=$preferred_designation->name?></button>
-                                  <?php } }?>
+                                  <div class="row">
+                                    <h6 class="mt-3">Job Type</h6>
+                                    <div class="col-md-6">
+                                      <h6 class="mt-3"><input type="checkbox" <?=(($row->job_type_temp)?'checked':'')?>> Temp</h6>
+                                      <ul style="list-style: none;">
+                                        <li><input type="checkbox" <?=(($row->temp_remote)?'checked':'')?>> Remote</li>
+                                        <li><input type="checkbox" <?=(($row->temp_onsite)?'checked':'')?>> On-Site</li>
+                                        <li><input type="checkbox" <?=(($row->temp_hybrid)?'checked':'')?>> Hybrid Roles</li>
+                                      </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                      <h6 class="mt-3">
+                                        <input type="checkbox" <?=(($row->job_type_permanent)?'checked':'')?>> Permanent
+                                      </h6>
+                                      <ul style="list-style: none;">
+                                        <li><input type="checkbox" <?=(($row->permanent_remote)?'checked':'')?>> Remote</li>
+                                        <li><input type="checkbox" <?=(($row->permanent_onsite)?'checked':'')?>> On-Site</li>
+                                        <li><input type="checkbox" <?=(($row->permanent_hybrid)?'checked':'')?>> Hybrid Roles</li>
+                                      </ul>
+                                    </div>
 
-                                  <h6 class="mt-3">Prefered Location</h6>
-                                  <?php if(!empty($preferred_locations)){ foreach($preferred_locations as $preferred_location){?>
-                                    <button type="button" class="btn rounded-pill btn-outline-secondary waves-effect mr-5"><?=$preferred_location->name?></button>
-                                  <?php } }?>
+                                    <div class="col-md-6">
+                                      <h6 class="mt-3">Prefered Designation</h6>
+                                      <?php
+                                      $preferred_designations = (($row->preferred_designation != '')?json_decode($row->preferred_designation):[]);
+                                      $preferred_locations = (($row->preferred_location != '')?json_decode($row->preferred_location):[]);
+                                      $preferred_industries = (($row->preferred_industry != '')?json_decode($row->preferred_industry):[]);
+                                      ?>
+                                      <?php if(!empty($preferred_designations)){ foreach($preferred_designations as $preferred_designation){?>
+                                        <button type="button" class="btn rounded-pill btn-outline-secondary waves-effect mr-5"><?=$preferred_designation->name?></button>
+                                      <?php } }?>
+                                    </div>
 
-                                  <h6 class="mt-3">Prefered Industry</h6>
-                                  <?php if(!empty($preferred_industries)){ foreach($preferred_industries as $preferred_industry){?>
-                                    <button type="button" class="btn rounded-pill btn-outline-secondary waves-effect mr-5"><?=$preferred_industry->name?></button>
-                                  <?php } }?>
+                                    <div class="col-md-6">
+                                      <h6 class="mt-3">Prefered Location</h6>
+                                      <?php if(!empty($preferred_locations)){ foreach($preferred_locations as $preferred_location){?>
+                                        <button type="button" class="btn rounded-pill btn-outline-secondary waves-effect mr-5"><?=$preferred_location->name?></button>
+                                      <?php } }?>
+                                    </div>
 
-                                  <h6 class="mt-3">Availability to join</h6>
-                                  <span><?=(($getNoticePeriod)?$getNoticePeriod->name:'')?></span>
+                                    <div class="col-md-6">
+                                      <h6 class="mt-3">Prefered Industry</h6>
+                                      <?php if(!empty($preferred_industries)){ foreach($preferred_industries as $preferred_industry){?>
+                                        <button type="button" class="btn rounded-pill btn-outline-secondary waves-effect mr-5"><?=$preferred_industry->name?></button>
+                                      <?php } }?>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                      <h6 class="mt-3">Availability to join</h6>
+                                      <span><?=(($getNoticePeriod)?$getNoticePeriod->name:'')?></span>
+                                    </div>
+                                  </div>
                                 </div>
                             </div>
                           </div>
@@ -816,7 +846,7 @@ $controllerRoute = $module['controller_route'];
                                   </div>
                               </div>
                           </div>
-                          <div class="tab-pane fade show active" id="navs-pills-justified-1" role="tabpanel">
+                          <div class="tab-pane fade" id="navs-pills-justified-10" role="tabpanel">
                             <h5>Profile Percentage</h5>
                             <div class="card mb-4">
                               <div class="card-body">
