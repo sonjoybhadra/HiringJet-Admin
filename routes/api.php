@@ -162,7 +162,7 @@ Route::group([
     Route::post('/update-employment-details/{id}', [EditEmploymentDetailsController::class, 'updateEmploymentDetails']);
     Route::post('/post-employment-details', [EditEmploymentDetailsController::class, 'postEmploymentDetails']);
 
-    Route::delete('/delete-cv', [EditResumeController::class, 'deleteResume']);
+    Route::post('/delete-cv', [EditResumeController::class, 'deleteResume']);
     Route::post('/post-cv', [EditResumeController::class, 'postResume']);
 
     Route::get('/get-certifications', [EditAccomplishmentsController::class, 'getCertificationDetails']);
