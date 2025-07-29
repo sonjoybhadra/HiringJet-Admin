@@ -29,6 +29,7 @@ use App\Models\Country;
 use App\Models\Designation;
 use App\Models\Industry;
 use App\Models\Language;
+use App\Models\University;
 use App\Models\UserLanguage;
 
 class RegistrationController extends BaseApiController
@@ -367,7 +368,7 @@ class RegistrationController extends BaseApiController
             'qualification' => 'required|integer',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
-            'university' => 'required|integer',
+            'university' => 'required',
             'passing_year' => 'required|integer',
             'location' => 'required|integer',
             'preferred_designation' => 'nullable|array',
@@ -431,6 +432,7 @@ class RegistrationController extends BaseApiController
                 $this->calculate_profile_completed_percentage($user->id, 'desired-job'); //Desired jobs
             }
             if(!empty($request->qualification)){
+                $university = new University();
                 UserEducation::where('user_id', $user->id)->delete();
                 UserEducation::create([
                     'user_id'=> $user->id,
@@ -438,7 +440,7 @@ class RegistrationController extends BaseApiController
                     'course_id'=> $request->course,
                     'specialization_id'=> $request->specialization,
                     'location_id' => $request->location,
-                    'university_id'=> $request->university,
+                    'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
                     'passing_year'=> $request->passing_year
                 ]);
                 $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes

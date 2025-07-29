@@ -97,20 +97,25 @@ class JobSearchController extends BaseApiController
                     });
                 }
             }
-
+            $country_ids = $city_ids = $location_array = [];
             if(!empty($request->location)){
                 $location_array = explode(',', $request->location);
-                $country_ids = Country::whereIn('name', $location_array)->get()->pluck('id')->toArray();
-                $city_ids = City::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                if(count($location_array) > 1){
+                    $country_ids = Country::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                    $city_ids = City::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                }else{
+                    $country_ids = Country::whereRaw('LOWER(name) LIKE ?', [strtolower($request->location)])->get()->pluck('id')->toArray();
+                    $city_ids = City::whereRaw('LOWER(name) LIKE ?', [strtolower($request->location)])->get()->pluck('id')->toArray();
+                }
                 if(!empty($country_ids)){
-                    $sql->where(function ($q) use ($location_array) {
-                        foreach ($location_array as $tag) {
+                    $sql->where(function ($q) use ($country_ids) {
+                        foreach ($country_ids as $tag) {
                             $q->orWhereRaw(
                                 "CASE
-                                    WHEN location_country_names IS NULL OR location_country_names = '' THEN FALSE
-                                    ELSE location_country_names::jsonb @> ?::jsonb
+                                    WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
+                                    ELSE location_countries::jsonb @> ?::jsonb
                                 END",
-                                [json_encode([$tag])]
+                                [json_encode([(string)$tag])]
                             );
                         }
                     });
@@ -120,10 +125,10 @@ class JobSearchController extends BaseApiController
                         foreach ($location_array as $tag) {
                             $q->orWhereRaw(
                                 "CASE
-                                    WHEN location_city_names IS NULL OR location_city_names = '' THEN FALSE
-                                    ELSE location_city_names::jsonb @> ?::jsonb
+                                    WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
+                                    ELSE location_cities::jsonb @> ?::jsonb
                                 END",
-                                [json_encode([$tag])]
+                                [json_encode([(string)$tag])]
                             );
                         }
                     });
@@ -239,9 +244,13 @@ class JobSearchController extends BaseApiController
             return $this->sendResponse([
                     'jobs'=> $list,
                     'sql'=> $pagination_sql->toSql(),
+                    'sql_params'=> $pagination_sql->getBindings(),
                     'filter_array'=> $filter_data_array,
                     'page'=> $request->page,
-                    'take'=> ['limit'=> $limit, 'offset'=> $offset]
+                    'take'=> ['limit'=> $limit, 'offset'=> $offset],
+                    'country_ids'=> $country_ids,
+                    'city_ids'=> $city_ids,
+                    'location_array'=> $location_array,
                 ],
                 'List search jobs'
             );

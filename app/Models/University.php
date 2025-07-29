@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class University extends Model
 {
     use SoftDeletes;
+
+    public function getUniversityId ($name){
+        $university = City::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        if($university){
+            return $university->id;
+        }
+
+        return University::getInsertId([
+                    'name' => $name,
+                    'status'=> 1
+                ]);
+    }
 }
