@@ -121,8 +121,8 @@ class JobSearchController extends BaseApiController
                     });
                 }
                 if(!empty($city_ids)){
-                    $sql->where(function ($q) use ($location_array) {
-                        foreach ($location_array as $tag) {
+                    $sql->where(function ($q) use ($city_ids) {
+                        foreach ($city_ids as $tag) {
                             $q->orWhereRaw(
                                 "CASE
                                     WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
