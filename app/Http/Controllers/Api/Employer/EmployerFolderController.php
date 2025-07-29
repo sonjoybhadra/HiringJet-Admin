@@ -122,7 +122,7 @@ class EmployerFolderController extends BaseApiController
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
+    */
     public function changeStatus(Request $request, $id)
     {
         $request->validate([

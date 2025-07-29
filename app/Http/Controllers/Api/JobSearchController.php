@@ -230,7 +230,7 @@ class JobSearchController extends BaseApiController
             $sql->with('designationRelation');
             $sql->with('functionalArea');
             // $sql->with('applied_users');
-            $all_data_sql = $pagination_sql = $sql->latest();
+            $pagination_sql = $sql->latest();
 
             $limit = 25;
             $offset = 0;
@@ -238,11 +238,12 @@ class JobSearchController extends BaseApiController
                 $limit += 10;
                 //$offset = 25 + (($request->page - 2) * $limit);
             }
-
+            $all_jobs_count = (clone $pagination_sql)->count(); // Total without pagination
+            $filter_data_array = $this->getFilterParametersArray((clone $pagination_sql)->get());
             $list = $pagination_sql->limit($limit)->offset($offset)->get();
-            $filter_data_array = $this->getFilterParametersArray($all_data_sql->get());
             return $this->sendResponse([
                     'jobs'=> $list,
+                    'all_jobs_count'=> $all_jobs_count,
                     'sql'=> $pagination_sql->toSql(),
                     'sql_params'=> $pagination_sql->getBindings(),
                     'filter_array'=> $filter_data_array,
@@ -270,11 +271,13 @@ class JobSearchController extends BaseApiController
             $data_ids = json_decode($job->location_countries, true);
             if (is_array($data_ids)) {
                 foreach ($data_ids as $id) {
-                    if (!isset($data_count_country_array[$id])) {
-                        $data = Country::find($id);
-                        $data_count_country_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                    if(!empty($id)){
+                        if (!isset($data_count_country_array[$id])) {
+                            $data = Country::find($id);
+                            $data_count_country_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                        }
+                        $data_count_country_array[$id]['count'] = $data_count_country_array[$id]['count']+1;
                     }
-                    $data_count_country_array[$id]['count'] = $data_count_country_array[$id]['count']+1;
                 }
             }
             // end location country
@@ -282,11 +285,13 @@ class JobSearchController extends BaseApiController
             $data_ids = json_decode($job->location_cities, true);
             if (is_array($data_ids)) {
                 foreach ($data_ids as $id) {
-                    if (!isset($data_count_city_array[$id])) {
-                        $data = City::find($id);
-                        $data_count_city_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                    if(!empty($id)){
+                        if (!isset($data_count_city_array[$id])) {
+                            $data = City::find($id);
+                            $data_count_city_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                        }
+                        $data_count_city_array[$id]['count'] = $data_count_city_array[$id]['count']+1;
                     }
-                    $data_count_city_array[$id]['count'] = $data_count_city_array[$id]['count']+1;
                 }
             }
             // end location Clty
@@ -328,8 +333,8 @@ class JobSearchController extends BaseApiController
             // get employers list
             if (!empty($job->employer_id)) {
                 if (!isset($data_count_employers_array[$job->employer_id])) {
-                     $data = Employer::find($job->employer_id);
-                    $data_count_employers_array[$job->employer_id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                    $data = Employer::find($job->employer_id);
+                    $data_count_employers_array[$job->employer_id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $job->employer_id];
                 }
                 $data_count_employers_array[$job->employer_id]['count'] = $data_count_employers_array[$job->employer_id]['count']+1;
             }

@@ -215,6 +215,7 @@ use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
 // use App\Http\Controllers\Api\Employer\ForgotpasswordController as EmployerForgotpasswordController;
 use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
 use App\Http\Controllers\Api\Employer\EmployerFolderController;
+use App\Http\Controllers\Api\Employer\EmployerUserController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -246,6 +247,10 @@ Route::group([
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);
     Route::post('/cv-folder/status/{id}', [EmployerFolderController::class, 'changeStatus']);
     Route::resource('/cv-folder', EmployerFolderController::class);
+
+    Route::post('/user/delete/{id}', [EmployerUserController::class, 'destroy']);
+    Route::post('/user/status/{id}', [EmployerUserController::class, 'changeStatus']);
+    Route::resource('/user', EmployerUserController::class);
 
 });
 

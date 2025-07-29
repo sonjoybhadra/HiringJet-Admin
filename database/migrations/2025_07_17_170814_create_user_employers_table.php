@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('country_code', 10);
             $table->string('phone', 15)->unique();
-            $table->foreignId('business_id')->constrained('employers');
+            $table->foreignId('business_id')->constrained('employers')->nullable()->nullOnDelete();
             $table->foreignId('designation_id')->constrained('designations');
             $table->foreignId('industrie_id')->constrained('industries')->nullable()->nullOnDelete();
             $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
