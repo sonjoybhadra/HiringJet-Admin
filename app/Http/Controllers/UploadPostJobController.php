@@ -26,6 +26,7 @@ use App\Helpers\Helper;
 use Auth;
 use Session;
 use Hash;
+use DB;
 
 class UploadPostJobController extends Controller
 {
@@ -263,11 +264,19 @@ class UploadPostJobController extends Controller
                                     if($getNationalityID){
                                         $nationality = $getNationalityID->id;
                                     } else {
-                                        $fields1 = [
-                                            'name' => $Nationality,
-                                            'status' => 1,
-                                        ];
-                                        $nationality = Nationality::insertGetId($fields1);
+                                        // $fields1 = [
+                                        //     'name' => $Nationality,
+                                        //     'status' => 1,
+                                        // ];
+                                        // $nationality = Nationality::insertGetId($fields1);
+
+                                        DB::table('nationalities')->updateOrInsert(
+                                            ['name' => $Nationality],     // Match condition
+                                            ['status' => 1]               // Will update if exists
+                                        );
+
+                                        $nationality = Nationality::where('name', $Nationality)->first();
+                                        $nationality = $nationality->id;
                                     }
 
                                     // contract type
@@ -287,11 +296,19 @@ class UploadPostJobController extends Controller
                                     if($getFunctionalAreaID){
                                         $functional_area = $getFunctionalAreaID->id;
                                     } else {
-                                        $fields1 = [
-                                            'name' => $Functional_Area,
-                                            'status' => 1,
-                                        ];
-                                        $functional_area = FunctionalArea::insertGetId($fields1);
+                                        // $fields1 = [
+                                        //     'name' => $Functional_Area,
+                                        //     'status' => 1,
+                                        // ];
+                                        // $functional_area = FunctionalArea::insertGetId($fields1);
+
+                                        DB::table('functional_areas')->updateOrInsert(
+                                            ['name' => $Functional_Area],     // Match condition
+                                            ['status' => 1]               // Will update if exists
+                                        );
+
+                                        $functional_area = FunctionalArea::where('name', $Functional_Area)->first();
+                                        $functional_area = $functional_area->id;
                                     }
 
                                     // skill
