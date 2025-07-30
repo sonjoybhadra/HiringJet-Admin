@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Course;
+use App\Models\Specialization;
 use App\Models\University;
 use App\Models\UserEducation;
 
@@ -40,8 +42,8 @@ class EditEducationalDetailsController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'qualification' => 'required|integer',
             'university' => 'required',
-            'course' => 'required|integer',
-            'specialization' => 'required|integer',
+            'course' => 'required',
+            'specialization' => 'required',
             'course_type' => 'required|string',
             'course_start_year' => 'required|integer',
             'course_end_year' => 'required|integer',
@@ -54,12 +56,19 @@ class EditEducationalDetailsController extends BaseApiController
         }
         try {
             $university = new University();
+            $course = new Course();
+            $specialization = new Specialization();
+
+            $qualification_id = $request->qualification;
+            $university_id = is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university);
+            $course_id = is_numeric($request->course) ? $request->course : $course->getCourseId($request->course, $qualification_id);
+            $specialization_id = is_numeric($request->specialization) ? $request->specialization : $specialization->getSpecializationId($request->specialization, $course_id, $qualification_id);
 
             UserEducation::where('id', $id)->update([
                 'qualification_id'=> $request->qualification,
-                'university_id'=> is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university),
-                'course_id'=> $request->course,
-                'specialization_id'=> $request->specialization,
+                'university_id'=> $university_id,
+                'course_id'=> $course_id,
+                'specialization_id'=> $specialization_id,
                 'course_type'=> $request->course_type,
                 'course_start_year'=> $request->course_start_year,
                 'course_end_year'=> $request->course_end_year,
@@ -81,8 +90,8 @@ class EditEducationalDetailsController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'qualification' => 'required|integer',
             'university' => 'required',
-            'course' => 'required|integer',
-            'specialization' => 'required|integer',
+            'course' => 'required',
+            'specialization' => 'required',
             'course_type' => 'required|string',
             'course_start_year' => 'required|integer',
             'course_end_year' => 'required|integer',
@@ -95,13 +104,21 @@ class EditEducationalDetailsController extends BaseApiController
         }
         try {
             $university = new University();
+            $course = new Course();
+            $specialization = new Specialization();
+
+            $qualification_id = $request->qualification;
+            $university_id = is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university);
+            $course_id = is_numeric($request->course) ? $request->course : $course->getCourseId($request->course, $qualification_id);
+            $specialization_id = is_numeric($request->specialization) ? $request->specialization : $specialization->getSpecializationId($request->specialization, $course_id, $qualification_id);
+
             // UserEducation::where('user_id', auth()->user()->id)->delete();
             UserEducation::insert([
                 'user_id'=> auth()->user()->id,
                 'qualification_id'=> $request->qualification,
-                'university_id'=> is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university),
-                'course_id'=> $request->course,
-                'specialization_id'=> $request->specialization,
+                'university_id'=> $university_id,
+                'course_id'=> $course_id,
+                'specialization_id'=> $specialization_id,
                 'course_type'=> $request->course_type,
                 'course_start_year'=> $request->course_start_year,
                 'course_end_year'=> $request->course_end_year,

@@ -17,4 +17,18 @@ class Course extends Model
     {
         return $this->BelongsTo(Qualification::class, 'qualification_id');
     }
+
+    public function getCourseId ($name, $qualification_id){
+        $course = Course::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        if($course){
+            return $course->id;
+        }
+
+        return Course::insertGetId([
+                    'qualification_id' => $qualification_id,
+                    'name' => ucwords($name),
+                    'status'=> 1
+                ]);
+    }
+
 }
