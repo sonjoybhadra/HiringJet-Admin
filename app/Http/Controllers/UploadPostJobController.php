@@ -360,8 +360,8 @@ class UploadPostJobController extends Controller
                                         $walkin_latitude = $Walkin_Latitude;
                                         $walkin_longitude = $Walkin_Longitude;
                                         $walkin_details = $Walkin_Details;
-                                    } elseif ($Application_Through === 'Link') {
-                                        $application_through = 'Link';
+                                    } elseif ($Application_Through === 'Apply To Link') {
+                                        $application_through = 'Apply To Link';
                                         $apply_on_email = null;
                                         $apply_on_link = $Apply_on_link;
                                         $walkin_address1 = $Walkin_address_1;
