@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
-use App\Models\UserProfile;
+use App\Models\University;
 use App\Models\UserEducation;
 
 class EditEducationalDetailsController extends BaseApiController
@@ -53,9 +53,10 @@ class EditEducationalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
+            $university = new University();
             UserEducation::where('id', $id)->update([
                 'qualification_id'=> $request->qualification,
-                'university_id'=> $request->university,
+                'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
                 'course_id'=> $request->course,
                 'specialization_id'=> $request->specialization,
                 'course_type'=> $request->course_type,
@@ -92,11 +93,12 @@ class EditEducationalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
+            $university = new University();
             // UserEducation::where('user_id', auth()->user()->id)->delete();
             UserEducation::insert([
                 'user_id'=> auth()->user()->id,
                 'qualification_id'=> $request->qualification,
-                'university_id'=> $request->university,
+                'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
                 'course_id'=> $request->course,
                 'specialization_id'=> $request->specialization,
                 'course_type'=> $request->course_type,
