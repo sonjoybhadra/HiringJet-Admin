@@ -386,7 +386,7 @@ class UploadPostJobController extends Controller
                                         'status'                    => 1,
                                         'upload_id'                 => $upload_id,
                                     ];
-                                    // Helper::pr($fields);
+                                    Helper::pr($fields);
                                     PostJob::insertGetId($fields);
                                 }
                             }
