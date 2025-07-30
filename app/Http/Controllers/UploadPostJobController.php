@@ -106,12 +106,14 @@ class UploadPostJobController extends Controller
                             fclose($handle);
                         }
                     /* extract csv file */
-                    // Helper::pr($rows);
+                    Helper::pr($rows,0);
                     /* insert data into post_jobs table */
                         if($rows){
                             for($k=0;$k<count($rows);$k++){
                                 // skip first row for header
                                 if($k > 0){
+                                    echo $k;
+                                    echo $rows[$k][1];die;
                                     $Sl_No = $rows[$k][0];
                                     $Designation = $rows[$k][1];
                                     $Employer = $rows[$k][2];
