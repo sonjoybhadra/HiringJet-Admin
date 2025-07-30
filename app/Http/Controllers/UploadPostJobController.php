@@ -418,7 +418,7 @@ class UploadPostJobController extends Controller
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
                                         // 'posting_open_date'         => $Posting_Open_Date,
                                         // 'posting_close_date'        => $Posting_Close_Date,
-                                        'application_through'       => $Application_Through,
+                                        'application_through'       => '',
                                         'apply_on_email'            => $apply_on_email,
                                         'apply_on_link'             => $apply_on_link,
                                         'walkin_address1'           => $walkin_address1,
