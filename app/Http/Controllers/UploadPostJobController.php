@@ -302,6 +302,9 @@ class UploadPostJobController extends Controller
                                         // ];
                                         // $functional_area = FunctionalArea::insertGetId($fields1);
 
+                                        $maxId = DB::table('functional_areas')->max('id');
+                                        DB::statement("ALTER SEQUENCE functional_areas_id_seq RESTART WITH " . ($maxId + 1));
+
                                         DB::table('functional_areas')->updateOrInsert(
                                             ['name' => $Functional_Area],     // Match condition
                                             ['status' => 1]               // Will update if exists
