@@ -340,7 +340,8 @@ class UploadPostJobController extends Controller
                                         }
                                     }
 
-                                    
+                                    $cleanDescription = $this->normalizeText($Job_Description);
+                                    $cleanRequirement = $this->normalizeText($Requirement);
 
                                     $fields = [
                                         'sl_no'                     => $next_sl_no,
@@ -362,8 +363,8 @@ class UploadPostJobController extends Controller
                                         'functional_area'           => $functional_area,
                                         'min_exp_year'              => $Min_Experience,
                                         'max_exp_year'              => $Max_Experience,
-                                        'job_description'           => $Job_Description,
-                                        'requirement'               => $Requirement,
+                                        'job_description'           => $cleanDescription,
+                                        'requirement'               => $cleanRequirement,
                                         'skill_ids'                 => ((!empty($skill_ids))?json_encode($skill_ids):''),
                                         'skill_names'               => ((!empty($Skills))?json_encode(explode(',', $Skills)):''),
                                         'expected_close_date'       => null,
@@ -412,6 +413,18 @@ class UploadPostJobController extends Controller
             }
 
             return view('maincontents.' . $page_name, $data);
+        }
+        public function normalizeText($text) {
+            return strtr($text, [
+                "\x91" => "'", // left single quote
+                "\x92" => "'", // right single quote
+                "\x93" => '"', // left double quote
+                "\x94" => '"', // right double quote
+                "\x96" => '-', // en dash
+                "\x97" => '--', // em dash
+                "\x85" => '...', // ellipsis
+                "\x95" => '*', // bullet
+            ]);
         }
     /* list */
     /* delete */
