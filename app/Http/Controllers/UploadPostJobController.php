@@ -273,6 +273,9 @@ class UploadPostJobController extends Controller
                                         // ];
                                         // $nationality = Nationality::insertGetId($fields1);
 
+                                        $maxId = DB::table('nationalities')->max('id');
+                                        DB::statement("ALTER SEQUENCE nationalities_id_seq RESTART WITH " . ($maxId + 1));
+
                                         DB::table('nationalities')->updateOrInsert(
                                             ['name' => $Nationality],     // Match condition
                                             ['status' => 1]               // Will update if exists
