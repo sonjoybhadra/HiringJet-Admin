@@ -347,7 +347,7 @@ class UploadPostJobController extends Controller
                                     $maxSalary = $Max_Salary !== '' ? $Max_Salary : null;
                                     $isNegotiable = $Is_Salary_Negotiable !== '' ? 1 : 0;
 
-                                    if ($data['application_through'] === 'Apply To Email') {
+                                    if ($Application_Through === 'Apply To Email') {
                                         $apply_on_email = $Apply_on_email;
                                         $apply_on_link = null;
                                         $walkin_address1 = $Walkin_address_1;
@@ -359,7 +359,7 @@ class UploadPostJobController extends Controller
                                         $walkin_latitude = $Walkin_Latitude;
                                         $walkin_longitude = $Walkin_Longitude;
                                         $walkin_details = $Walkin_Details;
-                                    } elseif ($data['application_through'] === 'Link') {
+                                    } elseif ($Application_Through === 'Link') {
                                         $apply_on_email = null;
                                         $apply_on_link = $Apply_on_link;
                                         $walkin_address1 = $Walkin_address_1;
@@ -371,7 +371,7 @@ class UploadPostJobController extends Controller
                                         $walkin_latitude = $Walkin_Latitude;
                                         $walkin_longitude = $Walkin_Longitude;
                                         $walkin_details = $Walkin_Details;
-                                    } elseif ($data['application_through'] === 'Link') {
+                                    } elseif ($Application_Through === 'Link') {
                                         $apply_on_email = null;
                                         $apply_on_link = null;
                                         $walkin_address1 = $Walkin_address_1;
