@@ -106,7 +106,7 @@ class UploadPostJobController extends Controller
                             fclose($handle);
                         }
                     /* extract csv file */
-                    Helper::pr($rows,0);
+                    // Helper::pr($rows,0);
                     // echo count($rows);
                     /* insert data into post_jobs table */
                         if($rows){
@@ -389,16 +389,16 @@ class UploadPostJobController extends Controller
                                         'status'                    => 1,
                                         'upload_id'                 => $upload_id,
                                     ];
-                                    Helper::pr($fields,0);
+                                    // Helper::pr($fields,0);
 
-                                    // $maxId = DB::table('post_jobs')->max('id');
-                                    // DB::statement("ALTER SEQUENCE post_jobs_id_seq RESTART WITH " . ($maxId + 1));
+                                    $maxId = DB::table('post_jobs')->max('id');
+                                    DB::statement("ALTER SEQUENCE post_jobs_id_seq RESTART WITH " . ($maxId + 1));
 
-                                    // PostJob::insert($fields);
+                                    PostJob::insert($fields);
                                 }
                             }
                         }
-                        die;
+                        // die;
                     /* insert data into post_jobs table */
                     // Helper::pr($rows);
                     // die;
