@@ -348,6 +348,7 @@ class UploadPostJobController extends Controller
                                     $isNegotiable = $Is_Salary_Negotiable !== '' ? 1 : 0;
 
                                     if ($Application_Through === 'Apply To Email') {
+                                        $application_through = 'Apply To Email';
                                         $apply_on_email = $Apply_on_email;
                                         $apply_on_link = null;
                                         $walkin_address1 = $Walkin_address_1;
@@ -360,6 +361,7 @@ class UploadPostJobController extends Controller
                                         $walkin_longitude = $Walkin_Longitude;
                                         $walkin_details = $Walkin_Details;
                                     } elseif ($Application_Through === 'Link') {
+                                        $application_through = 'Link';
                                         $apply_on_email = null;
                                         $apply_on_link = $Apply_on_link;
                                         $walkin_address1 = $Walkin_address_1;
@@ -371,7 +373,8 @@ class UploadPostJobController extends Controller
                                         $walkin_latitude = $Walkin_Latitude;
                                         $walkin_longitude = $Walkin_Longitude;
                                         $walkin_details = $Walkin_Details;
-                                    } elseif ($Application_Through === 'Link') {
+                                    } elseif ($Application_Through === 'Hiring Jet') {
+                                        $application_through = 'Hiring Jet';
                                         $apply_on_email = null;
                                         $apply_on_link = null;
                                         $walkin_address1 = $Walkin_address_1;
@@ -384,6 +387,8 @@ class UploadPostJobController extends Controller
                                         $walkin_longitude = $Walkin_Longitude;
                                         $walkin_details = $Walkin_Details;
                                     }
+
+                                    
 
                                     $fields = [
                                         'sl_no'                     => $next_sl_no,
@@ -418,7 +423,7 @@ class UploadPostJobController extends Controller
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
                                         // 'posting_open_date'         => $Posting_Open_Date,
                                         // 'posting_close_date'        => $Posting_Close_Date,
-                                        'application_through'       => '',
+                                        'application_through'       => $application_through,
                                         'apply_on_email'            => $apply_on_email,
                                         'apply_on_link'             => $apply_on_link,
                                         'walkin_address1'           => $walkin_address1,
