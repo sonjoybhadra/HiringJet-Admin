@@ -25,7 +25,7 @@ class City extends Model
         }
 
         return City::insertGetId([
-                    'name' => $name,
+                    'name' => ucwords($name),
                     'country_id' => $country_id,
                     'status'=> 1
                 ]);

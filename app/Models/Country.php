@@ -16,7 +16,7 @@ class Country extends Model
         }
 
         return Country::insertGetId([
-                    'name'=> $name,
+                    'name'=> ucwords($name),
                     'country_code'=> $name,
                     'country_flag'=> "",
                     'status'=> 1

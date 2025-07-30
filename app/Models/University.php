@@ -16,7 +16,7 @@ class University extends Model
         }
 
         return University::insertGetId([
-                    'name' => $name,
+                    'name' => ucwords($name),
                     'status'=> 1
                 ]);
     }
