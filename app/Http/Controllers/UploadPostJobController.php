@@ -343,6 +343,10 @@ class UploadPostJobController extends Controller
                                     $cleanDescription = $this->normalizeText($Job_Description);
                                     $cleanRequirement = $this->normalizeText($Requirement);
 
+                                    $minSalary = $Min_Salary !== '' ? $Min_Salary : null;
+                                    $maxSalary = $Max_Salary !== '' ? $Max_Salary : null;
+                                    $isNegotiable = $Is_Salary_Negotiable !== '' ? 1 : 0;
+
                                     $fields = [
                                         'sl_no'                     => $next_sl_no,
                                         'job_no'                    => $job_no,
@@ -369,9 +373,9 @@ class UploadPostJobController extends Controller
                                         'skill_names'               => ((!empty($Skills))?json_encode(explode(',', $Skills)):''),
                                         'expected_close_date'       => null,
                                         'currency'                  => strip_tags($Currency),
-                                        'min_salary'                => $Min_Salary,
-                                        'max_salary'                => $Max_Salary,
-                                        'is_salary_negotiable'      => (($Is_Salary_Negotiable == 'YES')?1:0),
+                                        'min_salary'                => $minSalary,
+                                        'max_salary'                => $maxSalary,
+                                        'is_salary_negotiable'      => $isNegotiable,
                                         'posting_open_date'         => (($Posting_Open_Date != '')?date_format(date_create($Posting_Open_Date), "Y-m-d"):null),
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
                                         // 'posting_open_date'         => $Posting_Open_Date,
