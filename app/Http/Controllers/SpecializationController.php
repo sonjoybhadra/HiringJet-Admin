@@ -45,8 +45,9 @@ class SpecializationController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'course_id'              => 'required',
-                    'name'                   => 'required',
+                    'course_id'                 => 'required',
+                    'name'                      => 'required',
+                    'rank'                      => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -66,6 +67,7 @@ class SpecializationController extends Controller
                         'qualification_id'      => (($getCourse)?$getCourse->qualification_id:0),
                         'course_id'             => strip_tags($postData['course_id']),
                         'name'                  => strip_tags($postData['name']),
+                        'rank'                  => strip_tags($postData['rank']),
                     ];
                     Specialization::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -94,8 +96,9 @@ class SpecializationController extends Controller
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
-                    'course_id'          => 'required',
-                    'name'                      => 'required',
+                    'course_id'             => 'required',
+                    'name'                  => 'required',
+                    'rank'                  => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $getCourse = Course::where('id', '=', $postData['course_id'])->first();
@@ -103,6 +106,7 @@ class SpecializationController extends Controller
                         'qualification_id'      => (($getCourse)?$getCourse->qualification_id:0),
                         'course_id'             => strip_tags($postData['course_id']),
                         'name'                  => strip_tags($postData['name']),
+                        'rank'                  => strip_tags($postData['rank']),
                     ];
                     Specialization::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */

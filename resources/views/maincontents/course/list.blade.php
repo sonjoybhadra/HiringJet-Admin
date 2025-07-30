@@ -39,12 +39,12 @@ $controllerRoute = $module['controller_route'];
                   'containerId' => 'table1',
                   'searchId' => 'search1',
                   'table' => 'courses',
-                  'columns' => ['qualification_id', 'name', 'created_at', 'courses.status'],
-                  'visibleColumns' => ['qualification_name', 'name', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Qualification Name', 'Course Name', 'Created At'],
+                  'columns' => ['qualification_id', 'name', 'rank', 'created_at', 'courses.status'],
+                  'visibleColumns' => ['qualification_name', 'name', 'rank', 'created_at'],    // used for rendering
+                  'headers' => ['#', 'Qualification Name', 'Course Name', 'Rank', 'Created At'],
                   'filename' => "Course",
-                  'orderBy' => 'id',
-                  'orderType' => 'desc',
+                  'orderBy' => 'rank',
+                  'orderType' => 'asc',
                   'conditions' => [
                     ['column' => 'courses.status', 'operator' => '!=', 'value' => 3]
                   ],
