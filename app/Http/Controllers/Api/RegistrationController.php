@@ -440,7 +440,7 @@ class RegistrationController extends BaseApiController
                     'course_id'=> $request->course,
                     'specialization_id'=> $request->specialization,
                     'location_id' => $request->location,
-                    'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
+                    'university_id'=> is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university),
                     'passing_year'=> $request->passing_year
                 ]);
                 $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes

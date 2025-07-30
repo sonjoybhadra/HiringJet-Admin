@@ -39,7 +39,7 @@ class EditEducationalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'qualification' => 'required|integer',
-            'university' => 'required|integer',
+            'university' => 'required',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
             'course_type' => 'required|string',
@@ -54,9 +54,10 @@ class EditEducationalDetailsController extends BaseApiController
         }
         try {
             $university = new University();
+
             UserEducation::where('id', $id)->update([
                 'qualification_id'=> $request->qualification,
-                'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
+                'university_id'=> is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university),
                 'course_id'=> $request->course,
                 'specialization_id'=> $request->specialization,
                 'course_type'=> $request->course_type,
@@ -79,7 +80,7 @@ class EditEducationalDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'qualification' => 'required|integer',
-            'university' => 'required|integer',
+            'university' => 'required',
             'course' => 'required|integer',
             'specialization' => 'required|integer',
             'course_type' => 'required|string',
@@ -98,7 +99,7 @@ class EditEducationalDetailsController extends BaseApiController
             UserEducation::insert([
                 'user_id'=> auth()->user()->id,
                 'qualification_id'=> $request->qualification,
-                'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
+                'university_id'=> is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university),
                 'course_id'=> $request->course,
                 'specialization_id'=> $request->specialization,
                 'course_type'=> $request->course_type,
