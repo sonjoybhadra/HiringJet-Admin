@@ -24,7 +24,7 @@ class City extends Model
             return $city->id;
         }
 
-        return City::getInsertId([
+        return City::insertGetId([
                     'name' => $name,
                     'country_id' => $country_id,
                     'status'=> 1

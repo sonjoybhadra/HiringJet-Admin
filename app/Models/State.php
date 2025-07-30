@@ -25,7 +25,7 @@ class State extends Model
         }
 
         $country = Country::find($country_id);
-        return State::getInsertId([
+        return State::insertGetId([
                     'name' => $name,
                     'country_id' => $country_id,
                     'country_code' => $country->country_code,

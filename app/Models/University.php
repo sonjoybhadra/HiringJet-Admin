@@ -15,7 +15,7 @@ class University extends Model
             return $university->id;
         }
 
-        return University::getInsertId([
+        return University::insertGetId([
                     'name' => $name,
                     'status'=> 1
                 ]);

@@ -15,7 +15,7 @@ class Country extends Model
             return $country->id;
         }
 
-        return Country::getInsertId([
+        return Country::insertGetId([
                     'name'=> $name,
                     'country_code'=> $name,
                     'country_flag'=> "",
