@@ -17,9 +17,25 @@ class Employer extends Model
     {
         return $this->BelongsTo(Industry::class, 'industry_id');
     }
-    
+
     public function postJobs()
     {
         return $this->hasMany(PostJob::class, 'employer_id');
+    }
+
+    public function getEmployerId ($name){
+        $employer = Employer::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        if($employer){
+            return $employer->id;
+        }
+
+        return Employer::insertGetId([
+                    'name' => ucwords($name),
+                    'no_of_employee' => 1,
+                    'industry_id' => 0,
+                    'description' => "",
+                    'logo' => "",
+                    'status'=> 1
+                ]);
     }
 }
