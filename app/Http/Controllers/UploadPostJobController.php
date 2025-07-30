@@ -106,7 +106,7 @@ class UploadPostJobController extends Controller
                             fclose($handle);
                         }
                     /* extract csv file */
-                    Helper::pr($rows,0);die;
+                    // Helper::pr($rows,0);die;
                     // echo count($rows);
                     /* insert data into post_jobs table */
                         if($rows){
@@ -129,8 +129,8 @@ class UploadPostJobController extends Controller
                                     $Functional_Area = $rows[$k][12];
                                     $Min_Experience = $rows[$k][13];
                                     $Max_Experience = $rows[$k][14];
-                                    $Job_Description = $rows[$k][15];
-                                    $Requirement = $rows[$k][16];
+                                    $Job_Description = strip_tags($rows[$k][15]);
+                                    $Requirement = strip_tags($rows[$k][16]);
                                     $Skills = $rows[$k][17];
                                     $Is_Salary_Negotiable = $rows[$k][18];
                                     $Currency = $rows[$k][19];
