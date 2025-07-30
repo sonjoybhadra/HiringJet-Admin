@@ -106,7 +106,7 @@ class UploadPostJobController extends Controller
                             fclose($handle);
                         }
                     /* extract csv file */
-                    // Helper::pr($rows,0);
+                    Helper::pr($rows,0);die;
                     // echo count($rows);
                     /* insert data into post_jobs table */
                         if($rows){
