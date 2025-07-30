@@ -347,6 +347,44 @@ class UploadPostJobController extends Controller
                                     $maxSalary = $Max_Salary !== '' ? $Max_Salary : null;
                                     $isNegotiable = $Is_Salary_Negotiable !== '' ? 1 : 0;
 
+                                    if ($data['application_through'] === 'Apply To Email') {
+                                        $apply_on_email = $Apply_on_email;
+                                        $apply_on_link = null;
+                                        $walkin_address1 = $Walkin_address_1;
+                                        $walkin_address2 = $Walkin_address_2;
+                                        $walkin_country = $Walkin_Country;
+                                        $walkin_state = $Walkin_State;
+                                        $walkin_city = $Walkin_City;
+                                        $walkin_pincode = $Walkin_Pincode;
+                                        $walkin_latitude = $Walkin_Latitude;
+                                        $walkin_longitude = $Walkin_Longitude;
+                                        $walkin_details = $Walkin_Details;
+                                    } elseif ($data['application_through'] === 'Link') {
+                                        $apply_on_email = null;
+                                        $apply_on_link = $Apply_on_link;
+                                        $walkin_address1 = $Walkin_address_1;
+                                        $walkin_address2 = $Walkin_address_2;
+                                        $walkin_country = $Walkin_Country;
+                                        $walkin_state = $Walkin_State;
+                                        $walkin_city = $Walkin_City;
+                                        $walkin_pincode = $Walkin_Pincode;
+                                        $walkin_latitude = $Walkin_Latitude;
+                                        $walkin_longitude = $Walkin_Longitude;
+                                        $walkin_details = $Walkin_Details;
+                                    } elseif ($data['application_through'] === 'Link') {
+                                        $apply_on_email = null;
+                                        $apply_on_link = null;
+                                        $walkin_address1 = $Walkin_address_1;
+                                        $walkin_address2 = $Walkin_address_2;
+                                        $walkin_country = $Walkin_Country;
+                                        $walkin_state = $Walkin_State;
+                                        $walkin_city = $Walkin_City;
+                                        $walkin_pincode = $Walkin_Pincode;
+                                        $walkin_latitude = $Walkin_Latitude;
+                                        $walkin_longitude = $Walkin_Longitude;
+                                        $walkin_details = $Walkin_Details;
+                                    }
+
                                     $fields = [
                                         'sl_no'                     => $next_sl_no,
                                         'job_no'                    => $job_no,
@@ -380,18 +418,18 @@ class UploadPostJobController extends Controller
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
                                         // 'posting_open_date'         => $Posting_Open_Date,
                                         // 'posting_close_date'        => $Posting_Close_Date,
-                                        'application_through'       => $Application_Through ?: null,
-                                        'apply_on_email'            => $Apply_on_email ?: null,
-                                        'apply_on_link'             => $Apply_on_link ?: null,
-                                        'walkin_address1'           => $Walkin_address_1 ?: null,
-                                        'walkin_address2'           => $Walkin_address_2 ?: null,
-                                        'walkin_country'            => $Walkin_Country ?: null,
-                                        'walkin_state'              => $Walkin_State ?: null,
-                                        'walkin_city'               => $Walkin_City ?: null,
-                                        'walkin_pincode'            => $Walkin_Pincode ?: null,
-                                        'walkin_latitude'           => $Walkin_Latitude ?: null,
-                                        'walkin_longitude'          => $Walkin_Longitude ?: null,
-                                        'walkin_details'            => html_entity_decode($Walkin_Details ?: null),
+                                        'application_through'       => $Application_Through,
+                                        'apply_on_email'            => $apply_on_email,
+                                        'apply_on_link'             => $apply_on_link,
+                                        'walkin_address1'           => $walkin_address1,
+                                        'walkin_address2'           => $walkin_address2,
+                                        'walkin_country'            => $walkin_country,
+                                        'walkin_state'              => $walkin_state,
+                                        'walkin_city'               => $walkin_city,
+                                        'walkin_pincode'            => $walkin_pincode,
+                                        'walkin_latitude'           => $walkin_latitude,
+                                        'walkin_longitude'          => $walkin_longitude,
+                                        'walkin_details'            => html_entity_decode($walkin_details),
                                         'created_by'                => session('user_data')['user_id'],
                                         'updated_by'                => session('user_data')['user_id'],
                                         'status'                    => 1,
