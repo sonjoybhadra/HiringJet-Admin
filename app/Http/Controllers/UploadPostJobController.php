@@ -386,8 +386,12 @@ class UploadPostJobController extends Controller
                                         'status'                    => 1,
                                         'upload_id'                 => $upload_id,
                                     ];
-                                    Helper::pr($fields);
-                                    PostJob::insertGetId($fields);
+                                    // Helper::pr($fields);
+
+                                    $maxId = DB::table('post_jobs')->max('id');
+                                    DB::statement("ALTER SEQUENCE post_jobs_id_seq RESTART WITH " . ($maxId + 1));
+
+                                    PostJob::insert($fields);
                                 }
                             }
                         }
