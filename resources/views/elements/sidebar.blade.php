@@ -432,7 +432,7 @@ $role_id = (($user)?$user->role_id:0);
   <?php }?>
 
   <!-- Job -->
-    <li class="menu-item active <?=(($pageSegment == 'post-job' || $pageSegment == 'upload-post-job')?'open':'')?>">
+    <li class="menu-item active <?=(($pageSegment == 'post-job' || $pageSegment == 'upload-post-job' || $pageSegment == 'job')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-briefcase"></i>
         <div data-i18n="Jobs">Jobs</div>
@@ -449,8 +449,8 @@ $role_id = (($user)?$user->role_id:0);
 
         <!-- pending job list -->
         <?php if(in_array(12, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'pending-list')?'active':'')?>">
-            <a href="<?=url('/post-job/pending-list')?>" class="menu-link">
+          <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'pending-list')?'active':'')?>">
+            <a href="<?=url('/job/pending-list')?>" class="menu-link">
               <div data-i18n="Pending Job List"><i class="fa-solid fa-arrow-right"></i> Pending Job List</div>
             </a>
           </li>
@@ -458,8 +458,8 @@ $role_id = (($user)?$user->role_id:0);
 
         <!-- rejected job list -->
         <?php if(in_array(12, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'reject-list')?'active':'')?>">
-            <a href="<?=url('/post-job/reject-list')?>" class="menu-link">
+          <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'reject-list')?'active':'')?>">
+            <a href="<?=url('/job/reject-list')?>" class="menu-link">
               <div data-i18n="Rejected Job List"><i class="fa-solid fa-arrow-right"></i> Rejected Job List</div>
             </a>
           </li>

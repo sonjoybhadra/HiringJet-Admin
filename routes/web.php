@@ -361,8 +361,8 @@ Route::middleware(['auth'])->group(function () {
     
     /* post job */
         Route::get('post-job/list', [PostJobController::class, 'list']);
-        Route::get('post-job/pending-list', [PostJobController::class, 'pendingList']);
-        Route::get('post-job/reject-list', [PostJobController::class, 'rejectList']);
+        Route::get('job/pending-list', [PostJobController::class, 'pendingList']);
+        Route::get('job/reject-list', [PostJobController::class, 'rejectList']);
         Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
         Route::match(['get', 'post'], 'post-job/edit/{id}', [PostJobController::class, 'edit']);
         Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);

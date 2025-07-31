@@ -55,6 +55,7 @@ class PostJobController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Pending List';
             $page_name                      = 'post-job.pending-list';
+            // $data['rows']                   = PostJob::where('status', '=', 0)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -62,6 +63,7 @@ class PostJobController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Reject List';
             $page_name                      = 'post-job.reject-list';
+            // $data['rows']                   = PostJob::where('status', '=', 2)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
