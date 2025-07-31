@@ -419,8 +419,6 @@ class UploadPostJobController extends Controller
                                         'is_salary_negotiable'      => $isNegotiable,
                                         'posting_open_date'         => (($Posting_Open_Date != '')?date_format(date_create($Posting_Open_Date), "Y-m-d"):null),
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
-                                        // 'posting_open_date'         => $Posting_Open_Date,
-                                        // 'posting_close_date'        => $Posting_Close_Date,
                                         'application_through'       => $application_through,
                                         'apply_on_email'            => $apply_on_email,
                                         'apply_on_link'             => $apply_on_link,
@@ -435,22 +433,18 @@ class UploadPostJobController extends Controller
                                         'walkin_details'            => html_entity_decode($walkin_details),
                                         'created_by'                => session('user_data')['user_id'],
                                         'updated_by'                => session('user_data')['user_id'],
-                                        'status'                    => 1,
+                                        'status'                    => 0,
                                         'upload_id'                 => $upload_id,
                                     ];
                                     // Helper::pr($fields,0);
-
                                     $maxId = DB::table('post_jobs')->max('id');
                                     DB::statement("ALTER SEQUENCE post_jobs_id_seq RESTART WITH " . ($maxId + 1));
-
                                     PostJob::insert($fields);
                                 }
                             }
                         }
-                        // die;
                     /* insert data into post_jobs table */
-                    // Helper::pr($rows);
-                    // die;
+                    
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
