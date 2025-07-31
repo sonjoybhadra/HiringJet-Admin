@@ -281,7 +281,7 @@ class CommonController extends BaseApiController
     public function get_qualification($res = '')
     {
         $list = Qualification::select('id', 'name')->where('status', 1)
-                                ->orderBy('rank', 'DESC')
+                                ->orderBy('rank', 'ASC')
                                 ->get();
         if($res != ''){
             return $list;
