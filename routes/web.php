@@ -361,6 +361,8 @@ Route::middleware(['auth'])->group(function () {
     
     /* post job */
         Route::get('post-job/list', [PostJobController::class, 'list']);
+        Route::get('job/pending-list', [PostJobController::class, 'pendingList']);
+        Route::get('job/reject-list', [PostJobController::class, 'rejectList']);
         Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
         Route::match(['get', 'post'], 'post-job/edit/{id}', [PostJobController::class, 'edit']);
         Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);
@@ -369,7 +371,10 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'post-job/applications/{id}', [PostJobController::class, 'applications']);
         Route::get('post-job/user-wise-list', [PostJobController::class, 'userWiseList']);
         Route::match(['get', 'post'], 'post-job/preview/{id}', [PostJobController::class, 'preview']);
+        Route::match(['get', 'post'], 'job/view-details/{id}', [PostJobController::class, 'viewDetails']);
         Route::get('post-job/cancel/{id}', [PostJobController::class, 'cancel']);
+        Route::get('post-job/approve/{id}', [PostJobController::class, 'approve']);
+        Route::get('post-job/reject/{id}', [PostJobController::class, 'reject']);
     /* post job */
 
     /* upload post job */

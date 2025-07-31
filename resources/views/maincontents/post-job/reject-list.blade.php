@@ -8,7 +8,8 @@ $controllerRoute = $module['controller_route'];
    <div class="row g-6">
       <h4><?=$page_header?></h4>
       <h6 class="breadcrumb-wrapper">
-         <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span> <?=$page_header?>
+         <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span>
+         <?=$page_header?>
       </h6>
       <div class="nav-align-top mb-4">
          <?php if(session('success_message')){?>
@@ -36,35 +37,29 @@ $controllerRoute = $module['controller_route'];
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
                 @include('components.table', [
-                  'containerId' => 'table1',
-                  'searchId' => 'search1',
-                  'table' => 'specializations',
-                  'columns' => ['qualification_id', 'course_id', 'name', 'rank', 'created_at', 'specializations.status'],
-                  'visibleColumns' => ['qualification_name', 'course_name', 'name', 'rank', 'created_at'],    // used for rendering
-                  'headers' => ['#', 'Qualification Name', 'Course Name', 'Specialization Name', 'Rank', 'Created At'],
-                  'filename' => "Specialization",
-                  'orderBy' => 'rank',
-                  'orderType' => 'asc',
-                  'conditions' => [
-                    ['column' => 'specializations.status', 'operator' => '!=', 'value' => 3]
-                  ],
-                  'routePrefix' => 'specialization',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status', // optional, defaults to 'is_active',
-                  'joins' => [
+                'containerId' => 'table1',
+                'searchId' => 'search1',
+                'table' => 'post_jobs',
+                'columns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by', 'status'],
+                'visibleColumns' => ['job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by_name'],    // used for rendering
+                'headers' => ['#', 'Job No.', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At', 'Created By'],
+                'filename' => "Job",
+                'orderBy' => 'id',
+                'orderType' => 'desc',
+                'conditions' => [
+                    ['column' => 'status', 'operator' => '=', 'value' => 2]
+                ],
+                'joins' => [
                      [
-                           'table' => 'qualifications',
-                           'localKey' => 'qualification_id',
+                           'table' => 'users',
+                           'localKey' => 'created_by',
                            'foreignKey' => 'id',
-                           'select' => ['name as qualification_name']
-                     ],
-                     [
-                           'table' => 'courses',
-                           'localKey' => 'course_id',
-                           'foreignKey' => 'id',
-                           'select' => ['name as course_name']
+                           'select' => ['first_name as created_by_name']
                      ]
-                  ]
+                  ],
+                'routePrefix' => 'job',
+                'showActions' => true, // set to false to hide actions
+                'statusColumn' => 'status' // optional, defaults to 'is_active'
                 ])
             </div>
         </div>
@@ -72,6 +67,7 @@ $controllerRoute = $module['controller_route'];
    </div>
 </div>
 @endsection
+
 @section('scripts')
 <script src="<?=config('constants.admin_assets_url')?>assets/js/table.js"></script>
 @endsection

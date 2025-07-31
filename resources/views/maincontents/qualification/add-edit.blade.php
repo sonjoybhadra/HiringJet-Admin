@@ -33,9 +33,11 @@ $controllerRoute = $module['controller_route'];
             <?php
             if($row){
                 $name           = $row->name;
+                $rank           = $row->rank;
                 $status         = $row->status;
             } else {
                 $name           = '';
+                $rank           = '';
                 $status         = '';
             }
             ?>
@@ -43,11 +45,20 @@ $controllerRoute = $module['controller_route'];
                 <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="name" class="form-label">Name <small class="text-danger">*</small></label>
                             <input class="form-control" type="text" id="name" name="name" value="<?=$name?>" required placeholder="Name" autofocus />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label for="rank" class="form-label">Rank <small class="text-danger">*</small></label>
+                            <select class="form-control" id="rank" name="rank" required>
+                                <option value="" selected>Select Rank</option>
+                                <?php for($k=1; $k<=5; $k++){?>
+                                    <option value="<?=$k?>">Rank <?=$k?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
                             <div class="form-check form-switch mt-0 ">
                                 <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
