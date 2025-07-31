@@ -404,9 +404,9 @@ use App\Models\Designation;
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
-                                        <a href="<?=url('post-job/cancel/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-danger me-1">Cancel</a>
-                                        <a href="<?=url('post-job/edit/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-primary me-1">Edit</a>
-                                        <a href="<?=url('post-job/list/')?>" class="btn btn-success">Final Submit</a>
+                                        <a href="<?=url('post-job/delete/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-danger me-1" onclick="return confirm('Do you want to delete this job ?');">Delete Job</a>
+                                        <a href="<?=url('post-job/reject/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-warning me-1" onclick="return confirm('Do you want to reject this job ?');">Reject Job</a>
+                                        <a href="<?=url('post-job/approve/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-success me-1" onclick="return confirm('Do you want to approve this job ?');">Approve Job</a>
                                     </div>
                                 </div>
                             </div>

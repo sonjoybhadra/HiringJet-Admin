@@ -475,6 +475,54 @@ class PostJobController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Cancelled Successfully !!!');
         }
     /* cancel */
+    /* approve */
+        public function approve(Request $request, $id){
+            $id                             = Helper::decoded($id);
+            $model                          = PostJob::find($id);
+            $fields = [
+                'status'             => 1,
+                'deleted_at'         => date('Y-m-d H:i:s'),
+            ];
+            PostJob::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->position_name . ' ' . $this->data['title'] . ' Approved',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
+            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Approved Successfully !!!');
+        }
+    /* approve */
+    /* reject */
+        public function reject(Request $request, $id){
+            $id                             = Helper::decoded($id);
+            $model                          = PostJob::find($id);
+            $fields = [
+                'status'             => 2,
+                'deleted_at'         => date('Y-m-d H:i:s'),
+            ];
+            PostJob::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->position_name . ' ' . $this->data['title'] . ' Rejected',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
+            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Rejected Successfully !!!');
+        }
+    /* reject */
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);

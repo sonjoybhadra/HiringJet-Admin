@@ -373,6 +373,8 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'post-job/preview/{id}', [PostJobController::class, 'preview']);
         Route::match(['get', 'post'], 'job/view-details/{id}', [PostJobController::class, 'viewDetails']);
         Route::get('post-job/cancel/{id}', [PostJobController::class, 'cancel']);
+        Route::get('post-job/approve/{id}', [PostJobController::class, 'approve']);
+        Route::get('post-job/reject/{id}', [PostJobController::class, 'reject']);
     /* post job */
 
     /* upload post job */
