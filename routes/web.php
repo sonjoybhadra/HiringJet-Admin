@@ -371,7 +371,7 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'post-job/applications/{id}', [PostJobController::class, 'applications']);
         Route::get('post-job/user-wise-list', [PostJobController::class, 'userWiseList']);
         Route::match(['get', 'post'], 'post-job/preview/{id}', [PostJobController::class, 'preview']);
-        Route::match(['get', 'post'], 'post-job/view-details/{id}', [PostJobController::class, 'viewDetails']);
+        Route::match(['get', 'post'], 'job/view-details/{id}', [PostJobController::class, 'viewDetails']);
         Route::get('post-job/cancel/{id}', [PostJobController::class, 'cancel']);
     /* post job */
 
