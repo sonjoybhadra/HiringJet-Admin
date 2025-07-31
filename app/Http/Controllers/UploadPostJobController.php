@@ -388,8 +388,6 @@ class UploadPostJobController extends Controller
                                         $walkin_details = $Walkin_Details;
                                     }
 
-                                    
-
                                     $fields = [
                                         'sl_no'                     => $next_sl_no,
                                         'job_no'                    => $job_no,
@@ -416,8 +414,8 @@ class UploadPostJobController extends Controller
                                         'skill_names'               => ((!empty($Skills))?json_encode(explode(',', $Skills)):''),
                                         'expected_close_date'       => null,
                                         'currency'                  => strip_tags($Currency),
-                                        'min_salary'                => $minSalary,
-                                        'max_salary'                => $maxSalary,
+                                        'min_salary'                => (($minSalary != '')?$minSalary:0),
+                                        'max_salary'                => (($maxSalary != '')?$maxSalary:0),
                                         'is_salary_negotiable'      => $isNegotiable,
                                         'posting_open_date'         => (($Posting_Open_Date != '')?date_format(date_create($Posting_Open_Date), "Y-m-d"):null),
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
