@@ -415,6 +415,18 @@ class PostJobController extends Controller
             return view('maincontents.' . $page_name, $data);
         }
     /* preview */
+    /* view details */
+        public function viewDetails(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $page_name                      = 'post-job.view-details';
+            $data['row']                    = PostJob::where('id', '=', $id)->first();
+            $title                          = $this->data['title'].' Details: ' . (($data['row'])?$data['row']->job_no:'');
+
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* view details */
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
