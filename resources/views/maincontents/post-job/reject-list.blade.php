@@ -47,7 +47,7 @@ $controllerRoute = $module['controller_route'];
                 'orderBy' => 'id',
                 'orderType' => 'desc',
                 'conditions' => [
-                    ['column' => 'status', 'operator' => '=', 'value' => 1]
+                    ['column' => 'status', 'operator' => '=', 'value' => 2]
                 ],
                 'joins' => [
                      [

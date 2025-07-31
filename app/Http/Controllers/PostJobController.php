@@ -51,6 +51,20 @@ class PostJobController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
+        public function pendingList(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Pending List';
+            $page_name                      = 'post-job.pending-list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function rejectList(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Reject List';
+            $page_name                      = 'post-job.reject-list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
     /* list */
     /* add */
         public function add(Request $request){
