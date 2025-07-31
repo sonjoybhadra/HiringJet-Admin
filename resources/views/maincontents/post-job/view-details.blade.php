@@ -404,9 +404,9 @@ use App\Models\Designation;
                                     </div>
 
                                     <div class="col-12 d-flex justify-content-between">
-                                        <a href="<?=url('post-job/delete/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-danger me-1" onclick="return confirm('Do you want to delete this job ?');">Delete Job</a>
-                                        <a href="<?=url('post-job/reject/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-warning me-1" onclick="return confirm('Do you want to reject this job ?');">Reject Job</a>
-                                        <a href="<?=url('post-job/approve/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-success me-1" onclick="return confirm('Do you want to approve this job ?');">Approve Job</a>
+                                        <a href="<?=url('post-job/delete/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-danger me-1" onclick="return confirm('Do you want to delete this job ?');"><i class="fa fa-trash"></i> Delete Job</a>
+                                        <a href="<?=url('post-job/reject/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-warning me-1" onclick="return confirm('Do you want to reject this job ?');"><i class="fa fa-times"></i> Reject Job</a>
+                                        <a href="<?=url('post-job/approve/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-success me-1" onclick="return confirm('Do you want to approve this job ?');"><i class="fa fa-check"></i> Approve Job</a>
                                     </div>
                                 </div>
                             </div>
