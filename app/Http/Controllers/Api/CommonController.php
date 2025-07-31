@@ -280,7 +280,9 @@ class CommonController extends BaseApiController
 
     public function get_qualification($res = '')
     {
-        $list = Qualification::select('id', 'name')->where('status', 1)->get();
+        $list = Qualification::select('id', 'name')->where('status', 1)
+                                ->orderBy('rank', 'DESC')
+                                ->get();
         if($res != ''){
             return $list;
         }else{
@@ -298,7 +300,7 @@ class CommonController extends BaseApiController
         if(!empty($qualification_id)){
             $sql->where('qualification_id', $qualification_id);
         }
-        $list = $sql->get();
+        $list = $sql->orderBy('rank', 'DESC')->get();
         if($res != ''){
             return $list;
         }else{
@@ -320,7 +322,7 @@ class CommonController extends BaseApiController
         if(!empty($request->course_id)){
             $sql->where('course_id', $request->course_id);
         }
-        $list = $sql->get();
+        $list = $sql->orderBy('rank', 'DESC')->get();
 
         return $this->sendResponse(
                     $list,

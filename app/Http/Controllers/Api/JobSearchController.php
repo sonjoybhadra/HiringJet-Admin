@@ -209,7 +209,11 @@ class JobSearchController extends BaseApiController
             }
 
             if(!empty($request->experience)){
-                $sql->where('min_exp_year', $request->experience);
+                $experience = explode('-', $request->experience);
+                if(count($experience) > 1){
+                    $sql->where('min_exp_year', '>=', $experience[0]);
+                    $sql->where('max_exp_year', '<=', $experience[1]);
+                }
             }
 
             if(!empty($request->gender)){
