@@ -520,7 +520,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Rejected Successfully !!!');
+            return redirect("job/reject-list")->with('success_message', $this->data['title'].' Rejected Successfully !!!');
         }
     /* reject */
     /* change status */
