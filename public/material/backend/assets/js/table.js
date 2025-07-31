@@ -125,7 +125,7 @@ function loadTable(config) {
 
                 if(config.routePrefix == 'post-job'){
                     var job_no = row['job_no'];
-                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-info me-1" title="View Jobs" target="_blank">
+                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning me-1" title="View Jobs" target="_blank">
                                     <i class="fa-solid fa-eye"></i> View</a>`;
 
                     html += `<a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
