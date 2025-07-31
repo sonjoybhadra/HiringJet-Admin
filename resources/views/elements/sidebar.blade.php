@@ -432,7 +432,7 @@ $role_id = (($user)?$user->role_id:0);
   <?php }?>
 
   <!-- Job -->
-    <li class="menu-item active <?=(($pageSegment == 'home-page' || $pageSegment == 'article' || $pageSegment == 'blog' || $pageSegment == 'testimonial')?'open':'')?>">
+    <li class="menu-item active <?=(($pageSegment == 'post-job' || $pageSegment == 'upload-post-job')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-briefcase"></i>
         <div data-i18n="Jobs">Jobs</div>
