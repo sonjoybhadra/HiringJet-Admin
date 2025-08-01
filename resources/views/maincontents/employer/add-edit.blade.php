@@ -2,10 +2,6 @@
 use App\Helpers\Helper;
 $controllerRoute = $module['controller_route'];
 ?>
-<!-- Include jQuery and jQuery UI CSS/JS -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 @extends('layouts.main')
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -124,6 +120,9 @@ $controllerRoute = $module['controller_route'];
 </div>
 @endsection
 @section('scripts')
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script>
         $(function () {
             $('#employer').autocomplete({
