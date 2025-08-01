@@ -235,7 +235,7 @@ $controllerRoute = $module['controller_route'];
                           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-9" aria-controls="navs-pills-justified-password" aria-selected="false">Shortlisted Jobs</button>
                         </li>
                         <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-10" aria-controls="navs-pills-justified-password" aria-selected="false">Profile Percentage</button>
+                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-10" aria-controls="navs-pills-justified-password" aria-selected="false">Profile (%)</button>
                         </li>
                       </ul>
                       <div class="tab-content">
