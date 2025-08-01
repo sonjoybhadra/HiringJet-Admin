@@ -144,6 +144,7 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], 'employer/edit/{id}', [EmployerController::class, 'edit']);
             Route::get('employer/delete/{id}', [EmployerController::class, 'delete']);
             Route::get('employer/change-status/{id}', [EmployerController::class, 'change_status']);
+            Route::get('/employer-suggestions', [EmployerController::class, 'suggest'])->name('employers.suggest');
         /* employer */
         /* country */
             Route::get('country/list', [CountryController::class, 'list']);

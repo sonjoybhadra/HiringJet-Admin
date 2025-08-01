@@ -84,8 +84,9 @@ class EmployerController extends Controller
                             'description'           => strip_tags($postData['description']),
                             'industry_id'           => strip_tags($postData['industry_id']),
                             'no_of_employee'        => strip_tags($postData['no_of_employee']),
-                            'logo'                  => '/uploads/' . $upload_folder . '/' . $logo,
+                            'logo'                  => (($logo != '')?'/uploads/' . $upload_folder . '/' . $logo:''),
                             'status'                => ((array_key_exists("status",$postData))?1:0),
+                            'created_by'            => session('user_data')['user_id'],
                         ];
                         Employer::insert($fields);
                         return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -147,6 +148,7 @@ class EmployerController extends Controller
                             'no_of_employee'        => strip_tags($postData['no_of_employee']),
                             'logo'                  => $logoLink,
                             'status'                => ((array_key_exists("status",$postData))?1:0),
+                            'created_by'            => session('user_data')['user_id'],
                         ];
                         Employer::where($this->data['primary_key'], '=', $id)->update($fields);
                         /* user activity */
@@ -237,4 +239,14 @@ class EmployerController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
+    public function suggest(Request $request)
+    {
+        $term = $request->get('term');
+
+        $results = Employer::where('name', 'LIKE', $term . '%')
+            ->limit(10)
+            ->pluck('name'); // Only return name, you can use ->get() if you need id too
+
+        return response()->json($results);
+    }
 }

@@ -53,7 +53,7 @@ class PostJobController extends Controller
         }
         public function pendingList(){
             $data['module']                 = $this->data;
-            $title                          = $this->data['title'].' Pending List';
+            $title                          = 'Pending From Bulk Uploads List';
             $page_name                      = 'post-job.pending-list';
             // $data['rows']                   = PostJob::where('status', '=', 0)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
