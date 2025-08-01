@@ -242,11 +242,8 @@ class EmployerController extends Controller
     public function suggest(Request $request)
     {
         $term = $request->get('term');
-
-        $results = Employer::where('name', 'LIKE', $term . '%')
-            ->limit(10)
+        $results = Employer::where('name', 'LIKE', '%' . $term . '%')
             ->pluck('name'); // Only return name, you can use ->get() if you need id too
-
         return response()->json($results);
     }
 }
