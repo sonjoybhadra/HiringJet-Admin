@@ -447,11 +447,11 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-sm-4 mb-3 salary">
                                         <label class="form-label" for="min_salary">Minimum Salary</label>
-                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" value="<?=$min_salary?>" />
+                                        <input type="text" name="min_salary" id="min_salary" class="form-control" placeholder="Minimum Salary" value="<?=$min_salary?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
                                     </div>
                                     <div class="col-sm-4 mb-3 salary">
                                         <label class="form-label" for="max_salary">Maximum Salary</label>
-                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" value="<?=$max_salary?>" />
+                                        <input type="text" name="max_salary" id="max_salary" class="form-control" placeholder="Maximum Salary" value="<?=$max_salary?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" />
                                     </div>                                    
 
                                     <div class="col-sm-6 mb-3">
