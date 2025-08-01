@@ -35,7 +35,7 @@ class UploadPostJobController extends Controller
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Upload Job',
+            'title'             => 'Bulk Jobs Upload',
             'controller'        => 'UploadPostJobController',
             'controller_route'  => 'upload-post-job',
             'primary_key'       => 'id',
