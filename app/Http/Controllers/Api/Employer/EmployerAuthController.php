@@ -12,6 +12,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificationEmail;
 // use JWTAuth;
 use App\Models\User;
 use App\Models\UserEmployment;
@@ -142,7 +144,7 @@ class EmployerAuthController extends BaseApiController
         $credentials['role_id'] = env('EMPLOYER_ROLE_ID');
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return $this->sendError('Current OTP Error', 'Current OTP not matched', Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->sendError('Current Password Error', 'Current Password not matched', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         User::where('id', Auth()->user()->id)

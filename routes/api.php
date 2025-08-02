@@ -242,9 +242,9 @@ Route::group([
 
     Route::post('/update-business-profile', [EditEmployerBusinessInfoController::class, 'updateBusinessData']);
 
-    Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
+    /* Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
-    Route::post('/change-password', [AccountSettingsController::class, 'changePassword']);
+    Route::post('/change-password', [AccountSettingsController::class, 'changePassword']); */
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 

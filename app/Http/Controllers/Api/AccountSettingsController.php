@@ -280,7 +280,7 @@ class AccountSettingsController extends BaseApiController
         $credentials['role_id'] = env('JOB_SEEKER_ROLE_ID');
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return $this->sendError('Current OTP Error', 'Current OTP not matched', Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->sendError('Current Password Error', 'Current Password not matched', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         User::where('id', Auth()->user()->id)
