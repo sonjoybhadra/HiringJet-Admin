@@ -44,32 +44,6 @@ class EditEmployerBusinessInfoController extends BaseApiController
         }
 
         try{
-            $profile_image = $trade_license = $vat_registration = $logo = "";
-            if (request()->hasFile('profile_image')) {
-                $file = request()->file('profile_image');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/profile_image/'.$fileName, file_get_contents($file));
-                $profile_image = 'public/storage/uploads/employer/profile_image/'.$fileName;
-            }
-            if (request()->hasFile('trade_license')) {
-                $file = request()->file('trade_license');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/trade_license/'.$fileName, file_get_contents($file));
-                $trade_license = 'public/storage/uploads/employer/trade_license/'.$fileName;
-            }
-            if (request()->hasFile('vat_registration')) {
-                $file = request()->file('vat_registration');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/vat_registration/'.$fileName, file_get_contents($file));
-                $vat_registration = 'public/storage/uploads/employer/vat_registration/'.$fileName;
-            }
-            if (request()->hasFile('logo')) {
-                $file = request()->file('logo');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
-                $logo = 'public/storage/uploads/employer/logo/'.$fileName;
-            }
-
             $city = new City();
             $country = new Country();
             $state = new State();
@@ -77,7 +51,7 @@ class EditEmployerBusinessInfoController extends BaseApiController
             $state_id = $state->getStateId($request->state, $country_id);
             $city_id = $city->getCityId($request->city, $country_id);
 
-            UserEmployer::where('user_id', auth()->user()->id)->update([
+            $profile_data = [
                 'country_id'=> $country_id,
                 'city_id'=> $city_id,
                 'state_id'=> $state_id,
@@ -86,20 +60,42 @@ class EditEmployerBusinessInfoController extends BaseApiController
                 'pincode' => $request->pincode,
                 'landline'=> $request->landline,
                 'industrie_id'=> $request->industrie_id,
-                'profile_image'=> $profile_image,
-                'trade_license'=> $trade_license,
-                'vat_registration'=> $vat_registration,
-                'logo'=> $logo,
                 'description'=> $request->description,
                 'web_url'=> $request->web_url,
                 'employe_type'=> $request->employe_type,
                 'completed_steps'=> 2,
-            ]);
+            ];
+            if (request()->hasFile('profile_image')) {
+                $file = request()->file('profile_image');
+                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/profile_image/'.$fileName, file_get_contents($file));
+                $profile_data['profile_image'] = 'public/storage/uploads/employer/profile_image/'.$fileName;
+            }
+            if (request()->hasFile('trade_license')) {
+                $file = request()->file('trade_license');
+                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/trade_license/'.$fileName, file_get_contents($file));
+                $profile_data['trade_license'] = 'public/storage/uploads/employer/trade_license/'.$fileName;
+            }
+            if (request()->hasFile('vat_registration')) {
+                $file = request()->file('vat_registration');
+                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/vat_registration/'.$fileName, file_get_contents($file));
+                $profile_data['vat_registration'] = 'public/storage/uploads/employer/vat_registration/'.$fileName;
+            }
+            if (request()->hasFile('logo')) {
+                $file = request()->file('logo');
+                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
+                $profile_data['logo'] = 'public/storage/uploads/employer/logo/'.$fileName;
+            }
 
-            return $this->sendResponse($this->getUserDetails(), 'Setup company profile has successfully done.');
+            UserEmployer::where('user_id', auth()->user()->id)->update($profile_data);
+
+            return $this->sendResponse($this->getUserDetails(), 'Business profile has successfully updated.');
 
         } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
+            return $this->sendError('Error', 'Sorry!! Unable to update business profile.');
         }
     }
 
