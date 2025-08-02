@@ -41,7 +41,7 @@ $controllerRoute = $module['controller_route'];
                         <label for="upload_file" class="form-label">Upload File <small class="text-danger">*</small></label>
                         <input class="form-control" type="file" id="upload_file" name="upload_file" required />
                         <small class="text-danger">(Only csv files are allowed)</small>
-                        <a href="<?=url('/public/material/backend/sample-post-job-file.csv')?>" class="text-primary" target="_blank">Sample File</a>
+                        <a href="<?=url('/public/material/backend/sample-post-job-file-v2.csv')?>" class="text-primary" target="_blank">Sample File</a>
                      </div>
                   </div>
                   <div class="mt-2">

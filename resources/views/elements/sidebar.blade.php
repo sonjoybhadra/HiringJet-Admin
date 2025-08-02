@@ -39,12 +39,13 @@ $role_id = (($user)?$user->role_id:0);
           fill="#7367F0" />
       </svg>
     </span> -->
-    <img src="<?=((Helper::getSettingValue('site_logo') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_logo'):config('constants.no_image'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block" style="margin-top: 10px;height: 50px;width: 150px;" />
-    <!-- <span class="app-brand-text demo menu-text fw-bold"><?=Helper::getSettingValue('site_name')?></span> -->
+    <img src="<?=((Helper::getSettingValue('site_favicon') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_favicon'):config('constants.no_image'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block" style="margin-top: 10px;height: 30px;width: 30px;margin-right: 10px;" />
+    <span class="app-brand-text demo menu-text fw-bold"><?=Helper::getSettingValue('site_name')?></span>
   </a>
 
   <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-    <i class="ti menu-toggle-icon d-none d-xl-block align-middle"></i>
+    <!-- <i class="fa menu-toggle-icon d-none d-xl-block align-middle"></i> -->
+    <i class="fa-solid fa-bars d-none d-xl-block align-middle"></i>
     <i class="ti ti-x d-block d-xl-none ti-md align-middle"></i>
   </a>
 </div>
@@ -451,7 +452,7 @@ $role_id = (($user)?$user->role_id:0);
         <?php if(in_array(12, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'pending-list')?'active':'')?>">
             <a href="<?=url('/job/pending-list')?>" class="menu-link">
-              <div data-i18n="Pending Job List"><i class="fa-solid fa-arrow-right"></i> Pending Job List</div>
+              <div data-i18n="Pending From Bulk Uploads"><i class="fa-solid fa-arrow-right"></i> Pending From Bulk Uploads</div>
             </a>
           </li>
         <?php }?>
@@ -478,7 +479,7 @@ $role_id = (($user)?$user->role_id:0);
         <?php if(in_array(12, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'upload-post-job' && $pageFunction == 'list')?'active':'')?>">
             <a href="<?=url('/upload-post-job/list')?>" class="menu-link">
-              <div data-i18n="Upload Jobs"><i class="fa-solid fa-arrow-right"></i> Upload Jobs</div>
+              <div data-i18n="Bulk Jobs Upload"><i class="fa-solid fa-arrow-right"></i> Bulk Jobs Upload</div>
             </a>
           </li>
         <?php }?>

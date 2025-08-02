@@ -53,7 +53,7 @@ class PostJobController extends Controller
         }
         public function pendingList(){
             $data['module']                 = $this->data;
-            $title                          = $this->data['title'].' Pending List';
+            $title                          = 'Pending From Bulk Uploads List';
             $page_name                      = 'post-job.pending-list';
             // $data['rows']                   = PostJob::where('status', '=', 0)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
@@ -189,8 +189,8 @@ class PostJobController extends Controller
                         // 'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):null),
                         'expected_close_date'       => null,
                         'currency'                  => ((array_key_exists("currency",$postData))?$postData['currency']:''),
-                        'min_salary'                => ((array_key_exists("min_salary",$postData))?(($postData['min_salary'] != '')?$postData['min_salary']:0):''),
-                        'max_salary'                => ((array_key_exists("max_salary",$postData))?(($postData['max_salary'] != '')?$postData['max_salary']:0):''),
+                        'min_salary'                => ((array_key_exists("min_salary",$postData))?(($postData['min_salary'] != '')?str_replace(',', '', $postData['min_salary']):0):0),
+                        'max_salary'                => ((array_key_exists("max_salary",$postData))?(($postData['max_salary'] != '')?str_replace(',', '', $postData['max_salary']):0):0),
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
                         'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):null),
                         'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):null),
@@ -371,8 +371,8 @@ class PostJobController extends Controller
                         // 'expected_close_date'       => (($postData['expected_close_date'] != '')?date_format(date_create($postData['expected_close_date']), "Y-m-d"):null),
                         'expected_close_date'       => null,
                         'currency'                  => ((array_key_exists("currency",$postData))?$postData['currency']:''),
-                        'min_salary'                => ((array_key_exists("min_salary",$postData))?(($postData['min_salary'] != '')?$postData['min_salary']:0):''),
-                        'max_salary'                => ((array_key_exists("max_salary",$postData))?(($postData['max_salary'] != '')?$postData['max_salary']:0):''),
+                        'min_salary'                => ((array_key_exists("min_salary",$postData))?(($postData['min_salary'] != '')?str_replace(',', '', $postData['min_salary']):0):0),
+                        'max_salary'                => ((array_key_exists("max_salary",$postData))?(($postData['max_salary'] != '')?str_replace(',', '', $postData['max_salary']):0):0),
                         'is_salary_negotiable'      => ((array_key_exists("is_salary_negotiable",$postData))?1:0),
                         'posting_open_date'         => (($postData['posting_open_date'] != '')?date_format(date_create($postData['posting_open_date']), "Y-m-d"):null),
                         'posting_close_date'        => (($postData['posting_close_date'] != '')?date_format(date_create($postData['posting_close_date']), "Y-m-d"):null),
