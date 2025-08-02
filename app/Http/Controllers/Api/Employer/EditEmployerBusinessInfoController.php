@@ -30,9 +30,9 @@ class EditEmployerBusinessInfoController extends BaseApiController
             'pincode' => 'required|string|max:10',
             'country_code' => 'nullable|required|max:5',
             'landline' => 'nullable|string|max:20',
-            'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            'trade_license' => 'nullable|required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            'vat_registration' => 'nullable|required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            'logo' => 'nullable|required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'description' => 'required|string',
             'industrie_id' => 'required|integer',
             'web_url' => 'required|url',
