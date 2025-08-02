@@ -125,24 +125,40 @@ class EmployerAuthController extends BaseApiController
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'existing_password' => 'required|min:6',
             'password' => 'required|min:6',
-            'c_password' => 'required|same:password'
+            'c_password' => 'required|same:password',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
-            User::where('id', auth()->user()->id)
-                    ->update([
-                        'password' => Hash::make($request->password),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                    ]);
-            return $this->sendResponse([], 'Password update successfully done.');
-        }catch (\Exception $exception) {
-            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to update password.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        $credentials = array(
+            'email' => auth()->user()->email,
+            'password' => $request->existing_password,
+            'status'=> 1
+        );
+        $credentials['role_id'] = env('EMPLOYER_ROLE_ID');
+
+        if (! $token = auth('api')->attempt($credentials)) {
+            return $this->sendError('Current OTP Error', 'Current OTP not matched', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        User::where('id', Auth()->user()->id)
+                ->update([
+                    'password' => Hash::make($request->password)
+                ]);
+
+        $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+        Mail::to(auth()->user()->email)->send(new NotificationEmail('Password updated successfully done.', $full_name, 'Your password has been updated successfully. New password is: '.$request->password));
+
+        return $this->sendResponse([
+                                        'token_type' => 'bearer',
+                                        'token' => $token,
+                                        'user' => $this->getEmployerDetails(),
+                                        'expires_in' => config('jwt.ttl') * 60,
+                                    ], 'Password updated successfully done.');
     }
 
     public function loginWithGoogle(Request $request)

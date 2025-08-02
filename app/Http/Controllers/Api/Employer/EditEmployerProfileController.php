@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 use App\Mail\NotificationEmail;
-
 use App\Models\User;
 use App\Models\UserEmployer;
 
@@ -22,113 +22,69 @@ class EditEmployerProfileController extends BaseApiController
     public function updateProfileData(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'country_id' => 'required|integer',
-            'city_id' => 'required|integer',
-            'state_id' => 'required|integer',
-            'address' => 'required|string|max:255',
-            'address_line_2' => 'nullable|string|max:255',
-            'pincode' => 'required|string|max:10',
-            'landline' => 'nullable|string|max:20',
-            'industry_id' => 'required|integer',
-            'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'description' => 'required|string',
-            'web_url' => 'required|url'
+            'first_name' => 'required|max:100',
+            'last_name' => 'required|max:100',
+            // 'email' => 'required|email|max:100|unique:users',
+            'country_code' => 'required|max:5',
+            'phone' => 'required|max:15|unique:users,phone,'.auth()->user()->id,
+            /* 'password' => 'required|min:6',
+            'c_password' => 'required|same:password', */
+            'business_id' => 'required|integer',
+            'designation_id' => 'required|integer',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-        try{
-            $image_path = $trade_license = $vat_registration = $logo = "";
+        try {
+            $image_path = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
                 $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                 Storage::disk('public')->put('uploads/employer/profile_image/'.$fileName, file_get_contents($file));
                 $image_path = 'public/storage/uploads/employer/profile_image/'.$fileName;
             }
-            if (request()->hasFile('trade_license')) {
-                $file = request()->file('trade_license');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/trade_license/'.$fileName, file_get_contents($file));
-                $trade_license = 'public/storage/uploads/employer/trade_license/'.$fileName;
-            }
-            if (request()->hasFile('vat_registration')) {
-                $file = request()->file('vat_registration');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/vat_registration/'.$fileName, file_get_contents($file));
-                $vat_registration = 'public/storage/uploads/employer/vat_registration/'.$fileName;
-            }
-            if (request()->hasFile('logo')) {
-                $file = request()->file('logo');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
-                $logo = 'public/storage/uploads/employer/logo/'.$fileName;
-            }
-
-            UserEmployer::where('user_id', auth()->user()->id)->update([
-                'country_id'=> $request->country_id,
-                'city_id'=> $request->city_id,
-                'state_id'=> $request->state_id,
-                'address'=> $request->address,
-                'address_line_2'=> $request->address_line_2,
-                'pincode' => $request->pincode,
-                'landline'=> $request->landline,
-                'industry_id'=> $request->industry_id,
-                'trade_license'=> $trade_license,
-                'vat_registration'=> $vat_registration,
-                'logo'=> $logo,
-                'description'=> $request->description,
-                'web_url'=> $request->web_url
+            User::where('id', auth()->user()->id)->update([
+                'first_name'=> $request->first_name,
+                'last_name'=> $request->last_name,
+                // 'email'=> $request->email,
+                'country_code' => $request->country_code,
+                'phone'=> $request->phone,
             ]);
 
-            return $this->sendResponse($this->getUserDetails(), 'Setup company profile has successfully done.');
+            $update_data = [
+                'first_name'=> $request->first_name,
+                'last_name'=> $request->last_name,
+                // 'email'=> $request->email,
+                'country_code'=> $request->country_code,
+                'phone' => $request->phone,
+                'business_id'=> $request->business_id,
+                'designation_id'=> $request->designation_id,
+                'profile_image'=> $image_path
+            ];
 
+            UserEmployer::where('user_id', auth()->user()->id)->update($update_data);
+
+            return $this->sendResponse($this->getUserDetails(), 'Profile data updated successfully.');
         } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
+            return $this->sendError('Error', $e->getMessage());
         }
     }
 
-    public function changePassword(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'existing_password' => 'required|min:6',
-            'password' => 'required|min:6',
-            'c_password' => 'required|same:password',
-        ]);
+    public function removeProfilePicture(){
+        try{
+            $has_data = UserEmployer::where('user_id', auth()->user()->id)->first();
+            if($has_data){
+                $data_path = str_replace("public/storage/", "", $has_data->profile_image);
+                UserEmployer::find($has_data->id)->update(['profile_image'=> NULL]);
+                Storage::disk('public')->delete($data_path);
+            }
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->sendResponse([], 'Profile image deleted successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
         }
-
-        $credentials = array(
-            'email' => auth()->user()->email,
-            'password' => $request->existing_password,
-            'status'=> 1
-        );
-        $credentials['role_id'] = env('EMPLOYER_ROLE_ID');
-
-        if (! $token = auth('api')->attempt($credentials)) {
-            return $this->sendError('Current OTP Error', 'Current OTP not matched', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        User::where('id', Auth()->user()->id)
-                ->update([
-                    'password' => Hash::make($request->password)
-                ]);
-
-        $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
-        Mail::to(auth()->user()->email)->send(new NotificationEmail('Password updated successfully done.', $full_name, 'Your password has been updated successfully. New password is: '.$request->password));
-
-        return $this->sendResponse([
-                                        'token_type' => 'bearer',
-                                        'token' => $token,
-                                        'user' => $this->getUserDetails(),
-                                        'expires_in' => config('jwt.ttl') * 60,
-                                    ], 'Password updated successfully done.');
     }
+
 
 }

@@ -79,7 +79,7 @@ class EditProfileController extends BaseApiController
         try{
             $has_data = UserProfile::where('user_id', auth()->user()->id)->first();
             if($has_data){
-                $data_path = str_replace("public/storage/", "", $has_data->resume);
+                $data_path = str_replace("public/storage/", "", $has_data->profile_image);
                 UserProfile::find($has_data->id)->update(['profile_image'=> NULL]);
                 Storage::disk('public')->delete($data_path);
             }

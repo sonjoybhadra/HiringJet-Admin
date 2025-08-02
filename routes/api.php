@@ -212,6 +212,7 @@ Route::group([
 use App\Http\Controllers\Api\Employer\EmployerRegistrationController;
 use App\Http\Controllers\Api\Employer\EmployerAuthController;
 use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
+use App\Http\Controllers\Api\Employer\EditEmployerBusinessInfoController;
 // use App\Http\Controllers\Api\Employer\ForgotpasswordController as EmployerForgotpasswordController;
 use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
 use App\Http\Controllers\Api\Employer\EmployerFolderController;
@@ -237,6 +238,9 @@ Route::group([
     Route::post('/signup/setup-company-profile/{user}', [EmployerRegistrationController::class, 'setupCompanyProfile']);
 
     Route::post('/update-profile', [EditEmployerProfileController::class, 'updateProfileData']);
+    Route::post('/delete-profile-picture', [EditEmployerProfileController::class, 'removeProfilePicture']);
+
+    Route::post('/update-business-profile', [EditEmployerBusinessInfoController::class, 'updateBusinessData']);
 
     Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
