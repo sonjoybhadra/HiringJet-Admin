@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('address');
             $table->foreignId('country')->constrained('countries');
             $table->string('zip_code', 10);
-            $table->integer('staus')->default(1);
+            $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
