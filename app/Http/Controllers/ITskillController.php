@@ -67,7 +67,7 @@ class ITskillController extends Controller
                         'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
                         'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    ItSkill::insert($fields);
+                    ItSkill::create($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
