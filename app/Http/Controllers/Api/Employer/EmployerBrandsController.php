@@ -58,6 +58,8 @@ class EmployerBrandsController extends BaseApiController
                 Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
                 $logo = 'public/storage/uploads/employer/logo/'.$fileName;
             }
+            $country = new Country();
+            $country_id = $country->getCountryId($request->country);
             EmployerBrand::insert([
                 'user_id'=> auth()->user()->id,
                 'company_name'=> $request->company_name,
@@ -68,8 +70,9 @@ class EmployerBrandsController extends BaseApiController
                 'contact_person_designation_id'=> $request->contact_person_designation,
                 'web_url' => $request->web_url,
                 'address' => $request->address,
-                'country' => $request->country,
+                'country' => $country_id,
                 'zip_code' => $request->zip_code,
+                'status'=> 1
             ]);
 
             return $this->sendResponse($this->getList(), 'Brand added successfully.');
@@ -119,7 +122,7 @@ class EmployerBrandsController extends BaseApiController
                 Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
                 $logo = 'public/storage/uploads/employer/logo/'.$fileName;
             }
-             $country = new Country();
+            $country = new Country();
             $country_id = $country->getCountryId($request->country);
             EmployerBrand::find($id)->update([
                 'company_name'=> $request->company_name,
