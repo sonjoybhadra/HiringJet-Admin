@@ -74,8 +74,8 @@ $controllerRoute = $module['controller_route'];
                         </div>
 
                         <div class="col-md-6 mt-3">
-                            <label for="publishing_year" class="form-label">Publishing Year <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="publishing_year" name="publishing_year" value="<?=$publishing_year?>" required placeholder="Publishing Year" />
+                            <label for="publishing_year" class="form-label">Publishing Year</label>
+                            <input class="form-control" type="text" id="publishing_year" name="publishing_year" value="<?=$publishing_year?>" placeholder="Publishing Year" />
                         </div>
                         <div class="col-md-6 mt-3">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
