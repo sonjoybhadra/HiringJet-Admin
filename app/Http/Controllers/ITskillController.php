@@ -64,7 +64,7 @@ class ITskillController extends Controller
                     $fields = [
                         'name'                          => strip_tags($postData['name']),
                         'version'                       => strip_tags($postData['version']),
-                        'publishing_year'               => strip_tags($postData['publishing_year']),
+                        'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
                         'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
                     ItSkill::insert($fields);
@@ -99,7 +99,7 @@ class ITskillController extends Controller
                     $fields = [
                         'name'                          => strip_tags($postData['name']),
                         'version'                       => strip_tags($postData['version']),
-                        'publishing_year'               => strip_tags($postData['publishing_year']),
+                        'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
                         'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
                     ItSkill::where($this->data['primary_key'], '=', $id)->update($fields);
