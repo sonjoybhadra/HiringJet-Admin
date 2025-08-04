@@ -46,7 +46,7 @@ class ITskillController extends Controller
                 $rules = [
                     'name'                      => 'required',
                     'version'                   => 'required',
-                    'publishing_year'           => 'required',
+                    // 'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -93,7 +93,7 @@ class ITskillController extends Controller
                 $rules = [
                     'name'                      => 'required',
                     'version'                   => 'required',
-                    'publishing_year'           => 'required',
+                    // 'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
