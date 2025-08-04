@@ -53,7 +53,7 @@ class EmployerBrandsController extends BaseApiController
         try{
             $has_duplicate = EmployerBrand::where('user_id', auth()->user()->id)
                                             ->where('company_name', 'ilike', '%'.$request->company_name.'%')
-                                            ->where('contact_person', $request->contact_person)
+                                            ->where('contact_person_id', $request->contact_person)
                                             ->get()->count();
             if($has_duplicate > 0){
                 return $this->sendError('Duplicate Error', 'Duplicate brand mapping is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -125,7 +125,7 @@ class EmployerBrandsController extends BaseApiController
         try{
             $has_duplicate = EmployerBrand::where('user_id', auth()->user()->id)
                                             ->where('company_name', 'ilike', '%'.$request->company_name.'%')
-                                            ->where('contact_person', $request->contact_person)
+                                            ->where('contact_person_id', $request->contact_person)
                                             ->where('id', '!=', $id)
                                             ->get()->count();
             if($has_duplicate > 0){
