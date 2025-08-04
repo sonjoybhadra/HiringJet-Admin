@@ -217,6 +217,7 @@ use App\Http\Controllers\Api\Employer\EditEmployerBusinessInfoController;
 use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
 use App\Http\Controllers\Api\Employer\EmployerFolderController;
 use App\Http\Controllers\Api\Employer\EmployerUserController;
+use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -255,6 +256,10 @@ Route::group([
     Route::post('/user/delete/{id}', [EmployerUserController::class, 'destroy']);
     Route::post('/user/status/{id}', [EmployerUserController::class, 'changeStatus']);
     Route::resource('/user', EmployerUserController::class);
+
+    Route::post('/brands/delete/{id}', [EmployerBrandsController::class, 'destroy']);
+    Route::post('/brands/status/{id}', [EmployerBrandsController::class, 'changeStatus']);
+    Route::resource('/brands', EmployerBrandsController::class);
 
 });
 
