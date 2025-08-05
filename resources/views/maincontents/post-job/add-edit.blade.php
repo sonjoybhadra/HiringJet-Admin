@@ -384,6 +384,14 @@ $controllerRoute = $module['controller_route'];
                                             <?php }?>
                                         </select>
                                     </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label" for="skill_ids">Skills</label>
+                                        <select class="select2" id="skill_ids" name="skill_ids[]" required multiple>
+                                            <?php if($keyskills){ foreach($keyskills as $select_row){?>
+                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $skill_ids))?'selected':'')?>><?=$select_row->name?></option>
+                                            <?php } }?>
+                                        </select>
+                                    </div>
 
                                     <div class="col-12 d-flex justify-content-between">
                                         <button class="btn btn-label-secondary btn-prev" disabled>
@@ -412,15 +420,6 @@ $controllerRoute = $module['controller_route'];
                                     <div class="col-sm-12 mb-3">
                                         <label class="form-label" for="requirement">Requirements</label>
                                         <textarea id="ckeditor2" name="requirement" class="form-control" placeholder="Requirements" rows="5"><?=$requirement?></textarea>
-                                    </div>                                    
-
-                                    <div class="col-sm-12 mb-3">
-                                        <label class="form-label" for="skill_ids">Skills</label>
-                                        <select class="select2" id="skill_ids" name="skill_ids[]" required multiple>
-                                            <?php if($keyskills){ foreach($keyskills as $select_row){?>
-                                                <option value="<?=$select_row->id?>" <?=((in_array($select_row->id, $skill_ids))?'selected':'')?>><?=$select_row->name?></option>
-                                            <?php } }?>
-                                        </select>
                                     </div>
                                     
                                     <!-- <div class="col-sm-6 mb-3">

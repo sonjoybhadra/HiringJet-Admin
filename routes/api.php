@@ -218,6 +218,7 @@ use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
 use App\Http\Controllers\Api\Employer\EmployerFolderController;
 use App\Http\Controllers\Api\Employer\EmployerUserController;
 use App\Http\Controllers\Api\Employer\EmployerBrandsController;
+use App\Http\Controllers\Api\Employer\EmployerTagsController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -249,6 +250,7 @@ Route::group([
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
+    Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);
     Route::post('/cv-folder/status/{id}', [EmployerFolderController::class, 'changeStatus']);
     Route::resource('/cv-folder', EmployerFolderController::class);
@@ -260,6 +262,11 @@ Route::group([
     Route::post('/brands/delete/{id}', [EmployerBrandsController::class, 'destroy']);
     Route::post('/brands/status/{id}', [EmployerBrandsController::class, 'changeStatus']);
     Route::resource('/brands', EmployerBrandsController::class);
+
+    Route::post('/tags/share/{id}', [EmployerTagsController::class, 'share']);
+    Route::post('/tags/delete/{id}', [EmployerTagsController::class, 'destroy']);
+    Route::post('/tags/status/{id}', [EmployerTagsController::class, 'changeStatus']);
+    Route::resource('/tags', EmployerTagsController::class);
 
 });
 

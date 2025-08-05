@@ -174,17 +174,60 @@ class EmployerFolderController extends BaseApiController
     }
 
     private function getList(){
-        $list = EmployerCvFolder::with('profile_cv')
+        $own_list = EmployerCvFolder::with('profile_cv')
                                 ->where('user_id', auth()->user()->id)
                                 ->orderBy('folder_name', 'ASC')
                                 ->get();
-        if($list->count() > 0){
-            foreach($list as $index => $val){
-                $list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
+        if($own_list->count() > 0){
+            foreach($own_list as $index => $val){
+                $own_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
             }
         }
 
-        return $list;
+        $shared_list = EmployerCvFolder::with('profile_cv')
+                                ->where('user_id', auth()->user()->id)
+                                ->where('owner_id', '!=', auth()->user()->id)
+                                ->orderBy('folder_name', 'ASC')
+                                ->get();
+        if($shared_list->count() > 0){
+            foreach($shared_list as $index => $val){
+                $shared_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
+            }
+        }
+
+        return [
+            'own_list' => $own_list,
+            'shared_list'  => $shared_list
+        ];
+    }
+
+    public function share(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'emplyer_id' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $folder = EmployerCvFolder::find($id);
+            $has_data = EmployerCvFolder::where('owner_id', auth()->user()->id)
+                                        ->where('folder_name', strtolower($folder->folder_name))
+                                        ->count();
+            if($has_data > 0){
+                return $this->sendError('Error', 'Same name folder is already exists.', Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            EmployerCvFolder::find($id)->update([
+                'user_id'=> $request->emplyer_id
+            ]);
+
+            return $this->sendResponse($this->getList(), 'Folder shared with selected user successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
     }
 
 }
