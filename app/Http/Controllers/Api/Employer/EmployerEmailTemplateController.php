@@ -120,8 +120,7 @@ class EmployerEmailTemplateController extends BaseApiController
             'currency_id' => 'required|integer',
             'salary_max' => 'required|integer',
             'salary_min' => 'required|integer',
-            'message' => 'required|string',
-            'owner_id' => 'required|integer',
+            'message' => 'required|string'
         ]);
 
         if($validator->fails()){
