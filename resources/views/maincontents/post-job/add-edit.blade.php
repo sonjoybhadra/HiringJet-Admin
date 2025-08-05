@@ -384,7 +384,7 @@ $controllerRoute = $module['controller_route'];
                                             <?php }?>
                                         </select>
                                     </div>
-                                    <div class="col-sm-12 mb-3">
+                                    <div class="col-sm-6 mb-3">
                                         <label class="form-label" for="skill_ids">Skills</label>
                                         <select class="select2" id="skill_ids" name="skill_ids[]" required multiple>
                                             <?php if($keyskills){ foreach($keyskills as $select_row){?>
