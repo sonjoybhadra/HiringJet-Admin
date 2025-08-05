@@ -50,6 +50,13 @@
             }
           }
         },
+        'skill_ids[]': {
+          validators: {
+            notEmpty: {
+              message: 'Skill is required'
+            }
+          }
+        },
         employer_id: {
           validators: {
             notEmpty: {
