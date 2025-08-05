@@ -30,7 +30,9 @@ use App\Models\Designation;
 use App\Models\Industry;
 use App\Models\Language;
 use App\Models\University;
-use App\Models\UserLanguage;
+use App\Models\Course;
+use App\Models\Employer;
+use App\Models\Specialization;
 
 class RegistrationController extends BaseApiController
 {
@@ -300,13 +302,15 @@ class RegistrationController extends BaseApiController
             ]);
 
             if($request->currently_employed == 1){
+                $employer = new Employer();
+                $employer_id = is_numeric($request->last_employer) ? $request->last_employer : $employer->getEmployerId($request->last_employer);
                 UserEmployment::where('user_id', $user->id)->delete();
                 UserEmployment::create([
                     'user_id'=> $user->id,
                     'total_experience_years'=> $request->total_experience_years,
                     'total_experience_months'=> $request->total_experience_months,
                     'last_designation'=> $request->last_designation,
-                    'employer_id'=> $request->last_employer,
+                    'employer_id'=> $employer_id,
                     'country_id'=> $request->employer_country,
                     'city_id'=> $request->employer_city,
                     'currency_id'=> $request->salary_currency,
@@ -366,8 +370,8 @@ class RegistrationController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'profile_summery' => 'required|string',// Max:5MB
             'qualification' => 'required|integer',
-            'course' => 'required|integer',
-            'specialization' => 'required|integer',
+            'course' => 'required',
+            'specialization' => 'required',
             'university' => 'required',
             'passing_year' => 'required|integer',
             'location' => 'required|integer',
@@ -433,14 +437,21 @@ class RegistrationController extends BaseApiController
             }
             if(!empty($request->qualification)){
                 $university = new University();
+                $course = new Course();
+                $specialization = new Specialization();
+
+                $qualification_id = $request->qualification;
+                $university_id = is_numeric($request->university) ? $request->university : $university->getUniversityId($request->university);
+                $course_id = is_numeric($request->course) ? $request->course : $course->getCourseId($request->course, $qualification_id);
+                $specialization_id = is_numeric($request->specialization) ? $request->specialization : $specialization->getSpecializationId($request->specialization, $course_id, $qualification_id);
                 UserEducation::where('user_id', $user->id)->delete();
                 UserEducation::create([
                     'user_id'=> $user->id,
                     'qualification_id'=> $request->qualification,
-                    'course_id'=> $request->course,
-                    'specialization_id'=> $request->specialization,
+                    'course_id'=> $course_id,
+                    'specialization_id'=> $specialization_id,
                     'location_id' => $request->location,
-                    'university_id'=> is_int($request->university) ? $request->university : $university->getUniversityId($request->university),
+                    'university_id'=> $university_id,
                     'passing_year'=> $request->passing_year
                 ]);
                 $this->calculate_profile_completed_percentage($user->id, 'education'); //Education completes
