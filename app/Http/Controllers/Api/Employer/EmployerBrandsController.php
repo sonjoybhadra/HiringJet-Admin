@@ -94,7 +94,11 @@ class EmployerBrandsController extends BaseApiController
     */
     public function show(string $id)
     {
-        $data = EmployerBrand::where('id', $id)->first();
+        $data = EmployerBrand::where('id', $id)
+                                ->with('industry')
+                                ->with('contact_person')
+                                ->with('contact_person_designation')
+                                ->first();
         return $this->sendResponse($data, 'Details of brand');
     }
 
