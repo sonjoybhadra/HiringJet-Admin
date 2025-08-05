@@ -171,7 +171,7 @@ class EmployerTagsController extends BaseApiController
             EmployerTag::insert([
                 'user_id'=> $request->emplyer_id,
                 'tag_name'=> $tag->tag_name,
-                'owner_id'=> $tag->tag,
+                'owner_id'=> $tag->owner_id,
                 'status'=> 1
             ]);
 
