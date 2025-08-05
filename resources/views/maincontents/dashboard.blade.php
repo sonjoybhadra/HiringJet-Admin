@@ -16,49 +16,61 @@ use App\Helpers\Helper;
     <!-- Average Daily Sales -->
       <div class="col-xl-2 col-sm-6 mb-3">
         <div class="card h-100">
-          <div class="card-header pb-0">
-            <h5 class="mb-3 card-title">Total Job Seekers</h5>
-            <h4 class="mb-3"><?=$total_jobseeker?></h4>
+          <div class="card-header">
+            <h6 class="card-title">Total Job Seekers</h6>
+          </div>
+          <div class="card-body">
+            <h4 style="bottom: 0;position: absolute;"><?=$total_jobseeker?></h4>
           </div>
         </div>
       </div>
       <div class="col-xl-2 col-sm-6 mb-3">
         <div class="card h-100">
-          <div class="card-header pb-0">
-            <h5 class="mb-3 card-title">Total Employers</h5>
-            <h4 class="mb-3">0</h4>
+          <div class="card-header">
+            <h6 class="card-title">Total Employers</h6>
+          </div>
+          <div class="card-body">
+            <h4 style="bottom: 0;position: absolute;">0</h4>
           </div>
         </div>
       </div>
       <div class="col-xl-2 col-sm-6 mb-3">
         <div class="card h-100">
-          <div class="card-header pb-0">
-            <h5 class="mb-3 card-title">Total Jobs Posted</h5>
-            <h4 class="mb-3"><?=$total_job_posted?></h4>
+          <div class="card-header">
+            <h6 class="card-title">Total Jobs Posted</h6>
+          </div>
+          <div class="card-body">
+            <h4 style="bottom: 0;position: absolute;"><?=$total_job_posted?></h4>
           </div>
         </div>
       </div>
       <div class="col-xl-2 col-sm-6 mb-3">
         <div class="card h-100">
-          <div class="card-header pb-0">
-            <h5 class="mb-3 card-title">Active Job Seekers in last 30 Days</h5>
-            <h4 class="mb-3"><?=$active_jobseeker_30_days?></h4>
+          <div class="card-header">
+            <h6 class="card-title">Active Job Seekers in last 30 Days</h6>
+          </div>
+          <div class="card-body">
+            <h4 style="bottom: 0;position: absolute;"><?=$active_jobseeker_30_days?></h4>
           </div>
         </div>
       </div>
       <div class="col-xl-2 col-sm-6 mb-3">
         <div class="card h-100">
-          <div class="card-header pb-0">
-            <h5 class="mb-3 card-title">Active Employers in last 30 Days</h5>
-            <h4 class="mb-3">0</h4>
+          <div class="card-header">
+            <h6 class="card-title">Active Employers in last 30 Days</h6>
+          </div>
+          <div class="card-body">
+            <h4 style="bottom: 0;position: absolute;">0</h4>
           </div>
         </div>
       </div>
       <div class="col-xl-2 col-sm-6 mb-3">
         <div class="card h-100">
-          <div class="card-header pb-0">
-            <h5 class="mb-3 card-title">Active Jobs in last 30 Days</h5>
-            <h4 class="mb-3"><?=$active_jobs_30_days?></h4>
+          <div class="card-header">
+            <h6 class="card-title">Active Jobs in last 30 Days</h6>
+          </div>
+          <div class="card-body">
+            <h4 style="bottom: 0;position: absolute;"><?=$active_jobs_30_days?></h4>
           </div>
         </div>
       </div>

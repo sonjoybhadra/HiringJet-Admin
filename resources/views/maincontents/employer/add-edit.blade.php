@@ -55,7 +55,7 @@ $controllerRoute = $module['controller_route'];
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Name <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="name" name="name" value="<?=$name?>" required placeholder="Name" autofocus />
+                            <input class="form-control" type="text" id="employer" name="name" value="<?=$name?>" required placeholder="Name" autofocus />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="industry_id" class="form-label">Industry <small class="text-danger">*</small></label>
@@ -118,4 +118,25 @@ $controllerRoute = $module['controller_route'];
       </div>
    </div>
 </div>
+@endsection
+@section('scripts')
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            $('#employer').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "{{ route('employers.suggest') }}",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+        });
+    </script>
 @endsection

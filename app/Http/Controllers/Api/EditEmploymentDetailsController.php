@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
-use App\Models\UserProfile;
+use App\Models\Employer;
 use App\Models\UserEmployment;
 use App\Models\UserEmploymentSkill;
 
@@ -69,7 +69,7 @@ class EditEmploymentDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'designation' => 'required|string',
-            'employer' => 'required|string',
+            'employer' => 'required',
             'is_current_job'=> 'required|boolean',
             'employment_type' => 'required|string',
             'location' => 'required|integer',
@@ -96,9 +96,11 @@ class EditEmploymentDetailsController extends BaseApiController
                     'is_current_job'=> 0
                 ]);
             }
+            $employer = new Employer();
+            $employer_id = is_numeric($request->employer) ? $request->employer : $employer->getEmployerId($request->employer);
             UserEmployment::where('id', $id)->update([
                 'last_designation'=> $request->designation,
-                'employer_id'=> $request->employer,
+                'employer_id'=> $employer_id,
                 'is_current_job'=> $request->is_current_job,
                 'employment_type'=> $request->employment_type,
                 'city_id'=> $request->location,
@@ -135,7 +137,7 @@ class EditEmploymentDetailsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'designation' => 'required|string',
-            'employer' => 'required|string',
+            'employer' => 'required',
             'is_current_job'=> 'required|boolean',
             'employment_type' => 'required|string',
             'location' => 'required|integer',
@@ -162,10 +164,12 @@ class EditEmploymentDetailsController extends BaseApiController
                     'is_current_job'=> 0
                 ]);
             }
+            $employer = new Employer();
+            $employer_id = is_numeric($request->employer) ? $request->employer : $employer->getEmployerId($request->employer);
             $employment_id = UserEmployment::insertGetId([
                 'user_id'=> auth()->user()->id,
                 'last_designation'=> $request->designation,
-                'employer_id'=> $request->employer,
+                'employer_id'=> $employer_id,
                 'is_current_job'=> $request->is_current_job,
                 'employment_type'=> $request->employment_type,
                 'city_id'=> $request->location,

@@ -45,6 +45,7 @@ class QualificationController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'           => 'required',
+                    'rank'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -61,6 +62,7 @@ class QualificationController extends Controller
                     /* user activity */
                     $fields = [
                         'name'              => strip_tags($postData['name']),
+                        'rank'              => strip_tags($postData['rank']),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Qualification::insert($fields);
@@ -88,10 +90,12 @@ class QualificationController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'           => 'required',
+                    'rank'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
                         'name'              => strip_tags($postData['name']),
+                        'rank'              => strip_tags($postData['rank']),
                         'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Qualification::where($this->data['primary_key'], '=', $id)->update($fields);

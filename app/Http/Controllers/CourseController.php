@@ -46,6 +46,7 @@ class CourseController extends Controller
                 $rules = [
                     'qualification_id'              => 'required',
                     'name'                          => 'required',
+                    'rank'                          => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -63,6 +64,7 @@ class CourseController extends Controller
                     $fields = [
                         'qualification_id'      => strip_tags($postData['qualification_id']),
                         'name'                  => strip_tags($postData['name']),
+                        'rank'                  => strip_tags($postData['rank']),
                     ];
                     Course::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -93,11 +95,13 @@ class CourseController extends Controller
                 $rules = [
                     'qualification_id'          => 'required',
                     'name'                      => 'required',
+                    'rank'                      => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
                         'qualification_id'      => strip_tags($postData['qualification_id']),
                         'name'                  => strip_tags($postData['name']),
+                        'rank'                  => strip_tags($postData['rank']),
                     ];
                     Course::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */

@@ -25,4 +25,19 @@ class Specialization extends Model
     {
         return $this->BelongsTo(Course::class, 'course_id');
     }
+
+    public function getSpecializationId ($name, $course_id, $qualification_id){
+        $specialization = Specialization::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        if($specialization){
+            return $specialization->id;
+        }
+
+        return Specialization::insertGetId([
+                    'qualification_id' => $qualification_id,
+                    'course_id' => $course_id,
+                    'name' => ucwords($name),
+                    'status'=> 1
+                ]);
+    }
+
 }

@@ -39,12 +39,13 @@ $role_id = (($user)?$user->role_id:0);
           fill="#7367F0" />
       </svg>
     </span> -->
-    <img src="<?=((Helper::getSettingValue('site_logo') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_logo'):config('constants.no_image'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block" style="margin-top: 10px;height: 50px;width: 150px;" />
-    <!-- <span class="app-brand-text demo menu-text fw-bold"><?=Helper::getSettingValue('site_name')?></span> -->
+    <img src="<?=((Helper::getSettingValue('site_favicon') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_favicon'):config('constants.no_image'))?>" alt="<?=Helper::getSettingValue('site_name')?>" class="d-block" style="margin-top: 10px;height: 30px;width: 30px;margin-right: 10px;" />
+    <span class="app-brand-text demo menu-text fw-bold"><?=Helper::getSettingValue('site_name')?></span>
   </a>
 
   <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-    <i class="ti menu-toggle-icon d-none d-xl-block align-middle"></i>
+    <!-- <i class="fa menu-toggle-icon d-none d-xl-block align-middle"></i> -->
+    <i class="fa-solid fa-bars d-none d-xl-block align-middle"></i>
     <i class="ti ti-x d-block d-xl-none ti-md align-middle"></i>
   </a>
 </div>
@@ -422,7 +423,7 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="CMS Pages">CMS Pages</div>
       </a>
     </li>
-    <!-- SEo Pages -->
+    <!-- SEO Pages -->
     <li class="menu-item <?=(($pageSegment == 'seo-page')?'active':'')?>">
       <a href="<?=url('/seo-page/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-file-lines"></i>
@@ -431,38 +432,71 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
-  <?php if(in_array(12, $moduleIds)){?>
-    <!-- Posting Jobs -->
-    <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
-      <a href="<?=url('/post-job/list')?>" class="menu-link">
+  <!-- Job -->
+    <li class="menu-item active <?=(($pageSegment == 'post-job' || $pageSegment == 'upload-post-job' || $pageSegment == 'job')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-briefcase"></i>
         <div data-i18n="Jobs">Jobs</div>
       </a>
-    </li>
-  <?php }?>
+      <ul class="menu-sub">
+        <!-- approved job list -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
+            <a href="<?=url('/post-job/list')?>" class="menu-link">
+              <div data-i18n="Approved Job List"><i class="fa-solid fa-arrow-right"></i> Approved Job List</div>
+            </a>
+          </li>
+        <?php }?>
 
-  <?php if(in_array(12, $moduleIds)){?>
-    <!-- Posting Jobs -->
-    <li class="menu-item <?=(($pageSegment == 'upload-post-job' && $pageFunction == 'list')?'active':'')?>">
-      <a href="<?=url('/upload-post-job/list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-upload"></i>
-        <div data-i18n="Upload Jobs">Upload Jobs</div>
-      </a>
-    </li>
-  <?php }?>
+        <!-- pending job list -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'pending-list')?'active':'')?>">
+            <a href="<?=url('/job/pending-list')?>" class="menu-link">
+              <div data-i18n="Pending From Bulk Uploads"><i class="fa-solid fa-arrow-right"></i> Pending From Bulk Uploads</div>
+            </a>
+          </li>
+        <?php }?>
 
-  <?php if(in_array(12, $moduleIds)){?>
-    <!-- Posting Jobs User Wise -->
-    <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'user-wise-list')?'active':'')?>">
-      <a href="<?=url('/post-job/user-wise-list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-floppy-disk"></i>
-        <div data-i18n="User Wise Job Posted">User Wise Job Posted</div>
-      </a>
+        <!-- rejected job list -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'reject-list')?'active':'')?>">
+            <a href="<?=url('/job/reject-list')?>" class="menu-link">
+              <div data-i18n="Rejected Job List"><i class="fa-solid fa-arrow-right"></i> Rejected Job List</div>
+            </a>
+          </li>
+        <?php }?>
+
+        <!-- add new job -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'add')?'active':'')?>">
+            <a href="<?=url('/post-job/add')?>" class="menu-link">
+              <div data-i18n="Add New Job"><i class="fa-solid fa-arrow-right"></i> Add New Job</div>
+            </a>
+          </li>
+        <?php }?>
+
+        <!-- Upload Jobs -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'upload-post-job' && $pageFunction == 'list')?'active':'')?>">
+            <a href="<?=url('/upload-post-job/list')?>" class="menu-link">
+              <div data-i18n="Bulk Jobs Upload"><i class="fa-solid fa-arrow-right"></i> Bulk Jobs Upload</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <!-- User Wise Job Posted -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'user-wise-list')?'active':'')?>">
+            <a href="<?=url('/post-job/user-wise-list')?>" class="menu-link">
+              <div data-i18n="User Wise Job Posted"><i class="fa-solid fa-arrow-right"></i> User Wise Job Posted</div>
+            </a>
+          </li>
+        <?php }?>
+      </ul>
     </li>
-  <?php }?>
 
   <?php if(in_array(14, $moduleIds)){?>
-    <!-- Posting Jobs -->
+    <!-- Jobseekers -->
     <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
       <a href="<?=url('/jobseeker/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-users"></i>

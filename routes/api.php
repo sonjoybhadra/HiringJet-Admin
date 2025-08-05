@@ -212,10 +212,12 @@ Route::group([
 use App\Http\Controllers\Api\Employer\EmployerRegistrationController;
 use App\Http\Controllers\Api\Employer\EmployerAuthController;
 use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
+use App\Http\Controllers\Api\Employer\EditEmployerBusinessInfoController;
 // use App\Http\Controllers\Api\Employer\ForgotpasswordController as EmployerForgotpasswordController;
 use App\Http\Controllers\Api\Employer\EmployerJobseekerController;
 use App\Http\Controllers\Api\Employer\EmployerFolderController;
 use App\Http\Controllers\Api\Employer\EmployerUserController;
+use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -237,10 +239,13 @@ Route::group([
     Route::post('/signup/setup-company-profile/{user}', [EmployerRegistrationController::class, 'setupCompanyProfile']);
 
     Route::post('/update-profile', [EditEmployerProfileController::class, 'updateProfileData']);
+    Route::post('/delete-profile-picture', [EditEmployerProfileController::class, 'removeProfilePicture']);
 
-    Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
+    Route::post('/update-business-profile', [EditEmployerBusinessInfoController::class, 'updateBusinessData']);
+
+    /* Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
-    Route::post('/change-password', [AccountSettingsController::class, 'changePassword']);
+    Route::post('/change-password', [AccountSettingsController::class, 'changePassword']); */
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
@@ -251,6 +256,10 @@ Route::group([
     Route::post('/user/delete/{id}', [EmployerUserController::class, 'destroy']);
     Route::post('/user/status/{id}', [EmployerUserController::class, 'changeStatus']);
     Route::resource('/user', EmployerUserController::class);
+
+    Route::post('/brands/delete/{id}', [EmployerBrandsController::class, 'destroy']);
+    Route::post('/brands/status/{id}', [EmployerBrandsController::class, 'changeStatus']);
+    Route::resource('/brands', EmployerBrandsController::class);
 
 });
 

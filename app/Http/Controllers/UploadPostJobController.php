@@ -26,6 +26,7 @@ use App\Helpers\Helper;
 use Auth;
 use Session;
 use Hash;
+use DB;
 
 class UploadPostJobController extends Controller
 {
@@ -34,7 +35,7 @@ class UploadPostJobController extends Controller
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Upload Job',
+            'title'             => 'Bulk Jobs Upload',
             'controller'        => 'UploadPostJobController',
             'controller_route'  => 'upload-post-job',
             'primary_key'       => 'id',
@@ -105,11 +106,14 @@ class UploadPostJobController extends Controller
                             fclose($handle);
                         }
                     /* extract csv file */
+                    // Helper::pr($rows,0);die;
+                    // echo count($rows);
                     /* insert data into post_jobs table */
                         if($rows){
                             for($k=0;$k<count($rows);$k++){
                                 // skip first row for header
                                 if($k > 0){
+                                    echo $k;
                                     $Sl_No = $rows[$k][0];
                                     $Designation = $rows[$k][1];
                                     $Employer = $rows[$k][2];
@@ -125,8 +129,8 @@ class UploadPostJobController extends Controller
                                     $Functional_Area = $rows[$k][12];
                                     $Min_Experience = $rows[$k][13];
                                     $Max_Experience = $rows[$k][14];
-                                    $Job_Description = $rows[$k][15];
-                                    $Requirement = $rows[$k][16];
+                                    $Job_Description = strip_tags($rows[$k][15]);
+                                    $Requirement = strip_tags($rows[$k][16]);
                                     $Skills = $rows[$k][17];
                                     $Is_Salary_Negotiable = $rows[$k][18];
                                     $Currency = $rows[$k][19];
@@ -263,11 +267,22 @@ class UploadPostJobController extends Controller
                                     if($getNationalityID){
                                         $nationality = $getNationalityID->id;
                                     } else {
-                                        $fields1 = [
-                                            'name' => $Nationality,
-                                            'status' => 1,
-                                        ];
-                                        $nationality = Nationality::insertGetId($fields1);
+                                        // $fields1 = [
+                                        //     'name' => $Nationality,
+                                        //     'status' => 1,
+                                        // ];
+                                        // $nationality = Nationality::insertGetId($fields1);
+
+                                        $maxId = DB::table('nationalities')->max('id');
+                                        DB::statement("ALTER SEQUENCE nationalities_id_seq RESTART WITH " . ($maxId + 1));
+
+                                        DB::table('nationalities')->updateOrInsert(
+                                            ['name' => $Nationality],     // Match condition
+                                            ['status' => 1]               // Will update if exists
+                                        );
+
+                                        $nationality = Nationality::where('name', $Nationality)->first();
+                                        $nationality = $nationality->id;
                                     }
 
                                     // contract type
@@ -287,11 +302,22 @@ class UploadPostJobController extends Controller
                                     if($getFunctionalAreaID){
                                         $functional_area = $getFunctionalAreaID->id;
                                     } else {
-                                        $fields1 = [
-                                            'name' => $Functional_Area,
-                                            'status' => 1,
-                                        ];
-                                        $functional_area = FunctionalArea::insertGetId($fields1);
+                                        // $fields1 = [
+                                        //     'name' => $Functional_Area,
+                                        //     'status' => 1,
+                                        // ];
+                                        // $functional_area = FunctionalArea::insertGetId($fields1);
+
+                                        $maxId = DB::table('functional_areas')->max('id');
+                                        DB::statement("ALTER SEQUENCE functional_areas_id_seq RESTART WITH " . ($maxId + 1));
+
+                                        DB::table('functional_areas')->updateOrInsert(
+                                            ['name' => $Functional_Area],     // Match condition
+                                            ['status' => 1]               // Will update if exists
+                                        );
+
+                                        $functional_area = FunctionalArea::where('name', $Functional_Area)->first();
+                                        $functional_area = $functional_area->id;
                                     }
 
                                     // skill
@@ -314,7 +340,53 @@ class UploadPostJobController extends Controller
                                         }
                                     }
 
-                                    
+                                    $cleanDescription = $this->normalizeText($Job_Description);
+                                    $cleanRequirement = $this->normalizeText($Requirement);
+
+                                    $minSalary = $Min_Salary !== '' ? $Min_Salary : null;
+                                    $maxSalary = $Max_Salary !== '' ? $Max_Salary : null;
+                                    $isNegotiable = $Is_Salary_Negotiable !== '' ? 1 : 0;
+
+                                    if ($Application_Through === 'Apply To Email') {
+                                        $application_through = 'Apply To Email';
+                                        $apply_on_email = $Apply_on_email;
+                                        $apply_on_link = null;
+                                        $walkin_address1 = $Walkin_address_1;
+                                        $walkin_address2 = $Walkin_address_2;
+                                        $walkin_country = $Walkin_Country;
+                                        $walkin_state = $Walkin_State;
+                                        $walkin_city = $Walkin_City;
+                                        $walkin_pincode = $Walkin_Pincode;
+                                        $walkin_latitude = $Walkin_Latitude;
+                                        $walkin_longitude = $Walkin_Longitude;
+                                        $walkin_details = $Walkin_Details;
+                                    } elseif ($Application_Through === 'Apply To Link') {
+                                        $application_through = 'Apply To Link';
+                                        $apply_on_email = null;
+                                        $apply_on_link = $Apply_on_link;
+                                        $walkin_address1 = $Walkin_address_1;
+                                        $walkin_address2 = $Walkin_address_2;
+                                        $walkin_country = $Walkin_Country;
+                                        $walkin_state = $Walkin_State;
+                                        $walkin_city = $Walkin_City;
+                                        $walkin_pincode = $Walkin_Pincode;
+                                        $walkin_latitude = $Walkin_Latitude;
+                                        $walkin_longitude = $Walkin_Longitude;
+                                        $walkin_details = $Walkin_Details;
+                                    } elseif ($Application_Through === 'Hiring Jet') {
+                                        $application_through = 'Hiring Jet';
+                                        $apply_on_email = null;
+                                        $apply_on_link = null;
+                                        $walkin_address1 = $Walkin_address_1;
+                                        $walkin_address2 = $Walkin_address_2;
+                                        $walkin_country = $Walkin_Country;
+                                        $walkin_state = $Walkin_State;
+                                        $walkin_city = $Walkin_City;
+                                        $walkin_pincode = $Walkin_Pincode;
+                                        $walkin_latitude = $Walkin_Latitude;
+                                        $walkin_longitude = $Walkin_Longitude;
+                                        $walkin_details = $Walkin_Details;
+                                    }
 
                                     $fields = [
                                         'sl_no'                     => $next_sl_no,
@@ -336,44 +408,43 @@ class UploadPostJobController extends Controller
                                         'functional_area'           => $functional_area,
                                         'min_exp_year'              => $Min_Experience,
                                         'max_exp_year'              => $Max_Experience,
-                                        'job_description'           => $Job_Description,
-                                        'requirement'               => $Requirement,
+                                        'job_description'           => $cleanDescription,
+                                        'requirement'               => $cleanRequirement,
                                         'skill_ids'                 => ((!empty($skill_ids))?json_encode($skill_ids):''),
                                         'skill_names'               => ((!empty($Skills))?json_encode(explode(',', $Skills)):''),
                                         'expected_close_date'       => null,
                                         'currency'                  => strip_tags($Currency),
-                                        'min_salary'                => $Min_Salary,
-                                        'max_salary'                => $Max_Salary,
-                                        'is_salary_negotiable'      => (($Is_Salary_Negotiable == 'YES')?1:0),
+                                        'min_salary'                => (($minSalary != '')?$minSalary:0),
+                                        'max_salary'                => (($maxSalary != '')?$maxSalary:0),
+                                        'is_salary_negotiable'      => $isNegotiable,
                                         'posting_open_date'         => (($Posting_Open_Date != '')?date_format(date_create($Posting_Open_Date), "Y-m-d"):null),
                                         'posting_close_date'        => (($Posting_Close_Date != '')?date_format(date_create($Posting_Close_Date), "Y-m-d"):null),
-                                        // 'posting_open_date'         => $Posting_Open_Date,
-                                        // 'posting_close_date'        => $Posting_Close_Date,
-                                        'application_through'       => strip_tags($Application_Through),
-                                        'apply_on_email'            => strip_tags($Apply_on_email),
-                                        'apply_on_link'             => strip_tags($Apply_on_link),
-                                        'walkin_address1'           => strip_tags($Walkin_address_1),
-                                        'walkin_address2'           => strip_tags($Walkin_address_2),
-                                        'walkin_country'            => strip_tags($Walkin_Country),
-                                        'walkin_state'              => strip_tags($Walkin_State),
-                                        'walkin_city'               => strip_tags($Walkin_City),
-                                        'walkin_pincode'            => strip_tags($Walkin_Pincode),
-                                        'walkin_latitude'           => strip_tags($Walkin_Latitude),
-                                        'walkin_longitude'          => strip_tags($Walkin_Longitude),
-                                        'walkin_details'            => html_entity_decode($Walkin_Details),
+                                        'application_through'       => $application_through,
+                                        'apply_on_email'            => $apply_on_email,
+                                        'apply_on_link'             => $apply_on_link,
+                                        'walkin_address1'           => $walkin_address1,
+                                        'walkin_address2'           => $walkin_address2,
+                                        'walkin_country'            => $walkin_country,
+                                        'walkin_state'              => $walkin_state,
+                                        'walkin_city'               => $walkin_city,
+                                        'walkin_pincode'            => $walkin_pincode,
+                                        'walkin_latitude'           => $walkin_latitude,
+                                        'walkin_longitude'          => $walkin_longitude,
+                                        'walkin_details'            => html_entity_decode($walkin_details),
                                         'created_by'                => session('user_data')['user_id'],
                                         'updated_by'                => session('user_data')['user_id'],
-                                        'status'                    => 1,
+                                        'status'                    => 0,
                                         'upload_id'                 => $upload_id,
                                     ];
-                                    // Helper::pr($fields);
-                                    PostJob::insertGetId($fields);
+                                    // Helper::pr($fields,0);
+                                    $maxId = DB::table('post_jobs')->max('id');
+                                    DB::statement("ALTER SEQUENCE post_jobs_id_seq RESTART WITH " . ($maxId + 1));
+                                    PostJob::insert($fields);
                                 }
                             }
                         }
                     /* insert data into post_jobs table */
-                    // Helper::pr($rows);
-                    // die;
+                    
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -381,6 +452,18 @@ class UploadPostJobController extends Controller
             }
 
             return view('maincontents.' . $page_name, $data);
+        }
+        public function normalizeText($text) {
+            return strtr($text, [
+                "\x91" => "'", // left single quote
+                "\x92" => "'", // right single quote
+                "\x93" => '"', // left double quote
+                "\x94" => '"', // right double quote
+                "\x96" => '-', // en dash
+                "\x97" => '--', // em dash
+                "\x85" => '...', // ellipsis
+                "\x95" => '*', // bullet
+            ]);
         }
     /* list */
     /* delete */

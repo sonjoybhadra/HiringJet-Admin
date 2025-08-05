@@ -10,13 +10,13 @@ class University extends Model
     use SoftDeletes;
 
     public function getUniversityId ($name){
-        $university = City::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
+        $university = University::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
         if($university){
             return $university->id;
         }
 
         return University::insertGetId([
-                    'name' => $name,
+                    'name' => ucwords($name),
                     'status'=> 1
                 ]);
     }
