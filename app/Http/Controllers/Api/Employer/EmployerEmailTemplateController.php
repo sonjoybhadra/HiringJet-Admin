@@ -198,15 +198,19 @@ class EmployerEmailTemplateController extends BaseApiController
     }
 
     private function getList(){
-        $own_list = EmployerEmailtemplate::with('industry')
-                                ->with('contact_person')
-                                ->with('contact_person_designation')
+        $own_list = EmployerEmailtemplate::with('from_email_user')
+                                ->with('designations')
+                                ->with('countries')
+                                ->with('cities')
+                                ->with('currency')
                                 ->where('user_id', auth()->user()->id)
                                 ->latest()
                                 ->get();
-        $shared_list = EmployerEmailtemplate::with('industry')
-                                ->with('contact_person')
-                                ->with('contact_person_designation')
+        $shared_list = EmployerEmailtemplate::with('from_email_user')
+                                ->with('designations')
+                                ->with('countries')
+                                ->with('cities')
+                                ->with('currency')
                                 ->where('user_id', auth()->user()->id)
                                 ->where('owner_id', '!=', auth()->user()->id)
                                 ->latest()
