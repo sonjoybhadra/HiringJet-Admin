@@ -137,7 +137,7 @@ class EmployerTagsController extends BaseApiController
 
     private function getList(){
         return [
-            'own_list' => EmployerTag::where('owner_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get(),
+            'own_list' => EmployerTag::where('user_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get(),
             'shared_list' => EmployerTag::where('user_id', auth()->user()->id)
                                             ->where('owner_id', '!=', auth()->user()->id)
                                             ->orderBy('tag_name', 'ASC')->get(),
