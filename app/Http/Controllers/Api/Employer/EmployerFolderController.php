@@ -219,9 +219,13 @@ class EmployerFolderController extends BaseApiController
             if($has_data > 0){
                 return $this->sendError('Error', 'Same name folder is already exists.', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
-
-            EmployerCvFolder::find($id)->update([
-                'user_id'=> $request->emplyer_id
+            $employer = User::find($request->emplyer_id);
+            EmployerCvFolder::create([
+                'user_id'=> $request->emplyer_id,
+                'user_employer_id'=> $employer->user_employer_details->id,
+                'folder_name'=> strtolower($folder->folder_name),
+                'owner_id'=> $folder->owner_id,
+                'status'=> 1
             ]);
 
             return $this->sendResponse($this->getList(), 'Folder shared with selected user successfully.');
