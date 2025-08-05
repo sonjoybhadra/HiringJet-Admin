@@ -213,7 +213,7 @@ class EmployerFolderController extends BaseApiController
 
         try{
             $folder = EmployerCvFolder::find($id);
-            $has_data = EmployerCvFolder::where('owner_id', auth()->user()->id)
+            $has_data = EmployerCvFolder::where('user_id', $request->emplyer_id)
                                         ->where('folder_name', strtolower($folder->folder_name))
                                         ->count();
             if($has_data > 0){

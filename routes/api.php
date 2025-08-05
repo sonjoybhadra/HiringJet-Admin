@@ -219,6 +219,7 @@ use App\Http\Controllers\Api\Employer\EmployerFolderController;
 use App\Http\Controllers\Api\Employer\EmployerUserController;
 use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 use App\Http\Controllers\Api\Employer\EmployerTagsController;
+use App\Http\Controllers\Api\Employer\EmployerEmailTemplateController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -267,6 +268,11 @@ Route::group([
     Route::post('/tags/delete/{id}', [EmployerTagsController::class, 'destroy']);
     Route::post('/tags/status/{id}', [EmployerTagsController::class, 'changeStatus']);
     Route::resource('/tags', EmployerTagsController::class);
+
+    Route::post('/email-templates/share/{id}', [EmployerEmailTemplateController::class, 'share']);
+    Route::post('/email-templates/delete/{id}', [EmployerEmailTemplateController::class, 'destroy']);
+    Route::post('/email-templates/status/{id}', [EmployerEmailTemplateController::class, 'changeStatus']);
+    Route::resource('/email-templates', EmployerEmailTemplateController::class);
 
 });
 
