@@ -46,7 +46,7 @@ class ITskillController extends Controller
                 $rules = [
                     'name'                      => 'required',
                     'version'                   => 'required',
-                    'publishing_year'           => 'required',
+                    // 'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -64,10 +64,10 @@ class ITskillController extends Controller
                     $fields = [
                         'name'                          => strip_tags($postData['name']),
                         'version'                       => strip_tags($postData['version']),
-                        'publishing_year'               => strip_tags($postData['publishing_year']),
+                        'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
                         'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
-                    ItSkill::insert($fields);
+                    ItSkill::create($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -93,13 +93,13 @@ class ITskillController extends Controller
                 $rules = [
                     'name'                      => 'required',
                     'version'                   => 'required',
-                    'publishing_year'           => 'required',
+                    // 'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
                         'name'                          => strip_tags($postData['name']),
                         'version'                       => strip_tags($postData['version']),
-                        'publishing_year'               => strip_tags($postData['publishing_year']),
+                        'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
                         'status'                        => ((array_key_exists("status",$postData))?1:0),
                     ];
                     ItSkill::where($this->data['primary_key'], '=', $id)->update($fields);
