@@ -98,7 +98,13 @@ class EmployerEmailTemplateController extends BaseApiController
     */
     public function show(string $id)
     {
-        $data = EmployerEmailtemplate::where('id', $id)->first();
+        $data = EmployerEmailtemplate::where('id', $id)
+                                ->with('from_email_user')
+                                ->with('designations')
+                                ->with('countries')
+                                ->with('cities')
+                                ->with('currency')
+                                ->first();
         return $this->sendResponse($data, 'Details of Email template');
     }
 
