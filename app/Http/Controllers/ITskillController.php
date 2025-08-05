@@ -61,13 +61,23 @@ class ITskillController extends Controller
                         ];
                         UserActivity::insert($activityData);
                     /* user activity */
-                    $fields = [
-                        'name'                          => strip_tags($postData['name']),
-                        'version'                       => strip_tags($postData['version']),
-                        'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
-                        'status'                        => ((array_key_exists("status",$postData))?1:0),
-                    ];
-                    ItSkill::create($fields);
+                    // $fields = [
+                    //     'name'                          => strip_tags($postData['name']),
+                    //     'version'                       => strip_tags($postData['version']),
+                    //     'publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0),
+                    //     'status'                        => ((array_key_exists("status",$postData))?1:0),
+                    // ];
+                    // ItSkill::create($fields);
+                    $maxId = DB::table('it_skills')->max('id');
+                    DB::statement("ALTER SEQUENCE it_skills_id_seq RESTART WITH " . ($maxId + 1));
+
+                    DB::table('it_skills')->updateOrInsert(
+                        ['name'                          => strip_tags($postData['name'])],
+                        ['version'                       => strip_tags($postData['version'])],
+                        ['publishing_year'               => (($postData['publishing_year'] != '')?strip_tags($postData['publishing_year']):0)],
+                        ['status'                        => ((array_key_exists("status",$postData))?1:0)]
+                    );
+
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
