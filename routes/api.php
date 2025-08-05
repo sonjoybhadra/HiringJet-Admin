@@ -210,6 +210,7 @@ Route::group([
  * Starts employer auth section
 */
 use App\Http\Controllers\Api\Employer\EmployerRegistrationController;
+use App\Http\Controllers\Api\Employer\EmployerPostJobRegistrationController;
 use App\Http\Controllers\Api\Employer\EmployerAuthController;
 use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
 use App\Http\Controllers\Api\Employer\EditEmployerBusinessInfoController;
@@ -223,9 +224,14 @@ Route::post('/employer/signup', [EmployerRegistrationController::class, 'registr
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
 Route::post('/employer/signup/verification-top', [EmployerRegistrationController::class, 'registerVerification']);
 
+Route::post('/employer/post-job/register', [EmployerPostJobRegistrationController::class, 'registration']);
+Route::post('/employer/check-email', [EmployerPostJobRegistrationController::class, 'checkEmail']);
+Route::post('/employer/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
+
 Route::post('/employer/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
 Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
+
 
 Route::post('/employer/login', [EmployerAuthController::class, 'login']);
 
