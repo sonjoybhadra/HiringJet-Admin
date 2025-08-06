@@ -207,6 +207,11 @@ $controllerRoute = $module['controller_route'];
 @endsection
 @section('scripts')
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ Script loaded and DOM is ready');
+    });
+</script>
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
