@@ -49,6 +49,7 @@ use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\ReportBugController;
 use App\Http\Controllers\JobseekerController;
+use App\Http\Controllers\EmployerUserController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -382,6 +383,20 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'upload-post-job/list', [UploadPostJobController::class, 'list']);
         Route::get('upload-post-job/delete/{id}', [UploadPostJobController::class, 'delete']);
     /* upload post job */
+
+    /* employer users */
+        Route::get('employer-user/list', [EmployerUserController::class, 'list']);
+        Route::match(['get', 'post'], 'employer-user/add', [EmployerUserController::class, 'add']);
+        Route::match(['get', 'post'], 'employer-user/edit/{id}', [EmployerUserController::class, 'edit']);
+        Route::get('employer-user/delete/{id}', [EmployerUserController::class, 'delete']);
+        Route::get('employer-user/change-status/{id}', [EmployerUserController::class, 'change_status']);
+        Route::match(['get', 'post'], 'employer-user/profile/{id}', [EmployerUserController::class, 'profile']);
+        Route::match(['get', 'post'], 'employer-user/resend-otp/{id}', [EmployerUserController::class, 'resendOtp']);
+        Route::match(['get', 'post'], 'employer-user/verify-otp/{id}', [EmployerUserController::class, 'verifyOtp']);
+        Route::match(['get', 'post'], 'employer-user/create-business/{id}', [EmployerUserController::class, 'createBusiness']);
+        Route::get('/get-states/{country_id}', [EmployerUserController::class, 'getStates']);
+        Route::get('/get-cities/{state_id}', [EmployerUserController::class, 'getCities']);
+    /* employer users */
 
     /* jobseeker */
         Route::get('jobseeker/list', [JobseekerController::class, 'list']);

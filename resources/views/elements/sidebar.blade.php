@@ -496,6 +496,16 @@ $role_id = (($user)?$user->role_id:0);
     </li>
 
   <?php if(in_array(14, $moduleIds)){?>
+    <!-- Employer Users -->
+    <li class="menu-item <?=(($pageSegment == 'employer-user')?'active':'')?>">
+      <a href="<?=url('/employer-user/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-users"></i>
+        <div data-i18n="Employer Users">Employer Users</div>
+      </a>
+    </li>
+  <?php }?>
+  
+  <?php if(in_array(14, $moduleIds)){?>
     <!-- Jobseekers -->
     <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
       <a href="<?=url('/jobseeker/list')?>" class="menu-link">

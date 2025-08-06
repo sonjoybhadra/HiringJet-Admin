@@ -103,21 +103,21 @@ function loadTable(config) {
 
                 html += `<td>`;
                 
-                if(config.routePrefix != 'jobseeker'){
+                if(config.routePrefix != 'jobseeker' && config.routePrefix != 'employer-user'){
                     html += `<a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>`;
-                }
 
-                if (status == 1) {
-                    html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-success me-1" title="Deactivate">
-                        <i class="fa-solid fa-check"></i>
-                    </a>`;
-                } else {
-                    html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-warning me-1" title="Activate">
-                        <i class="fas fa-times"></i>
-                    </a>`;
-                }
+                    if (status == 1) {
+                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-success me-1" title="Deactivate">
+                            <i class="fa-solid fa-check"></i>
+                        </a>`;
+                    } else {
+                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-warning me-1" title="Activate">
+                            <i class="fas fa-times"></i>
+                        </a>`;
+                    }
+                }                
 
                 html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
                     <i class="fa-solid fa-trash"></i>
@@ -143,6 +143,24 @@ function loadTable(config) {
                     html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
                                 </a>`;
+                }
+
+                if(config.routePrefix == 'employer-user'){
+                    const completed_steps = row['completed_steps'];
+                    if(completed_steps < 2){
+                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary" title="Business" target="_blank">
+                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Create Business
+                                </a>`;
+                    } else {
+                        html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
+                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
+                                </a>`;
+                    }
+                    if(status == 0){
+                        html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning" title="Verify OTP">
+                                    <i class="fa-solid fa-key"></i>&nbsp;&nbsp;Verify OTP
+                                </a>`;
+                    }
                 }
 
                 html += `</td>`;
