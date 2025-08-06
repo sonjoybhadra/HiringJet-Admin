@@ -209,87 +209,60 @@ $controllerRoute = $module['controller_route'];
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('✅ Script loaded and DOM is ready');
+        const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const stateDropdown = document.getElementById('state');
+        const cityDropdown = document.getElementById('city');
 
-        const country = document.getElementById('country');
-        const state = document.getElementById('state');
-        const city = document.getElementById('city');
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.id === 'country') {
+                const countryId = e.target.value;
+                console.log('🟡 [Delegated] Country changed:', countryId);
 
-        console.log('🔎 country dropdown:', country);
-        console.log('🔎 state dropdown:', state);
-        console.log('🔎 city dropdown:', city);
+                fetch("{{ route('get.states') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        body: JSON.stringify({
+                            country_id: countryId
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        stateDropdown.innerHTML = '<option value="">Select State</option>';
+                        for (let id in data) {
+                            stateDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
+                        }
+                        cityDropdown.innerHTML = '<option value="">Select City</option>';
+                    })
+                    .catch(error => console.error('❌ State fetch error:', error));
+            }
 
-        if (!country) {
-            console.error('❌ #country dropdown not found');
-            return;
-        }
+            if (e.target && e.target.id === 'state') {
+                const stateId = e.target.value;
+                console.log('🟡 [Delegated] State changed:', stateId);
 
-        country.addEventListener('change', function() {
-            console.log('🟡 Country changed:', this.value);
+                fetch("{{ route('get.cities') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        body: JSON.stringify({
+                            state_id: stateId
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        cityDropdown.innerHTML = '<option value="">Select City</option>';
+                        for (let id in data) {
+                            cityDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
+                        }
+                    })
+                    .catch(error => console.error('❌ City fetch error:', error));
+            }
         });
     });
 </script>
 @endsection
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        const countryDropdown = document.getElementById('country');
-        const stateDropdown = document.getElementById('state');
-        const cityDropdown = document.getElementById('city');
-
-        if (!countryDropdown || !stateDropdown || !cityDropdown) {
-            console.error("One or more dropdowns not found in DOM.");
-            return;
-        }
-
-        countryDropdown.addEventListener('change', function() {
-            console.log('Country changed:', this.value);
-            fetch("{{ route('get.states') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        country_id: this.value
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    stateDropdown.innerHTML = '<option value="">Select State</option>';
-                    cityDropdown.innerHTML = '<option value="">Select City</option>'; // Reset city too
-                    for (let id in data) {
-                        stateDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching states:', error);
-                });
-        });
-
-        countryDropdown.addEventListener('change', function() {
-            console.log('State changed:', this.value);
-            fetch("{{ route('get.cities') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        country_id: this.value
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    cityDropdown.innerHTML = '<option value="">Select City</option>';
-                    for (let id in data) {
-                        cityDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching cities:', error);
-                });
-        });
-    });
-</script>
