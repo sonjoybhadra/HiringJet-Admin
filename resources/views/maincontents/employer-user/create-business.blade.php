@@ -213,6 +213,7 @@ $controllerRoute = $module['controller_route'];
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         document.getElementById('country_id').addEventListener('change', function() {
+            console.log('Country changed:', this.value); // 👈 See this in Console
             fetch("{{ route('get.states') }}", {
                     method: 'POST',
                     headers: {
