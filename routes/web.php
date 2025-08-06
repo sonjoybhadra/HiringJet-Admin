@@ -393,6 +393,9 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'], 'employer-user/profile/{id}', [EmployerUserController::class, 'profile']);
         Route::match(['get', 'post'], 'employer-user/resend-otp/{id}', [EmployerUserController::class, 'resendOtp']);
         Route::match(['get', 'post'], 'employer-user/verify-otp/{id}', [EmployerUserController::class, 'verifyOtp']);
+        Route::match(['get', 'post'], 'employer-user/create-business/{id}', [EmployerUserController::class, 'createBusiness']);
+        Route::get('/get-states/{country_id}', [EmployerUserController::class, 'getStates']);
+        Route::get('/get-cities/{state_id}', [EmployerUserController::class, 'getCities']);
     /* employer users */
 
     /* jobseeker */

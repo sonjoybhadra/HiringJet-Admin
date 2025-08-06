@@ -17,6 +17,8 @@ use App\Models\EmployerTag;
 use App\Models\Industry;
 use App\Models\Designation;
 use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
@@ -376,4 +378,38 @@ class EmployerUserController extends Controller
             return view('maincontents.' . $page_name, $data);
         }
     /* profile */
+    /* create business */
+        public function createBusiness(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $page_name                      = 'employer-user.create-business';
+            $data['id']                     = $id;
+            $data['row']                    = DB::table('users')
+                                                ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
+                                                ->select('users.*', 'user_employers.*')
+                                                ->where('users.id', '=', $id)
+                                                ->first();
+
+            $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
+            $phone                          = (($data['row'])?$data['row']->phone:'');
+            $title                          = $this->data['title'].' Create Business : '.$name.' ('.$phone.')';
+
+            $data['industries']             = Industry::select('id', 'name')->where('status', '=', 1)->orderBy('name', 'ASC')->get();
+            $data['countries']              = Country::select('id', 'name')->where('status', '=', 1)->orderBy('name', 'ASC')->get();
+            
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function getStates($country_id)
+        {
+            $states = State::where('country_id', $country_id)->pluck('name', 'id');
+            return response()->json($states);
+        }
+
+        public function getCities($state_id)
+        {
+            $cities = City::where('country_id', $state_id)->pluck('name', 'id');
+            return response()->json($cities);
+        }
+    /* create business */
 }
