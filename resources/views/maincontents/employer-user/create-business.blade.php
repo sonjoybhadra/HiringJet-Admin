@@ -207,7 +207,7 @@ $controllerRoute = $module['controller_route'];
 @endsection
 @section('scripts')
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
-
+@endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -271,4 +271,3 @@ $controllerRoute = $module['controller_route'];
         });
     });
 </script>
-@endsection
