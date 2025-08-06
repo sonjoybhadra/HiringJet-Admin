@@ -210,6 +210,7 @@ Route::group([
  * Starts employer auth section
 */
 use App\Http\Controllers\Api\Employer\EmployerRegistrationController;
+use App\Http\Controllers\Api\Employer\EmployerPostJobRegistrationController;
 use App\Http\Controllers\Api\Employer\EmployerAuthController;
 use App\Http\Controllers\Api\Employer\EditEmployerProfileController;
 use App\Http\Controllers\Api\Employer\EditEmployerBusinessInfoController;
@@ -219,14 +220,20 @@ use App\Http\Controllers\Api\Employer\EmployerFolderController;
 use App\Http\Controllers\Api\Employer\EmployerUserController;
 use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 use App\Http\Controllers\Api\Employer\EmployerTagsController;
+use App\Http\Controllers\Api\Employer\EmployerEmailTemplateController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
 Route::post('/employer/signup/verification-top', [EmployerRegistrationController::class, 'registerVerification']);
 
+Route::post('/employer/post-job/register', [EmployerPostJobRegistrationController::class, 'registration']);
+Route::post('/employer/check-email', [EmployerPostJobRegistrationController::class, 'checkEmail']);
+Route::post('/employer/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
+
 Route::post('/employer/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
 Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
+
 
 Route::post('/employer/login', [EmployerAuthController::class, 'login']);
 
@@ -267,6 +274,11 @@ Route::group([
     Route::post('/tags/delete/{id}', [EmployerTagsController::class, 'destroy']);
     Route::post('/tags/status/{id}', [EmployerTagsController::class, 'changeStatus']);
     Route::resource('/tags', EmployerTagsController::class);
+
+    Route::post('/email-templates/share/{id}', [EmployerEmailTemplateController::class, 'share']);
+    Route::post('/email-templates/delete/{id}', [EmployerEmailTemplateController::class, 'destroy']);
+    Route::post('/email-templates/status/{id}', [EmployerEmailTemplateController::class, 'changeStatus']);
+    Route::resource('/email-templates', EmployerEmailTemplateController::class);
 
 });
 

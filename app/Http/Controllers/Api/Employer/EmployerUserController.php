@@ -30,7 +30,9 @@ class EmployerUserController extends BaseApiController
     */
     public function index(Request $request)
     {
-        $list = User::where('parent_id', auth()->user()->id)->latest()->get();
+        $list = User::where('parent_id', auth()->user()->id)
+                    ->with('user_employer_details')
+                    ->latest()->get();
         return $this->sendResponse($list, 'User List.');
     }
 
@@ -109,6 +111,7 @@ class EmployerUserController extends BaseApiController
     {
         $list = User::where('id', $id)
                     ->where('parent_id', auth()->user()->id)
+                    ->with('user_employer_details')
                     ->first();
         return $this->sendResponse($list, 'Member details.');
     }

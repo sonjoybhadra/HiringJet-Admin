@@ -137,7 +137,7 @@ class EmployerTagsController extends BaseApiController
 
     private function getList(){
         return [
-            'own_list' => EmployerTag::where('owner_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get(),
+            'own_list' => EmployerTag::where('user_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get(),
             'shared_list' => EmployerTag::where('user_id', auth()->user()->id)
                                             ->where('owner_id', '!=', auth()->user()->id)
                                             ->orderBy('tag_name', 'ASC')->get(),
@@ -168,8 +168,11 @@ class EmployerTagsController extends BaseApiController
                 return $this->sendError('Duplicate Error', 'Duplicate tag is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            EmployerTag::find($id)->update([
-                'user_id'=> $request->emplyer_id
+            EmployerTag::insert([
+                'user_id'=> $request->emplyer_id,
+                'tag_name'=> $tag->tag_name,
+                'owner_id'=> $tag->owner_id,
+                'status'=> 1
             ]);
 
             return $this->sendResponse($this->getList(), 'Tag shared with selected user successfully.');
