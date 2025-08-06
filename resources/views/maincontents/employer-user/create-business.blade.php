@@ -128,8 +128,8 @@ $controllerRoute = $module['controller_route'];
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="country_id" class="form-label">Country <small class="text-danger">*</small></label>
-                                <select class="form-control" type="text" id="country_id" name="country_id" required>
+                                <label for="country" class="form-label">Country <small class="text-danger">*</small></label>
+                                <select class="form-control" type="text" id="country" name="country_id" required>
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
@@ -139,14 +139,14 @@ $controllerRoute = $module['controller_route'];
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="state_id" class="form-label">State <small class="text-danger">*</small></label>
-                                <select class="form-control" type="text" id="state_id" name="state_id" required>
+                                <label for="state" class="form-label">State <small class="text-danger">*</small></label>
+                                <select class="form-control" type="text" id="state" name="state_id" required>
                                     <option value="" selected>Select State</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="city_id" class="form-label">City <small class="text-danger">*</small></label>
-                                <select class="form-control" type="text" id="city_id" name="city_id" required>
+                                <label for="city" class="form-label">City <small class="text-danger">*</small></label>
+                                <select class="form-control" type="text" id="city" name="city_id" required>
                                     <option value="" selected>Select City</option>
                                 </select>
                             </div>
@@ -212,8 +212,17 @@ $controllerRoute = $module['controller_route'];
     document.addEventListener('DOMContentLoaded', function() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        document.getElementById('country_id').addEventListener('change', function() {
-            console.log('Country changed:', this.value); // 👈 See this in Console
+        const countryDropdown = document.getElementById('country');
+        const stateDropdown = document.getElementById('state');
+        const cityDropdown = document.getElementById('city');
+
+        if (!countryDropdown || !stateDropdown || !cityDropdown) {
+            console.error("One or more dropdowns not found in DOM.");
+            return;
+        }
+
+        countryDropdown.addEventListener('change', function() {
+            console.log('Country changed:', this.value);
             fetch("{{ route('get.states') }}", {
                     method: 'POST',
                     headers: {
@@ -226,16 +235,19 @@ $controllerRoute = $module['controller_route'];
                 })
                 .then(res => res.json())
                 .then(data => {
-                    let stateDropdown = document.getElementById('state_id');
                     stateDropdown.innerHTML = '<option value="">Select State</option>';
+                    cityDropdown.innerHTML = '<option value="">Select City</option>'; // Reset city too
                     for (let id in data) {
                         stateDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
                     }
-                    document.getElementById('city').innerHTML = '<option value="">Select City</option>';
+                })
+                .catch(error => {
+                    console.error('Error fetching states:', error);
                 });
         });
 
-        document.getElementById('country_id').addEventListener('change', function() {
+        countryDropdown.addEventListener('change', function() {
+            console.log('State changed:', this.value);
             fetch("{{ route('get.cities') }}", {
                     method: 'POST',
                     headers: {
@@ -248,11 +260,13 @@ $controllerRoute = $module['controller_route'];
                 })
                 .then(res => res.json())
                 .then(data => {
-                    let cityDropdown = document.getElementById('city_id');
                     cityDropdown.innerHTML = '<option value="">Select City</option>';
                     for (let id in data) {
                         cityDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
                     }
+                })
+                .catch(error => {
+                    console.error('Error fetching cities:', error);
                 });
         });
     });
