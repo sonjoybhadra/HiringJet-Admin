@@ -400,15 +400,15 @@ class EmployerUserController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
-        public function getStates($country_id)
+        public function getStates(Request $request)
         {
-            $states = State::where('country_id', $country_id)->pluck('name', 'id');
+            $states = \App\Models\State::where('country_id', $request->country_id)->pluck('name', 'id');
             return response()->json($states);
         }
 
-        public function getCities($state_id)
+        public function getCities(Request $request)
         {
-            $cities = City::where('country_id', $state_id)->pluck('name', 'id');
+            $cities = \App\Models\City::where('country_id', $request->country_id)->pluck('name', 'id');
             return response()->json($cities);
         }
     /* create business */

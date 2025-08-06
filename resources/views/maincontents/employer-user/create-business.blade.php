@@ -209,31 +209,51 @@ $controllerRoute = $module['controller_route'];
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
 
 <script>
-    document.getElementById('country_id').addEventListener('change', function() {
-        let countryId = this.value;
-        fetch(`/get-states/${countryId}`)
-            .then(response => response.json())
-            .then(data => {
-                let stateDropdown = document.getElementById('state_id');
-                stateDropdown.innerHTML = '<option value="">Select State</option>';
-                for (let id in data) {
-                    stateDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
-                }
-                document.getElementById('city').innerHTML = '<option value="">Select City</option>';
-            });
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    document.getElementById('country_id').addEventListener('change', function() {
-        let countryId = this.value;
-        fetch(`/get-cities/${countryId}`)
-            .then(response => response.json())
-            .then(data => {
-                let cityDropdown = document.getElementById('city_id');
-                cityDropdown.innerHTML = '<option value="">Select City</option>';
-                for (let id in data) {
-                    cityDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
-                }
-            });
+        document.getElementById('country_id').addEventListener('change', function() {
+            fetch("{{ route('get.states') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        country_id: this.value
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    let stateDropdown = document.getElementById('state_id');
+                    stateDropdown.innerHTML = '<option value="">Select State</option>';
+                    for (let id in data) {
+                        stateDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
+                    }
+                    document.getElementById('city').innerHTML = '<option value="">Select City</option>';
+                });
+        });
+
+        document.getElementById('country_id').addEventListener('change', function() {
+            fetch("{{ route('get.cities') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        country_id: this.value
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    let cityDropdown = document.getElementById('city_id');
+                    cityDropdown.innerHTML = '<option value="">Select City</option>';
+                    for (let id in data) {
+                        cityDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
+                    }
+                });
+        });
     });
 </script>
 @endsection
