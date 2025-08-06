@@ -210,6 +210,23 @@ $controllerRoute = $module['controller_route'];
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Script loaded and DOM is ready');
+
+        const country = document.getElementById('country');
+        const state = document.getElementById('state');
+        const city = document.getElementById('city');
+
+        console.log('🔎 country dropdown:', country);
+        console.log('🔎 state dropdown:', state);
+        console.log('🔎 city dropdown:', city);
+
+        if (!country) {
+            console.error('❌ #country dropdown not found');
+            return;
+        }
+
+        country.addEventListener('change', function() {
+            console.log('🟡 Country changed:', this.value);
+        });
     });
 </script>
 @endsection
