@@ -136,7 +136,7 @@ $controllerRoute = $module['controller_route'];
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="address" class="form-label">Office Address <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="address" name="address" value="<?=$address?>" required placeholder="Office Address" autofocus />
+                                <input class="form-control" type="text" id="address" name="address" value="<?=$address?>" required placeholder="Office Address" />
                             </div>
 
                             <div class="col-md-6 mb-3">
