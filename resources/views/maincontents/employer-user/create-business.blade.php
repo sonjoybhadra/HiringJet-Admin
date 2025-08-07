@@ -186,7 +186,7 @@ $controllerRoute = $module['controller_route'];
                                 <label for="trade_license" class="form-label">Upload Trade License <small class="text-danger">*</small></label>
                                 <input class="form-control" type="file" id="trade_license" name="trade_license" placeholder="Upload Trade License" />
                                 <?php if ($trade_license) { ?>
-                                    <p class="mt-3"><img src="<?= url('/') . '/' . $trade_license ?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
+                                    <p class="mt-3"><img src="<?= url('/') . '/' . $trade_license ?>" class="img-thumbnail" style="width:100px; height:100px;border: 1px solid #9E9E9E;border-radius: 5px;"></p>
                                 <?php } ?>
                             </div>
 
@@ -194,14 +194,14 @@ $controllerRoute = $module['controller_route'];
                                 <label for="vat_registration" class="form-label">Upload VAT Registration <small class="text-danger">*</small></label>
                                 <input class="form-control" type="file" id="vat_registration" name="vat_registration" placeholder="Upload VAT Registration" />
                                 <?php if ($vat_registration) { ?>
-                                    <p class="mt-3"><img src="<?= url('/') . '/' . $vat_registration ?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
+                                    <p class="mt-3"><img src="<?= url('/') . '/' . $vat_registration ?>" class="img-thumbnail" style="width:100px; height:100px;border: 1px solid #9E9E9E;border-radius: 5px;"></p>
                                 <?php } ?>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="logo" class="form-label">Upload Logo <small class="text-danger">*</small></label>
                                 <input class="form-control" type="file" id="logo" name="logo" placeholder="Upload Logo" />
                                 <?php if ($logo) { ?>
-                                    <p class="mt-3"><img src="<?= url('/') . '/' . $logo ?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
+                                    <p class="mt-3"><img src="<?= url('/') . '/' . $logo ?>" class="img-thumbnail" style="width:100px; height:100px;border: 1px solid #9E9E9E;border-radius: 5px;"></p>
                                 <?php } ?>
                             </div>
 
