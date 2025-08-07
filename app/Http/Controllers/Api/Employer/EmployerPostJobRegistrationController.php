@@ -52,8 +52,6 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'email' => 'required|email|max:100|unique:users',
             'country_code' => 'required|max:5',
             'phone' => 'required|max:15|unique:users',
-            'password' => 'required|min:6',
-            'c_password' => 'required|same:password',
         ]);
 
         if($validator->fails()){
@@ -71,7 +69,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 'email'=> $request->email,
                 'country_code' => $request->country_code,
                 'phone'=> $request->phone,
-                'password'=> Hash::make($request->password),
+                'password'=> Hash::make('password'),
                 'status'=> 1,
                 'remember_token' => '',
                 'email_verified_at' =>date('Y-m-d H:i:s')
@@ -87,7 +85,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'phone' => $request->phone,
                     'business_id'=> 0,
                     'designation_id'=>0,
-                    'completed_steps'=> 2
+                    'completed_steps'=> 1
                 ]);
 
                 $user = User::with('user_employer_details')->findOrFail($user_id);
@@ -102,7 +100,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'token' => $token,
                     'user' => $this->getEmployerDetails(),
                     'expires_in' => config('jwt.ttl') * 60
-                ], 'Your account creation has successfully done. Now you can continue and complete your profile.');
+                 ], 'Your account creation has successfully done. Now you can continue and complete your profile.');
             }else{
                 return $this->sendError('Error', 'Sorry!! Unable to signup.');
             }
@@ -110,32 +108,81 @@ class EmployerPostJobRegistrationController extends BaseApiController
             return $this->sendError('Error', $e->getMessage());
         }
     }
-/**
+    /**
      * Create new job posting - matches your existing controller
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function postJobComplete(Request $request)
     {
         try {
             $user = User::with('user_employer_details')->findOrFail(auth()->user()->id);
+
             if (!$user) {
                 return $this->sendError('Unauthorized', 'Please login first', Response::HTTP_UNAUTHORIZED);
             }
-            // Validate the request data (removed employer_id requirement)
-            $validator = $this->validateJobPostData($request->all());
 
-            if ($validator->fails()) {
-                return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            // Validate job posting data
+            $jobValidator = $this->validateJobPostData($request->all());
+            if ($jobValidator->fails()) {
+                return $this->sendError('Validation Error', $jobValidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
             }
+
+            // Check if profile needs completion (step 1 = incomplete profile)
+            if ($user->user_employer_details && $user->user_employer_details->completed_steps == 1) {
+                // Validate profile completion fields
+                $profileValidator = Validator::make($request->all(), [
+                    'address' => 'required|string|max:255',
+                    'country' => 'required|string',
+                    'state' => 'required|string',
+                    'city' => 'required|string',
+                    'pincode' => 'required|string|max:10',
+                    'business_id' => 'required',
+                    'description' => 'required|string',
+                    'industrie_id' => 'required|integer',
+                    'web_url' => 'required|url',
+                    'employe_type' => 'required|in:company,agency'
+                ], [
+                    'address.required' => 'Address is required to complete your profile',
+                    'country.required' => 'Country is required',
+                    'state.required' => 'State is required',
+                    'city.required' => 'City is required',
+                    'pincode.required' => 'Pincode is required',
+                    'business_id.required' => 'Business ID is required',
+                    'description.required' => 'Company description is required',
+                    'industrie_id.required' => 'Industry selection is required',
+                    'web_url.required' => 'Website URL is required',
+                    'web_url.url' => 'Please provide a valid website URL',
+                    'employe_type.required' => 'Employee type is required',
+                    'employe_type.in' => 'Employee type must be either company or agency'
+                ]);
+
+                if ($profileValidator->fails()) {
+                    return $this->sendError('Profile Completion Required', $profileValidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
+
+            }
+
+          if ($user->user_employer_details && $user->user_employer_details->completed_steps == 1) {
+                // Update employer profile first
+                $profileUpdated = $this->updateEmployerProfile($request, $user);
+                if (!$profileUpdated) {
+                    return $this->sendError('Error', 'Failed to update profile. Please try again.');
+                }
+                // Refresh user data after profile update
+                $user = User::with('user_employer_details')->findOrFail(auth()->user()->id);
+            }            // Add employer_id to request data (using authenticated user's ID)
+            $jobData = $request->all();
+            $jobData['employer_id'] =$user->user_employer_details->business_id; // Assign authenticated user's ID as employer_id
 
             $jobService = new JobPostingService();
             $result = $jobService->createJobPost(
-                $request->all(),
-                auth()->id(), // This becomes employer_id in the service
+                $jobData, // Pass modified data with employer_id
+                auth()->id(),
                 auth()->user()->email,
-                $user->first_name . ' ' . $user->last_name, // Get full name properly
+                $user->first_name . ' ' . $user->last_name,
                 $request->ip()
             );
 
@@ -158,7 +205,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
     }
 
     /**
-     * Validate job posting data - REMOVED employer_id requirement
+     * Validate job posting data - Fixed job_type validation
      *
      * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
@@ -166,8 +213,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
     private function validateJobPostData(array $data)
     {
         $rules = [
-            // REMOVED: 'employer_id' => 'required|integer|exists:employers,id',
-            'job_type' => 'required|in:"walk-in-jobs","remote-jobs","on-site-jobs","temp-role-jobs"',
+            'job_type' => 'required|in:walk-in-jobs,remote-jobs,on-site-jobs,temp-role-jobs', // Fixed: removed quotes
             'industry' => 'required|integer',
             'job_category' => 'required|integer',
             'nationality' => 'required|array|min:1',
@@ -208,9 +254,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
         ];
 
         $messages = [
-            // REMOVED: employer_id messages
             'job_type.required' => 'Job type is required',
-            'job_type.in' => 'Invalid job type selected',
+            'job_type.in' => 'Invalid job type selected. Must be one of: walk-in-jobs, remote-jobs, on-site-jobs, temp-role-jobs',
             'industry.required' => 'Industry is required',
             'job_category.required' => 'Job category is required',
             'nationality.required' => 'At least one nationality must be selected',
@@ -244,5 +289,90 @@ class EmployerPostJobRegistrationController extends BaseApiController
         ];
 
         return Validator::make($data, $rules, $messages);
+    }
+
+    /**
+     * Update employer profile with file uploads - Fixed return statement
+     *
+     * @param Request $request
+     * @param User $user
+     * @return bool
+     */
+    public function updateEmployerProfile(Request $request, User $user)
+    {
+        try {
+            $profile_image = $trade_license = $vat_registration = $logo = "";
+
+            // Handle profile image upload
+            if ($request->hasFile('profile_image')) {
+                $file = $request->file('profile_image');
+                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/profile_image/' . $fileName, file_get_contents($file));
+                $profile_image = 'public/storage/uploads/employer/profile_image/' . $fileName;
+            }
+
+            // Handle trade license upload
+            if ($request->hasFile('trade_license')) {
+                $file = $request->file('trade_license');
+                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/trade_license/' . $fileName, file_get_contents($file));
+                $trade_license = 'public/storage/uploads/employer/trade_license/' . $fileName;
+            }
+
+            // Handle VAT registration upload
+            if ($request->hasFile('vat_registration')) {
+                $file = $request->file('vat_registration');
+                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/vat_registration/' . $fileName, file_get_contents($file));
+                $vat_registration = 'public/storage/uploads/employer/vat_registration/' . $fileName;
+            }
+
+            // Handle logo upload
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/logo/' . $fileName, file_get_contents($file));
+                $logo = 'public/storage/uploads/employer/logo/' . $fileName;
+            }
+
+            // Get location IDs
+            $city = new City();
+            $country = new Country();
+            $state = new State();
+
+            $country_id = $country->getCountryId($request->country);
+            $state_id = $state->getStateId($request->state, $country_id);
+            $city_id = $city->getCityId($request->city, $country_id);
+
+            // Update employer profile
+            $updateData = [
+                'country_id' => $country_id,
+                'city_id' => $city_id,
+                'state_id' => $state_id,
+                'address' => $request->address,
+                'address_line_2' => $request->address_line_2,
+                'pincode' => $request->pincode,
+                'landline' => $request->landline,
+                'industrie_id' => $request->industrie_id,
+                'description' => $request->description,
+                'web_url' => $request->web_url,
+                'employe_type' => $request->employe_type,
+                'completed_steps' => 2, // Mark profile as completed
+            ];
+
+            // Add file paths if uploaded
+            if ($profile_image) $updateData['profile_image'] = $profile_image;
+            if ($trade_license) $updateData['trade_license'] = $trade_license;
+            if ($vat_registration) $updateData['vat_registration'] = $vat_registration;
+            if ($logo) $updateData['logo'] = $logo;
+
+            $employer = UserEmployer::where('user_id', $user->id)->update($updateData);
+
+            return $employer ? true : false; // Fixed: return boolean instead of undefined variable
+
+        } catch (\Exception $e) {
+            \Log::error("updateEmployerProfile Error: " . $e->getMessage());
+            return false;
+        }
     }
 }
