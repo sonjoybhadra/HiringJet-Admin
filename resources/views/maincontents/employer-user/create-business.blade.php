@@ -254,6 +254,10 @@ $controllerRoute = $module['controller_route'];
         const selectedCityId = "{{ $selectedCityId ?? '' }}";
         const selectedCountryId = "{{ $selectedCountryId ?? '' }}";
 
+        console.log(selectedStateId);
+        console.log(selectedCityId);
+        console.log(selectedCountryId);
+
         if (selectedCountryId) {
             // Trigger load of states
             $.post("{{ route('get.states') }}", {
