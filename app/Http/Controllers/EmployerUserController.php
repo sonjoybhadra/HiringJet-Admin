@@ -415,11 +415,11 @@ class EmployerUserController extends Controller
                     'description' => 'required|string',
                     'industrie_id' => 'required|integer',
                     'web_url' => 'required|url',
-                    'employe_type' => 'required|in:company,agency'
+                    // 'employe_type' => 'required|in:company,agency'
                 ]);
 
                 if($validator->fails()){
-                    return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+                    // return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
                 }
 
                 try{
