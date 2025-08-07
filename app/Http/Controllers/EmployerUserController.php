@@ -415,7 +415,7 @@ class EmployerUserController extends Controller
                     'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
                     'description' => 'required|string',
                     'industrie_id' => 'required|integer',
-                    'web_url' => 'required|url',
+                    'web_url' => 'required',
                     // 'employe_type' => 'required|in:company,agency'
                 ]);
 
