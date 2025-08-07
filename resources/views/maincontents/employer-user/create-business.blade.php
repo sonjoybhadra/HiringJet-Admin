@@ -112,6 +112,7 @@ $controllerRoute = $module['controller_route'];
                     $description             = $row->description;
                     $web_url             = $row->web_url;
                     $country_code             = $row->country_code;
+                    $industrie_id             = $row->industrie_id;
                 } else {
                     $id                         = '';
                     $address                 = '';
@@ -126,6 +127,7 @@ $controllerRoute = $module['controller_route'];
                     $description             = '';
                     $web_url             = '';
                     $country_code             = '';
+                    $industrie_id             = '';
                 }
                 ?>
                 <div class="card-body">
