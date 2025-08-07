@@ -100,22 +100,32 @@ $controllerRoute = $module['controller_route'];
                 <?php
                 if ($row) {
                     $id                         = $row->id;
-                    $first_name                 = $row->first_name;
-                    $last_name                  = $row->last_name;
-                    $email                      = $row->email;
-                    $country_code               = $row->country_code;
-                    $phone                      = $row->phone;
-                    $business_id                = $row->business_id;
-                    $designation_id             = $row->designation_id;
+                    $address                 = $row->address;
+                    $country_id                  = $row->country_id;
+                    $state_id                      = $row->state_id;
+                    $city_id               = $row->city_id;
+                    $pincode                      = $row->pincode;
+                    $landline                = $row->landline;
+                    $trade_license             = $row->trade_license;
+                    $vat_registration             = $row->vat_registration;
+                    $logo             = $row->logo;
+                    $description             = $row->description;
+                    $web_url             = $row->web_url;
+                    $country_code             = $row->country_code;
                 } else {
                     $id                         = '';
-                    $first_name                 = '';
-                    $last_name                  = '';
-                    $email                      = '';
-                    $country_code               = '';
-                    $phone                      = '';
-                    $business_id                = '';
-                    $designation_id             = '';
+                    $address                 = '';
+                    $country_id                  = '';
+                    $state_id                      = '';
+                    $city_id               = '';
+                    $pincode                      = '';
+                    $landline                = '';
+                    $trade_license             = '';
+                    $vat_registration             = '';
+                    $logo             = '';
+                    $description             = '';
+                    $web_url             = '';
+                    $country_code             = '';
                 }
                 ?>
                 <div class="card-body">
@@ -124,7 +134,7 @@ $controllerRoute = $module['controller_route'];
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="address" class="form-label">Office Address <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="address" name="address" required placeholder="Office Address" autofocus />
+                                <input class="form-control" type="text" id="address" name="address" value="<?=$address?>" required placeholder="Office Address" autofocus />
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -133,7 +143,7 @@ $controllerRoute = $module['controller_route'];
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
-                                            <option value="<?= $country->id ?>"><?= $country->name ?></option>
+                                            <option value="<?= $country->id ?>" <?=(($country == $country->id)?'selected':'')?>><?= $country->name ?></option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -152,7 +162,7 @@ $controllerRoute = $module['controller_route'];
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="pincode" class="form-label">Post Code <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="pincode" name="pincode" required placeholder="Post Code" />
+                                <input class="form-control" type="text" id="pincode" name="pincode" required value="<?=$pincode?>" placeholder="Post Code" />
                             </div>
                             
                             <div class="col-md-2 mb-3">
@@ -161,14 +171,14 @@ $controllerRoute = $module['controller_route'];
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
-                                            <option value="<?= $country->country_code ?>"><?= $country->country_code ?> (<?= $country->name ?>)</option>
+                                            <option value="<?= $country->country_code ?>" <?=(($country_code == $country->country_code)?'selected':'')?>><?= $country->country_code ?> (<?= $country->name ?>)</option>
                                     <?php }
                                     } ?>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="landline" class="form-label">Office Landline <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="landline" name="landline" required placeholder="Office Landline" />
+                                <input class="form-control" type="text" id="landline" name="landline" required placeholder="Office Landline" value="<?=$landline?>" />
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="trade_license" class="form-label">Upload Trade License <small class="text-danger">*</small></label>
@@ -186,7 +196,7 @@ $controllerRoute = $module['controller_route'];
 
                             <div class="col-md-12 mb-3">
                                 <label for="description" class="form-label">Brief Description <small class="text-danger">*</small></label>
-                                <textarea class="form-control" id="description" name="description" required placeholder="Brief Description" rows="5"></textarea>
+                                <textarea class="form-control" id="description" name="description" required placeholder="Brief Description" rows="5"><?=$description?></textarea>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -195,14 +205,14 @@ $controllerRoute = $module['controller_route'];
                                     <option value="" selected>Select Industry</option>
                                     <?php if ($industries) {
                                         foreach ($industries as $industry) { ?>
-                                            <option value="<?= $industry->id ?>"><?= $industry->name ?></option>
+                                            <option value="<?= $industry->id ?>" <?=(($industrie_id == $industry->id)?'selected':'')?>><?= $industry->name ?></option>
                                     <?php }
                                     } ?>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="web_url" class="form-label">Website URL <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="web_url" name="web_url" required placeholder="Website URL" />
+                                <input class="form-control" type="text" id="web_url" name="web_url" value="<?=$web_url?>" required placeholder="Website URL" />
                             </div>
                         </div>
                         <div class="mt-2">
