@@ -403,9 +403,9 @@ class EmployerUserController extends Controller
                 $validator = Validator::make($request->all(), [
                     // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
                     'address' => 'required|string|max:255',
-                    'country' => 'required|string',
-                    'state' => 'required|string',
-                    'city' => 'required|string',
+                    'country' => 'required',
+                    'state' => 'required',
+                    'city' => 'required',
                     // 'address_line_2' => 'nullable|string|max:255',
                     'pincode' => 'required|string|max:10',
                     'country_code' => 'nullable|required|max:5',
@@ -419,9 +419,9 @@ class EmployerUserController extends Controller
                     // 'employe_type' => 'required|in:company,agency'
                 ]);
 
-                if($validator->fails()){
-                    // return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-                }
+                // if($validator->fails()){
+                //     // return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+                // }
 
                 try{
                     $profile_image = $trade_license = $vat_registration = $logo = "";
@@ -450,17 +450,17 @@ class EmployerUserController extends Controller
                         $logo = 'public/storage/uploads/employer/logo/'.$fileName;
                     }
 
-                    $city = new City();
-                    $country = new Country();
-                    $state = new State();
-                    $country_id = $country->getCountryId($request->country);
-                    $state_id = $state->getStateId($request->state, $country_id);
-                    $city_id = $city->getCityId($request->city, $country_id);
+                    // $city = new City();
+                    // $country = new Country();
+                    // $state = new State();
+                    // $country_id = $country->getCountryId($request->country);
+                    // $state_id = $state->getStateId($request->state, $country_id);
+                    // $city_id = $city->getCityId($request->city, $country_id);
 
                     Helper::pr([
-                        'country_id'=> $country_id,
-                        'city_id'=> $city_id,
-                        'state_id'=> $state_id,
+                        'country_id'=> $request->country,
+                        'city_id'=> $request->city,
+                        'state_id'=> $request->state,
                         'address'=> $request->address,
                         'address_line_2'=> $request->address_line_2,
                         'pincode' => $request->pincode,
@@ -477,9 +477,9 @@ class EmployerUserController extends Controller
                     ]);
 
                     UserEmployer::where('user_id', $id)->update([
-                        'country_id'=> $country_id,
-                        'city_id'=> $city_id,
-                        'state_id'=> $state_id,
+                        'country_id'=> $request->country,
+                        'city_id'=> $request->city,
+                        'state_id'=> $request->state,
                         'address'=> $request->address,
                         'address_line_2'=> $request->address_line_2,
                         'pincode' => $request->pincode,
