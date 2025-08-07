@@ -210,7 +210,7 @@ $controllerRoute = $module['controller_route'];
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        console.log("✅ jQuery loaded and ready");
+        // console.log("✅ jQuery loaded and ready");
 
         // $.ajaxSetup({
         //     headers: {
@@ -220,7 +220,7 @@ $controllerRoute = $module['controller_route'];
 
         $('#country').on('change', function() {
             let countryId = $(this).val();
-            console.log("🟡 Country changed:", countryId);
+            // console.log("🟡 Country changed:", countryId);
 
             if (countryId) {
                 $.post("{{ route('get.states') }}", {
@@ -238,13 +238,13 @@ $controllerRoute = $module['controller_route'];
             }
         });
 
-        $('#state').on('change', function() {
-            let stateId = $(this).val();
-            console.log("🟡 State changed:", stateId);
+        $('#country').on('change', function() {
+            let countryId = $(this).val();
+            // console.log("🟡 State changed:", stateId);
 
             if (stateId) {
                 $.post("{{ route('get.cities') }}", {
-                    state_id: stateId,
+                    country_id: countryId,
                     _token: '{{ csrf_token() }}'
                 }, function(data) {
                     $('#city').empty().append('<option value="">Select City</option>');
