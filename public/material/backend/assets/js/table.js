@@ -104,43 +104,43 @@ function loadTable(config) {
                 html += `<td>`;
                 
                 if(config.routePrefix != 'jobseeker' && config.routePrefix != 'employer-user'){
-                    html += `<a href="${base}/edit/${encodedId}" class="btn btn-sm btn-primary me-1" title="Edit">
+                    html += `<a href="${base}/edit/${encodedId}" class="btn btn-primary btn-sm me-1" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>`;
 
                     if (status == 1) {
-                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-success me-1" title="Deactivate">
+                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-success btn-sm me-1" title="Deactivate">
                             <i class="fa-solid fa-check"></i>
                         </a>`;
                     } else {
-                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-sm btn-warning me-1" title="Activate">
+                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-warning btn-sm me-1" title="Activate">
                             <i class="fas fa-times"></i>
                         </a>`;
                     }
                 }                
 
-                html += `<a href="${base}/delete/${encodedId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
+                html += `<a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
                     <i class="fa-solid fa-trash"></i>
                 </a>`;
 
                 if(config.routePrefix == 'post-job'){
                     var job_no = row['job_no'];
-                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-sm btn-warning me-1" title="View Jobs" target="_blank">
+                    html += `<br><br><a href="${frontendUrl}job-details/${job_no}" class="btn btn-warning btn-sm me-1" title="View Jobs" target="_blank">
                                     <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;View</a>`;
 
-                    html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-sm btn-info" title="Applications" target="_blank">
+                    html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-info btn-sm" title="Applications" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
                                 </a>`;
                 }
 
                 if(config.routePrefix == 'job'){
                     var job_no = row['job_no'];
-                    html += `<br><br><a href="${base}/view-details/${encodedId}" class="btn btn-sm btn-warning me-1" title="View Jobs">
+                    html += `<br><br><a href="${base}/view-details/${encodedId}" class="btn btn-warning btn-sm me-1" title="View Jobs">
                                     <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Details</a>`;
                 }
 
                 if(config.routePrefix == 'jobseeker'){
-                    html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
+                    html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-info btn-sm" title="Profile" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
                                 </a>`;
                 }
@@ -148,19 +148,19 @@ function loadTable(config) {
                 if(config.routePrefix == 'employer-user'){
                     const completed_steps = row['completed_steps'];
                     if(completed_steps < 2){
-                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary" title="Business" target="_blank">
+                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Create Business
                                 </a>`;
                     } else {
-                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary" title="Business" target="_blank">
+                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Edit Business
                                 </a>`;
-                        html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
+                        html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
                                     <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Profile
                                 </a>`;
                     }
                     if(status == 0){
-                        html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning" title="Verify OTP">
+                        html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
                                     <i class="fa-solid fa-key"></i>&nbsp;&nbsp;Verify OTP
                                 </a>`;
                     }
