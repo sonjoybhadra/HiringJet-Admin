@@ -152,6 +152,9 @@ function loadTable(config) {
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Create Business
                                 </a>`;
                     } else {
+                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary" title="Business" target="_blank">
+                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Edit Business
+                                </a>`;
                         html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
                                 </a>`;
