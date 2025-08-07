@@ -66,7 +66,7 @@ $controllerRoute = $module['controller_route'];
         postalField.value = postcode;
         document.querySelector("#walkin_latitude").value = place.geometry.location.lat();
         document.querySelector("#walkin_longitude").value = place.geometry.location.lng();
-        address2Field.focus();
+        // address2Field.focus();
     }
     window.initAutocomplete = initAutocomplete;
 </script>
