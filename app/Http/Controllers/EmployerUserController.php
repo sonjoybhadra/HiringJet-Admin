@@ -398,6 +398,10 @@ class EmployerUserController extends Controller
             $data['industries']             = Industry::select('id', 'name')->where('status', '=', 1)->orderBy('name', 'ASC')->get();
             $data['countries']              = Country::select('id', 'name', 'country_code')->where('status', '=', 1)->orderBy('name', 'ASC')->get();
 
+            $data['selectedCountryId']      = (($data['row'])?$data['row']->country_id:''); // e.g. India
+            $data['selectedStateId']        = (($data['row'])?$data['row']->state_id:'');   // e.g. Maharashtra
+            $data['selectedCityId']         = (($data['row'])?$data['row']->city_id:'');   // e.g. Mumbai
+
             if($request->isMethod('post')){
                 // Helper::pr($request->all());
                 $validator = Validator::make($request->all(), [
@@ -450,12 +454,12 @@ class EmployerUserController extends Controller
                         $logo = 'public/storage/uploads/employer/logo/'.$fileName;
                     }
 
-                    // $city = new City();
-                    // $country = new Country();
-                    // $state = new State();
-                    // $country_id = $country->getCountryId($request->country);
-                    // $state_id = $state->getStateId($request->state, $country_id);
-                    // $city_id = $city->getCityId($request->city, $country_id);
+                    $city = new City();
+                    $country = new Country();
+                    $state = new State();
+                    $country_id = $country->getCountryId($request->country);
+                    $state_id = $state->getStateId($request->state, $country_id);
+                    $city_id = $city->getCityId($request->city, $country_id);
 
                     UserEmployer::where('user_id', $id)->update([
                         'country_id'=> $request->country,

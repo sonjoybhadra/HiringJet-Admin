@@ -136,7 +136,7 @@ $controllerRoute = $module['controller_route'];
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="address" class="form-label">Office Address <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="address" name="address" value="<?=$address?>" required placeholder="Office Address" />
+                                <input class="form-control" type="text" id="address" name="address" value="<?= $address ?>" required placeholder="Office Address" />
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -145,7 +145,7 @@ $controllerRoute = $module['controller_route'];
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
-                                            <option value="<?= $country->id ?>" <?=(($country_id == $country->id)?'selected':'')?>><?= $country->name ?></option>
+                                            <option value="<?= $country->id ?>" <?= (($country_id == $country->id) ? 'selected' : '') ?>><?= $country->name ?></option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -164,50 +164,50 @@ $controllerRoute = $module['controller_route'];
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="pincode" class="form-label">Post Code <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="pincode" name="pincode" required value="<?=$pincode?>" placeholder="Post Code" />
+                                <input class="form-control" type="text" id="pincode" name="pincode" required value="<?= $pincode ?>" placeholder="Post Code" />
                             </div>
-                            
+
                             <div class="col-md-2 mb-3">
                                 <label for="country_code" class="form-label">Country Code <small class="text-danger">*</small></label>
                                 <select class="form-control" type="text" id="country_code" name="country_code" required>
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
-                                            <option value="<?= $country->country_code ?>" <?=(($country_code == $country->country_code)?'selected':'')?>><?= $country->country_code ?> (<?= $country->name ?>)</option>
+                                            <option value="<?= $country->country_code ?>" <?= (($country_code == $country->country_code) ? 'selected' : '') ?>><?= $country->country_code ?> (<?= $country->name ?>)</option>
                                     <?php }
                                     } ?>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="landline" class="form-label">Office Landline <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="landline" name="landline" required placeholder="Office Landline" value="<?=$landline?>" />
+                                <input class="form-control" type="text" id="landline" name="landline" required placeholder="Office Landline" value="<?= $landline ?>" />
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="trade_license" class="form-label">Upload Trade License <small class="text-danger">*</small></label>
                                 <input class="form-control" type="file" id="trade_license" name="trade_license" required placeholder="Upload Trade License" />
-                                <?php if($trade_license){?>
-                                    <p class="mt-3"><img src="<?=url('/').'/'.$trade_license?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
-                                <?php }?>
+                                <?php if ($trade_license) { ?>
+                                    <p class="mt-3"><img src="<?= url('/') . '/' . $trade_license ?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
+                                <?php } ?>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label for="vat_registration" class="form-label">Upload VAT Registration <small class="text-danger">*</small></label>
                                 <input class="form-control" type="file" id="vat_registration" name="vat_registration" required placeholder="Upload VAT Registration" />
-                                <?php if($vat_registration){?>
-                                    <p class="mt-3"><img src="<?=url('/').'/'.$vat_registration?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
-                                <?php }?>
+                                <?php if ($vat_registration) { ?>
+                                    <p class="mt-3"><img src="<?= url('/') . '/' . $vat_registration ?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
+                                <?php } ?>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="logo" class="form-label">Upload Logo <small class="text-danger">*</small></label>
                                 <input class="form-control" type="file" id="logo" name="logo" required placeholder="Upload Logo" />
-                                <?php if($logo){?>
-                                    <p class="mt-3"><img src="<?=url('/').'/'.$logo?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
-                                <?php }?>
+                                <?php if ($logo) { ?>
+                                    <p class="mt-3"><img src="<?= url('/') . '/' . $logo ?>" class="img-thumbnail" style="width:100px; height:100px;"></p>
+                                <?php } ?>
                             </div>
 
                             <div class="col-md-12 mb-3">
                                 <label for="description" class="form-label">Brief Description <small class="text-danger">*</small></label>
-                                <textarea class="form-control" id="description" name="description" required placeholder="Brief Description" rows="5"><?=$description?></textarea>
+                                <textarea class="form-control" id="description" name="description" required placeholder="Brief Description" rows="5"><?= $description ?></textarea>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -216,14 +216,14 @@ $controllerRoute = $module['controller_route'];
                                     <option value="" selected>Select Industry</option>
                                     <?php if ($industries) {
                                         foreach ($industries as $industry) { ?>
-                                            <option value="<?= $industry->id ?>" <?=(($industrie_id == $industry->id)?'selected':'')?>><?= $industry->name ?></option>
+                                            <option value="<?= $industry->id ?>" <?= (($industrie_id == $industry->id) ? 'selected' : '') ?>><?= $industry->name ?></option>
                                     <?php }
                                     } ?>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="web_url" class="form-label">Website URL <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="web_url" name="web_url" value="<?=$web_url?>" required placeholder="Website URL" />
+                                <input class="form-control" type="text" id="web_url" name="web_url" value="<?= $web_url ?>" required placeholder="Website URL" />
                             </div>
                         </div>
                         <div class="mt-2">
@@ -249,6 +249,36 @@ $controllerRoute = $module['controller_route'];
         //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         //     }
         // });
+
+        const selectedStateId = "{{ $selectedStateId ?? '' }}";
+        const selectedCityId = "{{ $selectedCityId ?? '' }}";
+        const selectedCountryId = "{{ $selectedCountryId ?? '' }}";
+
+        if (selectedCountryId) {
+            // Trigger load of states
+            $.post("{{ route('get.states') }}", {
+                country_id: selectedCountryId
+            }, function(states) {
+                $('#state').empty().append('<option value="">Select State</option>');
+                $.each(states, function(id, name) {
+                    let selected = (id == selectedStateId) ? 'selected' : '';
+                    $('#state').append('<option value="' + id + '" ' + selected + '>' + name + '</option>');
+                });
+
+                if (selectedCountryId) {
+                    // Trigger load of cities after states are loaded
+                    $.post("{{ route('get.cities') }}", {
+                        country_id: selectedCountryId
+                    }, function(cities) {
+                        $('#city').empty().append('<option value="">Select City</option>');
+                        $.each(cities, function(id, name) {
+                            let selected = (id == selectedCityId) ? 'selected' : '';
+                            $('#city').append('<option value="' + id + '" ' + selected + '>' + name + '</option>');
+                        });
+                    });
+                }
+            });
+        }
 
         $('#country').on('change', function() {
             let countryId = $(this).val();

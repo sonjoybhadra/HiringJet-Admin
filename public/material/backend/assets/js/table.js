@@ -156,7 +156,7 @@ function loadTable(config) {
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Edit Business
                                 </a>`;
                         html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info" title="Profile" target="_blank">
-                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
+                                    <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Profile
                                 </a>`;
                     }
                     if(status == 0){
