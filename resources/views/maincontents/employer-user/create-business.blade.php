@@ -207,60 +207,53 @@ $controllerRoute = $module['controller_route'];
 @endsection
 @section('scripts')
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMbNCogNokCwVmJCRfefB6iCYUWv28LjQ&libraries=places&callback=initAutocomplete&libraries=places&v=weekly"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const stateDropdown = document.getElementById('state');
-        const cityDropdown = document.getElementById('city');
+    $(document).ready(function() {
+        console.log("✅ jQuery loaded and ready");
 
-        document.addEventListener('change', function(e) {
-            if (e.target && e.target.id === 'country') {
-                const countryId = e.target.value;
-                console.log('🟡 [Delegated] Country changed:', countryId);
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
 
-                fetch("{{ route('get.states') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrf
-                        },
-                        body: JSON.stringify({
-                            country_id: countryId
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        stateDropdown.innerHTML = '<option value="">Select State</option>';
-                        for (let id in data) {
-                            stateDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
-                        }
-                        cityDropdown.innerHTML = '<option value="">Select City</option>';
-                    })
-                    .catch(error => console.error('❌ State fetch error:', error));
+        $('#country').on('change', function() {
+            let countryId = $(this).val();
+            console.log("🟡 Country changed:", countryId);
+
+            if (countryId) {
+                $.post("{{ route('get.states') }}", {
+                    country_id: countryId,
+                    _token: '{{ csrf_token() }}'
+                }, function(data) {
+                    $('#state').empty().append('<option value="">Select State</option>');
+                    $('#city').empty().append('<option value="">Select City</option>');
+                    $.each(data, function(id, name) {
+                        $('#state').append('<option value="' + id + '">' + name + '</option>');
+                    });
+                }).fail(function(xhr, status, error) {
+                    console.error("❌ Error loading states:", error);
+                });
             }
+        });
 
-            if (e.target && e.target.id === 'state') {
-                const stateId = e.target.value;
-                console.log('🟡 [Delegated] State changed:', stateId);
+        $('#state').on('change', function() {
+            let stateId = $(this).val();
+            console.log("🟡 State changed:", stateId);
 
-                fetch("{{ route('get.cities') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrf
-                        },
-                        body: JSON.stringify({
-                            state_id: stateId
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        cityDropdown.innerHTML = '<option value="">Select City</option>';
-                        for (let id in data) {
-                            cityDropdown.innerHTML += `<option value="${id}">${data[id]}</option>`;
-                        }
-                    })
-                    .catch(error => console.error('❌ City fetch error:', error));
+            if (stateId) {
+                $.post("{{ route('get.cities') }}", {
+                    state_id: stateId,
+                    _token: '{{ csrf_token() }}'
+                }, function(data) {
+                    $('#city').empty().append('<option value="">Select City</option>');
+                    $.each(data, function(id, name) {
+                        $('#city').append('<option value="' + id + '">' + name + '</option>');
+                    });
+                }).fail(function(xhr, status, error) {
+                    console.error("❌ Error loading cities:", error);
+                });
             }
         });
     });
