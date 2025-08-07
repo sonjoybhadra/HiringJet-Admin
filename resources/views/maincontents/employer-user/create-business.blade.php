@@ -242,7 +242,7 @@ $controllerRoute = $module['controller_route'];
             let countryId = $(this).val();
             // console.log("🟡 State changed:", stateId);
 
-            if (stateId) {
+            if (countryId) {
                 $.post("{{ route('get.cities') }}", {
                     country_id: countryId,
                     _token: '{{ csrf_token() }}'
