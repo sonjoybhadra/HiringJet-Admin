@@ -143,7 +143,7 @@ $controllerRoute = $module['controller_route'];
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
-                                            <option value="<?= $country->id ?>" <?=(($country == $country->id)?'selected':'')?>><?= $country->name ?></option>
+                                            <option value="<?= $country->id ?>" <?=(($country_id == $country->id)?'selected':'')?>><?= $country->name ?></option>
                                     <?php }
                                     } ?>
                                 </select>
