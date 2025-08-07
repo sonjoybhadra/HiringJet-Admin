@@ -22,7 +22,7 @@ $controllerRoute = $module['controller_route'];
             fields: ["address_components", "geometry", "formatted_address"],
             types: ["address"],
         });
-        address1Field.focus();
+        // address1Field.focus();
         autocomplete.addListener("place_changed", fillInAddress);
     }
 
