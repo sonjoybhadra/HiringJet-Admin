@@ -403,25 +403,40 @@ class EmployerUserController extends Controller
             $data['selectedCityId']         = (($data['row'])?$data['row']->city_id:'');   // e.g. Mumbai
 
             if($request->isMethod('post')){
-                // Helper::pr($request->all());
-                $validator = Validator::make($request->all(), [
-                    // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-                    'address' => 'required|string|max:255',
-                    'country' => 'required',
-                    'state' => 'required',
-                    'city' => 'required',
-                    // 'address_line_2' => 'nullable|string|max:255',
-                    'pincode' => 'required|string|max:10',
-                    'country_code' => 'nullable|required|max:5',
-                    'landline' => 'nullable|string|max:20',
-                    'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-                    'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-                    'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-                    'description' => 'required|string',
-                    'industrie_id' => 'required|integer',
-                    'web_url' => 'required',
-                    // 'employe_type' => 'required|in:company,agency'
-                ]);
+                if($data['row']->country_id == ''){
+                    $validator = Validator::make($request->all(), [
+                        'address' => 'required|string|max:255',
+                        'country' => 'required',
+                        'state' => 'required',
+                        'city' => 'required',
+                        'pincode' => 'required|string|max:10',
+                        'country_code' => 'nullable|required|max:5',
+                        'landline' => 'nullable|string|max:20',
+                        'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+                        'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+                        'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+                        'description' => 'required|string',
+                        'industrie_id' => 'required|integer',
+                        'web_url' => 'required'
+                    ]);
+                } else {
+                    $validator = Validator::make($request->all(), [
+                        'address' => 'required|string|max:255',
+                        'country' => 'required',
+                        'state' => 'required',
+                        'city' => 'required',
+                        'pincode' => 'required|string|max:10',
+                        'country_code' => 'nullable|required|max:5',
+                        'landline' => 'nullable|string|max:20',
+                        'trade_license' => 'image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+                        'vat_registration' => 'image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+                        'logo' => 'image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+                        'description' => 'required|string',
+                        'industrie_id' => 'required|integer',
+                        'web_url' => 'required'
+                    ]);
+                }
+                
 
                 // if($validator->fails()){
                 //     // return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -434,32 +449,40 @@ class EmployerUserController extends Controller
                         $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                         Storage::disk('public')->put('uploads/employer/profile_image/'.$fileName, file_get_contents($file));
                         $profile_image = 'public/storage/uploads/employer/profile_image/'.$fileName;
+                    } else {
+                        $profile_image = $data['row']->profile_image;
                     }
                     if (request()->hasFile('trade_license')) {
                         $file = request()->file('trade_license');
                         $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                         Storage::disk('public')->put('uploads/employer/trade_license/'.$fileName, file_get_contents($file));
                         $trade_license = 'public/storage/uploads/employer/trade_license/'.$fileName;
+                    } else {
+                        $trade_license = $data['row']->trade_license;
                     }
                     if (request()->hasFile('vat_registration')) {
                         $file = request()->file('vat_registration');
                         $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                         Storage::disk('public')->put('uploads/employer/vat_registration/'.$fileName, file_get_contents($file));
                         $vat_registration = 'public/storage/uploads/employer/vat_registration/'.$fileName;
+                    } else {
+                        $vat_registration = $data['row']->vat_registration;
                     }
                     if (request()->hasFile('logo')) {
                         $file = request()->file('logo');
                         $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
                         Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
                         $logo = 'public/storage/uploads/employer/logo/'.$fileName;
+                    } else {
+                        $logo = $data['row']->logo;
                     }
 
-                    $city = new City();
-                    $country = new Country();
-                    $state = new State();
-                    $country_id = $country->getCountryId($request->country);
-                    $state_id = $state->getStateId($request->state, $country_id);
-                    $city_id = $city->getCityId($request->city, $country_id);
+                    // $city = new City();
+                    // $country = new Country();
+                    // $state = new State();
+                    // $country_id = $country->getCountryId($request->country);
+                    // $state_id = $state->getStateId($request->state, $country_id);
+                    // $city_id = $city->getCityId($request->city, $country_id);
 
                     UserEmployer::where('user_id', $id)->update([
                         'country_id'=> $request->country,
