@@ -129,7 +129,7 @@ $controllerRoute = $module['controller_route'];
 
                             <div class="col-md-6 mb-3">
                                 <label for="country" class="form-label">Country <small class="text-danger">*</small></label>
-                                <select class="form-control" type="text" id="country" name="country_id" required>
+                                <select class="form-control" type="text" id="country" name="country" required>
                                     <option value="" selected>Select Country</option>
                                     <?php if ($countries) {
                                         foreach ($countries as $country) { ?>
@@ -140,13 +140,13 @@ $controllerRoute = $module['controller_route'];
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="state" class="form-label">State <small class="text-danger">*</small></label>
-                                <select class="form-control" type="text" id="state" name="state_id" required>
+                                <select class="form-control" type="text" id="state" name="state" required>
                                     <option value="" selected>Select State</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="city" class="form-label">City <small class="text-danger">*</small></label>
-                                <select class="form-control" type="text" id="city" name="city_id" required>
+                                <select class="form-control" type="text" id="city" name="city" required>
                                     <option value="" selected>Select City</option>
                                 </select>
                             </div>
@@ -154,8 +154,19 @@ $controllerRoute = $module['controller_route'];
                                 <label for="pincode" class="form-label">Post Code <small class="text-danger">*</small></label>
                                 <input class="form-control" type="text" id="pincode" name="pincode" required placeholder="Post Code" />
                             </div>
-
-                            <div class="col-md-6 mb-3">
+                            
+                            <div class="col-md-2 mb-3">
+                                <label for="country_code" class="form-label">Country Code <small class="text-danger">*</small></label>
+                                <select class="form-control" type="text" id="country_code" name="country_code" required>
+                                    <option value="" selected>Select Country</option>
+                                    <?php if ($countries) {
+                                        foreach ($countries as $country) { ?>
+                                            <option value="<?= $country->country_code ?>"><?= $country->country_code ?> (<?= $country->name ?>)</option>
+                                    <?php }
+                                    } ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="landline" class="form-label">Office Landline <small class="text-danger">*</small></label>
                                 <input class="form-control" type="text" id="landline" name="landline" required placeholder="Office Landline" />
                             </div>
