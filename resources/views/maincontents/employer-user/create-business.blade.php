@@ -261,7 +261,8 @@ $controllerRoute = $module['controller_route'];
         if (selectedCountryId) {
             // Trigger load of states
             $.post("{{ route('get.states') }}", {
-                country_id: selectedCountryId
+                country_id: selectedCountryId,
+                _token: '{{ csrf_token() }}'
             }, function(states) {
                 $('#state').empty().append('<option value="">Select State</option>');
                 $.each(states, function(id, name) {
@@ -272,7 +273,8 @@ $controllerRoute = $module['controller_route'];
                 if (selectedCountryId) {
                     // Trigger load of cities after states are loaded
                     $.post("{{ route('get.cities') }}", {
-                        country_id: selectedCountryId
+                        country_id: selectedCountryId,
+                        _token: '{{ csrf_token() }}'
                     }, function(cities) {
                         $('#city').empty().append('<option value="">Select City</option>');
                         $.each(cities, function(id, name) {
