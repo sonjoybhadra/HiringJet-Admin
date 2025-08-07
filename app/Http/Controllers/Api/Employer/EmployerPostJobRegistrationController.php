@@ -83,7 +83,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'business_id'=> 0,
+                    'business_id'=> 10,
                     'designation_id'=>0,
                     'completed_steps'=> 1
                 ]);
