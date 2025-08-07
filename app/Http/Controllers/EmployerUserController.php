@@ -399,6 +399,7 @@ class EmployerUserController extends Controller
             $data['countries']              = Country::select('id', 'name', 'country_code')->where('status', '=', 1)->orderBy('name', 'ASC')->get();
 
             if($request->isMethod('post')){
+                Helper::pr($request->all());
                 $validator = Validator::make($request->all(), [
                     // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
                     'address' => 'required|string|max:255',
