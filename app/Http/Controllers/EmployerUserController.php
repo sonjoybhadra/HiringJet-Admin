@@ -399,7 +399,7 @@ class EmployerUserController extends Controller
             $data['countries']              = Country::select('id', 'name', 'country_code')->where('status', '=', 1)->orderBy('name', 'ASC')->get();
 
             if($request->isMethod('post')){
-                Helper::pr($request->all());
+                // Helper::pr($request->all());
                 $validator = Validator::make($request->all(), [
                     // 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
                     'address' => 'required|string|max:255',
@@ -456,6 +456,25 @@ class EmployerUserController extends Controller
                     $country_id = $country->getCountryId($request->country);
                     $state_id = $state->getStateId($request->state, $country_id);
                     $city_id = $city->getCityId($request->city, $country_id);
+
+                    Helper::pr([
+                        'country_id'=> $country_id,
+                        'city_id'=> $city_id,
+                        'state_id'=> $state_id,
+                        'address'=> $request->address,
+                        'address_line_2'=> $request->address_line_2,
+                        'pincode' => $request->pincode,
+                        'landline'=> $request->landline,
+                        'industrie_id'=> $request->industrie_id,
+                        'profile_image'=> $profile_image,
+                        'trade_license'=> $trade_license,
+                        'vat_registration'=> $vat_registration,
+                        'logo'=> $logo,
+                        'description'=> $request->description,
+                        'web_url'=> $request->web_url,
+                        'employe_type'=> 'company',
+                        'completed_steps'=> 2,
+                    ]);
 
                     UserEmployer::where('user_id', $id)->update([
                         'country_id'=> $country_id,
