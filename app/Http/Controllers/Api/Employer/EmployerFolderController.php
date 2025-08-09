@@ -185,7 +185,7 @@ class EmployerFolderController extends BaseApiController
                                                             ->join('users', 'users.id', '=', 'employer_cv_folders.user_id')
                                                             ->where('user_id', '!=', auth()->user()->id)
                                                             ->where('owner_id', auth()->user()->id)
-                                                            ->where('folder_name', $val->tag_name)
+                                                            ->where('folder_name', $val->folder_name)
                                                             ->get()->toArray();
             }
         }
