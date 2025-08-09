@@ -211,6 +211,16 @@ class EmployerEmailTemplateController extends BaseApiController
                                 ->where('user_id', auth()->user()->id)
                                 ->latest()
                                 ->get();
+        if($own_list->count() > 0){
+            foreach($own_list as $index => $val){
+                $own_list[$index]->shared_employers = EmployerEmailtemplate::select('template_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
+                                                            ->join('users', 'users.id', '=', 'employer_emailtemplates.user_id')
+                                                            ->where('user_id', '!=', auth()->user()->id)
+                                                            ->where('owner_id', auth()->user()->id)
+                                                            ->where('template_name', $val->template_name)
+                                                            ->get()->toArray();
+            }
+        }
         $shared_list = EmployerEmailtemplate::with('from_email_user')
                                 ->with('designations')
                                 ->with('countries')
@@ -220,6 +230,11 @@ class EmployerEmailTemplateController extends BaseApiController
                                 ->where('owner_id', '!=', auth()->user()->id)
                                 ->latest()
                                 ->get();
+        if($shared_list->count() > 0){
+            foreach($shared_list as $index => $val){
+                $shared_list[$index]->shared_employers = [];
+            }
+        }
 
         return [
             'own_list' => $own_list,
@@ -230,7 +245,7 @@ class EmployerEmailTemplateController extends BaseApiController
     public function share(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'emplyer_id' => 'required',
+            'emplyer_id' => 'required|array',
         ]);
 
         if($validator->fails()){
@@ -239,28 +254,36 @@ class EmployerEmailTemplateController extends BaseApiController
 
         try{
             $template = EmployerEmailtemplate::find($id);
-            $has_data = EmployerEmailtemplate:: where('user_id', $request->emplyer_id)
+            /* $has_data = EmployerEmailtemplate:: where('user_id', $request->emplyer_id)
                                         ->where('template_name', strtolower($template->template_name))
                                         ->count();
             if($has_data > 0){
                 return $this->sendError('Error', 'Same Email template is already exists.', Response::HTTP_UNPROCESSABLE_ENTITY);
+            } */
+            EmployerEmailtemplate::where('user_id', '!=', auth()->user()->id)
+                            ->where('owner_id', auth()->user()->id)
+                            ->where('template_name', $template->folder_name)
+                            ->delete();
+            foreach($request->emplyer_id as $emplyer_id){
+                if(!empty($emplyer_id)){
+                    EmployerEmailtemplate::insert([
+                        'user_id'=> $emplyer_id,
+                        'template_name'=> $template->template_name,
+                        'from_email_user_id'=> $template->from_email_user_id,
+                        'designation_id'=> $template->designation_id,
+                        'experience_max'=> $template->experience_max,
+                        'experience_min'=> $template->experience_min,
+                        'country_id'=> $template->country_id,
+                        'city_id' => $template->city_id,
+                        'currency_id' => $template->currency_id,
+                        'salary_max' => $template->salary_max,
+                        'salary_min' => $template->salary_min,
+                        'message'=> $template->message,
+                        'owner_id'=> $template->owner_id,
+                        'status'=> 1
+                    ]);
+                }
             }
-            EmployerEmailtemplate::insert([
-                'user_id'=> auth()->user()->id,
-                'template_name'=> $template->template_name,
-                'from_email_user_id'=> $template->from_email_user_id,
-                'designation_id'=> $template->designation_id,
-                'experience_max'=> $template->experience_max,
-                'experience_min'=> $template->experience_min,
-                'country_id'=> $template->country_id,
-                'city_id' => $template->city_id,
-                'currency_id' => $template->currency_id,
-                'salary_max' => $template->salary_max,
-                'salary_min' => $template->salary_min,
-                'message'=> $template->message,
-                'owner_id'=> $template->owner_id,
-                'status'=> 1
-            ]);
 
             return $this->sendResponse($this->getList(), 'Email template shared with selected user successfully.');
         } catch (\Exception $e) {

@@ -138,12 +138,12 @@ class EmployerTagsController extends BaseApiController
     private function getList(){
         $own_list = EmployerTag::where('user_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get();
         if($own_list->count() > 0){
-            foreach($own_list as $index => $list){
+            foreach($own_list as $index => $val){
                 $own_list[$index]->shared_employers = EmployerTag::select('tag_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
                                                             ->join('users', 'users.id', '=', 'employer_tags.user_id')
                                                             ->where('user_id', '!=', auth()->user()->id)
                                                             ->where('owner_id', auth()->user()->id)
-                                                            ->where('tag_name', $list->tag_name)
+                                                            ->where('tag_name', $val->tag_name)
                                                             ->get()->toArray();
             }
         }
@@ -152,7 +152,7 @@ class EmployerTagsController extends BaseApiController
                                             ->orderBy('tag_name', 'ASC')->get();
 
         if($shared_list->count() > 0){
-            foreach($shared_list as $index => $list){
+            foreach($shared_list as $index => $val){
                 $shared_list[$index]->shared_employers = [];
             }
         }
