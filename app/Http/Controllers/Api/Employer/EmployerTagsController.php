@@ -136,11 +136,29 @@ class EmployerTagsController extends BaseApiController
     }
 
     private function getList(){
-        return [
-            'own_list' => EmployerTag::where('user_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get(),
-            'shared_list' => EmployerTag::where('user_id', auth()->user()->id)
+        $own_list = EmployerTag::where('user_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get();
+        if($own_list->count() > 0){
+            foreach($own_list as $index => $list){
+                $own_list[$index]->shared_employers = EmployerTag::select('tag_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
+                                                            ->join('users', 'users.id', '=', 'employer_tags.user_id')
+                                                            ->where('user_id', '!=', auth()->user()->id)
+                                                            ->where('owner_id', auth()->user()->id)
+                                                            ->where('tag_name', $list->tag_name)
+                                                            ->get()->toArray();
+            }
+        }
+        $shared_list = EmployerTag::where('user_id', auth()->user()->id)
                                             ->where('owner_id', '!=', auth()->user()->id)
-                                            ->orderBy('tag_name', 'ASC')->get(),
+                                            ->orderBy('tag_name', 'ASC')->get();
+
+        if($shared_list->count() > 0){
+            foreach($shared_list as $index => $list){
+                $shared_list[$index]->shared_employers = [];
+            }
+        }
+        return [
+            'own_list' => $own_list,
+            'shared_list' => $shared_list,
         ];
     }
 
@@ -152,7 +170,7 @@ class EmployerTagsController extends BaseApiController
     public function share(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'emplyer_id' => 'required',
+            'emplyer_id' => 'required|array',
         ]);
 
         if($validator->fails()){
@@ -161,19 +179,26 @@ class EmployerTagsController extends BaseApiController
 
         try{
             $tag = EmployerTag::find($id);
-            $has_duplicate = EmployerTag::where('user_id', $request->emplyer_id)
+            /* $has_duplicate = EmployerTag::where('user_id', $request->emplyer_id)
                                             ->where('tag_name', 'ilike', '%'.$tag->tag_name.'%')
                                             ->get()->count();
             if($has_duplicate > 0){
                 return $this->sendError('Duplicate Error', 'Duplicate tag is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
+            } */
+            EmployerTag::where('user_id', '!=', auth()->user()->id)
+                        ->where('owner_id', auth()->user()->id)
+                        ->where('tag_name', $tag->tag_name)
+                        ->delete();
+            foreach($request->emplyer_id as $emplyer_id){
+                if(!empty($emplyer_id)){
+                    EmployerTag::insert([
+                        'user_id'=> $emplyer_id,
+                        'tag_name'=> $tag->tag_name,
+                        'owner_id'=> $tag->owner_id,
+                        'status'=> 1
+                    ]);
+                }
             }
-
-            EmployerTag::insert([
-                'user_id'=> $request->emplyer_id,
-                'tag_name'=> $tag->tag_name,
-                'owner_id'=> $tag->owner_id,
-                'status'=> 1
-            ]);
 
             return $this->sendResponse($this->getList(), 'Tag shared with selected user successfully.');
         } catch (\Exception $e) {

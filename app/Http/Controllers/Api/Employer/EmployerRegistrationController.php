@@ -16,6 +16,7 @@ use App\Models\UserEmployer;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\Employer;
 
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
@@ -80,6 +81,10 @@ class EmployerRegistrationController extends BaseApiController
                     'business_id'=> $request->business_id,
                     'designation_id'=> $request->designation_id,
                     'completed_steps'=> 0
+                ]);
+
+                Employer::find($request->business_id)->update([
+                    'status'=> 4    // Waiting for admin approval
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
