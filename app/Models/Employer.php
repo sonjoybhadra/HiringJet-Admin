@@ -10,6 +10,25 @@ class Employer extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'logo',
+        'description',
+        'industry_id',
+        'country_id',
+        'city_id',
+        'state_id',
+        'address',
+        'address_line_2',
+        'pincode',
+        'landline',
+        'trade_license',
+        'vat_registration',
+        'employe_type',
+        'web_url',
+        'status'
+    ];
+
     /**
      * Get the role details of associated user.
     */

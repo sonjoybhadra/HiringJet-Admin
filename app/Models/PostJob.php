@@ -53,6 +53,7 @@ class PostJob extends Model
         'walkin_pincode',
         'walkin_latitude',
         'walkin_longitude',
+        'brand_id',
         'status',
         'created_by',
         'updated_by',
