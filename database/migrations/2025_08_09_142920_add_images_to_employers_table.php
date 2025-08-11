@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('landline', 20)->nullable();
             $table->string('trade_license')->nullable();
             $table->string('vat_registration')->nullable();
-            $table->string('logo')->nullable();
             $table->enum('employe_type', ['company', 'agency'])->default('company');
             $table->string('web_url')->nullable();
         });
@@ -42,7 +41,6 @@ return new class extends Migration
             $table->dropColumn('landline');
             $table->dropColumn('trade_license');
             $table->dropColumn('vat_registration');
-            $table->dropColumn('logo');
             $table->dropColumn('employe_type');
             $table->dropColumn('web_url');
         });
