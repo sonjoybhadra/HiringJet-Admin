@@ -84,7 +84,7 @@ class EmployerRegistrationController extends BaseApiController
                 ]);
 
                 Employer::find($request->business_id)->update([
-                    'status'=> 4    // Waiting for admin approval
+                    'status'=> 0    // Waiting for admin approval
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
@@ -208,9 +208,9 @@ class EmployerRegistrationController extends BaseApiController
             'pincode' => 'required|string|max:10',
             'country_code' => 'nullable|required|max:5',
             'landline' => 'nullable|string|max:20',
-            'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            //'trade_license' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            //'vat_registration' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+           //'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'description' => 'required|string',
             'industrie_id' => 'required|integer',
             'web_url' => 'required|url',
@@ -254,8 +254,8 @@ class EmployerRegistrationController extends BaseApiController
             $country_id = $country->getCountryId($request->country);
             $state_id = $state->getStateId($request->state, $country_id);
             $city_id = $city->getCityId($request->city, $country_id);
-
-            UserEmployer::where('user_id', $user->id)->update([
+            $user_employer = UserEmployer::find($user->id);
+            UserEmployer::find($user_employer->id)->update([
                 'country_id'=> $country_id,
                 'city_id'=> $city_id,
                 'state_id'=> $state_id,
@@ -272,6 +272,25 @@ class EmployerRegistrationController extends BaseApiController
                 'web_url'=> $request->web_url,
                 'employe_type'=> $request->employe_type,
                 'completed_steps'=> 2,
+            ]);
+
+            Employer::find($user_employer->business_id)->update([
+                'country_id'=> $country_id,
+                'city_id'=> $city_id,
+                'state_id'=> $state_id,
+                'address'=> $request->address,
+                'address_line_2'=> $request->address_line_2,
+                'pincode' => $request->pincode,
+                'landline'=> $request->landline,
+                'industrie_id'=> $request->industrie_id,
+                'profile_image'=> $profile_image,
+                'trade_license'=> $trade_license,
+                'vat_registration'=> $vat_registration,
+                'logo'=> $logo,
+                'description'=> $request->description,
+                'web_url'=> $request->web_url,
+                'employe_type'=> $request->employe_type,
+                'status'=> 0    // Unverified employer
             ]);
 
             return $this->sendResponse($this->getEmployerDetails(), 'Setup company profile has successfully done.');

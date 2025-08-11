@@ -221,6 +221,7 @@ use App\Http\Controllers\Api\Employer\EmployerUserController;
 use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 use App\Http\Controllers\Api\Employer\EmployerTagsController;
 use App\Http\Controllers\Api\Employer\EmployerEmailTemplateController;
+use App\Http\Controllers\Api\Employer\EmployerPostJobController;
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -256,6 +257,8 @@ Route::group([
     Route::post('/change-password', [AccountSettingsController::class, 'changePassword']); */
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
+
+    Route::post('/post-job', [EmployerPostJobController::class, 'postJob']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);
