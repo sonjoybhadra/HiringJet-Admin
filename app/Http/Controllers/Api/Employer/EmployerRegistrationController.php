@@ -254,8 +254,8 @@ class EmployerRegistrationController extends BaseApiController
             $country_id = $country->getCountryId($request->country);
             $state_id = $state->getStateId($request->state, $country_id);
             $city_id = $city->getCityId($request->city, $country_id);
-            $user_employer = UserEmployer::find($user->id);
-            UserEmployer::find($user_employer->id)->update([
+            $user_employer = UserEmployer::where('user_id', $user->id)->first();
+            UserEmployer::where('user_id', $user->id)->update([
                 'country_id'=> $country_id,
                 'city_id'=> $city_id,
                 'state_id'=> $state_id,
