@@ -111,7 +111,7 @@ class EmployerBrandsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'company_name' => 'required|string|max:255',
-            'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
+            // 'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
             'info' => 'required|string|max:255',
             'industry' => 'required|integer',
             'web_url' => 'required|url',
@@ -135,18 +135,11 @@ class EmployerBrandsController extends BaseApiController
             if($has_duplicate > 0){
                 return $this->sendError('Duplicate Error', 'Duplicate brand mapping is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
-            $logo = "";
-            if (request()->hasFile('logo')) {
-                $file = request()->file('logo');
-                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
-                $logo = 'public/storage/uploads/employer/logo/'.$fileName;
-            }
+
             $country = new Country();
             $country_id = $country->getCountryId($request->country);
-            EmployerBrand::find($id)->update([
+            $update_array = [
                 'company_name'=> $request->company_name,
-                'company_logo'=> $logo,
                 'info'=> $request->info,
                 'industry_id'=> $request->industry,
                 'contact_person_id'=> $request->contact_person,
@@ -155,7 +148,14 @@ class EmployerBrandsController extends BaseApiController
                 'address' => $request->address,
                 'country' => $country_id,
                 'zip_code' => $request->zip_code,
-            ]);
+            ];
+            if (request()->hasFile('logo')) {
+                $file = request()->file('logo');
+                $fileName = md5($file->getClientOriginalName() .'_'. time()) . "." . $file->getClientOriginalExtension();
+                Storage::disk('public')->put('uploads/employer/logo/'.$fileName, file_get_contents($file));
+                $update_array['company_logo'] = 'public/storage/uploads/employer/logo/'.$fileName;
+            }
+            EmployerBrand::find($id)->update($update_array);
 
             return $this->sendResponse($this->getList(), 'Brand updated successfully.');
         } catch (\Exception $e) {
