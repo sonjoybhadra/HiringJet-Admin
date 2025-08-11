@@ -33,7 +33,18 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('employers', function (Blueprint $table) {
-            //
+            $table->dropColumn('country_id');
+            $table->dropColumn('city_id');
+            $table->dropColumn('state_id');
+            $table->dropColumn('address');
+            $table->dropColumn('address_line_2');
+            $table->dropColumn('pincode');
+            $table->dropColumn('landline');
+            $table->dropColumn('trade_license');
+            $table->dropColumn('vat_registration');
+            $table->dropColumn('logo');
+            $table->dropColumn('employe_type');
+            $table->dropColumn('web_url');
         });
     }
 };
