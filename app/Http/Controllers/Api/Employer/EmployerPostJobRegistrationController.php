@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\UserEmployer;
+use App\Models\Employer;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
@@ -344,31 +345,54 @@ class EmployerPostJobRegistrationController extends BaseApiController
             $state_id = $state->getStateId($request->state, $country_id);
             $city_id = $city->getCityId($request->city, $country_id);
 
-            // Update employer profile
-            $updateData = [
-                'country_id' => $country_id,
-                'city_id' => $city_id,
-                'state_id' => $state_id,
-                'address' => $request->address,
-                'address_line_2' => $request->address_line_2,
-                'pincode' => $request->pincode,
-                'landline' => $request->landline,
-                'industrie_id' => $request->industrie_id,
-                'description' => $request->description,
-                'web_url' => $request->web_url,
-                'employe_type' => $request->employe_type,
-                'completed_steps' => 2, // Mark profile as completed
-            ];
+            // create new  employer/company profile
+             $employer = new Employer();
+                $employer->name = $request->company_name ?? null;
+                $employer->logo = $request->logo ?? null;
+                $employer->description = $request->description ?? null;
+                $employer->industry_id = $request->industry_id;
+                $employer->country_id = $country_id;
+                $employer->state_id = $state_id;
+                $employer->city_id = $city_id;
+                $employer->address = $request->address;
+                $employer->address_line_2 = $request->address_line_2 ?? null;
+                $employer->pincode = $request->pincode;
+                $employer->landline = $request->landline ?? null;
+                $employer->trade_license = $request->trade_license ?? null;
+                $employer->vat_registration = $request->vat_registration ?? null;
+                $employer->employe_type = $request->employe_type;
+                $employer->web_url = $request->web_url ?? null;
+                $employer->status =0 ?? 0; // default active
+                $employer->save();
+            if ($employer) {
+                // Update super user employer profile
+                $updateData = [
+                    'country_id' => $country_id,
+                    'city_id' => $city_id,
+                    'state_id' => $state_id,
+                    'address' => $request->address,
+                    'address_line_2' => $request->address_line_2,
+                    'pincode' => $request->pincode,
+                    'landline' => $request->landline,
+                    'industrie_id' => $request->industrie_id,
+                    'description' => $request->description,
+                    'business_id' => $employer->id,
+                    'web_url' => $request->web_url,
+                    'employe_type' => $request->employe_type,
+                    'completed_steps' => 2, // Mark profile as completed
+                ];
 
-            // Add file paths if uploaded
-            if ($profile_image) $updateData['profile_image'] = $profile_image;
-            if ($trade_license) $updateData['trade_license'] = $trade_license;
-            if ($vat_registration) $updateData['vat_registration'] = $vat_registration;
-            if ($logo) $updateData['logo'] = $logo;
+                // Add file paths if uploaded
+                if ($profile_image) $updateData['profile_image'] = $profile_image;
+                if ($trade_license) $updateData['trade_license'] = $trade_license;
+                if ($vat_registration) $updateData['vat_registration'] = $vat_registration;
+                if ($logo) $updateData['logo'] = $logo;
+            }
 
-            $employer = UserEmployer::where('user_id', $user->id)->update($updateData);
 
-            return $employer ? true : false; // Fixed: return boolean instead of undefined variable
+            $user_employer = UserEmployer::where('user_id', $user->id)->update($updateData);
+
+            return $user_employer ? true : false; // Fixed: return boolean instead of undefined variable
 
         } catch (\Exception $e) {
             \Log::error("updateEmployerProfile Error: " . $e->getMessage());
