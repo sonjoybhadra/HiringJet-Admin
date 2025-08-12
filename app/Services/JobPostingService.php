@@ -240,10 +240,10 @@ class JobPostingService
         int $userId
     ): array {
         // Handle nationality - convert array to JSON if needed
-        $nationality = $data['nationality'] ?? '';
-        if (is_array($nationality)) {
-            $nationality = json_encode($nationality);
-        }
+        // $nationality = $data['nationality'] ?? '';
+        // if (is_array($nationality)) {
+        //     $nationality = json_encode($nationality);
+        // }
 
         // Process salary fields - remove commas and convert to numeric
         $minSalary = 0;
@@ -270,7 +270,7 @@ class JobPostingService
             'location_city_names' => $locationData['city_names_json'],
             'industry' => (int) $data['industry'],
             'job_category' => (int) $data['job_category'],
-            'nationality' => $nationality,
+            'nationality' => (int) $data['nationality'],
             'gender' => (int) $data['gender'],
             'open_position_number' => (int) $data['open_position_number'],
             'contract_type' => (int) $data['contract_type'],

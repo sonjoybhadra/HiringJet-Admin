@@ -221,7 +221,7 @@ class EmployerRegistrationController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        //try{
+        try{
             $profile_image = $trade_license = $vat_registration = $logo = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
@@ -295,10 +295,10 @@ class EmployerRegistrationController extends BaseApiController
 
             return $this->sendResponse($this->getEmployerDetails(), 'Setup company profile has successfully done.');
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
             \Log::info("employerCompleteProfile::", $e->getMessage());
             return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
-        } */
+        }
     }
 
 }
