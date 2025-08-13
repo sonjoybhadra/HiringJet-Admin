@@ -355,7 +355,7 @@ private function validateJobPostingData(Request $request)
         'skill_ids' => 'nullable|array',
         'skill_ids.*' => 'integer|min:1',
         'expected_close_date' => 'nullable|date|after_or_equal:today',
-        'currency' => 'required|integer|min:1', // Currency ID, not string
+        'currency' => 'required|string|min:1', // Currency ID, not string
         'min_salary' => 'nullable|numeric|min:0',
         'max_salary' => 'nullable|numeric|min:0|gte:min_salary',
         'is_salary_negotiable' => 'nullable|boolean',
@@ -422,7 +422,7 @@ private function validateJobPostingData(Request $request)
         'job_description.required' => 'Job description is required',
         'job_description.min' => 'Job description must be at least 10 characters',
         'currency.required' => 'Currency is required',
-        'currency.integer' => 'Currency must be a valid selection',
+        'currency.string' => 'Currency must be a valid selection',
         'max_salary.gte' => 'Maximum salary must be greater than or equal to minimum salary',
         'expected_close_date.after_or_equal' => 'Expected close date cannot be in the past',
         'posting_open_date.after_or_equal' => 'Posting open date cannot be in the past',
