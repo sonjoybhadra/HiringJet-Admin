@@ -149,19 +149,19 @@ function loadTable(config) {
                     const completed_steps = row['completed_steps'];
                     if(completed_steps < 2){
                         html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
-                                    <i class="fa-solid fa-briefcase" style="margin-right:5px;"></i>Create Business
+                                    <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Create Business
                                 </a>`;
                     } else {
                         html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
-                                    <i class="fa-solid fa-briefcase" style="margin-right:5px;"></i>Edit Business
+                                    <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Edit Business
                                 </a>`;
                         html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
-                                    <i class="fa-solid fa-info-circle" style="margin-right:5px;"></i>View Profile
+                                    <i class="fa-solid fa-info-circle" style="margin-right:3px;"></i>View Profile
                                 </a>`;
                     }
                     if(status == 0){
                         html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
-                                    <i class="fa-solid fa-key" style="margin-right:5px;"></i>Verify OTP
+                                    <i class="fa-solid fa-key" style="margin-right:3px;"></i>Verify OTP
                                 </a>`;
                     }
                 }
