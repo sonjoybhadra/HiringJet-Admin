@@ -514,6 +514,12 @@ $role_id = (($user)?$user->role_id:0);
             <div data-i18n="Non-Verified"><i class="fa-solid fa-arrow-right"></i> Non-Verified</div>
           </a>
         </li>
+
+        <li class="menu-item <?=(($pageSegment == 'employer-user' && $pageFunction == 'decline')?'active':'')?>">
+          <a href="<?=url('/employer-user/decline')?>" class="menu-link">
+            <div data-i18n="Declined"><i class="fa-solid fa-arrow-right"></i> Declined</div>
+          </a>
+        </li>
       </ul>
     </li>
   <?php }?>
