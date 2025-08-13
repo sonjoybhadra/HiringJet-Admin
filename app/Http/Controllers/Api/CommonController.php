@@ -32,6 +32,7 @@ use App\Models\MaritalStatus;
 use App\Models\ItSkill;
 use App\Models\Nationality;
 use App\Models\State;
+use App\Models\ContractType;
 
 use App\Models\HomePage;
 use App\Models\GeneralSetting;
@@ -75,6 +76,7 @@ class CommonController extends BaseApiController
             'report_bug_category'=> $this->get_report_bug_category(1),
             'interestedIn'=> $this->get_interestedIn(1),
             'itSkill'=> $this->get_itSkill(1),
+            'contract_type'=> $this->get_contractType(1)
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -463,6 +465,19 @@ class CommonController extends BaseApiController
     public function get_course_type($res = '')
     {
         $list = ['Full Time', 'Part Time', 'Correspenence/ Distance learning'];
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
+    }
+
+    public function get_contractType($res = '')
+    {
+        $list = ContractType::select('id', 'name')->where('status', 1)->get();
         if($res != ''){
             return $list;
         }else{
