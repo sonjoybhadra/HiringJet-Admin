@@ -134,33 +134,9 @@ public function postJobComplete(Request $request)
         }
 
         // If business_id is null or completed_steps is 1, create/update employer profile
-        if (!$userEmployer->business_id || $userEmployer->completed_steps == 1) {
 
-            // Simple employer creation without complex location lookup
-            $employer = Employer::create([
-                'name' => $request->company_name ?? 'Default Company',
-                'description' => $request->description ?? '',
-                'industry_id' => $request->industrie_id ?? 1,
-                'country_id' => 1, // Default country ID
-                'state_id' => 1,   // Default state ID
-                'city_id' => 1,    // Default city ID
-                'address' => $request->address ?? '',
-                'address_line_2' => $request->address_line_2 ?? '',
-                'pincode' => $request->pincode ?? '',
-                'landline' => $request->landline ?? '',
-                'employe_type' => $request->employe_type ?? 'company',
-                'web_url' => $request->web_url ?? '',
-                'no_of_employee' => $request->no_of_employee ?? 1,
-                'logo' => '',
-                'status' => 0
-            ]);
+        $this->updateEmployerProfile($request, $user);
 
-            // Update user employer with new business_id
-            $userEmployer->update([
-                'business_id' => $employer->id,
-                'completed_steps' => 2
-            ]);
-        }
 
         // Prepare job data for service
         $jobData = [
