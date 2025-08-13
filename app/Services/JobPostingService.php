@@ -15,7 +15,7 @@ use Exception;
 class JobPostingService
 {
     /**
-     * Create a new job posting
+     * Create a new job posting - UPDATED FOR STRING SUPPORT
      *
      * @param array $data
      * @param int $userId
@@ -35,16 +35,16 @@ class JobPostingService
             // Process position name based on designation
             $positionName = $this->getPositionName(
                 $data['designation'],
-                $data['position_name'] ?? ''
+                $data['roleName'] ?? $data['position_name'] ?? ''
             );
 
-            // Process location data (countries and cities)
+            // Process location data
             $locationData = $this->processLocationData($data);
 
             // Process skills data
             $skillData = $this->processSkillsData($data);
 
-            // Prepare final job data for insertion
+            // Prepare final job data for insertion - KEEP STRINGS
             $jobData = $this->prepareJobDataForInsertion(
                 $data,
                 $jobNumberData,
@@ -54,7 +54,7 @@ class JobPostingService
                 $userId
             );
 
-            // Insert job into database using PostgreSQL
+            // Insert job into database
             $jobId = DB::table('post_jobs')->insertGetId($jobData);
 
             // Log user activity
@@ -92,12 +92,9 @@ class JobPostingService
 
     /**
      * Generate unique job number
-     *
-     * @return array
      */
     private function generateJobNumber(): array
     {
-        // Use PostgreSQL specific query to get latest job
         $lastJob = DB::table('post_jobs')
                     ->select('sl_no')
                     ->orderBy('id', 'DESC')
@@ -109,7 +106,6 @@ class JobPostingService
             $nextSlNo = 1;
         }
 
-        // Format serial number with leading zeros
         $formattedSlNo = str_pad($nextSlNo, 7, '0', STR_PAD_LEFT);
         $jobNo = 'HJ-J-' . $formattedSlNo;
 
@@ -121,10 +117,6 @@ class JobPostingService
 
     /**
      * Get position name based on designation
-     *
-     * @param int $designationId
-     * @param string $customPositionName
-     * @return string
      */
     private function getPositionName(int $designationId, string $customPositionName = ''): string
     {
@@ -139,14 +131,11 @@ class JobPostingService
                         ->where('id', $designationId)
                         ->first();
 
-        return $designation ? $designation->name : '';
+        return $designation ? $designation->name : $customPositionName;
     }
 
     /**
-     * Process location data (countries and cities)
-     *
-     * @param array $data
-     * @return array
+     * Process location data
      */
     private function processLocationData(array $data): array
     {
@@ -157,30 +146,32 @@ class JobPostingService
             'city_names_json' => ''
         ];
 
-        // Process countries
-        if (!empty($data['location_countries']) && is_array($data['location_countries'])) {
-            $countryIds = $data['location_countries'];
-            $locationData['countries_json'] = json_encode($countryIds);
+        // Process countries - handle single value or array
+        $countries = [];
+        if (!empty($data['location_countries'])) {
+            $countries = is_array($data['location_countries']) ? $data['location_countries'] : [$data['location_countries']];
+            $locationData['countries_json'] = json_encode($countries);
 
-            // Get country names using PostgreSQL
+            // Get country names
             $countryNames = DB::table('countries')
                              ->select('name')
-                             ->whereIn('id', $countryIds)
+                             ->whereIn('id', $countries)
                              ->pluck('name')
                              ->toArray();
 
             $locationData['country_names_json'] = json_encode($countryNames);
         }
 
-        // Process cities
-        if (!empty($data['location_cities']) && is_array($data['location_cities'])) {
-            $cityIds = $data['location_cities'];
-            $locationData['cities_json'] = json_encode($cityIds);
+        // Process cities - handle single value or array
+        $cities = [];
+        if (!empty($data['location_cities'])) {
+            $cities = is_array($data['location_cities']) ? $data['location_cities'] : [$data['location_cities']];
+            $locationData['cities_json'] = json_encode($cities);
 
-            // Get city names using PostgreSQL
+            // Get city names
             $cityNames = DB::table('cities')
                           ->select('name')
-                          ->whereIn('id', $cityIds)
+                          ->whereIn('id', $cities)
                           ->pluck('name')
                           ->toArray();
 
@@ -192,9 +183,6 @@ class JobPostingService
 
     /**
      * Process skills data
-     *
-     * @param array $data
-     * @return array
      */
     private function processSkillsData(array $data): array
     {
@@ -207,7 +195,7 @@ class JobPostingService
             $skillIds = $data['skill_ids'];
             $skillData['skill_ids_json'] = json_encode($skillIds);
 
-            // Get skill names using PostgreSQL
+            // Get skill names
             $skillNames = DB::table('keyskills')
                            ->select('name')
                            ->whereIn('id', $skillIds)
@@ -221,15 +209,7 @@ class JobPostingService
     }
 
     /**
-     * Prepare job data for database insertion
-     *
-     * @param array $data
-     * @param array $jobNumberData
-     * @param string $positionName
-     * @param array $locationData
-     * @param array $skillData
-     * @param int $userId
-     * @return array
+     * Prepare job data for database insertion - KEEP STRINGS WHERE APPROPRIATE
      */
     private function prepareJobDataForInsertion(
         array $data,
@@ -239,70 +219,85 @@ class JobPostingService
         array $skillData,
         int $userId
     ): array {
-        // Handle nationality - convert array to JSON if needed
-        // $nationality = $data['nationality'] ?? '';
-        // if (is_array($nationality)) {
-        //     $nationality = json_encode($nationality);
-        // }
+        // Handle nationality - keep as is or convert to JSON if array
+        $nationality = $data['nationality'] ?? '';
+        if (is_array($nationality)) {
+            $nationality = json_encode($nationality);
+        }
 
-        // Process salary fields - remove commas and convert to numeric
+        // Process salary fields
         $minSalary = 0;
         $maxSalary = 0;
 
-        if (!empty($data['min_salary'])) {
-            $minSalary = (float) str_replace(',', '', $data['min_salary']);
+        if (!empty($data['minSalary'])) {
+            $minSalary = (float) str_replace(',', '', $data['minSalary']);
         }
 
-        if (!empty($data['max_salary'])) {
-            $maxSalary = (float) str_replace(',', '', $data['max_salary']);
+        if (!empty($data['maxSalary'])) {
+            $maxSalary = (float) str_replace(',', '', $data['maxSalary']);
         }
 
-        // Prepare the final data array for PostgreSQL insertion
+        // Store as strings directly - no conversion needed
+        $jobType = $data['jobtype'] ?? 'walk-in-jobs';
+        $gender = $data['gender'] ?? 'No-Preference';
+        $contractType = $data['contract_type'] ?? 'Full-time';
+
+        // Handle walk-in location data - keep as strings for string-based database
+        $walkinCountry = '';
+        $walkinState = '';
+        $walkinCity = '';
+
+        if ($jobType === 'walk-in-jobs') { // walk-in-jobs
+            // Store location names as strings directly
+            $walkinCountry = $data['walkin_country'] ?? '';
+            $walkinState = $data['walkin_state'] ?? '';
+            $walkinCity = $data['walkin_city'] ?? '';
+        }
+
+        // Prepare the final data array
         return [
             'sl_no' => $jobNumberData['sl_no'],
             'job_no' => $jobNumberData['job_no'],
             'position_name' => $positionName,
             'employer_id' => (int) $data['employer_id'],
-            'job_type' => (int) $data['job_type'],
+            'job_type' => $jobType, // String: 'walk-in-jobs', 'remote-jobs', etc.
             'location_countries' => $locationData['countries_json'],
             'location_country_names' => $locationData['country_names_json'],
             'location_cities' => $locationData['cities_json'],
             'location_city_names' => $locationData['city_names_json'],
-            'industry' => (int) $data['industry'],
-            'job_category' => (int) $data['job_category'],
-            'nationality' => (int) $data['nationality'],
-            'gender' => (int) $data['gender'],
-            'open_position_number' => (int) $data['open_position_number'],
-            'contract_type' => (int) $data['contract_type'],
+            'industry' => (int) ($data['industry'] ?? 0),
+            'job_category' => (int) ($data['job_category'] ?? 0),
+            'nationality' => $nationality,
+            'gender' => $gender, // String: 'Male', 'Female', 'Others', 'No-Preference'
+            'open_position_number' => (int) ($data['numberOfPositions'] ?? $data['open_position_number'] ?? 1),
+            'contract_type' => $contractType, // String: 'Full-time', 'Part-time', etc.
             'designation' => (int) $data['designation'],
             'functional_area' => (int) ($data['functional_area'] ?? 0),
-            'min_exp_year' => (int) $data['min_exp_year'],
-            'max_exp_year' => isset($data['max_exp_year']) ? (int) $data['max_exp_year'] : null,
-            'job_description' => $data['job_description'] ?? '',
-            'requirement' => $data['requirement'] ?? '',
+            'min_exp_year' => (int) ($data['minexperience'] ?? $data['min_exp_year'] ?? 0),
+            'max_exp_year' => isset($data['maxexperience']) ? (int) $data['maxexperience'] : (isset($data['max_exp_year']) ? (int) $data['max_exp_year'] : null),
+            'job_description' => $data['jobDescription'] ?? $data['job_description'] ?? '',
+            'requirement' => $data['requirements'] ?? $data['requirement'] ?? '',
             'skill_ids' => $skillData['skill_ids_json'],
             'skill_names' => $skillData['skill_names_json'],
             'expected_close_date' => null,
-            'currency' => $data['currency'] ?? '',
+            'currency' => $data['currency'] ?? 'USD',
             'min_salary' => $minSalary,
             'max_salary' => $maxSalary,
-            'is_salary_negotiable' => isset($data['is_salary_negotiable']) ? 1 : 0,
-            'posting_open_date' => $data['posting_open_date'] ?? null,
-            'posting_close_date' => $data['posting_close_date'] ?? null,
-            'application_through' => (int) $data['application_through'],
-            'apply_on_email' => $data['apply_on_email'] ?? '',
-            'apply_on_link' => $data['apply_on_link'] ?? '',
+            'is_salary_negotiable' => ($data['salnegotiate'] ?? $data['is_salary_negotiable'] ?? 'no') === 'yes' ? 1 : 0,
+            'posting_open_date' => $data['openDate'] ?? $data['posting_open_date'] ?? date('Y-m-d'),
+            'posting_close_date' => $data['closeDate'] ?? $data['posting_close_date'] ?? date('Y-m-d', strtotime('+30 days')),
+            'application_through' => (int) ($data['application_through'] ?? 1),
+            'apply_on_email' => $data['applyTo'] ?? $data['apply_on_email'] ?? '',
+            'apply_on_link' => $data['applyTo'] ?? $data['apply_on_link'] ?? '',
             'walkin_address1' => $data['walkin_address1'] ?? '',
             'walkin_address2' => $data['walkin_address2'] ?? '',
-            'walkin_country' => (int) ($data['walkin_country'] ?? 0),
-            'walkin_state' => (int) ($data['walkin_state'] ?? 0),
-            'walkin_city' => (int) ($data['walkin_city'] ?? 0),
+            'walkin_country' => $walkinCountry,
+            'walkin_state' => $walkinState,
+            'walkin_city' => $walkinCity,
             'walkin_pincode' => $data['walkin_pincode'] ?? '',
             'walkin_latitude' => $data['walkin_latitude'] ?? '',
             'walkin_longitude' => $data['walkin_longitude'] ?? '',
-            'walkin_details' => isset($data['walkin_details'])
-                ? html_entity_decode($data['walkin_details'])
-                : '',
+            'walkin_details' => isset($data['walkin_details']) ? html_entity_decode($data['walkin_details']) : '',
             'created_by' => $userId,
             'updated_by' => $userId,
             'status' => 1,
@@ -312,14 +307,54 @@ class JobPostingService
     }
 
     /**
+     * Get location ID by name - SAFE FALLBACK
+     */
+    private function getLocationId($type, $name, $countryId = null)
+    {
+        if (empty($name)) {
+            return 0;
+        }
+
+        try {
+            switch ($type) {
+                case 'country':
+                    $location = DB::table('countries')
+                                ->where('name', 'ILIKE', $name)
+                                ->first();
+                    break;
+
+                case 'state':
+                    $query = DB::table('states')
+                           ->where('name', 'ILIKE', $name);
+                    if ($countryId) {
+                        $query->where('country_id', $countryId);
+                    }
+                    $location = $query->first();
+                    break;
+
+                case 'city':
+                    $query = DB::table('cities')
+                           ->where('name', 'ILIKE', $name);
+                    if ($countryId) {
+                        $query->where('country_id', $countryId);
+                    }
+                    $location = $query->first();
+                    break;
+
+                default:
+                    return 0;
+            }
+
+            return $location ? $location->id : 0;
+
+        } catch (Exception $e) {
+            Log::error("Error getting {$type} ID: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    /**
      * Log user activity for audit trail
-     *
-     * @param string $userEmail
-     * @param string $userName
-     * @param string $ipAddress
-     * @param string $positionName
-     * @param string $action
-     * @return void
      */
     private function logUserActivity(
         string $userEmail,
@@ -340,25 +375,18 @@ class JobPostingService
                 'created_at' => now()
             ]);
         } catch (Exception $e) {
-            // Log the error but don't fail the main operation
             Log::warning('Failed to log user activity: ' . $e->getMessage());
         }
     }
 
     /**
      * Update existing job posting
-     *
-     * @param int $jobId
-     * @param array $data
-     * @param int $userId
-     * @return array
      */
     public function updateJobPost(int $jobId, array $data, int $userId): array
     {
         try {
             DB::beginTransaction();
 
-            // Check if job exists
             $existingJob = DB::table('post_jobs')
                             ->where('id', $jobId)
                             ->first();
@@ -370,17 +398,14 @@ class JobPostingService
                 ];
             }
 
-            // Process position name
             $positionName = $this->getPositionName(
                 $data['designation'],
                 $data['position_name'] ?? ''
             );
 
-            // Process location and skills data
             $locationData = $this->processLocationData($data);
             $skillData = $this->processSkillsData($data);
 
-            // Prepare update data (exclude sl_no and job_no)
             $updateData = $this->prepareJobDataForInsertion(
                 $data,
                 ['sl_no' => $existingJob->sl_no, 'job_no' => $existingJob->job_no],
@@ -394,7 +419,6 @@ class JobPostingService
             unset($updateData['sl_no'], $updateData['job_no'], $updateData['created_by'], $updateData['created_at']);
             $updateData['updated_at'] = now();
 
-            // Update job in PostgreSQL
             DB::table('post_jobs')
               ->where('id', $jobId)
               ->update($updateData);
@@ -424,10 +448,6 @@ class JobPostingService
 
     /**
      * Delete job posting (soft delete)
-     *
-     * @param int $jobId
-     * @param int $userId
-     * @return array
      */
     public function deleteJobPost(int $jobId, int $userId): array
     {
@@ -469,9 +489,6 @@ class JobPostingService
 
     /**
      * Get job by ID
-     *
-     * @param int $jobId
-     * @return array|null
      */
     public function getJobById(int $jobId): ?array
     {
@@ -491,11 +508,6 @@ class JobPostingService
 
     /**
      * Get jobs by employer with filters
-     *
-     * @param int $employerId
-     * @param array $filters
-     * @param int $perPage
-     * @return array
      */
     public function getEmployerJobs(int $employerId, array $filters = [], int $perPage = 15): array
     {
@@ -521,12 +533,12 @@ class JobPostingService
                 $query->whereDate('created_at', '<=', $filters['date_to']);
             }
 
-            // Get total count for pagination
+            // Get total count
             $total = $query->count();
 
             // Get paginated results
             $jobs = $query->orderBy('created_at', 'desc')
-                         ->offset(($filters['page'] ?? 1 - 1) * $perPage)
+                         ->offset((($filters['page'] ?? 1) - 1) * $perPage)
                          ->limit($perPage)
                          ->get();
 

@@ -53,6 +53,27 @@ class EmployerUserController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
+        public function verified(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Verified List';
+            $page_name                      = 'employer-user.verified';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function nonVerified(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Non-Verified List';
+            $page_name                      = 'employer-user.non-verified';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function decline(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Declined List';
+            $page_name                      = 'employer-user.decline';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
     /* list */
     /* add */
         public function add(Request $request){
@@ -231,7 +252,10 @@ class EmployerUserController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Employer::find($id);
+            $model                          = UserEmployer::find($id);
+            $business_id                    = (($model)?$model->business_id:0);
+            $getBusiness                    = Employer::where('id', '=', $business_id)->first();
+            Employer::where('id', '=', $business_id)->update(['status' => 3]);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
@@ -253,43 +277,47 @@ class EmployerUserController extends Controller
         }
     /* delete */
     /* change status */
-        public function change_status(Request $request, $id){
+        public function change_status(Request $request, $id, $statusNo){
             $id                             = Helper::decoded($id);
-            $model                          = Employer::find($id);
-            if ($model->status == 1)
-            {
-                $model->status  = 0;
-                $msg            = 'Deactivated';
-                /* user activity */
-                    $activityData = [
-                        'user_email'        => session('user_data')['email'],
-                        'user_name'         => session('user_data')['name'],
-                        'user_type'         => 'ADMIN',
-                        'ip_address'        => $request->ip(),
-                        'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
-                        'platform_type'     => 'WEB',
-                    ];
-                    UserActivity::insert($activityData);
-                /* user activity */
-            } else {
-                $model->status  = 1;
-                $msg            = 'Activated';
-                /* user activity */
-                    $activityData = [
-                        'user_email'        => session('user_data')['email'],
-                        'user_name'         => session('user_data')['name'],
-                        'user_type'         => 'ADMIN',
-                        'ip_address'        => $request->ip(),
-                        'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
-                        'platform_type'     => 'WEB',
-                    ];
-                    UserActivity::insert($activityData);
-                /* user activity */
-            }            
-            $model->save();
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
+            $model                          = UserEmployer::find($id);
+            $business_id                    = (($model)?$model->business_id:0);
+            $getBusiness                    = Employer::where('id', '=', $business_id)->first();
+            if($getBusiness){
+                Employer::where('id', '=', $business_id)->update(['status' => $statusNo]);
+                if ($statusNo == 2)
+                { 
+                    $msg            = 'Declined';
+                    $redirectRoute  = 'decline';
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Declined',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
+                } elseif ($statusNo == 4) {
+                    $msg            = 'Verified';
+                    $redirectRoute  = 'verified';
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Verified',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
+                }
+            }
+            return redirect($this->data['controller_route'] . "/" . $redirectRoute)->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
     /* resend otp */
@@ -388,7 +416,7 @@ class EmployerUserController extends Controller
             $data['row']                    = DB::table('users')
                                                 ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
                                                 ->select('users.*', 'user_employers.*')
-                                                ->where('users.id', '=', $id)
+                                                ->where('user_employers.id', '=', $id)
                                                 ->first();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
@@ -484,23 +512,42 @@ class EmployerUserController extends Controller
                     // $state_id = $state->getStateId($request->state, $country_id);
                     // $city_id = $city->getCityId($request->city, $country_id);
 
-                    UserEmployer::where('user_id', $id)->update([
-                        'country_id'=> $request->country,
-                        'city_id'=> $request->city,
-                        'state_id'=> $request->state,
-                        'address'=> $request->address,
-                        'address_line_2'=> $request->address_line_2,
-                        'pincode' => $request->pincode,
-                        'landline'=> $request->landline,
-                        'industrie_id'=> $request->industrie_id,
-                        'profile_image'=> $profile_image,
-                        'trade_license'=> $trade_license,
-                        'vat_registration'=> $vat_registration,
-                        'logo'=> $logo,
-                        'description'=> $request->description,
-                        'web_url'=> $request->web_url,
-                        'employe_type'=> 'company',
-                        'completed_steps'=> 2,
+                    UserEmployer::where('id', $id)->update([
+                        'country_id'        => $request->country,
+                        'city_id'           => $request->city,
+                        'state_id'          => $request->state,
+                        'address'           => $request->address,
+                        'address_line_2'    => $request->address_line_2,
+                        'pincode'           => $request->pincode,
+                        'landline'          => $request->landline,
+                        'industrie_id'      => $request->industrie_id,
+                        'profile_image'     => $profile_image,
+                        'trade_license'     => $trade_license,
+                        'vat_registration'  => $vat_registration,
+                        'logo'              => $logo,
+                        'description'       => $request->description,
+                        'web_url'           => $request->web_url,
+                        'employe_type'      => 'company',
+                        'completed_steps'   => 2,
+                        'created_at'        => date('Y-m-d H:i:s'),
+                        'updated_at'        => date('Y-m-d H:i:s'),
+                    ]);
+
+                    $business_id                          = (($data['row'])?$data['row']->business_id:'');
+                    Employer::where('id', $business_id)->update([
+                        'country_id'        => $request->country,
+                        'city_id'           => $request->city,
+                        'state_id'          => $request->state,
+                        'address'           => $request->address,
+                        'address_line_2'    => $request->address_line_2,
+                        'pincode'           => $request->pincode,
+                        'landline'          => $request->landline,
+                        'trade_license'     => $trade_license,
+                        'vat_registration'  => $vat_registration,
+                        'logo'              => $logo,
+                        'description'       => $request->description,
+                        'web_url'           => $request->web_url,
+                        'employe_type'      => 'company',
                     ]);
 
                     return redirect($this->data['controller_route'] . "/create-business/" . Helper::encoded($id))->with(['success_message' => 'Setup company profile has successfully done.']);

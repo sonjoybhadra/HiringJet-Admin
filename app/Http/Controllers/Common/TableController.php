@@ -70,8 +70,8 @@ class TableController extends Controller
         if ($table === 'report_bugs') {
             $query->leftJoin('users', DB::raw("CAST($table.user_id AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
         }
-        if ($table === 'users' && $routes == 'employer-user') {
-            $query->leftJoin('user_employers', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_employers.user_id AS TEXT)"));
+        if ($table === 'user_employers' && $routes == 'employer-user') {
+            $query->leftJoin('employers', DB::raw("CAST($table.business_id AS TEXT)"), '=', DB::raw("CAST(employers.id AS TEXT)"));
         }
 
         // Aliased select columns
@@ -125,9 +125,12 @@ class TableController extends Controller
             if ($table === 'users' && $col == 'profile_completed_percentage') {
                 return 'user_profiles.profile_completed_percentage';
             }
-            if ($table === 'users') {
-                if ($col === 'completed_steps') {
-                    return 'user_employers.completed_steps as completed_steps';
+            if ($table === 'user_employers') {
+                if ($col === 'business_id') {
+                    return 'employers.name as business_name';
+                }
+                if ($col === 'status') {
+                    return 'employers.status as status';
                 }
             }
             return str_contains($col, '.') ? $col : "$table.$col";
@@ -147,7 +150,7 @@ class TableController extends Controller
         }
 
         if($routes == 'employer-user'){
-            $query->whereNull('users.parent_id');
+            $query->whereNotNull('user_employers.business_id');
         }
 
         // Search
