@@ -236,6 +236,8 @@ Route::post('/employer/check-email', [EmployerPostJobRegistrationController::cla
 Route::post('/employer/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
 Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
+Route::post('/employer/search/result', [EmployerSearchController::class, 'getEmployerBySearch']);
+
 
 
 Route::post('/employer/login', [EmployerAuthController::class, 'login']);
