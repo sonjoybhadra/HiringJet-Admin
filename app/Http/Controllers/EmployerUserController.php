@@ -287,7 +287,7 @@ class EmployerUserController extends Controller
                 if ($statusNo == 2)
                 { 
                     $msg            = 'Declined';
-                    $redirectRoute  = 'non-verified';
+                    $redirectRoute  = 'decline';
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
