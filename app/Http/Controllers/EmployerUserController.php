@@ -485,22 +485,37 @@ class EmployerUserController extends Controller
                     // $city_id = $city->getCityId($request->city, $country_id);
 
                     UserEmployer::where('user_id', $id)->update([
-                        'country_id'=> $request->country,
-                        'city_id'=> $request->city,
-                        'state_id'=> $request->state,
-                        'address'=> $request->address,
-                        'address_line_2'=> $request->address_line_2,
-                        'pincode' => $request->pincode,
-                        'landline'=> $request->landline,
-                        'industrie_id'=> $request->industrie_id,
-                        'profile_image'=> $profile_image,
-                        'trade_license'=> $trade_license,
-                        'vat_registration'=> $vat_registration,
-                        'logo'=> $logo,
-                        'description'=> $request->description,
-                        'web_url'=> $request->web_url,
-                        'employe_type'=> 'company',
-                        'completed_steps'=> 2,
+                        'country_id'        => $request->country,
+                        'city_id'           => $request->city,
+                        'state_id'          => $request->state,
+                        'address'           => $request->address,
+                        'address_line_2'    => $request->address_line_2,
+                        'pincode'           => $request->pincode,
+                        'landline'          => $request->landline,
+                        'industrie_id'      => $request->industrie_id,
+                        'profile_image'     => $profile_image,
+                        'trade_license'     => $trade_license,
+                        'vat_registration'  => $vat_registration,
+                        'logo'              => $logo,
+                        'description'       => $request->description,
+                        'web_url'           => $request->web_url,
+                        'employe_type'      => 'company',
+                        'completed_steps'   => 2,
+                    ]);
+
+                    $business_id                          = (($data['row'])?$data['row']->business_id:'');
+                    Employer::where('id', $business_id)->update([
+                        'country_id'        => $request->country,
+                        'city_id'           => $request->city,
+                        'state_id'          => $request->state,
+                        'address'           => $request->address,
+                        'address_line_2'    => $request->address_line_2,
+                        'pincode'           => $request->pincode,
+                        'landline'          => $request->landline,
+                        'trade_license'     => $trade_license,
+                        'vat_registration'  => $vat_registration,
+                        'web_url'           => $request->web_url,
+                        'employe_type'      => 'company',
                     ]);
 
                     return redirect($this->data['controller_route'] . "/create-business/" . Helper::encoded($id))->with(['success_message' => 'Setup company profile has successfully done.']);
