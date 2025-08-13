@@ -67,6 +67,13 @@ class EmployerUserController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
+        public function decline(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Declined List';
+            $page_name                      = 'employer-user.decline';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
     /* list */
     /* add */
         public function add(Request $request){

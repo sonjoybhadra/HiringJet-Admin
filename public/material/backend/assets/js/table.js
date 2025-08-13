@@ -155,7 +155,7 @@ function loadTable(config) {
                         html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
                                     <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Edit Business
                                 </a>`;
-                        html += `<a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
+                        html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
                                     <i class="fa-solid fa-info-circle" style="margin-right:3px;"></i>View Profile
                                 </a>`;
                     }

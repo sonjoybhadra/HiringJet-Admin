@@ -388,6 +388,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('employer-user/list', [EmployerUserController::class, 'list']);
         Route::get('employer-user/verified', [EmployerUserController::class, 'verified']);
         Route::get('employer-user/non-verified', [EmployerUserController::class, 'nonVerified']);
+        Route::get('employer-user/decline', [EmployerUserController::class, 'decline']);
         Route::match(['get', 'post'], 'employer-user/add', [EmployerUserController::class, 'add']);
         Route::match(['get', 'post'], 'employer-user/edit/{id}', [EmployerUserController::class, 'edit']);
         Route::get('employer-user/delete/{id}', [EmployerUserController::class, 'delete']);
