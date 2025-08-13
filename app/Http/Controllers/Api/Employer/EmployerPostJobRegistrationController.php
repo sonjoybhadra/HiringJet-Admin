@@ -117,11 +117,11 @@ class EmployerPostJobRegistrationController extends BaseApiController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-public function postJobComplete(Request $request,User $user)
+public function postJobComplete(Request $request)
   {
     try {
         // Check authentication first
-        //$user = auth()->user();
+        $user = User::find(auth()->user()->id);
         if (!$user) {
             return $this->sendError('Unauthorized', 'Please login first', 401);
         }
