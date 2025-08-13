@@ -258,8 +258,6 @@ Route::group([
 
     Route::post('/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
 
-    Route::post('/search/result', [EmployerSearchController::class, 'getEmployerBySearch']);
-
 
     /* Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
