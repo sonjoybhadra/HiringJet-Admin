@@ -199,7 +199,7 @@ public function postJobComplete(Request $request)
             'walkin_longitude' => $request->walkin_longitude,
             'walkin_details' => $request->walkin_details
         ];
-       dd($jobData);
+       //dd($jobData);
         // Call job service
         $result = $this->jobService->createJobPost(
             $jobData,
