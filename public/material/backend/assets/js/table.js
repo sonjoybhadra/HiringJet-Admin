@@ -148,13 +148,17 @@ function loadTable(config) {
                 if(config.routePrefix == 'employer-user'){
                     const completed_steps = row['completed_steps'];
                     if(completed_steps < 2){
-                        html += `<a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
-                                    <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Add Business
-                                </a>`;
+                        if(status != 2){
+                            html += `<a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
+                                        <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Add Business
+                                    </a>`;
+                        }
                     } else {
-                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
-                                    <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Edit Business
-                                </a>`;
+                        if(status != 2){
+                            html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
+                                        <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Edit Business
+                                    </a>`;
+                        }
                         html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
                                     <i class="fa-solid fa-info-circle" style="margin-right:3px;"></i>View Profile
                                 </a>`;
@@ -172,7 +176,7 @@ function loadTable(config) {
                                 </a>`;
                     } else if(status == 2){
                         html += `<br><br><span class="badge bg-danger"><i class="fas fa-times" style="margin-right:3px;"></i> DECLINE</span>`;
-                        html += `<a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
+                        html += `<br><br><a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
                             <i class="fa-solid fa-trash" style="margin-right:3px;"></i> Delete
                         </a>`;
                     } else if(status == 4){
