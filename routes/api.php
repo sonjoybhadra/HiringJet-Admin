@@ -251,7 +251,7 @@ Route::group([
 
     Route::post('/update-business-profile', [EditEmployerBusinessInfoController::class, 'updateBusinessData']);
 
-    Route::post('/employer/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
+    Route::post('/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
 
     /* Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
