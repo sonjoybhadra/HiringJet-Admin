@@ -163,19 +163,19 @@ function loadTable(config) {
                         html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
                                     <i class="fa-solid fa-key" style="margin-right:3px;"></i>Verify OTP
                                 </a>`;
-                    } elseif(status == 1){
+                    } else if(status == 1){
                         html += `<a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Deactivate">
                                     <i class="fa-solid fa-check"></i> Click to Verify
                                 </a>`;
                         html += `<a href="${base}/change-status/${encodedId}/2" class="btn btn-warning btn-sm me-1" title="Activate">
                                     <i class="fas fa-times"></i> Click to Decline
                                 </a>`;
-                    } elseif(status == 2){
+                    } else if(status == 2){
                         html += `<span class="badge bg-danger">DECLINE</span>`;
                         html += `<a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
                             <i class="fa-solid fa-trash"></i>
                         </a>`;
-                    } elseif(status == 4){
+                    } else if(status == 4){
                         html += `<span class="badge bg-success">VERIFIED</span>`;
                     }
                 }
