@@ -33,7 +33,8 @@ class EmployerPostJobController extends BaseApiController
 
             $jobData = $request->all();
             $jobData['application_through'] = ucwords(str_replace('-', ' ', $jobData['application_through']));
-            $jobData['employer_id'] = auth()->user()->id; // Assign authenticated user's ID as employer_id
+            $jobData['expected_close_date'] = date('Y-m-d', strtotime('+1 month'));
+            $jobData['employer_id'] = auth()->user()->user_employer_details->business_id; // Assign authenticated user's ID as employer_id
 
             $jobService = new JobPostingService();
             $result = $jobService->createJobPost(
