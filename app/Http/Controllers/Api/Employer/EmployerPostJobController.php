@@ -32,6 +32,7 @@ class EmployerPostJobController extends BaseApiController
             }
 
             $jobData = $request->all();
+            $jobData['application_through'] = ucwords(str_replace('-', ' ', $jobData['application_through']));
             $jobData['employer_id'] = auth()->user()->id; // Assign authenticated user's ID as employer_id
 
             $jobService = new JobPostingService();
@@ -100,9 +101,9 @@ class EmployerPostJobController extends BaseApiController
             'posting_open_date' => 'required|date|after_or_equal:today',
             'posting_close_date' => 'required|date|after:posting_open_date',
 
-            'application_through' => 'required|string|in:Hiring Jet, Apply To Email, Apply To Link',
-            'apply_on_email' => 'required_if:application_through,Apply To Email|email|max:100',
-            'apply_on_link' => 'required_if:application_through,Apply To Link|url|max:500',
+            'application_through' => 'required|string|in:hiring-jet,apply-to-email,apply-to-link',
+            'apply_on_email' => 'required_if:application_through,apply-to-email|email|max:100',
+            'apply_on_link' => 'required_if:application_through,apply-to-link|url|max:500',
 
             'walkin_address1' => 'required_if:job_type,walk-in-jobs|string|max:200',
             'walkin_address2' => 'nullable|string|max:200',
