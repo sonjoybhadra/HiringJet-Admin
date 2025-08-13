@@ -150,6 +150,7 @@ public function postJobComplete(Request $request)
                 'landline' => $request->landline ?? '',
                 'employe_type' => $request->employe_type ?? 'company',
                 'web_url' => $request->web_url ?? '',
+                'logo' => '',
                 'status' => 0
             ]);
 
