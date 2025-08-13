@@ -514,6 +514,7 @@ class EmployerUserController extends Controller
                         'landline'          => $request->landline,
                         'trade_license'     => $trade_license,
                         'vat_registration'  => $vat_registration,
+                        'logo'              => $logo,
                         'web_url'           => $request->web_url,
                         'employe_type'      => 'company',
                     ]);
