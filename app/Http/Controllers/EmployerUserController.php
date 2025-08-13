@@ -245,7 +245,10 @@ class EmployerUserController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Employer::find($id);
+            $model                          = UserEmployer::find($id);
+            $business_id                    = (($model)?$model->business_id:0);
+            $getBusiness                    = Employer::where('id', '=', $business_id)->first();
+            Employer::where('id', '=', $business_id)->update(['status' => 3]);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
@@ -267,43 +270,47 @@ class EmployerUserController extends Controller
         }
     /* delete */
     /* change status */
-        public function change_status(Request $request, $id){
+        public function change_status(Request $request, $id, $statusNo){
             $id                             = Helper::decoded($id);
-            $model                          = Employer::find($id);
-            if ($model->status == 1)
-            {
-                $model->status  = 0;
-                $msg            = 'Deactivated';
-                /* user activity */
-                    $activityData = [
-                        'user_email'        => session('user_data')['email'],
-                        'user_name'         => session('user_data')['name'],
-                        'user_type'         => 'ADMIN',
-                        'ip_address'        => $request->ip(),
-                        'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
-                        'platform_type'     => 'WEB',
-                    ];
-                    UserActivity::insert($activityData);
-                /* user activity */
-            } else {
-                $model->status  = 1;
-                $msg            = 'Activated';
-                /* user activity */
-                    $activityData = [
-                        'user_email'        => session('user_data')['email'],
-                        'user_name'         => session('user_data')['name'],
-                        'user_type'         => 'ADMIN',
-                        'ip_address'        => $request->ip(),
-                        'activity_type'     => 3,
-                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
-                        'platform_type'     => 'WEB',
-                    ];
-                    UserActivity::insert($activityData);
-                /* user activity */
-            }            
-            $model->save();
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
+            $model                          = UserEmployer::find($id);
+            $business_id                    = (($model)?$model->business_id:0);
+            $getBusiness                    = Employer::where('id', '=', $business_id)->first();
+            if($getBusiness){
+                Employer::where('id', '=', $business_id)->update(['status' => $statusNo]);
+                if ($statusNo == 2)
+                { 
+                    $msg            = 'Declined';
+                    $redirectRoute  = 'non-verified';
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Declined',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
+                } elseif ($statusNo == 4) {
+                    $msg            = 'Verified';
+                    $redirectRoute  = 'verified';
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Verified',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
+                }
+            }
+            return redirect($this->data['controller_route'] . "/" . $redirectRoute)->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
     /* resend otp */

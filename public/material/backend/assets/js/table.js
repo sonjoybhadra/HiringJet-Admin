@@ -165,18 +165,18 @@ function loadTable(config) {
                                 </a>`;
                     } else if(status == 1){
                         html += `<br><br><a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Click to Verify">
-                                    <i class="fa-solid fa-check"></i> Click to Verify
+                                    <i class="fa-solid fa-check" style="margin-right:3px;"></i> Click to Verify
                                 </a>`;
                         html += `<a href="${base}/change-status/${encodedId}/2" class="btn btn-warning btn-sm me-1" title="Click to Decline">
-                                    <i class="fas fa-times"></i> Click to Decline
+                                    <i class="fas fa-times" style="margin-right:3px;"></i> Click to Decline
                                 </a>`;
                     } else if(status == 2){
-                        html += `<br><br><span class="badge bg-danger">DECLINE</span>`;
+                        html += `<br><br><span class="badge bg-danger"><i class="fas fa-times" style="margin-right:3px;"></i> DECLINE</span>`;
                         html += `<a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
-                            <i class="fa-solid fa-trash"></i>
+                            <i class="fa-solid fa-trash" style="margin-right:3px;"></i> Delete
                         </a>`;
                     } else if(status == 4){
-                        html += `<br><br><span class="badge bg-success">VERIFIED</span>`;
+                        html += `<br><br><span class="badge bg-success"><i class="fa-solid fa-check" style="margin-right:3px;"></i> VERIFIED</span>`;
                     }
                 }
 
