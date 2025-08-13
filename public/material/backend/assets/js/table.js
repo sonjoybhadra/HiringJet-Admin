@@ -148,26 +148,26 @@ function loadTable(config) {
                 if(config.routePrefix == 'employer-user'){
                     const completed_steps = row['completed_steps'];
                     if(completed_steps < 2){
-                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
+                        html += `<a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
                                     <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Add Business
                                 </a>`;
                     } else {
-                        html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
+                        html += `<br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
                                     <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Edit Business
                                 </a>`;
-                        html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
+                        html += `<br><a href="${base}/profile/${encodedId}" class="btn btn-sm btn-info btn-sm" title="Profile" target="_blank">
                                     <i class="fa-solid fa-info-circle" style="margin-right:3px;"></i>View Profile
                                 </a>`;
                     }
                     if(status == 0){
-                        html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
+                        html += `<br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
                                     <i class="fa-solid fa-key" style="margin-right:3px;"></i>Verify OTP
                                 </a>`;
                     } else if(status == 1){
-                        html += `<a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Deactivate">
+                        html += `<br><a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Click to Verify">
                                     <i class="fa-solid fa-check"></i> Click to Verify
                                 </a>`;
-                        html += `<a href="${base}/change-status/${encodedId}/2" class="btn btn-warning btn-sm me-1" title="Activate">
+                        html += `<a href="${base}/change-status/${encodedId}/2" class="btn btn-warning btn-sm me-1" title="Click to Decline">
                                     <i class="fas fa-times"></i> Click to Decline
                                 </a>`;
                     } else if(status == 2){
