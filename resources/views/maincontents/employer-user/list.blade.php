@@ -38,26 +38,25 @@ $controllerRoute = $module['controller_route'];
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
-                  'table' => 'users',
-                  'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'completed_steps', 'created_at', 'status'],
-                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'completed_steps', 'created_at'],
-                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'completed_steps', 'Created At'],
+                  'table' => 'user_employers',
+                  'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'completed_steps', 'business_id', 'created_at', 'employers.status'],
+                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'completed_steps', 'business_name', 'created_at'],
+                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'completed_steps', 'Business Name', 'Created At'],
                   'filename' => "EmployerUser",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                     ['column' => 'status', 'operator' => '!=', 'value' => 3],
-                     ['column' => 'role_id', 'operator' => '=', 'value' => 2],
+                     ['column' => 'is_active', 'operator' => '=', 'value' => 1]
                   ],
                   'routePrefix' => 'employer-user',
                   'showActions' => true, // set to false to hide actions
                   'statusColumn' => 'status',
                   'joins' => [
                      [
-                        'table' => 'user_employers',
+                        'table' => 'employers',
                         'localKey' => 'id',
-                        'foreignKey' => 'user_id',
-                        'select' => ['completed_steps as completed_steps']
+                        'foreignKey' => 'business_id',
+                        'select' => ['employers.name as business_name']
                      ]
                   ]
                 ])
