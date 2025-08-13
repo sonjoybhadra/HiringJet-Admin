@@ -117,80 +117,112 @@ class EmployerPostJobRegistrationController extends BaseApiController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postJobComplete(Request $request)
-    {
-        try {
-            $user = User::with('user_employer_details')->findOrFail(auth()->user()->id);
+public function postJobComplete(Request $request)
+  {
+    try {
+        // Check authentication first
+        $user = auth()->user();
+        if (!$user) {
+            return $this->sendError('Unauthorized', 'Please login first', 401);
+        }
 
-            if (!$user) {
-                return $this->sendError('Unauthorized', 'Please login first', Response::HTTP_UNAUTHORIZED);
-            }
+        // Get or create employer details
+        $userEmployer = UserEmployer::where('user_id', $user->id)->first();
 
-            // Prepare data for backend - KEEP STRINGS AS STRINGS
-            $jobData = $this->prepareJobData($request->all());
+        if (!$userEmployer) {
+            return $this->sendError('Profile Error', 'Please complete your profile first', 400);
+        }
 
-            // Validate job posting data with string validation
-            $jobValidator = $this->validateJobPostData($jobData);
-            if ($jobValidator->fails()) {
-                return $this->sendError('Validation Error', $jobValidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
+        // If business_id is null or completed_steps is 1, create/update employer profile
+        if (!$userEmployer->business_id || $userEmployer->completed_steps == 1) {
 
-            // Check if profile needs completion
-            if ($user->user_employer_details && $user->user_employer_details->completed_steps == 1) {
-                // Validate profile completion fields
-                $profileValidator = Validator::make($request->all(), [
-                    'address' => 'required|string|max:255',
-                    'country' => 'required|string',
-                    'state' => 'required|string',
-                    'city' => 'required|string',
-                    'pincode' => 'required|string|max:10',
-                    'description' => 'required|string',
-                    'industrie_id' => 'required|integer',
-                    'web_url' => 'required|url',
-                    'employe_type' => 'required|in:company,consultant'
-                ]);
+            // Simple employer creation without complex location lookup
+            $employer = Employer::create([
+                'name' => $request->company_name ?? 'Default Company',
+                'description' => $request->description ?? '',
+                'industry_id' => $request->industrie_id ?? 1,
+                'country_id' => 1, // Default country ID
+                'state_id' => 1,   // Default state ID
+                'city_id' => 1,    // Default city ID
+                'address' => $request->address ?? '',
+                'address_line_2' => $request->address_line_2 ?? '',
+                'pincode' => $request->pincode ?? '',
+                'landline' => $request->landline ?? '',
+                'employe_type' => $request->employe_type ?? 'company',
+                'web_url' => $request->web_url ?? '',
+                'status' => 0
+            ]);
 
-                if ($profileValidator->fails()) {
-                    return $this->sendError('Profile Completion Required', $profileValidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-                }
+            // Update user employer with new business_id
+            $userEmployer->update([
+                'business_id' => $employer->id,
+                'completed_steps' => 2
+            ]);
+        }
 
-                // Update employer profile first
-                $profileUpdated = $this->updateEmployerProfile($request, $user);
-                if (!$profileUpdated) {
-                    return $this->sendError('Error', 'Failed to update profile. Please try again.');
-                }
+        // Prepare job data for service
+        $jobData = [
+            'employer_id' => $userEmployer->business_id,
+            'job_type' => $request->job_type,
+            'industry' => $request->industry,
+            'job_category' => $request->job_category,
+            'nationality' => $request->nationality,
+            'open_position_number' => $request->open_position_number,
+            'contract_type' => $request->contract_type,
+            'min_exp_year' => $request->min_exp_year,
+            'max_exp_year' => $request->max_exp_year,
+            'designation' => $request->designation,
+            'position_name' => $request->position_name,
+            'functional_area' => $request->functional_area,
+            'job_description' => $request->job_description,
+            'requirement' => $request->requirement,
+            'location_countries' => $request->location_countries,
+            'location_cities' => $request->location_cities,
+            'skill_ids' => $request->skill_ids ?? [],
+            'currency' => $request->currency,
+            'min_salary' => $request->min_salary,
+            'max_salary' => $request->max_salary,
+            'is_salary_negotiable' => $request->is_salary_negotiable ?? false,
+            'posting_open_date' => $request->posting_open_date,
+            'posting_close_date' => $request->posting_close_date,
+            'application_through' => $request->application_through,
+            'apply_on_email' => $request->apply_on_email,
+            'apply_on_link' => $request->apply_on_link,
+            // Walk-in fields (null for remote jobs)
+            'walkin_address1' => $request->walkin_address1,
+            'walkin_address2' => $request->walkin_address2,
+            'walkin_country' => $request->walkin_country,
+            'walkin_state' => $request->walkin_state,
+            'walkin_city' => $request->walkin_city,
+            'walkin_pincode' => $request->walkin_pincode,
+            'walkin_latitude' => $request->walkin_latitude,
+            'walkin_longitude' => $request->walkin_longitude,
+            'walkin_details' => $request->walkin_details
+        ];
 
-                $user = User::with('user_employer_details')->findOrFail(auth()->user()->id);
-            }
+        // Call job service
+        $result = $this->jobService->createJobPost(
+            $jobData,
+            $user->id,
+            $user->email,
+            $user->first_name . ' ' . $user->last_name,
+            $request->ip()
+        );
 
-            // Add employer_id to job data
-            $jobData['employer_id'] = $user->user_employer_details->business_id;
-
-            $result = $this->jobService->createJobPost(
-                $jobData,
-                auth()->id(),
-                auth()->user()->email,
-                $user->first_name . ' ' . $user->last_name,
-                $request->ip()
-            );
-
-            if (!$result['success']) {
-                return $this->sendError(
-                    $result['message'],
-                    $result['errors'] ?? $result['error'] ?? null,
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
-            }
-
+        if ($result['success']) {
             return $this->sendResponse([
                 'job_id' => $result['job_id'],
                 'job_number' => $result['job_number']
-            ], 'Your job post has successfully done.');
-
-        } catch (\Exception $e) {
-            return $this->sendError('Error', $e->getMessage());
+            ], 'Job posted successfully');
+        } else {
+            return $this->sendError('Job Creation Failed', $result['message'], 400);
         }
+
+    } catch (\Exception $e) {
+        \Log::error('Job posting error: ' . $e->getMessage());
+        return $this->sendError('Error', $e->getMessage(), 500);
     }
+}
 
     /**
      * Prepare job data - KEEP ORIGINAL FORMAT
