@@ -501,6 +501,8 @@ class EmployerUserController extends Controller
                         'web_url'           => $request->web_url,
                         'employe_type'      => 'company',
                         'completed_steps'   => 2,
+                        'created_at'        => date('Y-m-d H:i:s'),
+                        'updated_at'        => date('Y-m-d H:i:s'),
                     ]);
 
                     $business_id                          = (($data['row'])?$data['row']->business_id:'');
@@ -515,6 +517,7 @@ class EmployerUserController extends Controller
                         'trade_license'     => $trade_license,
                         'vat_registration'  => $vat_registration,
                         'logo'              => $logo,
+                        'description'       => $request->description,
                         'web_url'           => $request->web_url,
                         'employe_type'      => 'company',
                     ]);
