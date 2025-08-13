@@ -260,7 +260,7 @@ Route::group([
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
-    Route::post('/post-job', [EmployerPostJobController::class, 'postJob']);
+    Route::post('/post-a-job', [EmployerPostJobController::class, 'postJob']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);
