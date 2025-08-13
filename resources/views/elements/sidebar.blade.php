@@ -497,11 +497,24 @@ $role_id = (($user)?$user->role_id:0);
 
   <?php if(in_array(14, $moduleIds)){?>
     <!-- Employer Users -->
-    <li class="menu-item <?=(($pageSegment == 'employer-user')?'active':'')?>">
-      <a href="<?=url('/employer-user/list')?>" class="menu-link">
+    <li class="menu-item active <?=(($pageSegment == 'employer-user')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-users"></i>
-        <div data-i18n="Employer Users">Employer Users</div>
+        <div data-i18n="Employers">Employers</div>
       </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?=(($pageSegment == 'employer-user')?'active':'')?>">
+          <a href="<?=url('/employer-user/verified')?>" class="menu-link">
+            <div data-i18n="Verified"><i class="fa-solid fa-arrow-right"></i> Verified</div>
+          </a>
+        </li>
+      
+        <li class="menu-item <?=(($pageSegment == 'employer-user')?'active':'')?>">
+          <a href="<?=url('/employer-user/non-verified')?>" class="menu-link">
+            <div data-i18n="Non-Verified"><i class="fa-solid fa-arrow-right"></i> Non-Verified</div>
+          </a>
+        </li>
+      </ul>
     </li>
   <?php }?>
   

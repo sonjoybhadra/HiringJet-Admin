@@ -149,7 +149,7 @@ function loadTable(config) {
                     const completed_steps = row['completed_steps'];
                     if(completed_steps < 2){
                         html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">
-                                    <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Create Business
+                                    <i class="fa-solid fa-briefcase" style="margin-right:3px;"></i>Add Business
                                 </a>`;
                     } else {
                         html += `<br><br><a href="${base}/create-business/${encodedId}" class="btn btn-sm btn-primary btn-sm" title="Business" target="_blank">

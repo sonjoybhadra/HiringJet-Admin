@@ -53,6 +53,20 @@ class EmployerUserController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
+        public function verified(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Verified List';
+            $page_name                      = 'employer-user.verified';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function nonVerified(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Non-Verified List';
+            $page_name                      = 'employer-user.non-verified';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
     /* list */
     /* add */
         public function add(Request $request){
