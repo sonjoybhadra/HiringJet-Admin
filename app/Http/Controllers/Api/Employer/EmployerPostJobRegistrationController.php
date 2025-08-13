@@ -122,6 +122,7 @@ public function postJobComplete(Request $request)
     try {
         // Check authentication first
         $user = auth()->user();
+        dd($user);
         if (!$user) {
             return $this->sendError('Unauthorized', 'Please login first', 401);
         }
