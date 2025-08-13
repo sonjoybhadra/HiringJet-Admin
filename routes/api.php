@@ -102,6 +102,7 @@ Route::get('/get-testimonials', [CommonController::class, 'get_testimonials']);
 Route::get('/get-testimonials/{slug}', [CommonController::class, 'get_testimonials_details']);
 Route::get('/get-designation-by-param', [CommonController::class, 'get_designation_by_param']);
 Route::get('/get-industry-by-param', [CommonController::class, 'get_industry_by_param']);
+Route::get('/get-contract-type', [CommonController::class, 'get_contractType']);
 
 Route::get('/get-jobsearch-keys', [CommonController::class, 'get_jobsearch_keys']);
 
@@ -264,7 +265,7 @@ Route::group([
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
-    Route::post('/post-job', [EmployerPostJobController::class, 'postJob']);
+    Route::post('/post-a-job', [EmployerPostJobController::class, 'postJob']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);

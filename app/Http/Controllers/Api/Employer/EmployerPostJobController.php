@@ -32,7 +32,9 @@ class EmployerPostJobController extends BaseApiController
             }
 
             $jobData = $request->all();
-            $jobData['employer_id'] = auth()->user()->id; // Assign authenticated user's ID as employer_id
+            $jobData['application_through'] = ucwords(str_replace('-', ' ', $jobData['application_through']));
+            $jobData['expected_close_date'] = date('Y-m-d', strtotime('+1 month'));
+            $jobData['employer_id'] = auth()->user()->user_employer_details->business_id; // Assign authenticated user's ID as employer_id
 
             $jobService = new JobPostingService();
             $result = $jobService->createJobPost(
@@ -78,8 +80,8 @@ class EmployerPostJobController extends BaseApiController
             'location_cities.*' => 'integer',
             'industry' => 'required|integer',
             'job_category' => 'required|integer',
-            'nationality' => 'required|array|min:1',
-            'nationality.*' => 'integer',
+            // 'nationality' => 'required|array|min:1',
+            'nationality' => 'integer',
             'gender' => 'required|string',
             'open_position_number' => 'required|integer|min:1|max:999',
             'contract_type' => 'required|integer',
@@ -100,15 +102,16 @@ class EmployerPostJobController extends BaseApiController
             'posting_open_date' => 'required|date|after_or_equal:today',
             'posting_close_date' => 'required|date|after:posting_open_date',
 
-            'application_through' => 'required|integer|in:1,2,3',
-            'apply_on_email' => 'required_if:application_through,1|email|max:100',
-            'apply_on_link' => 'required_if:application_through,2|url|max:500',
-            'walkin_address1' => 'required_if:application_through,3|string|max:200',
+            'application_through' => 'required|string|in:hiring-jet,apply-to-email,apply-to-link',
+            'apply_on_email' => 'required_if:application_through,apply-to-email|email|max:100',
+            'apply_on_link' => 'required_if:application_through,apply-to-link|url|max:500',
+
+            'walkin_address1' => 'required_if:job_type,walk-in-jobs|string|max:200',
             'walkin_address2' => 'nullable|string|max:200',
-            'walkin_country' => 'required_if:application_through,3|integer',
-            'walkin_state' => 'required_if:application_through,3|integer',
-            'walkin_city' => 'required_if:application_through,3|integer',
-            'walkin_pincode' => 'required_if:application_through,3|string|max:10',
+            'walkin_country' => 'required_if:job_type,walk-in-jobs|string',
+            'walkin_state' => 'required_if:job_type,walk-in-jobs|string',
+            'walkin_city' => 'required_if:job_type,walk-in-jobs|string',
+            'walkin_pincode' => 'required_if:job_type,walk-in-jobs|string|max:10',
             'walkin_latitude' => 'nullable|string',
             'walkin_longitude' => 'nullable|string',
             'walkin_details' => 'nullable|string',
