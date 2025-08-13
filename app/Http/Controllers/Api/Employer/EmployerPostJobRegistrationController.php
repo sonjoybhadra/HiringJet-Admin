@@ -119,7 +119,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
      */
 public function postJobComplete(Request $request)
   {
-    try {
+    //try {
         // Check authentication first
         $user = User::find(auth()->user()->id);
         if (!$user) {
@@ -199,7 +199,7 @@ public function postJobComplete(Request $request)
             'walkin_longitude' => $request->walkin_longitude,
             'walkin_details' => $request->walkin_details
         ];
-
+       dd($jobData);
         // Call job service
         $result = $this->jobService->createJobPost(
             $jobData,
@@ -218,10 +218,10 @@ public function postJobComplete(Request $request)
             return $this->sendError('Job Creation Failed', $result['message'], 400);
         }
 
-    } catch (\Exception $e) {
-        \Log::error('Job posting error: ' . $e->getMessage());
-        return $this->sendError('Error', $e->getMessage(), 500);
-    }
+    // } catch (\Exception $e) {
+    //     \Log::error('Job posting error: ' . $e->getMessage());
+    //     return $this->sendError('Error', $e->getMessage(), 500);
+    // }
 }
 
     /**
