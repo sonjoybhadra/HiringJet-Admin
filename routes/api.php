@@ -222,6 +222,8 @@ use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 use App\Http\Controllers\Api\Employer\EmployerTagsController;
 use App\Http\Controllers\Api\Employer\EmployerEmailTemplateController;
 use App\Http\Controllers\Api\Employer\EmployerPostJobController;
+use App\Http\Controllers\Api\Search\EmployerSearchController;
+
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -252,6 +254,9 @@ Route::group([
     Route::post('/update-business-profile', [EditEmployerBusinessInfoController::class, 'updateBusinessData']);
 
     Route::post('/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
+
+    Route::post('/search/data', [EmployerSearchController::class, 'getEmployerBySearch']);
+
 
     /* Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);

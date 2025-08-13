@@ -117,9 +117,9 @@ class EmployerPostJobRegistrationController extends BaseApiController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-public function postJobComplete(Request $request)
-  {
-    //try {
+    public function postJobComplete(Request $request)
+{
+    try {
         // Check authentication first
         $user = User::find(auth()->user()->id);
         if (!$user) {
@@ -128,56 +128,88 @@ public function postJobComplete(Request $request)
 
         // Get or create employer details
         $userEmployer = UserEmployer::where('user_id', $user->id)->first();
-
         if (!$userEmployer) {
             return $this->sendError('Profile Error', 'Please complete your profile first', 400);
         }
 
-        // If business_id is null or completed_steps is 1, create/update employer profile
+        // Validate job posting data based on database schema
+        $validator = $this->validateJobPostingData($request);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
-        $this->updateEmployerProfile($request, $user);
+        // Update employer profile
+        $profileUpdated = $this->updateEmployerProfile($request, $user);
+        if (!$profileUpdated) {
+            return $this->sendError('Profile Error', 'Failed to update employer profile', 400);
+        }
 
+        // Map application method to database format
+        $applicationMap = [
+            'Hireing Jet' => 'Hireing Jet',
+            'Apply To Email' => 'Apply To Email',
+            'Apply-Email' => 'Apply To Email',
+            'Apply To Link' => 'Apply To Link',
+            'Apply-Link' => 'Apply To Link'
+        ];
 
-        // Prepare job data for service
+        $applicationThrough = $applicationMap[$request->application_through] ?? 'Apply To Email';
+
+        // Prepare job data matching the database schema
         $jobData = [
             'employer_id' => $userEmployer->business_id,
-            'job_type' => $request->job_type,
-            'industry' => $request->industry,
-            'job_category' => $request->job_category,
-            'nationality' => $request->nationality,
-            'open_position_number' => $request->open_position_number,
-            'contract_type' => $request->contract_type,
-            'min_exp_year' => $request->min_exp_year,
-            'max_exp_year' => $request->max_exp_year,
-            'designation' => $request->designation,
             'position_name' => $request->position_name,
-            'functional_area' => $request->functional_area,
+            'job_type' => $request->job_type,
+            'location_countries' => $request->location_countries, // JSON array
+            'location_cities' => $request->location_cities, // JSON array
+            'industry' => (int) $request->industry,
+            'job_category' => $request->job_category ? (int) $request->job_category : null,
+            'nationality' => (int) $request->nationality,
+            'gender' => $request->gender,
+            'open_position_number' => (int) $request->open_position_number,
+            'contract_type' => (int) $request->contract_type,
+            'designation' => (int) $request->designation,
+            'functional_area' => $request->functional_area ? (int) $request->functional_area : null,
+            'min_exp_year' => (int) $request->min_exp_year,
+            'max_exp_year' => (int) $request->max_exp_year,
             'job_description' => $request->job_description,
             'requirement' => $request->requirement,
-            'location_countries' => $request->location_countries,
-            'location_cities' => $request->location_cities,
-            'skill_ids' => $request->skill_ids ?? [],
-            'currency' => $request->currency,
-            'min_salary' => $request->min_salary,
-            'max_salary' => $request->max_salary,
-            'is_salary_negotiable' => $request->is_salary_negotiable ?? false,
-            'posting_open_date' => $request->posting_open_date,
-            'posting_close_date' => $request->posting_close_date,
-            'application_through' => $request->application_through,
+            'skill_ids' => $request->skill_ids ?? [], // JSON array
+            'expected_close_date' => $request->expected_close_date,
+            'currency' => (int) $request->currency,
+            'min_salary' => $request->min_salary ? (float) $request->min_salary : 0,
+            'max_salary' => $request->max_salary ? (float) $request->max_salary : 0,
+            'is_salary_negotiable' => $request->boolean('is_salary_negotiable') ? 1 : 0,
+            'posting_open_date' => $request->posting_open_date ?: date('Y-m-d'),
+            'posting_close_date' => $request->posting_close_date ?: date('Y-m-d', strtotime('+30 days')),
+            'application_through' => $applicationThrough,
             'apply_on_email' => $request->apply_on_email,
             'apply_on_link' => $request->apply_on_link,
-            // Walk-in fields (null for remote jobs)
-            'walkin_address1' => $request->walkin_address1,
-            'walkin_address2' => $request->walkin_address2,
-            'walkin_country' => $request->walkin_country,
-            'walkin_state' => $request->walkin_state,
-            'walkin_city' => $request->walkin_city,
-            'walkin_pincode' => $request->walkin_pincode,
-            'walkin_latitude' => $request->walkin_latitude,
-            'walkin_longitude' => $request->walkin_longitude,
-            'walkin_details' => $request->walkin_details
         ];
-       //dd($jobData);
+
+        // Add walk-in fields only if job type is walk-in-jobs, otherwise set to null
+        if ($request->job_type === 'walk-in-jobs') {
+            $jobData['walkin_address1'] = $request->walkin_address1;
+            $jobData['walkin_address2'] = $request->walkin_address2;
+            $jobData['walkin_country'] = $request->walkin_country;
+            $jobData['walkin_state'] = $request->walkin_state;
+            $jobData['walkin_city'] = $request->walkin_city;
+            $jobData['walkin_pincode'] = $request->walkin_pincode;
+            $jobData['walkin_latitude'] = $request->walkin_latitude ? (float) $request->walkin_latitude : null;
+            $jobData['walkin_longitude'] = $request->walkin_longitude ? (float) $request->walkin_longitude : null;
+            $jobData['walkin_details'] = $request->walkin_details;
+        } else {
+            $jobData['walkin_address1'] = null;
+            $jobData['walkin_address2'] = null;
+            $jobData['walkin_country'] = null;
+            $jobData['walkin_state'] = null;
+            $jobData['walkin_city'] = null;
+            $jobData['walkin_pincode'] = null;
+            $jobData['walkin_latitude'] = null;
+            $jobData['walkin_longitude'] = null;
+            $jobData['walkin_details'] = null;
+        }
+
         // Call job service
         $result = $this->jobService->createJobPost(
             $jobData,
@@ -196,10 +228,13 @@ public function postJobComplete(Request $request)
             return $this->sendError('Job Creation Failed', $result['message'], 400);
         }
 
-    // } catch (\Exception $e) {
-    //     \Log::error('Job posting error: ' . $e->getMessage());
-    //     return $this->sendError('Error', $e->getMessage(), 500);
-    // }
+    } catch (\Exception $e) {
+        \Log::error('Job posting error: ' . $e->getMessage(), [
+            'user_id' => auth()->id(),
+            'request_data' => $request->all()
+        ]);
+        return $this->sendError('Error', 'An error occurred while posting the job. Please try again.', 500);
+    }
 }
 
     /**
@@ -294,57 +329,124 @@ public function postJobComplete(Request $request)
     /**
      * Validate job posting data - STRING VALIDATION
      */
-    private function validateJobPostData(array $data)
-    {
-        $rules = [
-            // Keep string validation for job_type and gender
-            'jobtype' => 'required|string|in:walk-in-jobs,remote-jobs,on-site-jobs,temp-role-jobs',
-            'industry' => 'required|integer',
-            'job_category' => 'nullable|integer',
-            'nationality' => 'required|integer',
-            'gender' => 'required|string|in:Male,Female,Others,No-Preference',
-            'numberOfPositions' => 'required|integer|min:1|max:999',
-            'contract_type' => 'required|string|in:Full-time,Part-time,Temporary,Internship,Freelance,Contractor',
-            'minexperience' => 'required|integer|min:0|max:50',
-            'maxexperience' => 'nullable|integer|min:0|max:50|gte:minexperience',
-            'designation' => 'required|integer',
-            'roleName' => 'required|string|max:200',
-            'jobDescription' => 'nullable|string',
-            'requirements' => 'nullable|string',
-            'location_countries' => 'required|integer',
-            'location_cities' => 'nullable|integer',
-            'skill_ids' => 'nullable|array',
-            'skill_ids.*' => 'integer',
-            'currency' => 'nullable|string|max:10',
-            'minSalary' => 'nullable|string',
-            'maxSalary' => 'nullable|string',
-            'salnegotiate' => 'nullable|in:yes,no',
-            'openDate' => 'nullable|date',
-            'closeDate' => 'nullable|date|after:openDate',
-            'applyThrough' => 'required|string|in:Hireing-Jet,Apply-Email,Apply-Link',
-            'applyTo' => 'nullable|string|max:255',
-            'walkin_address1' => 'required_if:jobtype,walk-in-jobs|string|max:200',
-            'walkin_country' => 'required_if:jobtype,walk-in-jobs|string',
-            'walkin_state' => 'nullable|string',
-            'walkin_city' => 'required_if:jobtype,walk-in-jobs|string',
-            'walkin_pincode' => 'required_if:jobtype,walk-in-jobs|string|max:10',
-        ];
+ /**
+ * Validation based on exact database schema from SQL insert
+ */
+private function validateJobPostingData(Request $request)
+{
+    $rules = [
+        // Required fields matching database schema
+        'position_name' => 'required|string|max:255',
+        'job_type' => 'required|string|in:walk-in-jobs,remote-jobs,on-site-jobs,temp-role-jobs',
+        'location_countries' => 'required', // JSON array or single integer
+        'location_cities' => 'nullable', // JSON array or single integer, can be null
+        'industry' => 'required|integer|min:1',
+        'job_category' => 'nullable|integer|min:1',
+        'nationality' => 'required|integer|min:1',
+        'gender' => 'required|string|in:Male,Female,Others,No-Preference',
+        'open_position_number' => 'required|integer|min:1|max:999',
+        'contract_type' => 'required|integer|in:1,2,3,4,5,6', // Based on your mapping
+        'designation' => 'required|integer|min:1',
+        'functional_area' => 'nullable|integer|min:1',
+        'min_exp_year' => 'required|integer|min:0|max:50',
+        'max_exp_year' => 'required|integer|min:0|max:50|gte:min_exp_year',
+        'job_description' => 'required|string|min:10',
+        'requirement' => 'nullable|string',
+        'skill_ids' => 'nullable|array',
+        'skill_ids.*' => 'integer|min:1',
+        'expected_close_date' => 'nullable|date|after_or_equal:today',
+        'currency' => 'required|integer|min:1', // Currency ID, not string
+        'min_salary' => 'nullable|numeric|min:0',
+        'max_salary' => 'nullable|numeric|min:0|gte:min_salary',
+        'is_salary_negotiable' => 'nullable|boolean',
+        'posting_open_date' => 'nullable|date|after_or_equal:today',
+        'posting_close_date' => 'nullable|date|after:posting_open_date',
+        'application_through' => 'required|string|in:Hireing Jet,Apply To Email,Apply-Email,Apply To Link,Apply-Link',
+        'apply_on_email' => 'required_if:application_through,Apply To Email,Apply-Email|nullable|email|max:255',
+        'apply_on_link' => 'required_if:application_through,Apply To Link,Apply-Link|nullable|url|max:500',
 
-        $messages = [
-            'jobtype.required' => 'Job type is required',
-            'jobtype.in' => 'Invalid job type selected',
-            'gender.required' => 'Gender preference is required',
-            'gender.in' => 'Invalid gender option selected',
-            'contract_type.required' => 'Contract type is required',
-            'contract_type.in' => 'Invalid contract type selected',
-            'walkin_address1.required_if' => 'Walk-in address is required for walk-in jobs',
-            'walkin_country.required_if' => 'Country is required for walk-in interviews',
-            'walkin_city.required_if' => 'City is required for walk-in interviews',
-            'walkin_pincode.required_if' => 'Pincode is required for walk-in interviews',
-        ];
+        // Walk-in specific validation (all nullable as they can be NULL in database)
+        'walkin_address1' => 'nullable|string|max:255',
+        'walkin_address2' => 'nullable|string|max:255',
+        'walkin_country' => 'nullable|string|max:100',
+        'walkin_state' => 'nullable|string|max:100',
+        'walkin_city' => 'nullable|string|max:100',
+        'walkin_pincode' => 'nullable|string|max:20',
+        'walkin_latitude' => 'nullable|numeric|between:-90,90',
+        'walkin_longitude' => 'nullable|numeric|between:-180,180',
+        'walkin_details' => 'nullable|string|max:1000',
 
-        return Validator::make($data, $rules, $messages);
-    }
+        // Company profile fields (for updateEmployerProfile)
+        'company_name' => 'sometimes|required|string|max:255',
+        'description' => 'nullable|string|max:2000',
+        'industrie_id' => 'sometimes|required|integer|min:1',
+        'country' => 'sometimes|required|string|max:100',
+        'state' => 'nullable|string|max:100',
+        'city' => 'nullable|string|max:100',
+        'address' => 'sometimes|required|string|max:255',
+        'address_line_2' => 'nullable|string|max:255',
+        'pincode' => 'sometimes|required|string|max:20',
+        'landline' => 'nullable|string|max:20',
+        'web_url' => 'nullable|url|max:255',
+        'no_of_employee' => 'sometimes|required|integer|min:1',
+
+    ];
+
+    $messages = [
+        // Core job posting messages
+        'position_name.required' => 'Position name is required',
+        'position_name.max' => 'Position name cannot exceed 255 characters',
+        'job_type.required' => 'Job type is required',
+        'job_type.in' => 'Invalid job type. Choose from: walk-in-jobs, remote-jobs, on-site-jobs, temp-role-jobs',
+        'location_countries.required' => 'Job location country is required',
+        'industry.required' => 'Industry is required',
+        'industry.integer' => 'Industry must be a valid selection',
+        'nationality.required' => 'Nationality preference is required',
+        'nationality.integer' => 'Nationality must be a valid selection',
+        'gender.required' => 'Gender preference is required',
+        'gender.in' => 'Gender must be one of: Male, Female, Others, No-Preference',
+        'open_position_number.required' => 'Number of open positions is required',
+        'open_position_number.min' => 'At least 1 position must be available',
+        'open_position_number.max' => 'Maximum 999 positions allowed',
+        'contract_type.required' => 'Contract type is required',
+        'contract_type.integer' => 'Contract type must be a valid selection',
+        'contract_type.in' => 'Invalid contract type selected',
+        'designation.required' => 'Designation is required',
+        'designation.integer' => 'Designation must be a valid selection',
+        'min_exp_year.required' => 'Minimum experience is required',
+        'min_exp_year.integer' => 'Minimum experience must be a number',
+        'min_exp_year.min' => 'Minimum experience cannot be negative',
+        'min_exp_year.max' => 'Minimum experience cannot exceed 50 years',
+        'max_exp_year.required' => 'Maximum experience is required',
+        'max_exp_year.gte' => 'Maximum experience must be greater than or equal to minimum experience',
+        'job_description.required' => 'Job description is required',
+        'job_description.min' => 'Job description must be at least 10 characters',
+        'currency.required' => 'Currency is required',
+        'currency.integer' => 'Currency must be a valid selection',
+        'max_salary.gte' => 'Maximum salary must be greater than or equal to minimum salary',
+        'expected_close_date.after_or_equal' => 'Expected close date cannot be in the past',
+        'posting_open_date.after_or_equal' => 'Posting open date cannot be in the past',
+        'posting_close_date.after' => 'Posting close date must be after the open date',
+        'application_through.required' => 'Application method is required',
+        'application_through.in' => 'Invalid application method selected',
+        'apply_on_email.required_if' => 'Email is required when application method is "Apply To Email"',
+        'apply_on_email.email' => 'Please provide a valid email address',
+        'apply_on_link.required_if' => 'Application link is required when application method is "Apply To Link"',
+        'apply_on_link.url' => 'Please provide a valid URL',
+        'walkin_latitude.between' => 'Latitude must be between -90 and 90',
+        'walkin_longitude.between' => 'Longitude must be between -180 and 180',
+
+        // Company profile messages
+        'company_name.required' => 'Company name is required',
+        'industrie_id.required' => 'Company industry is required',
+        'country.required' => 'Company country is required',
+        'address.required' => 'Company address is required',
+        'pincode.required' => 'Company pincode is required',
+        'no_of_employee.required' => 'Number of employees is required',
+    ];
+
+    return Validator::make($request->all(), $rules, $messages);
+}
 
     /**
      * Update employer profile - SIMPLIFIED
@@ -405,7 +507,7 @@ public function postJobComplete(Request $request)
             $employer->vat_registration = $vat_registration ?: null;
             $employer->employe_type = $request->employe_type ?? 'company';
             $employer->web_url = $request->web_url ?? '';
-            $employerno_of_employee = $request->no_of_employee ?? 1;
+            $employer->no_of_employee = $request->no_of_employee ?? 1;
             $employer->status = 0;
             $employer->save();
 
