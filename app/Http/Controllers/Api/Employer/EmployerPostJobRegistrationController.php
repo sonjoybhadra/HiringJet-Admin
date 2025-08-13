@@ -125,7 +125,7 @@ public function postJobComplete(Request $request,User $user)
         if (!$user) {
             return $this->sendError('Unauthorized', 'Please login first', 401);
         }
-
+dd($user);
         // Get or create employer details
         $userEmployer = UserEmployer::where('user_id', $user->id)->first();
 
