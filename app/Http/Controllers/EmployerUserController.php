@@ -388,7 +388,7 @@ class EmployerUserController extends Controller
             $data['row']                    = DB::table('users')
                                                 ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
                                                 ->select('users.*', 'user_employers.*')
-                                                ->where('users.id', '=', $id)
+                                                ->where('user_employers.id', '=', $id)
                                                 ->first();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
@@ -484,7 +484,7 @@ class EmployerUserController extends Controller
                     // $state_id = $state->getStateId($request->state, $country_id);
                     // $city_id = $city->getCityId($request->city, $country_id);
 
-                    UserEmployer::where('user_id', $id)->update([
+                    UserEmployer::where('id', $id)->update([
                         'country_id'        => $request->country,
                         'city_id'           => $request->city,
                         'state_id'          => $request->state,
