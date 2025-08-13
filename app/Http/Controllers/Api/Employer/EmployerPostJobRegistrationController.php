@@ -150,7 +150,7 @@ public function postJobComplete(Request $request)
                 'landline' => $request->landline ?? '',
                 'employe_type' => $request->employe_type ?? 'company',
                 'web_url' => $request->web_url ?? '',
-                'no_of_employee' => 1,
+                'no_of_employee' => $request->no_of_employee ?? 1,
                 'logo' => '',
                 'status' => 0
             ]);
@@ -429,6 +429,7 @@ public function postJobComplete(Request $request)
             $employer->vat_registration = $vat_registration ?: null;
             $employer->employe_type = $request->employe_type ?? 'company';
             $employer->web_url = $request->web_url ?? '';
+            $employerno_of_employee = $request->no_of_employee ?? 1;
             $employer->status = 0;
             $employer->save();
 
