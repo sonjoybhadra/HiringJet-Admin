@@ -150,7 +150,7 @@ class TableController extends Controller
         }
 
         if($routes == 'employer-user'){
-            $query->whereNull('user_employers.business_id');
+            $query->whereNotNull('user_employers.business_id');
         }
 
         // Search
