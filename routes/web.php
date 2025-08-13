@@ -386,10 +386,13 @@ Route::middleware(['auth'])->group(function () {
 
     /* employer users */
         Route::get('employer-user/list', [EmployerUserController::class, 'list']);
+        Route::get('employer-user/verified', [EmployerUserController::class, 'verified']);
+        Route::get('employer-user/non-verified', [EmployerUserController::class, 'nonVerified']);
+        Route::get('employer-user/decline', [EmployerUserController::class, 'decline']);
         Route::match(['get', 'post'], 'employer-user/add', [EmployerUserController::class, 'add']);
         Route::match(['get', 'post'], 'employer-user/edit/{id}', [EmployerUserController::class, 'edit']);
         Route::get('employer-user/delete/{id}', [EmployerUserController::class, 'delete']);
-        Route::get('employer-user/change-status/{id}', [EmployerUserController::class, 'change_status']);
+        Route::get('employer-user/change-status/{id}/{id2}', [EmployerUserController::class, 'change_status']);
         Route::match(['get', 'post'], 'employer-user/profile/{id}', [EmployerUserController::class, 'profile']);
         Route::match(['get', 'post'], 'employer-user/resend-otp/{id}', [EmployerUserController::class, 'resendOtp']);
         Route::match(['get', 'post'], 'employer-user/verify-otp/{id}', [EmployerUserController::class, 'verifyOtp']);
