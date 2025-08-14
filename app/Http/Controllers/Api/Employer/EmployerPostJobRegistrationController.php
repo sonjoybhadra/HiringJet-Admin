@@ -451,100 +451,91 @@ private function validateJobPostingData(Request $request)
     /**
      * Update employer profile - SIMPLIFIED
      */
-    public function updateEmployerProfile(Request $request, User $user)
-    {
-        try {
-            // Handle file uploads (same as before)
-            $profile_image = $trade_license = $vat_registration = $logo = "";
+   public function updateEmployerProfile(Request $request, User $user)
+{
+    try {
+        // Handle file uploads with a cleaner approach
+        $fileFields = ['profile_image', 'trade_license', 'vat_registration', 'logo'];
+        $uploadedFiles = [];
 
-            if ($request->hasFile('profile_image')) {
-                $file = $request->file('profile_image');
-                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/profile_image/' . $fileName, file_get_contents($file));
-                $profile_image = 'public/storage/uploads/employer/profile_image/' . $fileName;
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $uploadedFiles[$field] = $this->handleFileUpload($request->file($field), $field);
             }
-
-            if ($request->hasFile('trade_license')) {
-                $file = $request->file('trade_license');
-                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/trade_license/' . $fileName, file_get_contents($file));
-                $trade_license = 'public/storage/uploads/employer/trade_license/' . $fileName;
-            }
-
-            if ($request->hasFile('vat_registration')) {
-                $file = $request->file('vat_registration');
-                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/vat_registration/' . $fileName, file_get_contents($file));
-                $vat_registration = 'public/storage/uploads/employer/vat_registration/' . $fileName;
-            }
-
-            if ($request->hasFile('logo')) {
-                $file = $request->file('logo');
-                $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
-                Storage::disk('public')->put('uploads/employer/logo/' . $fileName, file_get_contents($file));
-                $logo = 'public/storage/uploads/employer/logo/' . $fileName;
-            }
-
-            // Get location IDs - keep your existing logic
-            $country_id = $this->safeGetLocationId('country', $request->country);
-            $state_id = $this->safeGetLocationId('state', $request->state, $country_id);
-            $city_id = $this->safeGetLocationId('city', $request->city, $country_id);
-
-            // Create new employer/company profile
-            $employer = new Employer();
-            $employer->name = $request->company_name ?? '';
-            $employer->logo = $logo ?: null;
-            $employer->description = $request->description ?? '';
-            $employer->industry_id = $request->industrie_id;
-            $employer->country_id = $country_id;
-            $employer->state_id = $state_id;
-            $employer->city_id = $city_id;
-            $employer->address = $request->address ?? '';
-            $employer->address_line_2 = $request->address_line_2 ?? '';
-            $employer->pincode = $request->pincode ?? '';
-            $employer->landline = $request->landline ?? '';
-            $employer->trade_license = $trade_license ?: null;
-            $employer->vat_registration = $vat_registration ?: null;
-            $employer->employe_type = $request->employe_type ?? 'company';
-            $employer->web_url = $request->web_url ?? '';
-            $employer->no_of_employee = $request->no_of_employee ?? 1;
-            $employer->status = 0;
-            $employer->save();
-
-            if ($employer && $employer->id) {
-                $updateData = [
-                    'country_id' => $country_id,
-                    'city_id' => $city_id,
-                    'state_id' => $state_id,
-                    'address' => $request->address ?? '',
-                    'address_line_2' => $request->address_line_2 ?? '',
-                    'pincode' => $request->pincode ?? '',
-                    'landline' => $request->landline ?? '',
-                    'industrie_id' => $request->industrie_id,
-                    'description' => $request->description ?? '',
-                    'business_id' => $employer->id,
-                    'web_url' => $request->web_url ?? '',
-                    'employe_type' => $request->employe_type ?? 'company',
-                    'completed_steps' => 2,
-                ];
-
-                if ($profile_image) $updateData['profile_image'] = $profile_image;
-                if ($trade_license) $updateData['trade_license'] = $trade_license;
-                if ($vat_registration) $updateData['vat_registration'] = $vat_registration;
-                if ($logo) $updateData['logo'] = $logo;
-
-                $user_employer = UserEmployer::where('user_id', $user->id)->update($updateData);
-                return $user_employer ? true : false;
-            }
-
-            return false;
-
-        } catch (\Exception $e) {
-            \Log::error("updateEmployerProfile Error: " . $e->getMessage());
-            return false;
         }
-    }
 
+        // Get location IDs
+        $country_id = $this->safeGetLocationId('country', $request->country);
+        $state_id = $this->safeGetLocationId('state', $request->state, $country_id);
+        $city_id = $this->safeGetLocationId('city', $request->city, $country_id);
+
+        // Create new employer/company profile
+        $employer = new Employer();
+        $employer->name = $request->company_name ?? '';
+        $employer->logo = $uploadedFiles['logo'] ?? ''; // Use empty string instead of null
+        $employer->description = $request->description ?? '';
+        $employer->industry_id = $request->industrie_id;
+        $employer->country_id = $country_id;
+        $employer->state_id = $state_id;
+        $employer->city_id = $city_id;
+        $employer->address = $request->address ?? '';
+        $employer->address_line_2 = $request->address_line_2 ?? '';
+        $employer->pincode = $request->pincode ?? '';
+        $employer->landline = $request->landline ?? '';
+        $employer->trade_license = $uploadedFiles['trade_license'] ?? '';
+        $employer->vat_registration = $uploadedFiles['vat_registration'] ?? '';
+        $employer->employe_type = $request->employe_type ?? 'company';
+        $employer->web_url = $request->web_url ?? '';
+        $employer->no_of_employee = $request->no_of_employee ?? 1;
+        $employer->status = 0;
+        $employer->save();
+
+        if ($employer && $employer->id) {
+            $updateData = [
+                'country_id' => $country_id,
+                'city_id' => $city_id,
+                'state_id' => $state_id,
+                'address' => $request->address ?? '',
+                'address_line_2' => $request->address_line_2 ?? '',
+                'pincode' => $request->pincode ?? '',
+                'landline' => $request->landline ?? '',
+                'industrie_id' => $request->industrie_id,
+                'description' => $request->description ?? '',
+                'business_id' => $employer->id,
+                'web_url' => $request->web_url ?? '',
+                'employe_type' => $request->employe_type ?? 'company',
+                'completed_steps' => 2,
+            ];
+
+            // Add uploaded files to update data
+            foreach ($uploadedFiles as $field => $path) {
+                $updateData[$field] = $path;
+            }
+
+            $user_employer = UserEmployer::where('user_id', $user->id)->update($updateData);
+            return $user_employer ? true : false;
+        }
+
+        return false;
+
+    } catch (\Exception $e) {
+        \Log::error("updateEmployerProfile Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Handle file upload for employer profile
+ */
+private function handleFileUpload($file, $fieldName)
+{
+    $fileName = md5($file->getClientOriginalName() . '_' . time()) . "." . $file->getClientOriginalExtension();
+    $path = "uploads/employer/{$fieldName}/" . $fileName;
+
+    Storage::disk('public')->put($path, file_get_contents($file));
+
+    return 'public/storage/' . $path;
+}
     /**
      * Safe location ID getter - keep your existing implementation
      */
