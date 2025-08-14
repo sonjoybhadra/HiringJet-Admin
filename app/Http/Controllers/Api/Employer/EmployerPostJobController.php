@@ -25,15 +25,13 @@ class EmployerPostJobController extends BaseApiController
     */
     public function getMyPostedJobs(Request $request){
         $sql = PostJob::select('*')
-                        ->where('industryRelation')
-                        ->where('jobCategory')
-                        ->where('nationalityRelation')
-                        ->where('contractType')
-                        ->where('designationRelation')
-                        ->where('functionalArea')
-                        ->where('applied_users')
-                        ->latest()
-                        ->get();
+                        ->with('industryRelation')
+                        ->with('jobCategory')
+                        ->with('nationalityRelation')
+                        ->with('contractType')
+                        ->with('designationRelation')
+                        ->with('functionalArea')
+                        ->with('applied_users');
         if(auth()->user()->parent_id > 0){
             $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
         }else{
@@ -47,7 +45,8 @@ class EmployerPostJobController extends BaseApiController
             $sql->whereIn('employer_id', $child_user_business_array);
         }
 
-        $list = $sql->get();
+        $list = $sql->latest()->get();
+
         return $this->sendResponse($list, 'List of posted jobs');
     }
 
