@@ -8,12 +8,47 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Validator;
 
+use App\Models\PostJob;
+use App\Models\User;
+
 class EmployerPostJobController extends BaseApiController
 {
     protected $jobService;
     public function __construct(JobPostingService $jobService)
     {
         $this->jobService = $jobService;
+    }
+
+    /**
+        * Jobs list for employers
+        @response json
+    */
+    public function getMyPostedJobs(Request $request){
+        $sql = PostJob::select('*')
+                        ->where('industryRelation')
+                        ->where('jobCategory')
+                        ->where('nationalityRelation')
+                        ->where('contractType')
+                        ->where('designationRelation')
+                        ->where('functionalArea')
+                        ->where('applied_users')
+                        ->latest()
+                        ->get();
+        if(auth()->user()->parent_id > 0){
+            $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
+        }else{
+            $child_user_business_array = User::select('user_employers.business_id')
+                                ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
+                                ->where('parent_id', auth()->user()->id())
+                                ->get()->pluck('business_id')->toArray();
+
+            array_push($child_user_business_array, auth()->user()->user_employer_details->business_id);
+
+            $sql->whereIn('employer_id', $child_user_business_array);
+        }
+
+        $list = $sql->get();
+        return $this->sendResponse($list, 'List of posted jobs');
     }
 
     /**
