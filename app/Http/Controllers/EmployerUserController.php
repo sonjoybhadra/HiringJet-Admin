@@ -366,7 +366,7 @@ class EmployerUserController extends Controller
                     $remember_token             = (($user)?base64_decode($user->remember_token):'');
 
                     if($remember_token == $postData['otp']){
-                        $user_obj = User::find($id);
+                        $user_obj = User::where('id', '=', $user_id)->first();
                         $user_obj->status = 1;
                         $user_obj->remember_token = '';
                         $user_obj->email_verified_at = date('Y-m-d H:i:s');
