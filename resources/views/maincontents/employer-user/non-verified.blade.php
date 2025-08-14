@@ -40,14 +40,14 @@ $controllerRoute = $module['controller_route'];
                   'searchId' => 'search1',
                   'table' => 'user_employers',
                   'columns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'completed_steps', 'business_id', 'created_at', 'employers.status'],
-                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'completed_steps', 'business_name', 'created_at'],
-                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'completed_steps', 'Business Name', 'Created At'],
+                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'business_name', 'created_at'],
+                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Business Name', 'Created At'],
                   'filename' => "EmployerUser",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
                      ['column' => 'is_active', 'operator' => '!=', 'value' => 3],
-                     ['column' => 'employers.status', 'operator' => '=', 'value' => 1],
+                     ['column' => 'employers.status', 'operator' => '<=', 'value' => 1],
                   ],
                   'routePrefix' => 'employer-user',
                   'showActions' => true, // set to false to hide actions
