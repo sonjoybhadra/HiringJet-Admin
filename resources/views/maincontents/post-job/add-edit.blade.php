@@ -566,7 +566,7 @@ $controllerRoute = $module['controller_route'];
                                                         <i class="ti ti-arrow-left ti-xs me-sm-2 me-0"></i>
                                                         <span class="align-middle d-sm-inline-block d-none">Previous</span>
                                                     </button>
-                                                    <button type="submit" class="btn btn-success btn-next btn-submit">Submit</button>
+                                                    <button type="submit" class="btn btn-success btn-next btn-submit" id="btn-submit">Submit</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -613,6 +613,8 @@ $controllerRoute = $module['controller_route'];
         });
 
         var application_through = '<?= $application_through ?>';
+        var apply_on_email = '<?= $apply_on_email ?>';
+        var apply_on_link = '<?= $apply_on_link ?>';
         // Hide all divs first
         $('#apply_on_email_row, #apply_on_link_row').hide();
         // Show based on selected value
@@ -621,12 +623,28 @@ $controllerRoute = $module['controller_route'];
         } else if (application_through === 'Apply To Email') {
             $('#apply_on_email_row').show();
             $('#apply_on_link_row').hide();
+            $('#apply_on_email').attr('required', true);
+            $('#apply_on_link').attr('required', false);
+            if(apply_on_email == ''){
+                $('#btn-submit').attr('disabled', true);
+            } else {
+                $('#btn-submit').attr('disabled', false);
+            }
         } else if (application_through === 'Apply To Link') {
             $('#apply_on_email_row').hide();
             $('#apply_on_link_row').show();
+            $('#apply_on_email').attr('required', false);
+            $('#apply_on_link').attr('required', true);
+            if(apply_on_link == ''){
+                $('#btn-submit').attr('disabled', true);
+            } else {
+                $('#btn-submit').attr('disabled', false);
+            }
         }
         $('input[name="application_through"]').change(function() {
             var application_through = $(this).val();
+            var apply_on_email = $('#apply_on_email').val();
+            var apply_on_link = $('#apply_on_link').val();
 
             // Hide all divs first
             $('#apply_on_email_row, #apply_on_link_row').hide();
@@ -637,9 +655,38 @@ $controllerRoute = $module['controller_route'];
             } else if (application_through === 'Apply To Email') {
                 $('#apply_on_email_row').show();
                 $('#apply_on_link_row').hide();
+                $('#apply_on_email').attr('required', true);
+                $('#apply_on_link').attr('required', false);
+                if(apply_on_email == ''){
+                    $('#btn-submit').attr('disabled', true);
+                } else {
+                    $('#btn-submit').attr('disabled', false);
+                }
             } else if (application_through === 'Apply To Link') {
                 $('#apply_on_email_row').hide();
                 $('#apply_on_link_row').show();
+                $('#apply_on_email').attr('required', false);
+                $('#apply_on_link').attr('required', true);
+                if(apply_on_link == ''){
+                    $('#btn-submit').attr('disabled', true);
+                } else {
+                    $('#btn-submit').attr('disabled', false);
+                }
+            }
+        });
+
+        $('#apply_on_email').on('blur', function() {
+            if($('#apply_on_email').val() == ''){
+                $('#btn-submit').attr('disabled', true);
+            } else {
+                $('#btn-submit').attr('disabled', false);
+            }
+        });
+        $('#apply_on_link').on('blur', function() {
+            if($('#apply_on_link').val() == ''){
+                $('#btn-submit').attr('disabled', true);
+            } else {
+                $('#btn-submit').attr('disabled', false);
             }
         });
 
