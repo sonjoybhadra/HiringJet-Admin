@@ -348,6 +348,7 @@ class EmployerUserController extends Controller
             $id                             = Helper::decoded($id);
             $page_name                      = 'employer-user.verify-otp';
             $data['row']                    = UserEmployer::where('id', '=', $id)->first();
+            $business_id                    = (($data['row'])?$data['row']->business_id:0);
             $data['id']                     = $id;
             $title                          = 'Verify OTP : ' . (($data['row'])?$data['row']->first_name . '' . $data['row']->last_name:'');
 
@@ -359,6 +360,8 @@ class EmployerUserController extends Controller
                 if($this->validate($request, $rules)){
                     $user_employer              = UserEmployer::where('id', '=', $id)->first();
                     $user_id                    = (($user_employer)?$user_employer->user_id:0);
+                    $business_id                = (($user_employer)?$user_employer->business_id:0);
+
                     $user                       = User::where('id', '=', $user_id)->first();
                     $remember_token             = (($user)?base64_decode($user->remember_token):'');
 
@@ -371,6 +374,9 @@ class EmployerUserController extends Controller
 
                         UserEmployer::where('user_id', $id)->update([
                             'completed_steps'=> 1,
+                        ]);
+                        Employer::where('id', $business_id)->update([
+                            'status'=> 1,
                         ]);
 
                         $full_name  = $user->first_name.' '.$user->last_name;
