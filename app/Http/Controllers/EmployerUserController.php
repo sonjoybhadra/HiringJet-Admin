@@ -345,9 +345,9 @@ class EmployerUserController extends Controller
     /* verify otp */
         public function verifyOtp(Request $request, $id){
             $data['module']                 = $this->data;
-            echo $id                             = Helper::decoded($id);die;
+            $id                             = Helper::decoded($id);
             $page_name                      = 'employer-user.verify-otp';
-            $data['row']                    = User::where('id', '=', $id)->first();
+            $data['row']                    = UserEmployer::where('id', '=', $id)->first();
             $data['id']                     = $id;
             $title                          = 'Verify OTP : ' . (($data['row'])?$data['row']->first_name . '' . $data['row']->last_name:'');
 
@@ -357,7 +357,9 @@ class EmployerUserController extends Controller
                     'otp'            => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    $user                    = User::where('id', '=', $id)->first();
+                    $user_employer              = UserEmployer::where('id', '=', $id)->first();
+                    $user_id                    = (($user_employer)?$user_employer->user_id:0);
+                    $user                       = User::where('id', '=', $user_id)->first();
                     $remember_token             = (($user)?base64_decode($user->remember_token):'');
 
                     if($remember_token == $postData['otp']){
@@ -371,11 +373,11 @@ class EmployerUserController extends Controller
                             'completed_steps'=> 1,
                         ]);
 
-                        $full_name = $user->first_name.' '.$user->last_name;
-                        $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
+                        $full_name  = $user->first_name.' '.$user->last_name;
+                        $message    = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
                         Mail::to($user->email)->send(new RegistrationSuccess($user->email, $full_name, $message));
 
-                        return redirect($this->data['controller_route'] . "/list")->with('success_message', 'Your account verification has successfully done. Now you can continue and complete your profile.');
+                        return redirect($this->data['controller_route'] . "/non-verified")->with('success_message', 'Your account verification has successfully done. Now you can continue and complete your profile.');
                     } else {
                         return redirect()->back()->with('error_message', 'OTP mismatched !!!');
                     }
