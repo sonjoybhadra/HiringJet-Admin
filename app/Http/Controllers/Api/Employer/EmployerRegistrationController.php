@@ -67,7 +67,8 @@ class EmployerRegistrationController extends BaseApiController
                 'password'=> Hash::make($request->password),
                 'status'=> 0,
                 'remember_token' => $otp_mail_hash,
-                'email_verified_at' => date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes'))
+                'email_verified_at' => date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes')),
+                'emp_reg_type' => 1,
             ]);
 
             if($user_id){

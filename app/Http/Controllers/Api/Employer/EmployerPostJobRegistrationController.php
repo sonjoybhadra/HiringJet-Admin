@@ -77,7 +77,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 'password'=> Hash::make('password'),
                 'status'=> 1,
                 'remember_token' => '',
-                'email_verified_at' =>date('Y-m-d H:i:s')
+                'email_verified_at' =>date('Y-m-d H:i:s'),
+                'emp_reg_type' => 2,
             ]);
 
             if($user_id){
