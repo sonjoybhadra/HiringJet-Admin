@@ -347,7 +347,8 @@ class EmployerUserController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $page_name                      = 'employer-user.verify-otp';
-            $data['row']                    = User::where('id', '=', $id)->first();
+            $data['row']                    = UserEmployer::where('id', '=', $id)->first();
+            $business_id                    = (($data['row'])?$data['row']->business_id:0);
             $data['id']                     = $id;
             $title                          = 'Verify OTP : ' . (($data['row'])?$data['row']->first_name . '' . $data['row']->last_name:'');
 
@@ -357,25 +358,32 @@ class EmployerUserController extends Controller
                     'otp'            => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    $user                    = User::where('id', '=', $id)->first();
+                    $user_employer              = UserEmployer::where('id', '=', $id)->first();
+                    $user_id                    = (($user_employer)?$user_employer->user_id:0);
+                    $business_id                = (($user_employer)?$user_employer->business_id:0);
+
+                    $user                       = User::where('id', '=', $user_id)->first();
                     $remember_token             = (($user)?base64_decode($user->remember_token):'');
 
                     if($remember_token == $postData['otp']){
-                        $user_obj = User::find($id);
+                        $user_obj = User::where('id', '=', $user_id)->first();
                         $user_obj->status = 1;
                         $user_obj->remember_token = '';
                         $user_obj->email_verified_at = date('Y-m-d H:i:s');
                         $user_obj->save();
 
-                        UserEmployer::where('user_id', $id)->update([
+                        UserEmployer::where('id', $id)->update([
                             'completed_steps'=> 1,
                         ]);
+                        Employer::where('id', $business_id)->update([
+                            'status'=> 1,
+                        ]);
 
-                        $full_name = $user->first_name.' '.$user->last_name;
-                        $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
+                        $full_name  = $user->first_name.' '.$user->last_name;
+                        $message    = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
                         Mail::to($user->email)->send(new RegistrationSuccess($user->email, $full_name, $message));
 
-                        return redirect($this->data['controller_route'] . "/list")->with('success_message', 'Your account verification has successfully done. Now you can continue and complete your profile.');
+                        return redirect($this->data['controller_route'] . "/non-verified")->with('success_message', 'Your account verification has successfully done. Now you can continue and complete your profile.');
                     } else {
                         return redirect()->back()->with('error_message', 'OTP mismatched !!!');
                     }

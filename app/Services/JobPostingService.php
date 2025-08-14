@@ -15,7 +15,7 @@ use Exception;
 class JobPostingService
 {
     /**
-     * Create a new job posting - UPDATED FOR STRING SUPPORT
+     * Create a new job posting - FIXED APPLICATION_THROUGH MAPPING
      *
      * @param array $data
      * @param int $userId
@@ -44,7 +44,7 @@ class JobPostingService
             // Process skills data
             $skillData = $this->processSkillsData($data);
 
-            // Prepare final job data for insertion - KEEP STRINGS
+            // Prepare final job data for insertion
             $jobData = $this->prepareJobDataForInsertion(
                 $data,
                 $jobNumberData,
@@ -209,7 +209,7 @@ class JobPostingService
     }
 
     /**
-     * Prepare job data for database insertion - KEEP STRINGS WHERE APPROPRIATE
+     * Prepare job data for database insertion - FIXED APPLICATION_THROUGH
      */
     private function prepareJobDataForInsertion(
         array $data,
@@ -229,29 +229,45 @@ class JobPostingService
         $minSalary = 0;
         $maxSalary = 0;
 
-        if (!empty($data['minSalary'])) {
-            $minSalary = (float) str_replace(',', '', $data['minSalary']);
+        if (!empty($data['min_salary'])) {
+            $minSalary = (float) str_replace(',', '', $data['min_salary']);
         }
 
-        if (!empty($data['maxSalary'])) {
-            $maxSalary = (float) str_replace(',', '', $data['maxSalary']);
+        if (!empty($data['max_salary'])) {
+            $maxSalary = (float) str_replace(',', '', $data['max_salary']);
         }
 
-        // Store as strings directly - no conversion needed
-        $jobType = $data['jobtype'] ?? 'walk-in-jobs';
+        // Handle job type
+        $jobType = $data['job_type'] ?? 'walk-in-jobs';
+
+        // Handle gender
         $gender = $data['gender'] ?? 'No-Preference';
-        $contractType = $data['contract_type'] ?? 'Full-time';
 
-        // Handle walk-in location data - keep as strings for string-based database
+        // Handle contract type - convert to integer as expected by database
+        $contractType = (int) ($data['contract_type'] ?? 1);
+
+        // FIXED: Handle application_through - keep as STRING, don't convert to integer
+        $applicationThrough = $data['application_through'] ?? 'Hiring Jet';
+
+        // Ensure it matches the database constraint values
+        $validApplicationMethods = ['Hiring Jet', 'Apply To Email', 'Apply To Link'];
+        if (!in_array($applicationThrough, $validApplicationMethods)) {
+            // Default to 'Hiring Jet' if invalid value
+            $applicationThrough = 'Hiring Jet';
+        }
+
+        // Handle currency - use directly from request data
+        $currency = $data['currency'] ?? '';
+
+        // Handle walk-in location data
         $walkinCountry = '';
         $walkinState = '';
         $walkinCity = '';
 
-        if ($jobType === 'walk-in-jobs') { // walk-in-jobs
-            // Store location names as strings directly
-            $walkinCountry = $data['walkin_country'] ?? '';
-            $walkinState = $data['walkin_state'] ?? '';
-            $walkinCity = $data['walkin_city'] ?? '';
+        if ($jobType === 'walk-in-jobs') {
+            $walkinCountry = $data['walkin_country'] ?? NULL;
+            $walkinState = $data['walkin_state'] ?? NULL;
+            $walkinCity = $data['walkin_city'] ?? NULL;
         }
 
         // Prepare the final data array
@@ -260,44 +276,44 @@ class JobPostingService
             'job_no' => $jobNumberData['job_no'],
             'position_name' => $positionName,
             'employer_id' => (int) $data['employer_id'],
-            'job_type' => $jobType, // String: 'walk-in-jobs', 'remote-jobs', etc.
+            'job_type' => $jobType,
             'location_countries' => $locationData['countries_json'],
             'location_country_names' => $locationData['country_names_json'],
             'location_cities' => $locationData['cities_json'],
             'location_city_names' => $locationData['city_names_json'],
-            'industry' => (int) ($data['industry'] ?? 0),
-            'job_category' => (int) ($data['job_category'] ?? 0),
+            'industry' => (int) ($data['industry'] ?? 1),
+            'job_category' => (int) ($data['job_category'] ?? 1),
             'nationality' => $nationality,
-            'gender' => $gender, // String: 'Male', 'Female', 'Others', 'No-Preference'
-            'open_position_number' => (int) ($data['numberOfPositions'] ?? $data['open_position_number'] ?? 1),
-            'contract_type' => $contractType, // String: 'Full-time', 'Part-time', etc.
+            'gender' => $gender,
+            'open_position_number' => (int) ($data['open_position_number'] ?? 1),
+            'contract_type' => $contractType,
             'designation' => (int) $data['designation'],
-            'functional_area' => (int) ($data['functional_area'] ?? 0),
-            'min_exp_year' => (int) ($data['minexperience'] ?? $data['min_exp_year'] ?? 0),
-            'max_exp_year' => isset($data['maxexperience']) ? (int) $data['maxexperience'] : (isset($data['max_exp_year']) ? (int) $data['max_exp_year'] : null),
-            'job_description' => $data['jobDescription'] ?? $data['job_description'] ?? '',
-            'requirement' => $data['requirements'] ?? $data['requirement'] ?? '',
+            'functional_area' => (int) ($data['functional_area'] ?? 1),
+            'min_exp_year' => (int) ($data['min_exp_year'] ?? 0),
+            'max_exp_year' => (int) ($data['max_exp_year'] ?? 0),
+            'job_description' => $data['job_description'] ?? NULL,
+            'requirement' => $data['requirement'] ?? NULL,
             'skill_ids' => $skillData['skill_ids_json'],
             'skill_names' => $skillData['skill_names_json'],
-            'expected_close_date' => null,
-            'currency' => $data['currency'] ?? 'USD',
+            'expected_close_date' => $data['expected_close_date'] ?: NULL,
+            'currency' => $currency,
             'min_salary' => $minSalary,
             'max_salary' => $maxSalary,
-            'is_salary_negotiable' => ($data['salnegotiate'] ?? $data['is_salary_negotiable'] ?? 'no') === 'yes' ? 1 : 0,
-            'posting_open_date' => $data['openDate'] ?? $data['posting_open_date'] ?? date('Y-m-d'),
-            'posting_close_date' => $data['closeDate'] ?? $data['posting_close_date'] ?? date('Y-m-d', strtotime('+30 days')),
-            'application_through' => (int) ($data['application_through'] ?? 1),
-            'apply_on_email' => $data['applyTo'] ?? $data['apply_on_email'] ?? '',
-            'apply_on_link' => $data['applyTo'] ?? $data['apply_on_link'] ?? '',
-            'walkin_address1' => $data['walkin_address1'] ?? '',
-            'walkin_address2' => $data['walkin_address2'] ?? '',
+            'is_salary_negotiable' => ($data['is_salary_negotiable'] ?? false) ? 1 : 0,
+            'posting_open_date' => $data['posting_open_date'] ?? date('Y-m-d'),
+            'posting_close_date' => $data['posting_close_date'] ?? date('Y-m-d', strtotime('+30 days')),
+            'application_through' => $applicationThrough, // Keep as STRING
+            'apply_on_email' => $data['apply_on_email'] ?? NULL,
+            'apply_on_link' => $data['apply_on_link'] ?? NULL,
+            'walkin_address1' => $data['walkin_address1'] ?? NULL,
+            'walkin_address2' => $data['walkin_address2'] ?? NULL,
             'walkin_country' => $walkinCountry,
             'walkin_state' => $walkinState,
             'walkin_city' => $walkinCity,
-            'walkin_pincode' => $data['walkin_pincode'] ?? '',
-            'walkin_latitude' => $data['walkin_latitude'] ?? '',
-            'walkin_longitude' => $data['walkin_longitude'] ?? '',
-            'walkin_details' => isset($data['walkin_details']) ? html_entity_decode($data['walkin_details']) : '',
+            'walkin_pincode' => $data['walkin_pincode'] ?? NULL,
+            'walkin_latitude' => $data['walkin_latitude'] ?? null,
+            'walkin_longitude' => $data['walkin_longitude'] ?? null,
+            'walkin_details' => $data['walkin_details'] ?? NULL,
             'created_by' => $userId,
             'updated_by' => $userId,
             'status' => 1,

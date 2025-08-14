@@ -168,11 +168,11 @@ function loadTable(config) {
                                     <i class="fa-solid fa-key" style="margin-right:3px;"></i>Verify OTP
                                 </a>`;
                     } else if(status == 1){
-                        html += `<br><br><a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Click to Verify">
-                                    <i class="fa-solid fa-check" style="margin-right:3px;"></i> Click to Verify
+                        html += `<br><br><a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Click Verify">
+                                    <i class="fa-solid fa-check" style="margin-right:3px;"></i> Click Verify
                                 </a>`;
-                        html += `<a href="${base}/change-status/${encodedId}/2" class="btn btn-danger btn-sm me-1" title="Click to Decline">
-                                    <i class="fas fa-times" style="margin-right:3px;"></i> Click to Decline
+                        html += `<br><br><a href="${base}/change-status/${encodedId}/2" class="btn btn-danger btn-sm me-1" title="Click Decline">
+                                    <i class="fas fa-times" style="margin-right:3px;"></i> Click Decline
                                 </a>`;
                     } else if(status == 2){
                         html += `<br><br><span class="badge bg-danger"><i class="fas fa-times" style="margin-right:3px;"></i> DECLINE</span>`;

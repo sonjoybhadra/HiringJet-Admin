@@ -223,6 +223,8 @@ use App\Http\Controllers\Api\Employer\EmployerBrandsController;
 use App\Http\Controllers\Api\Employer\EmployerTagsController;
 use App\Http\Controllers\Api\Employer\EmployerEmailTemplateController;
 use App\Http\Controllers\Api\Employer\EmployerPostJobController;
+use App\Http\Controllers\Api\Search\EmployerSearchController;
+
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -234,6 +236,8 @@ Route::post('/employer/check-email', [EmployerPostJobRegistrationController::cla
 Route::post('/employer/forgot-password', [ForgotpasswordController::class, 'forgotPassword']);
 Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordController::class, 'otpVerification']);
 Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
+Route::post('/employer/search/result', [EmployerSearchController::class, 'getEmployerBySearch']);
+
 
 
 Route::post('/employer/login', [EmployerAuthController::class, 'login']);
@@ -253,6 +257,7 @@ Route::group([
     Route::post('/update-business-profile', [EditEmployerBusinessInfoController::class, 'updateBusinessData']);
 
     Route::post('/post-job/complete', [EmployerPostJobRegistrationController::class, 'postJobComplete']);
+
 
     /* Route::post('/send-verification-otp', [AccountSettingsController::class, 'sendVerificationOtp']);
     Route::post('/verification-otp', [AccountSettingsController::class, 'verificationOtp']);
