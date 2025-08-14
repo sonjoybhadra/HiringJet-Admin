@@ -265,6 +265,7 @@ Route::group([
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
+    Route::get('/postd-jobs', [EmployerPostJobController::class, 'getMyPostedJobs']);
     Route::post('/post-a-job', [EmployerPostJobController::class, 'postJob']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
