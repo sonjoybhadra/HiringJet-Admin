@@ -372,7 +372,7 @@ class EmployerUserController extends Controller
                         $user_obj->email_verified_at = date('Y-m-d H:i:s');
                         $user_obj->save();
 
-                        UserEmployer::where('user_id', $id)->update([
+                        UserEmployer::where('id', $id)->update([
                             'completed_steps'=> 1,
                         ]);
                         Employer::where('id', $business_id)->update([
