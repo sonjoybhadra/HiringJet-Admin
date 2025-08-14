@@ -171,7 +171,7 @@ function loadTable(config) {
                         html += `<br><br><a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Click to Verify">
                                     <i class="fa-solid fa-check" style="margin-right:3px;"></i> Click to Verify
                                 </a>`;
-                        html += `<a href="${base}/change-status/${encodedId}/2" class="btn btn-danger btn-sm me-1" title="Click to Decline">
+                        html += `<br><br><a href="${base}/change-status/${encodedId}/2" class="btn btn-danger btn-sm me-1" title="Click to Decline">
                                     <i class="fas fa-times" style="margin-right:3px;"></i> Click to Decline
                                 </a>`;
                     } else if(status == 2){
