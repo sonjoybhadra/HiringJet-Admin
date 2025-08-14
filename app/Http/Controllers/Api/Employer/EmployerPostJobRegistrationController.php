@@ -120,7 +120,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postJobComplete(Request $request)
+  public function postJobComplete(Request $request)
     {
         try {
             // Check authentication first
@@ -135,7 +135,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 return $this->sendError('Profile Error', 'Please complete your profile first', 400);
             }
 
-            // STEP 1: Clean and sanitize request data - convert string "null" to actual null
+            // STEP 1: Clean and sanitize request data
             $cleanedRequest = $this->sanitizeRequestData($request);
 
             // Validate job posting data based on database schema
@@ -150,19 +150,23 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 return $this->sendError('Profile Error', 'Failed to update employer profile', 400);
             }
 
-            // Map application method to database STRING format (based on SQL example)
+            // FIXED: Handle application_through properly - keep as string
+            $applicationThrough = $cleanedRequest->get('application_through');
+
+            // Normalize different frontend variations to database expected values
             $applicationMap = [
-                'Hireing Jet' => 'Hireing Jet',
+                'Hireing Jet' => 'Hiring Jet',
+                'Hiring Jet' => 'Hiring Jet',
                 'Apply To Email' => 'Apply To Email',
                 'Apply-Email' => 'Apply To Email',
                 'Apply To Link' => 'Apply To Link',
                 'Apply-Link' => 'Apply To Link'
             ];
 
-            $applicationThrough = $applicationMap[$cleanedRequest->get('application_through')] ?? 'Apply To Email';
+            $applicationThrough = $applicationMap[$applicationThrough] ?? 'Hiring Jet';
 
-            // Handle currency - convert to integer
-            $currencyId = $this->getCurrencyId($cleanedRequest->get('currency'));
+            // Handle currency - use directly from request
+            $currency = $cleanedRequest->get('currency') ?: '';
 
             // Prepare job data matching the database schema
             $jobData = [
@@ -185,13 +189,13 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 'requirement' => $cleanedRequest->get('requirement'),
                 'skill_ids' => $cleanedRequest->get('skill_ids', []),
                 'expected_close_date' => $cleanedRequest->get('expected_close_date'),
-                'currency' => $currencyId,
+                'currency' => $currency,
                 'min_salary' => $cleanedRequest->get('min_salary') ? (float) $cleanedRequest->get('min_salary') : 0,
                 'max_salary' => $cleanedRequest->get('max_salary') ? (float) $cleanedRequest->get('max_salary') : 0,
                 'is_salary_negotiable' => $cleanedRequest->boolean('is_salary_negotiable') ? 1 : 0,
                 'posting_open_date' => $cleanedRequest->get('posting_open_date') ?: date('Y-m-d'),
                 'posting_close_date' => $cleanedRequest->get('posting_close_date') ?: date('Y-m-d', strtotime('+30 days')),
-                'application_through' => $applicationThrough,
+                'application_through' => $applicationThrough, // Keep as STRING
                 'apply_on_email' => $cleanedRequest->get('apply_on_email'),
                 'apply_on_link' => $cleanedRequest->get('apply_on_link'),
             ];
