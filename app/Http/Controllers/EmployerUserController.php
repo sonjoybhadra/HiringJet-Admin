@@ -345,7 +345,7 @@ class EmployerUserController extends Controller
     /* verify otp */
         public function verifyOtp(Request $request, $id){
             $data['module']                 = $this->data;
-            $id                             = Helper::decoded($id);
+            echo $id                             = Helper::decoded($id);die;
             $page_name                      = 'employer-user.verify-otp';
             $data['row']                    = User::where('id', '=', $id)->first();
             $data['id']                     = $id;
