@@ -47,7 +47,7 @@ $controllerRoute = $module['controller_route'];
                   'orderType' => 'desc',
                   'conditions' => [
                      ['column' => 'is_active', 'operator' => '!=', 'value' => 3],
-                     ['column' => 'employers.status', 'operator' => '=', 'value' => 1],
+                     ['column' => 'employers.status', 'operator' => '<=', 'value' => 1],
                   ],
                   'routePrefix' => 'employer-user',
                   'showActions' => true, // set to false to hide actions
