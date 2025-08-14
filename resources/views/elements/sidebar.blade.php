@@ -503,6 +503,12 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="Employers">Employers</div>
       </a>
       <ul class="menu-sub">
+        <li class="menu-item <?=(($pageSegment == 'employer-user' && $pageFunction == 'add')?'active':'')?>">
+          <a href="<?=url('/employer-user/add')?>" class="menu-link">
+            <div data-i18n="Add New Employer"><i class="fa-solid fa-arrow-right"></i> Add New Employer</div>
+          </a>
+        </li>
+
         <li class="menu-item <?=(($pageSegment == 'employer-user' && $pageFunction == 'non-verified')?'active':'')?>">
           <a href="<?=url('/employer-user/non-verified')?>" class="menu-link">
             <div data-i18n="Non-Verified"><i class="fa-solid fa-arrow-right"></i> Non-Verified</div>
