@@ -37,7 +37,7 @@ class EmployerPostJobController extends BaseApiController
         }else{
             $child_user_business_array = User::select('user_employers.business_id')
                                 ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
-                                ->where('parent_id', auth()->user()->id)
+                                ->where('users.parent_id', auth()->user()->id)
                                 ->get()->pluck('business_id')->toArray();
 
             array_push($child_user_business_array, auth()->user()->user_employer_details->business_id);
