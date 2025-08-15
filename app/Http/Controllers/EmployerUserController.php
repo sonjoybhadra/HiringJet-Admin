@@ -401,10 +401,10 @@ class EmployerUserController extends Controller
             $id                             = Helper::decoded($id);
             $page_name                      = 'employer-user.profile';
             $data['id']                     = $id;
-            $data['row']                    = DB::table('users')
-                                                ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
-                                                ->select('users.*', 'user_employers.*')
-                                                ->where('users.id', '=', $id)
+            $data['row']                    = DB::table('user_employers')
+                                                ->join('employers', 'employers.user_id', '=', 'user_employers.id')
+                                                ->select('employers.*', 'user_employers.*')
+                                                ->where('user_employers.id', '=', $id)
                                                 ->first();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
