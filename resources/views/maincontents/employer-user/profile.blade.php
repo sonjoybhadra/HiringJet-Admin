@@ -88,75 +88,62 @@ $controllerRoute = $module['controller_route'];
 
                                         <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-1" aria-controls="navs-pills-justified-profile" aria-selected="true">Professional</button>
+                                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-1" aria-controls="navs-pills-justified-profile" aria-selected="true">Users</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-2" aria-controls="navs-pills-justified-general" aria-selected="false">Personal</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-2" aria-controls="navs-pills-justified-general" aria-selected="false">Brands</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-3" aria-controls="navs-pills-justified-password" aria-selected="false">Educational</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-3" aria-controls="navs-pills-justified-password" aria-selected="false">Folders</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-4" aria-controls="navs-pills-justified-password" aria-selected="false">Employment</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-4" aria-controls="navs-pills-justified-password" aria-selected="false">Tags</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-5" aria-controls="navs-pills-justified-password" aria-selected="false">Accomplishments</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-5" aria-controls="navs-pills-justified-password" aria-selected="false">Saved Searches</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-6" aria-controls="navs-pills-justified-password" aria-selected="false">Desired Jobs</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-6" aria-controls="navs-pills-justified-password" aria-selected="false">Email Templates</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-7" aria-controls="navs-pills-justified-password" aria-selected="false">CV</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-7" aria-controls="navs-pills-justified-password" aria-selected="false">Jobs</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-8" aria-controls="navs-pills-justified-password" aria-selected="false">Applied Jobs</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-9" aria-controls="navs-pills-justified-password" aria-selected="false">Shortlisted Jobs</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-10" aria-controls="navs-pills-justified-password" aria-selected="false">Profile (%)</button>
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-8" aria-controls="navs-pills-justified-password" aria-selected="false">CVs</button>
                                             </li>
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active" id="navs-pills-justified-1" role="tabpanel">
-                                                <h5>Professional Info</h5>
+                                                <h5>Users</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-2" role="tabpanel">
-                                                <h5>Personal Info</h5>
+                                                <h5>Brands</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-3" role="tabpanel">
-                                                <h5>Educational Info</h5>
+                                                <h5>Folders</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-4" role="tabpanel">
-                                                <h5>Employment Info</h5>
+                                                <h5>Tags</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-5" role="tabpanel">
-                                                <h5>Accomplishments</h5>
+                                                <h5>Saved Searches</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-6" role="tabpanel">
-                                                <h5>Desired Jobs</h5>
+                                                <h5>Email Templates</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-7" role="tabpanel">
-                                                <h5>CV</h5>
+                                                <h5>Jobs</h5>
                                                 
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-8" role="tabpanel">
-                                                <h5>Applied Jobs</h5>
+                                                <h5>CVs</h5>
                                                 
-                                            </div>
-                                            <div class="tab-pane fade" id="navs-pills-justified-9" role="tabpanel">
-                                                <h5>Shortlisted Jobs</h5>
-                                                
-                                            </div>
-                                            <div class="tab-pane fade" id="navs-pills-justified-10" role="tabpanel">
-                                                <h5>Profile Percentage</h5>
                                             </div>
                                         </div>
                                     </div>
