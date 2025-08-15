@@ -402,7 +402,7 @@ class EmployerUserController extends Controller
             $page_name                      = 'employer-user.profile';
             $data['id']                     = $id;
             $data['row']                    = DB::table('user_employers')
-                                                ->join('employers', 'employers.user_id', '=', 'user_employers.id')
+                                                ->join('employers', 'employers.id', '=', 'user_employers.business_id')
                                                 ->select('employers.*', 'user_employers.*')
                                                 ->where('user_employers.id', '=', $id)
                                                 ->first();
