@@ -1,0 +1,674 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Api\BaseApiController as BaseApiController;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
+use Validator;
+use App\Mail\NotificationEmail;
+
+use App\Models\PostJob;
+use App\Models\PostJobUserApplied;
+use App\Models\ShortlistedJob;
+use App\Models\Designation;
+use App\Models\Industry;
+use App\Models\ItSkill;
+use App\Models\JobCategory;
+use App\Models\Country;
+use App\Models\City;
+use App\Models\Employer;
+use App\Models\Nationality;
+use App\Models\UserJobSearchHistory;
+
+class JobSearchController extends BaseApiController
+{
+    /**
+     * Get jobs by request params.
+    */
+    public function getJobsByParams(Request $request, $job_type)
+    {
+        try {
+            $job_search_data = [
+                'user_id'=> NULL,
+                'ip'=> $_SERVER['REMOTE_ADDR'],
+                'search_string'=> json_encode($request->all())
+            ];
+            if(Auth::guard('api')->check()){
+                $job_search_data['user_id'] = Auth::guard('api')->user()->id;
+                $saved_jobs = UserJobSearchHistory::where('user_id', Auth::guard('api')->user()->id)->latest()->get();
+            }else{
+                $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->get();
+            }
+            if($saved_jobs->count() < 5){
+                UserJobSearchHistory::create($job_search_data);
+            }else{
+                UserJobSearchHistory::where('id', $saved_jobs[0]->id)->update($job_search_data);
+            }
+
+            $sql = PostJob::select('post_jobs.*');
+            // $sql->where('posting_close_date', '>=', date('Y-m-d'));
+            if(strtolower($job_type) != 'all-jobs'){
+                $sql->where('job_type', $job_type);
+            }
+            if(Auth::guard('api')->check()){
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+            }
+
+            if(!empty($request->keyword)){
+                $keywords_array = explode(',', $request->keyword);
+
+                $designations = Designation::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                $industries = Industry::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                $itskills = ItSkill::whereIn('name', $keywords_array)->get()->pluck('id')->toArray();
+                if(count($designations) > 0){
+                    $sql->where(function ($q) use ($designations) {
+                        foreach ($designations as $tag) {
+                            $q->orWhere('designation', (string)$tag);
+                        }
+                    });
+                }
+
+                if(count($industries) > 0){
+                    $sql->where(function ($q) use ($industries) {
+                        foreach ($industries as $tag) {
+                            $q->orWhere('industry', (string)$tag);
+                        }
+                    });
+                }
+
+                if(count($itskills) > 0){
+                    $sql->where(function ($q) use ($itskills) {
+                        foreach ($itskills as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                    ELSE skill_ids::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([$tag])]
+                            );
+                        }
+                    });
+                }
+            }
+            $country_ids = $city_ids = $location_array = [];
+            if(!empty($request->location)){
+                $location_array = explode(',', $request->location);
+                if(count($location_array) > 1){
+                    $country_ids = Country::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                    $city_ids = City::whereIn('name', $location_array)->get()->pluck('id')->toArray();
+                }else{
+                    $country_ids = Country::whereRaw('LOWER(name) LIKE ?', [strtolower($request->location)])->get()->pluck('id')->toArray();
+                    $city_ids = City::whereRaw('LOWER(name) LIKE ?', [strtolower($request->location)])->get()->pluck('id')->toArray();
+                }
+                if(!empty($country_ids)){
+                    $sql->where(function ($q) use ($country_ids) {
+                        foreach ($country_ids as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
+                                    ELSE location_countries::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([(string)$tag])]
+                            );
+                        }
+                    });
+                }
+                if(!empty($city_ids)){
+                    $sql->where(function ($q) use ($city_ids) {
+                        foreach ($city_ids as $tag) {
+                            $q->orWhereRaw(
+                                "CASE
+                                    WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
+                                    ELSE location_cities::jsonb @> ?::jsonb
+                                END",
+                                [json_encode([(string)$tag])]
+                            );
+                        }
+                    });
+                }
+            }
+
+            if(!empty($request->job_category)){
+                $category = JobCategory::where('name', 'ILIKE', $request->job_category)->first();
+                if($category){
+                    $sql->where('job_category', $category->id);
+                }
+            }
+
+            $countrys = $this->filterRequestParam($request->country);
+            if(!empty($countrys) && count($countrys) > 0){
+                $sql->orWhere(function ($q) use ($countrys) {
+                    foreach ($countrys as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_countries IS NULL OR location_countries = '' THEN FALSE
+                                ELSE location_countries::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
+            }
+
+            $citys = $this->filterRequestParam($request->city);
+            if(!empty($citys) && count($citys) > 0){
+                $sql->where(function ($q) use ($citys) {
+                    foreach ($citys as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN location_cities IS NULL OR location_cities = '' THEN FALSE
+                                ELSE location_cities::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
+            }
+
+            $designation = $this->filterRequestParam($request->designation);
+            if(!empty($designation) && count($designation) > 0){
+                $sql->whereIn('designation', $designation);
+            }
+
+            $employer = $this->filterRequestParam($request->employer);
+            if(!empty($employer)){
+                $sql->whereIn('employer_id', $employer);
+            }
+
+            $industry = $this->filterRequestParam($request->industry);
+            if(!empty($industry) && count($industry) > 0){
+                $sql->whereIn('industry', $industry);
+            }
+
+            $nationality = $this->filterRequestParam($request->nationality);
+            if(!empty($nationality) && count($nationality) > 0){
+                $sql->whereIn('nationality', $nationality);
+            }
+
+            $skills = $this->filterRequestParam($request->skills);
+            if(!empty($skills) && count($skills) > 0){
+                $skills = $request->skills;
+                $sql->where(function ($q) use ($skills) {
+                    foreach ($skills as $tag) {
+                        $q->orWhereRaw(
+                            "CASE
+                                WHEN skill_ids IS NULL OR skill_ids = '' THEN FALSE
+                                ELSE skill_ids::jsonb @> ?::jsonb
+                            END",
+                            [json_encode([$tag])]
+                        );
+                    }
+                });
+            }
+
+            if(!empty($request->experience)){
+                $experience = explode('-', $request->experience);
+                if(count($experience) > 1){
+                    $sql->where('min_exp_year', '>=', $experience[0]);
+                    $sql->where('max_exp_year', '<=', $experience[1]);
+                }
+            }
+
+            if(!empty($request->gender)){
+                $sql->where('gender', $request->gender);
+            }
+
+            if(!empty($request->freshness)){
+                $sql->where('created_at', '>=', date('Y-m-d', strtotime('-'.$request->freshness.' days')));
+            }
+            /* if(!empty($request->salary)){
+                $sql->whereRaw('? BETWEEN min_salary AND max_salary', [$request->salary]);
+            } */
+            $sql->with('employer');
+            $sql->with('industryRelation');
+            $sql->with('jobCategory');
+            $sql->with('nationalityRelation');
+            $sql->with('contractType');
+            $sql->with('designationRelation');
+            $sql->with('functionalArea');
+            // $sql->with('applied_users');
+            $pagination_sql = $sql->latest();
+
+            $limit = 25;
+            $offset = 0;
+            if($request->page && $request->page > 1){
+                $limit += 10;
+                //$offset = 25 + (($request->page - 2) * $limit);
+            }
+            $all_jobs_count = (clone $pagination_sql)->count(); // Total without pagination
+            $filter_data_array = $this->getFilterParametersArray((clone $pagination_sql)->get());
+            $list = $pagination_sql->limit($limit)->offset($offset)->get();
+            return $this->sendResponse([
+                    'jobs'=> $list,
+                    'all_jobs_count'=> $all_jobs_count,
+                    'sql'=> $pagination_sql->toSql(),
+                    'sql_params'=> $pagination_sql->getBindings(),
+                    'filter_array'=> $filter_data_array,
+                    'page'=> $request->page,
+                    'take'=> ['limit'=> $limit, 'offset'=> $offset],
+                    'country_ids'=> $country_ids,
+                    'city_ids'=> $city_ids,
+                    'location_array'=> $location_array,
+                ],
+                'List search jobs'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    private function getFilterParametersArray($data_array){
+        $data_count_country_array = $data_count_city_array = $data_count_industry_array = $data_count_designation_array = $data_count_nationality_array = $data_count_gender_array = $data_count_employers_array = $data_count_freshness_array = $data_count_experience_array = $data_count_jobtype_array = $data_count_salary_array = [];
+        $freshness = [1, 3, 7, 15, 30, 60];
+        $experience = ['0-1', '2-5', '6-10', '11-15', '16-20', '21'];
+        $salary_list = ['<35000', '35000-70000', '70000-140000', '140000-210000', '210000-300000', '300001-420000', '>420000'];
+        $job_types = ['walk-in-jobs', 'remote-jobs', 'on-site-jobs', 'temp-role-jobs'];
+        foreach ($data_array as $job) {
+            // get location Country list
+            $data_ids = json_decode($job->location_countries, true);
+            if (is_array($data_ids)) {
+                foreach ($data_ids as $id) {
+                    if(!empty($id)){
+                        if (!isset($data_count_country_array[$id])) {
+                            $data = Country::find($id);
+                            $data_count_country_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                        }
+                        $data_count_country_array[$id]['count'] = $data_count_country_array[$id]['count']+1;
+                    }
+                }
+            }
+            // end location country
+            // get location Clty list
+            $data_ids = json_decode($job->location_cities, true);
+            if (is_array($data_ids)) {
+                foreach ($data_ids as $id) {
+                    if(!empty($id)){
+                        if (!isset($data_count_city_array[$id])) {
+                            $data = City::find($id);
+                            $data_count_city_array[$id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $id];
+                        }
+                        $data_count_city_array[$id]['count'] = $data_count_city_array[$id]['count']+1;
+                    }
+                }
+            }
+            // end location Clty
+            // get industry list
+            if (!empty($job->industry)) {
+                if (!isset($data_count_industry_array[$job->industry])) {
+                    $data = Industry::find($job->industry);
+                    $data_count_industry_array[$job->industry] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $job->industry];
+                }
+                $data_count_industry_array[$job->industry]['count'] = $data_count_industry_array[$job->industry]['count']+1;
+            }
+            // end industry
+            // get nationality list
+            if (!empty($job->nationality)) {
+                if (!isset($data_count_nationality_array[$job->nationality])) {
+                    $data = Nationality::find($job->nationality);
+                    $data_count_nationality_array[$job->nationality] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_nationality_array[$job->nationality]['count'] = $data_count_nationality_array[$job->nationality]['count']+1;
+            }
+            // end nationality
+            // get designation list
+            if (!empty($job->designation)) {
+                if (!isset($data_count_designation_array[$job->designation])) {
+                    $data = Designation::find($job->designation);
+                    $data_count_designation_array[$job->designation] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_designation_array[$job->designation]['count'] = $data_count_designation_array[$job->designation]['count']+1;
+            }
+            // end designation
+            // get gender list
+            if (!empty($job->gender)) {
+                if (!isset($data_count_gender_array[$job->gender])) {
+                    $data_count_gender_array[$job->gender] = ['name'=> $job->gender, 'count'=> 0, 'id'=> $data->id];
+                }
+                $data_count_gender_array[$job->gender]['count'] = $data_count_gender_array[$job->gender]['count']+1;
+            }
+            // end gender
+            // get employers list
+            if (!empty($job->employer_id)) {
+                if (!isset($data_count_employers_array[$job->employer_id])) {
+                    $data = Employer::find($job->employer_id);
+                    $data_count_employers_array[$job->employer_id] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $job->employer_id];
+                }
+                $data_count_employers_array[$job->employer_id]['count'] = $data_count_employers_array[$job->employer_id]['count']+1;
+            }
+            // end employers
+            // get freshness list
+            foreach($freshness as $day){
+                $freshness_day = date('Y-m-d', strtotime('-'.$day.' days'));
+                if($job->created_at >= $freshness_day){
+                    if (!isset($data_count_freshness_array[$day])) {
+                        $data_count_freshness_array[$day] = ['name'=> $day.' days old', 'count'=> 0, 'id'=> $day];
+                    }
+                    $data_count_freshness_array[$day]['count'] = $data_count_freshness_array[$day]['count']+1;
+                }
+            }
+            // end freshness
+            // get experience list
+            foreach($experience as $value){
+                $min_max_year = explode('-', $value);
+                if((count($min_max_year) > 1 && $job->min_exp_year >= (int)$min_max_year[0] && $job->max_exp_year <= (int)$min_max_year[1]) || ($job->max_exp_year >= (int)$min_max_year[0])){
+                    if (!isset($data_count_experience_array[$value])) {
+                        $data_count_experience_array[$value] = ['name'=> $value.' years', 'count'=> 0, 'id'=> $value];
+                    }
+                    $data_count_experience_array[$value]['count'] = $data_count_experience_array[$value]['count']+1;
+                }
+            }
+            // end experience
+            // get salary list
+            $has_insert = false;
+            foreach($salary_list as $value){
+                $range = explode('-', $value);
+                if (!isset($data_count_salary_array[$value])) {
+                    $data_count_salary_array[$value] = ['name'=> $value, 'count'=> 0, 'id'=> $value];
+                }
+                if(count($range) > 1){
+                    if(($job->min_salary >= (int)$range[0] && $job->min_salary <= (int)$range[1]) || ($job->max_salary >= (int)$range[0] && $job->max_salary <= (int)$range[1])){
+                        $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
+                    }
+                }else{
+                    $max_range = explode('<', $value);
+                    $min_range = explode('>', $value);
+                    if(strpos('<', $value)){
+                        if($job->max_salary < (int)$max_range[0]){
+                            $has_insert = true;
+                        }
+                    }else if(strpos('>', $value)){
+                        if($job->min_salary > (int)$min_range[0]){
+                            $has_insert = true;
+                        }
+                    }
+
+                    if($has_insert){
+                        $data_count_salary_array[$value]['count'] = $data_count_salary_array[$value]['count']+1;
+                    }
+                }
+            }
+            // end salary
+            // get job_type list
+            if (!isset($data_count_jobtype_array[$job->job_type])) {
+                $data_count_jobtype_array[$job->job_type] = ['name'=> ucwords(str_replace("-", " ",$job->job_type)), 'count'=> 0, 'id'=> $job->job_type];
+            }
+            $data_count_jobtype_array[$job->job_type]['count'] = $data_count_jobtype_array[$job->job_type]['count']+1;
+
+            if (!isset($data_count_jobtype_array['all-jobs'])) {
+                $data_count_jobtype_array['all-jobs'] = ['name'=> 'All Jobs', 'count'=> 0, 'id'=> 'all-jobs'];
+            }
+            $data_count_jobtype_array['all-jobs']['count'] = $data_count_jobtype_array['all-jobs']['count']+1;
+            // end job_type
+        }   //end foreach
+
+        return [
+            'country' => $data_count_country_array,
+            'city' => $data_count_city_array,
+            'industry' => $data_count_industry_array,
+            'designation' => $data_count_designation_array,
+            'nationality' => $data_count_nationality_array,
+            'employers' => $data_count_employers_array,
+            'gender'=> $data_count_gender_array,
+            'freshness'=> $data_count_freshness_array,
+            'experience'=> $data_count_experience_array,
+            'jobtypes'=> $data_count_jobtype_array,
+            'salary_range'=> $data_count_salary_array
+        ];
+    }
+
+    private function filterRequestParam($data){
+        if(is_array($data)){
+            $filter_array = [];
+            if(!empty($data)){
+                foreach($data as $d){
+                    if(!empty($d) && $d != NULL){
+                        array_push($filter_array, $d);
+                    }
+                }
+            }
+            return $filter_array;
+        }else{
+            return $data;
+        }
+    }
+
+    public function getJobDetails(Request $request, $job_type, $slug)
+    {
+        try {
+            $sql = PostJob::select('post_jobs.*')->where('job_no', $slug)
+                            ->with('employer')
+                            ->with('industryRelation')
+                            ->with('jobCategory')
+                            ->with('nationalityRelation')
+                            ->with('contractType')
+                            ->with('designationRelation')
+                            ->with('functionalArea');
+            if(Auth::guard('api')->check()){
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.Auth::guard('api')->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+
+                $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.Auth::guard('api')->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+            }
+            return $this->sendResponse(
+                $sql->first(),
+                'Job details'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    public function postJobApply(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|integer'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $job_details = PostJob::find($request->job_id);
+            if($job_details && $job_details->posting_close_date >= date('Y-m-d')){
+                $has_data = PostJobUserApplied::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->count();
+                if($has_data == 0){
+                    $applied_job_id = PostJobUserApplied::insertGetId([
+                        'job_id'=> $request->job_id,
+                        'user_id'=> auth()->user()->id,
+                        'status'=> 1,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    ]);
+
+                    $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Job applied successfully.', $full_name, 'You have applied for this job successfully.'));
+                    return $this->sendResponse(
+                        ['applied_job_id'=> $applied_job_id],
+                        'You have successfully applied for the job.'
+                    );
+                }else{
+                    return $this->sendError('Warning', 'You have already applied for this job.', 201);
+                }
+            }else{
+                return $this->sendError('Error', 'Sorry!! job apply date is over.', 201);
+            }
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function jobseekerAppliedJobs(Request $request)
+    {
+        try{
+            $job_ids = PostJobUserApplied::select('job_id')->where('user_id', auth()->user()->id)
+                                            ->get()->pluck('job_id')->toArray();
+            $data = [];
+            if(count($job_ids)){
+                $data = PostJob::whereIn('id', $job_ids)
+                            ->with('employer')
+                            ->with('industryRelation')
+                            ->with('jobCategory')
+                            ->with('nationalityRelation')
+                            ->with('contractType')
+                            ->with('designationRelation')
+                            ->with('functionalArea')
+                            ->latest()->get();
+            }
+            return $this->sendResponse(
+                $data,
+                'Applied Jobs list'
+            );
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function shortlistedJob(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $job_details = PostJob::find($request->job_id);
+            if($job_details && $job_details->posting_close_date >= date('Y-m-d')){
+                $has_data = ShortlistedJob::where('user_id', auth()->user()->id)->where('job_id', $request->job_id)->first();
+                if(!$has_data){
+                    ShortlistedJob::create([
+                        'job_id'=> $request->job_id,
+                        'user_id'=> auth()->user()->id,
+                        'status'=> 1,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    ]);
+
+                    $msg = 'Job shortlisted successfully.';
+                    $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                    Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
+                }else{
+                    if($has_data->status == 1){
+                        $update_date = [
+                            'status'=> 0,
+                            'deleted_at'=> date('Y-m-d H:i:s')
+                        ];
+                        $msg = 'Removed job from shortlisted.';
+                    }else{
+                        $update_date = [
+                            'status'=> 1,
+                            'deleted_at'=> null
+                        ];
+                        $msg = 'Job shortlisted successfully.';
+                        $full_name = auth()->user()->first_name.' '.auth()->user()->last_name;
+                        Mail::to(auth()->user()->email)->send(new NotificationEmail('Shortlisted Job.', $full_name, 'Shortlisted Job saved successfully.'));
+                    }
+                    $update_date['updated_at'] = date('Y-m-d H:i:s');
+                    ShortlistedJob::where('id', $has_data->id)->update($update_date);
+                }
+                return $this->sendResponse(
+                    ShortlistedJob::where('user_id', auth()->user()->id)->where('status', 1)->with('job_details')->latest()->get(),
+                    $msg
+                );
+            }else{
+                return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', 201);
+            }
+        }catch (\Exception $exception) {
+            return $this->sendError('Internal Error', $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getShortlistedJob(Request $request)
+    {
+        try{
+            $job_ids = ShortlistedJob::select('job_id')->where('user_id', auth()->user()->id)
+                                        ->get()->pluck('job_id')->toArray();
+            $data = [];
+            if(count($job_ids)){
+                $data = PostJob::whereIn('id', $job_ids)
+                            ->with('employer')
+                            ->with('industryRelation')
+                            ->with('jobCategory')
+                            ->with('nationalityRelation')
+                            ->with('contractType')
+                            ->with('designationRelation')
+                            ->with('functionalArea')
+                            ->latest()->get();
+            }
+            return $this->sendResponse(
+                $data,
+                'Shortlisted Jobs list'
+            );
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getMatchedJobsForJobseeker(Request $request)
+    {
+        try {
+            /* $jobseeker_designation = UserEmployment::select('last_designation')
+                                                    ->where('user_id', auth()->user()->id)
+                                                    ->orderBy('is_current_job', 'DESC')
+                                                    ->first();
+
+            $user_skills = UserSkill::where('user_id', auth()->user()->id)->get()->pluck('keyskill_id')->toArray();
+
+            $sql = PostJob::select('post_jobs.*');
+            $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM post_job_user_applieds WHERE post_job_user_applieds.user_id = '.auth()->user()->id.' and post_job_user_applieds.job_id = post_jobs.id and post_job_user_applieds.status=1) AS job_applied_status'));
+            $sql->addSelect(DB::raw('(SELECT COUNT(*) FROM shortlisted_jobs WHERE shortlisted_jobs.user_id = '.auth()->user()->id.' and shortlisted_jobs.job_id = post_jobs.id and shortlisted_jobs.status=1) AS job_shortlisted_status'));
+
+            if($jobseeker_designation){
+                $sql->where('designation', $jobseeker_designation->last_designation);
+            }
+            if(!empty($user_skills)){
+                foreach ($user_skills as $tag) {
+                    $sql->orWhereJsonContains('skill_ids', (string)$tag);
+                }
+            } */
+            $postJobObj = new PostJob();
+            $sql = $postJobObj->get_job_search_custom_sql();
+            $sql->with('employer');
+            $sql->with('industryRelation');
+            $sql->with('jobCategory');
+            $sql->with('nationalityRelation');
+            $sql->with('contractType');
+            $sql->with('designationRelation');
+            $sql->with('functionalArea');
+            // $sql->with('applied_users');
+            $sql->latest();
+            return $this->sendResponse(
+                $sql->get(),
+                'Matched Job list'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    public function getSavedJobs(Request $request)
+    {
+        try {
+            if(Auth::guard('api')->check()){
+                $saved_jobs = UserJobSearchHistory::where('user_id', Auth::guard('api')->user()->id)->latest()->take(5)->get();
+            }else{
+                $saved_jobs = UserJobSearchHistory::where('ip', $_SERVER['REMOTE_ADDR'])->latest()->take(5)->get();
+            }
+
+            return $this->sendResponse(
+                $saved_jobs,
+                'Saved Jobs list'
+            );
+        }catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+}
