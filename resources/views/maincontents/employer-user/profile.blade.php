@@ -270,7 +270,24 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-5" role="tabpanel">
                                                 <h5>Saved Searches</h5>
-                                                
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sl No.</th>
+                                                            <th>IP Address</th>
+                                                            <th>Search String</th>
+                                                            <th>Search Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>202.8.119.226</td>
+                                                            <td>{"country":[],"city":[],"industry":[],"nationality":[],"designation":[],"employer":[],"freshness":null,"gender":null,"experience":null,"salary_range":null,"title":null,"location":null,"keyword":null,"job_category":null,"job_type":"on-site-jobs","page":1}</td>
+                                                            <td>14 Aug 2025</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-6" role="tabpanel">
                                                 <h5>Email Templates</h5>
