@@ -170,7 +170,7 @@ $controllerRoute = $module['controller_route'];
                                                     <tbody>
                                                         <tr>
                                                             <td>1</td>
-                                                            <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:120px; height:70px;"></td>
+                                                            <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:150px; height:70px;"></td>
                                                             <td>TCS</td>
                                                             <td>IT</td>
                                                             <td>7042398540</td>
