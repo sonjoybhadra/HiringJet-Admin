@@ -175,7 +175,50 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-3" role="tabpanel">
                                                 <h5>Folders</h5>
-                                                
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h6>My CV Folders (15)</h6>
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Sl No.</th>
+                                                                    <th>Name of the folder</th>
+                                                                    <th>No. of CVs</th>
+                                                                    <th>Last Modified Date</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>HR DEMO</td>
+                                                                    <td>75</td>
+                                                                    <td>10 Sept 2024</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6>Folders of other Users (19)</h6>
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Sl No.</th>
+                                                                    <th>Name of the folder</th>
+                                                                    <th>No. of CVs</th>
+                                                                    <th>Last Modified Date</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>HR DEMO</td>
+                                                                    <td>75</td>
+                                                                    <td>10 Sept 2024</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-4" role="tabpanel">
                                                 <h5>Tags</h5>
@@ -187,7 +230,46 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-6" role="tabpanel">
                                                 <h5>Email Templates</h5>
-                                                
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h6>My Templates (8)</h6>
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Sl No.</th>
+                                                                    <th>Name of the Template</th>
+                                                                    <th>Last Modified Date</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>HR DEMO</td>
+                                                                    <td>10 Sept 2024</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6>Templates of other Users (19)</h6>
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Sl No.</th>
+                                                                    <th>Name of the Template</th>
+                                                                    <th>Last Modified Date</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>HR DEMO</td>
+                                                                    <td>10 Sept 2024</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-7" role="tabpanel">
                                                 <h5>Jobs</h5>
