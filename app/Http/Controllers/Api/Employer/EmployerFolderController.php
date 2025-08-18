@@ -99,7 +99,7 @@ class EmployerFolderController extends BaseApiController
 
         try{
             $has_data = EmployerCvFolder::where('user_id', auth()->user()->id)
-                                        ->where('folder_name', strtolower($request->folder_name))
+                                        ->where('folder_name', $request->folder_name)
                                         ->where('id', '!=', $id)
                                         ->count();
             if($has_data > 0){
@@ -109,7 +109,7 @@ class EmployerFolderController extends BaseApiController
             EmployerCvFolder::where('id', $id)->update([
                 'user_id'=> auth()->user()->id,
                 'user_employer_id'=> auth()->user()->user_employer_details->id,
-                'folder_name'=> strtolower($request->folder_name),
+                'folder_name'=> $request->folder_name,
                 'owner_id'=> auth()->user()->id,
                 'status'=> 1
             ]);
