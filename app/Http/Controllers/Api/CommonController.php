@@ -577,13 +577,13 @@ class CommonController extends BaseApiController
                                 ->whereIn('id', $city_id_array)
                                 ->get();
 
-        $live_jobs = PostJob::where('status', 1)->where('created_at', '>=', date('Y-m-d', strtotime('-30 days')))
+        $live_jobs = PostJob::where('status', 1)->where('created_at', '>=', date('Y-m-d', strtotime('-'.env('LIVE_JOBS_SHOW_DAYS').' days')))
                                                 ->get();
         $list->live_jobs= $live_jobs->count(); //PostJob::where('created_at', '>=', date('Y-m-d', strtotime('-30 days')))->count();
         // $list->companies= User::where('role_id', 2)->count();
         $list->companies= Employer::where('status', 1)->count();
         $list->candidates= User::where('role_id', env('JOB_SEEKER_ROLE_ID'))->count();
-        $list->new_jobs= PostJob::where('created_at', '>=', date('Y-m-d', strtotime('-15 days')))
+        $list->new_jobs= PostJob::where('created_at', '>=', date('Y-m-d', strtotime('-'.env('NEW_JOBS_SHOW_DAYS').' days')))
                                 ->where('status', 1)
                                 ->count();
 
