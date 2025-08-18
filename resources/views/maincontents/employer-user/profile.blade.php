@@ -334,7 +334,52 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-7" role="tabpanel">
                                                 <h5>Jobs</h5>
-                                                
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sl No.</th>
+                                                            <th>Job No.</th>
+                                                            <th>Position Name</th>
+                                                            <th>Job Type</th>
+                                                            <th>Posting Open Date</th>
+                                                            <th>Posting Close Date</th>
+                                                            <th>Created At</th>
+                                                            <th>Created By</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>HJ-J-0000020</td>
+                                                            <td>Accounts Receivable Clerk</td>
+                                                            <td>walk-in-jobs</td>
+                                                            <td>2025-08-15</td>
+                                                            <td>2025-09-15</td>
+                                                            <td>2025-08-13 18:55:38</td>
+                                                            <td>Demo</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>HJ-J-0000020</td>
+                                                            <td>Accounts Receivable Clerk</td>
+                                                            <td>walk-in-jobs</td>
+                                                            <td>2025-08-15</td>
+                                                            <td>2025-09-15</td>
+                                                            <td>2025-08-13 18:55:38</td>
+                                                            <td>Demo</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>HJ-J-0000020</td>
+                                                            <td>Accounts Receivable Clerk</td>
+                                                            <td>walk-in-jobs</td>
+                                                            <td>2025-08-15</td>
+                                                            <td>2025-09-15</td>
+                                                            <td>2025-08-13 18:55:38</td>
+                                                            <td>Demo</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-8" role="tabpanel">
                                                 <h5>CVs</h5>
