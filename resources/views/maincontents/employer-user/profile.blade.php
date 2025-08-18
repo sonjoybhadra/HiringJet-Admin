@@ -115,11 +115,63 @@ $controllerRoute = $module['controller_route'];
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active" id="navs-pills-justified-1" role="tabpanel">
                                                 <h5>Users</h5>
-                                                
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sl No.</th>
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone</th>
+                                                            <th>Designation</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>AAAAAAAAA</td>
+                                                            <td>a@a.com</td>
+                                                            <td>+91 9999999999</td>
+                                                            <td>Front End Developer</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2</td>
+                                                            <td>BBBBBBBBBBBBB</td>
+                                                            <td>b@b.com</td>
+                                                            <td>+91 9999999999</td>
+                                                            <td>Front End Developer</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>3</td>
+                                                            <td>CCCCCCCCCCCC</td>
+                                                            <td>c@c.com</td>
+                                                            <td>+91 9999999999</td>
+                                                            <td>Front End Developer</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-2" role="tabpanel">
                                                 <h5>Brands</h5>
-                                                
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sl No.</th>
+                                                            <th>Brand Logo</th>
+                                                            <th>Brand Name</th>
+                                                            <th>Industry</th>
+                                                            <th>Contact Person</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:120px; height:70px;"></td>
+                                                            <td>TCS</td>
+                                                            <td>IT</td>
+                                                            <td>7042398540</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-3" role="tabpanel">
                                                 <h5>Folders</h5>
