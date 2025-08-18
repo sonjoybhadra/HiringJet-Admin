@@ -36,7 +36,7 @@ class EmployerBrandsController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'company_name' => 'required|string|max:255',
             'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'info' => 'required|string|max:255',
+            'info' => 'required|string|max:1500',
             'industry' => 'required|integer',
             'web_url' => 'required|url',
             'contact_person' => 'required|integer',
@@ -112,7 +112,7 @@ class EmployerBrandsController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'company_name' => 'required|string|max:255',
             // 'logo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'info' => 'required|string|max:255',
+            'info' => 'required|string|max:1500',
             'industry' => 'required|integer',
             'web_url' => 'required|url',
             'contact_person' => 'required|integer',

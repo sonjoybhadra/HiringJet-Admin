@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('company_name', 100);
             $table->string('company_logo')->nullable();
-            $table->string('info')->nullable();
+            $table->text('info')->nullable();
             $table->foreignId('industry_id')->constrained('industries');
             $table->foreignId('contact_person_id')->constrained('users');
             $table->foreignId('contact_person_designation_id')->constrained('designations');
