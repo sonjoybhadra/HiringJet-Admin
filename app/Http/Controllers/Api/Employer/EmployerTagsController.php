@@ -9,6 +9,7 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\EmployerTag;
+use App\Models\TagJobseekerMapping;
 
 class EmployerTagsController extends BaseApiController
 {
@@ -67,6 +68,20 @@ class EmployerTagsController extends BaseApiController
     public function show(string $id)
     {
         $data = EmployerTag::where('id', $id)->first();
+        $data->is_own_tag = ($data->user_id == auth()->user()->id && $data->owner_id == auth()->user()->id) ? true : false;
+        if($data->is_own_tag){
+            $tag_id_array = [$id];
+        }else{
+            $tag_id_array = EmployerTag::where('user_id', auth()->user()->id)
+                                            ->where('owner_id', '!=', auth()->user()->id)
+                                            ->where('tag_name', 'ilike', '%'.$data->tag_name.'%')
+                                            ->get()->pluck('id')->toArray();
+        }
+        $data->jobseekers_profiles = TagJobseekerMapping::select('users.id', 'users.first_name','users.last_name', 'users.email')
+                                                        ->join('users', 'users.id', '=', 'tag_jobseeker_mappings.jobseeker_id')
+                                                        ->whereIn('tag_jobseeker_mappings.tag_id', $tag_id_array)
+                                                        ->get();
+
         return $this->sendResponse($data, 'Details of tag');
     }
 
@@ -133,6 +148,42 @@ class EmployerTagsController extends BaseApiController
         $data->save();
 
         return $this->sendResponse($this->getList(), 'Tag status updated successfully.');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+    */
+    public function saveProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'jobseeker_id' => 'required|integer',
+            'tag_id' => 'required|integer',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $has_data = TagJobseekerMapping::where('user_id', auth()->user()->id)
+                                        ->where('tag_id', $request->tag_id)
+                                        ->where('jobseeker_id', $request->jobseeker_id)
+                                        ->count();
+            if($has_data > 0){
+                return $this->sendError('Error', 'Same name profile is already present in this tag.', Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            TagJobseekerMapping::create([
+                'user_id'=> auth()->user()->id,
+                'tag_id'=> $request->tag_id,
+                'jobseeker_id'=> $request->jobseeker_id
+            ]);
+
+
+            return $this->sendResponse([], 'Profile added in selected tag successfully.');
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     private function getList(){

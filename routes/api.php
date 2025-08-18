@@ -265,6 +265,7 @@ Route::group([
 
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
+    Route::get('/posted-jobs', [EmployerPostJobController::class, 'getMyPostedJobs']);
     Route::post('/post-a-job', [EmployerPostJobController::class, 'postJob']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
@@ -281,6 +282,7 @@ Route::group([
     Route::resource('/brands', EmployerBrandsController::class);
 
     Route::post('/tags/share/{id}', [EmployerTagsController::class, 'share']);
+    Route::post('/tags/save-profile', [EmployerTagsController::class, 'saveProfile']);
     Route::post('/tags/delete/{id}', [EmployerTagsController::class, 'destroy']);
     Route::post('/tags/status/{id}', [EmployerTagsController::class, 'changeStatus']);
     Route::resource('/tags', EmployerTagsController::class);

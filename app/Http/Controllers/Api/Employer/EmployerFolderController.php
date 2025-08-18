@@ -62,11 +62,25 @@ class EmployerFolderController extends BaseApiController
     public function show(string $id)
     {
         $data = EmployerCvFolder::where('id', $id)->first()->with('profile_cv')->first();
-        $jobseeker_id = $data->profile_cv ? $data->profile_cv->pluck('jobseeker_id')->toArray() : [];
+        $data->is_own_tag = ($data->user_id == auth()->user()->id && $data->owner_id == auth()->user()->id) ? true : false;
+        if($data->is_own_tag){
+            $folder_id_array = [$id];
+        }else{
+            $folder_id_array = EmployerCvFolder::where('user_id', auth()->user()->id)
+                                            ->where('owner_id', '!=', auth()->user()->id)
+                                            ->where('folder_name', 'ilike', '%'.$data->folder_name.'%')
+                                            ->get()->pluck('id')->toArray();
+        }
+        $data->jobseekers_profiles = EmployerCvProfile::select('users.id', 'users.first_name','users.last_name', 'users.email')
+                                                        ->join('users', 'users.id', '=', 'employer_cv_profiles.jobseeker_id')
+                                                        ->whereIn('employer_cv_profiles.cv_folders_id', $folder_id_array)
+                                                        ->get();
+
+        /* $jobseeker_id = $data->profile_cv ? $data->profile_cv->pluck('jobseeker_id')->toArray() : [];
         $data->profile_cv_jobseeker = [];
         if(count($jobseeker_id) > 0){
             $data->profile_cv_jobseeker = User::with('user_profile')->whereIn('id', $jobseeker_id)->get();
-        }
+        } */
         return $this->sendResponse($data, 'Details CV folders');
     }
 
