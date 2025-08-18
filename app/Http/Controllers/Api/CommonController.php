@@ -137,6 +137,7 @@ class CommonController extends BaseApiController
         $list = Employer::select('id', 'name', 'logo', 'description', 'no_of_employee')
                         ->where('status', 1)
                         ->with('industry')
+                        ->orderBy('name', 'asc')
                         ->get();
         if($res != ''){
             return $list;
