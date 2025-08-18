@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 $controllerRoute = $module['controller_route'];
 ?>
+<style>
+    .theme-color-text{
+        color: #092b61;
+    }
+</style>
 @extends('layouts.main')
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -177,7 +182,7 @@ $controllerRoute = $module['controller_route'];
                                                 <h5>Folders</h5>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <h6>My CV Folders (15)</h6>
+                                                        <h6 class="theme-color-text">My CV Folders (15)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -198,7 +203,7 @@ $controllerRoute = $module['controller_route'];
                                                         </table>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <h6>Folders of other Users (19)</h6>
+                                                        <h6 class="theme-color-text">Folders of other Users (19)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -224,7 +229,7 @@ $controllerRoute = $module['controller_route'];
                                                 <h5>Tags</h5>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <h6>My Tag (15)</h6>
+                                                        <h6 class="theme-color-text">My Tag (15)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -243,7 +248,7 @@ $controllerRoute = $module['controller_route'];
                                                         </table>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <h6>Tags of other Users (19)</h6>
+                                                        <h6 class="theme-color-text">Tags of other Users (19)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -271,7 +276,7 @@ $controllerRoute = $module['controller_route'];
                                                 <h5>Email Templates</h5>
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <h6>My Templates (8)</h6>
+                                                        <h6 class="theme-color-text">My Templates (8)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -290,7 +295,7 @@ $controllerRoute = $module['controller_route'];
                                                         </table>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <h6>Templates of other Users (19)</h6>
+                                                        <h6 class="theme-color-text">Templates of other Users (19)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
