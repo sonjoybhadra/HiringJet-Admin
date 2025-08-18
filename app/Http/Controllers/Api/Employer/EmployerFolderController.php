@@ -36,7 +36,7 @@ class EmployerFolderController extends BaseApiController
 
         try{
             $has_data = EmployerCvFolder::where('user_id', auth()->user()->id)
-                                        ->where('folder_name', strtolower($request->folder_name))
+                                        ->where('folder_name', $request->folder_name)
                                         ->count();
             if($has_data > 0){
                 return $this->sendError('Error', 'Same name folder is already exists.', Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -45,7 +45,7 @@ class EmployerFolderController extends BaseApiController
             EmployerCvFolder::create([
                 'user_id'=> auth()->user()->id,
                 'user_employer_id'=> auth()->user()->user_employer_details->id,
-                'folder_name'=> strtolower($request->folder_name),
+                'folder_name'=> $request->folder_name,
                 'owner_id'=> auth()->user()->id,
                 'status'=> 1
             ]);
