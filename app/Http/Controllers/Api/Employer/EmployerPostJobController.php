@@ -339,7 +339,7 @@ class EmployerPostJobController extends BaseApiController
             'industry' => 'required|integer|min:1',
             'job_category' => 'nullable|integer|min:1',
             'nationality' => 'required|integer|min:1',
-            'gender' => 'required|string|in:Male,Female,Others,No-Preference',
+            'gender' => 'required|string|in:Male,Female,Others,No Preference',
             'open_position_number' => 'required|integer|min:1|max:999',
             'contract_type' => 'required|integer|in:1,2,3,4,5,6',
             'designation' => 'required|integer|min:1',
@@ -351,13 +351,13 @@ class EmployerPostJobController extends BaseApiController
             'skill_ids' => 'nullable|array',
             'skill_ids.*' => 'integer|min:1',
             'expected_close_date' => 'nullable|date|after_or_equal:today',
-            'currency' => 'required', // Can be string or integer now
+            'currency' => 'nullable', // Can be string or integer now
             'min_salary' => 'nullable|numeric|min:0',
             'max_salary' => 'nullable|numeric|min:0|gte:min_salary',
             'is_salary_negotiable' => 'nullable|boolean',
             'posting_open_date' => 'nullable|date|after_or_equal:today',
             'posting_close_date' => 'nullable|date|after:posting_open_date',
-            'application_through' => 'required|string|in:Hireing Jet,Apply To Email,Apply-Email,Apply To Link,Apply-Link',
+            'application_through' => 'required|string|in:Hiring Jet,Apply To Email,Apply-Email,Apply To Link,Apply-Link',
             'apply_on_email' => 'required_if:application_through,Apply To Email,Apply-Email|nullable|email|max:255',
             'apply_on_link' => 'required_if:application_through,Apply To Link,Apply-Link|nullable|url|max:500',
 
