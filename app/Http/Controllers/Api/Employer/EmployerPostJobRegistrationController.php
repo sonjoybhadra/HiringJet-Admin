@@ -234,6 +234,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $request->ip()
             );
 
+            
+
             if ($result['success']) {
                 return $this->sendResponse([
                     'job_id' => $result['job_id'],
@@ -335,7 +337,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'industry' => 'required|integer|min:1',
             'job_category' => 'nullable|integer|min:1',
             'nationality' => 'required|integer|min:1',
-            'gender' => 'required|string|in:Male,Female,Others,No-Preference',
+            'gender' => 'required|string|in:Male,Female,No Preference',
             'open_position_number' => 'required|integer|min:1|max:999',
             'contract_type' => 'required|integer|in:1,2,3,4,5,6',
             'designation' => 'required|integer|min:1',

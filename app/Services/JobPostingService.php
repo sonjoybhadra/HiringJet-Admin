@@ -241,7 +241,7 @@ class JobPostingService
         $jobType = $data['job_type'] ?? 'walk-in-jobs';
 
         // Handle gender
-        $gender = $data['gender'] ?? 'No-Preference';
+        $gender = $data['gender'] ?? 'No Preference';
 
         // Handle contract type - convert to integer as expected by database
         $contractType = (int) ($data['contract_type'] ?? 1);
