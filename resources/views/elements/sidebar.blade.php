@@ -452,7 +452,7 @@ $role_id = (($user)?$user->role_id:0);
         <?php if(in_array(12, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'pending-list')?'active':'')?>">
             <a href="<?=url('/job/pending-list')?>" class="menu-link">
-              <div data-i18n="Pending From Bulk Uploads"><i class="fa-solid fa-arrow-right"></i> Pending From Bulk Uploads</div>
+              <div data-i18n="Pending From Bulk Uploads"><i class="fa-solid fa-arrow-right"></i> Pending Job List</div>
             </a>
           </li>
         <?php }?>
@@ -536,6 +536,16 @@ $role_id = (($user)?$user->role_id:0);
       <a href="<?=url('/jobseeker/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-users"></i>
         <div data-i18n="Jobseekers">Jobseekers</div>
+      </a>
+    </li>
+  <?php }?>
+
+  <?php if(in_array(15, $moduleIds)){?>
+    <!-- Contact Us -->
+    <li class="menu-item <?=(($pageSegment == 'package')?'active':'')?>">
+      <a href="<?=url('/package/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-money-bill"></i>
+        <div data-i18n="CRM Membership Plans">CRM Membership Plans</div>
       </a>
     </li>
   <?php }?>
