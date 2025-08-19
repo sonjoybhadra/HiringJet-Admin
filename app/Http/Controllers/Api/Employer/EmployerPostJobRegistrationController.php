@@ -339,7 +339,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'open_position_number' => 'required|integer|min:1|max:999',
             'contract_type' => 'required|integer|in:1,2,3,4,5,6',
             'designation' => 'required|integer|min:1',
-            'functional_area' => 'nullable|integer|min:1',
+            'functional_area' => 'required|integer|min:1',
             'min_exp_year' => 'required|integer|min:0|max:50',
             'max_exp_year' => 'required|integer|min:0|max:50|gte:min_exp_year',
             'job_description' => 'required|string|min:10',
@@ -347,7 +347,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'skill_ids' => 'nullable|array',
             'skill_ids.*' => 'integer|min:1',
             'expected_close_date' => 'nullable|date|after_or_equal:today',
-            'currency' => 'required', // Can be string or integer now
+            'currency' => 'nullable', // Can be string or integer now
             'min_salary' => 'nullable|numeric|min:0',
             'max_salary' => 'nullable|numeric|min:0|gte:min_salary',
             'is_salary_negotiable' => 'nullable|boolean',
@@ -398,7 +398,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'max_exp_year.gte' => 'Maximum experience must be >= minimum experience',
             'job_description.required' => 'Job description is required',
             'job_description.min' => 'Job description too short',
-            'currency.required' => 'Currency is required',
+            //'currency.required' => 'Currency is required',
             'application_through.required' => 'Application method is required',
             'apply_on_email.required_if' => 'Email required for email application',
             'apply_on_email.email' => 'Invalid email address',
