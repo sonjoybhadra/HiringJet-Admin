@@ -281,9 +281,13 @@ class EmployerUserController extends Controller
             $id                             = Helper::decoded($id);
             $model                          = UserEmployer::find($id);
             $business_id                    = (($model)?$model->business_id:0);
+            $user_id                        = (($model)?$model->user_id:0);
             $getBusiness                    = Employer::where('id', '=', $business_id)->first();
             if($getBusiness){
                 Employer::where('id', '=', $business_id)->update(['status' => $statusNo]);
+                UserEmployer::where('id', '=', $id)->update(['status' => 1]);
+                User::where('id', '=', $user_id)->update(['status' => 1]);
+
                 if ($statusNo == 2)
                 { 
                     $msg            = 'Declined';
@@ -349,8 +353,22 @@ class EmployerUserController extends Controller
             $page_name                      = 'employer-user.verify-otp';
             $data['row']                    = UserEmployer::where('id', '=', $id)->first();
             $business_id                    = (($data['row'])?$data['row']->business_id:0);
+            $user_id                        = (($data['row'])?$data['row']->user_id:0);
             $data['id']                     = $id;
             $title                          = 'Verify OTP : ' . (($data['row'])?$data['row']->first_name . '' . $data['row']->last_name:'');
+
+            /* otp send again when verify otp button clicked */
+                $user = User::where('id', '=', $user_id)->first();
+                $otp = mt_rand(1111, 9999);
+                $otp_mail_hash = base64_encode($otp);
+
+                $user->remember_token = $otp_mail_hash;
+                $user->save();
+
+                $full_name = $user->first_name.' '.$user->last_name;
+                $message = 'Please verify activation OTP.';
+                Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
+            /* otp send again when verify otp button clicked */
 
             if($request->isMethod('post')){
                 $postData = $request->all();
