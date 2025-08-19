@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\Package;
+use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
@@ -20,7 +21,7 @@ class PackageController extends Controller
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Membership Plan',
+            'title'             => 'CRM Membership Plan',
             'controller'        => 'PackageController',
             'controller_route'  => 'package',
             'primary_key'       => 'id',
@@ -42,18 +43,33 @@ class PackageController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'                  => 'required',
-                    'description'           => 'required',
-                    'duration'              => 'required',
                     'price'                 => 'required',
-                    'no_of_users'           => 'required',
+                    'cv_storage_limit'      => 'required',
+                    'users'                 => 'required',
+                    'features'              => 'required',
+                    'ideal_for'             => 'required',
                 ];
                 if($this->validate($request, $rules)){
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
                     $fields = [
                         'name'                  => strip_tags($postData['name']),
-                        'description'           => strip_tags($postData['description']),
-                        'duration'              => strip_tags($postData['duration']),
                         'price'                 => strip_tags($postData['price']),
-                        'no_of_users'           => strip_tags($postData['no_of_users']),
+                        'cv_storage_limit'      => strip_tags($postData['cv_storage_limit']),
+                        'users'                 => strip_tags($postData['users']),
+                        'features'              => strip_tags($postData['features']),
+                        'ideal_for'             => strip_tags($postData['ideal_for']),
+                        'status'                => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Package::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -81,20 +97,35 @@ class PackageController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'name'                  => 'required',
-                    'description'           => 'required',
-                    'duration'              => 'required',
                     'price'                 => 'required',
-                    'no_of_users'           => 'required',
+                    'cv_storage_limit'      => 'required',
+                    'users'                 => 'required',
+                    'features'              => 'required',
+                    'ideal_for'             => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
                         'name'                  => strip_tags($postData['name']),
-                        'description'           => strip_tags($postData['description']),
-                        'duration'              => strip_tags($postData['duration']),
                         'price'                 => strip_tags($postData['price']),
-                        'no_of_users'           => strip_tags($postData['no_of_users']),
+                        'cv_storage_limit'      => strip_tags($postData['cv_storage_limit']),
+                        'users'                 => strip_tags($postData['users']),
+                        'features'              => strip_tags($postData['features']),
+                        'ideal_for'             => strip_tags($postData['ideal_for']),
+                        'status'                => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Package::where($this->data['primary_key'], '=', $id)->update($fields);
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -107,11 +138,24 @@ class PackageController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
+            $model                          = Package::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
             Package::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
         }
     /* delete */
@@ -123,9 +167,33 @@ class PackageController extends Controller
             {
                 $model->status  = 0;
                 $msg            = 'Deactivated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
             } else {
                 $model->status  = 1;
                 $msg            = 'Activated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
             }            
             $model->save();
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
