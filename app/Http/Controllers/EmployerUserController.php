@@ -285,7 +285,7 @@ class EmployerUserController extends Controller
             $getBusiness                    = Employer::where('id', '=', $business_id)->first();
             if($getBusiness){
                 Employer::where('id', '=', $business_id)->update(['status' => $statusNo]);
-                UserEmployer::where('id', '=', $id)->update(['status' => 1]);
+                // UserEmployer::where('id', '=', $id)->update(['status' => 1]);
                 User::where('id', '=', $user_id)->update(['status' => 1]);
 
                 if ($statusNo == 2)
