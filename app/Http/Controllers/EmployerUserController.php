@@ -355,20 +355,7 @@ class EmployerUserController extends Controller
             $business_id                    = (($data['row'])?$data['row']->business_id:0);
             $user_id                        = (($data['row'])?$data['row']->user_id:0);
             $data['id']                     = $id;
-            $title                          = 'Verify OTP : ' . (($data['row'])?$data['row']->first_name . '' . $data['row']->last_name:'');
-
-            /* otp send again when verify otp button clicked */
-                $user = User::where('id', '=', $user_id)->first();
-                $otp = mt_rand(1111, 9999);
-                $otp_mail_hash = base64_encode($otp);
-
-                $user->remember_token = $otp_mail_hash;
-                $user->save();
-
-                $full_name = $user->first_name.' '.$user->last_name;
-                $message = 'Please verify activation OTP.';
-                Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
-            /* otp send again when verify otp button clicked */
+            $title                          = 'Verify OTP : ' . (($data['row'])?$data['row']->first_name . '' . $data['row']->last_name:'');            
 
             if($request->isMethod('post')){
                 $postData = $request->all();
@@ -409,6 +396,23 @@ class EmployerUserController extends Controller
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
+
+            $user                           = User::where('id', '=', $user_id)->first();
+            if(!$user->status){
+                /* otp send again when verify otp button clicked */
+                    
+                    $otp = mt_rand(1111, 9999);
+                    $otp_mail_hash = base64_encode($otp);
+
+                    $user->remember_token = $otp_mail_hash;
+                    $user->save();
+
+                    $full_name = $user->first_name.' '.$user->last_name;
+                    $message = 'Please verify activation OTP.';
+                    Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
+                /* otp send again when verify otp button clicked */
+            }
+            
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
