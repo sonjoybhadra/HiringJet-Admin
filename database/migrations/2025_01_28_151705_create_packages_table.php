@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->longText('description');
-            $table->integer('duration');
+            $table->text('name')->nullable();
             $table->float('price', 10, 2)->default(0.00);
-            $table->integer('no_of_users');
+            $table->text('cv_storage_limit')->nullable();
+            $table->text('users')->nullable();
+            $table->longText('features')->nullable();
+            $table->text('ideal_for')->nullable();
+            $table->integer('duration')->nullable();
             $table->tinyInteger('status')->default(1);
-            $table->string('stripe_price_id')->nullable();
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate(); // Auto-updates on change
