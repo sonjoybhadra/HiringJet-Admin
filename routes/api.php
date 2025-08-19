@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\ReportBugController;
 
 use App\Http\Controllers\Api\JobSearchController;
+use App\Http\Controllers\Api\CandidateSearchController;
 
 use App\Http\Controllers\Api\SocialAuthController;
 
@@ -119,6 +120,7 @@ Route::post('/get-jobs/{job_type}', [JobSearchController::class, 'getJobsByParam
 Route::post('/get-jobs/{job_type}/{id}', [JobSearchController::class, 'getJobDetails']);
 Route::get('/get-saved-jobs', [JobSearchController::class, 'getSavedJobs']);
 
+Route::post('/candidate-search-filter', [CandidateSearchController::class, 'searchCandidates']);
 
 Route::group([
     'middleware' => ['auth:api'],
