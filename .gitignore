@@ -23,3 +23,7 @@ yarn-error.log
 /.zed
 docker-compose.yml
 composer.lock
+dump.sql
+hiringjet.dump
+dump.sql
+hiringjet.dump
