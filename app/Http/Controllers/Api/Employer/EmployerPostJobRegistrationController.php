@@ -234,7 +234,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $request->ip()
             );
 
-            
+
 
             if ($result['success']) {
                 return $this->sendResponse([
@@ -355,7 +355,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'is_salary_negotiable' => 'nullable|boolean',
             'posting_open_date' => 'nullable|date|after_or_equal:today',
             'posting_close_date' => 'nullable|date|after:posting_open_date',
-            'application_through' => 'required|string|in:Hireing Jet,Apply To Email,Apply-Email,Apply To Link,Apply-Link',
+            'application_through' => 'required|string|in:Hiring Jet,Apply To Email,Apply-Email,Apply To Link,Apply-Link',
             'apply_on_email' => 'required_if:application_through,Apply To Email,Apply-Email|nullable|email|max:255',
             'apply_on_link' => 'required_if:application_through,Apply To Link,Apply-Link|nullable|url|max:500',
 
