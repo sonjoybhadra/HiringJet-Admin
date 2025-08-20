@@ -58,13 +58,13 @@ class JobPostingService
             $jobId = DB::table('post_jobs')->insertGetId($jobData);
 
             // Log user activity
-            $this->logUserActivity(
+            /* $this->logUserActivity(
                 $userEmail,
                 $userName,
                 $ipAddress,
                 $positionName,
                 'Job Posted'
-            );
+            ); */
 
             DB::commit();
 

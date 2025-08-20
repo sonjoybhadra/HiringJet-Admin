@@ -43,7 +43,7 @@ class EditEmployerBusinessInfoController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
+        // try{
             $city = new City();
             $country = new Country();
             $state = new State();
@@ -94,9 +94,9 @@ class EditEmployerBusinessInfoController extends BaseApiController
 
             return $this->sendResponse($this->getUserDetails(), 'Business profile has successfully updated.');
 
-        } catch (\Exception $e) {
-            return $this->sendError('Error', 'Sorry!! Unable to update business profile.');
-        }
+        // } catch (\Exception $e) {
+        //     return $this->sendError('Error', 'Sorry!! Unable to update business profile.');
+        // }
     }
 
 }
