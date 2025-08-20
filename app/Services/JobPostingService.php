@@ -379,7 +379,7 @@ class JobPostingService
         string $positionName,
         string $action
     ): void {
-        //try {
+        try {
             DB::table('user_activities')->insert([
                 'user_email' => $userEmail,
                 'user_name' => $userName,
@@ -390,9 +390,9 @@ class JobPostingService
                 'platform_type' => 'WEB',
                 'created_at' => now()
             ]);
-        // } catch (Exception $e) {
-        //     Log::warning('Failed to log user activity: ' . $e->getMessage());
-        // }
+        } catch (Exception $e) {
+            Log::warning('Failed to log user activity: ' . $e->getMessage());
+        }
     }
 
     /**
