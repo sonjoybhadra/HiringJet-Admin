@@ -58,13 +58,13 @@ class JobPostingService
             $jobId = DB::table('post_jobs')->insertGetId($jobData);
 
             // Log user activity
-            /* $this->logUserActivity(
+            $this->logUserActivity(
                 $userEmail,
                 $userName,
                 $ipAddress,
                 $positionName,
                 'Job Posted'
-            ); */
+            );
 
             DB::commit();
 
@@ -131,7 +131,7 @@ class JobPostingService
                         ->where('id', $designationId)
                         ->first();
 
-        return $designation ? $designation->name : $customPositionName;
+        return $customPositionName ? $customPositionName : ($designation ? $designation->name : '');
     }
 
     /**
@@ -379,7 +379,7 @@ class JobPostingService
         string $positionName,
         string $action
     ): void {
-        try {
+        // try {
             DB::table('user_activities')->insert([
                 'user_email' => $userEmail,
                 'user_name' => $userName,
@@ -390,9 +390,9 @@ class JobPostingService
                 'platform_type' => 'API',
                 'created_at' => now()
             ]);
-        } catch (Exception $e) {
-            Log::warning('Failed to log user activity: ' . $e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     Log::warning('Failed to log user activity: ' . $e->getMessage());
+        // }
     }
 
     /**
