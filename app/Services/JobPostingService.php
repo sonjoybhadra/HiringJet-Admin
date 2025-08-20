@@ -379,7 +379,7 @@ class JobPostingService
         string $positionName,
         string $action
     ): void {
-        // try {
+        try {
             DB::table('user_activities')->insert([
                 'user_email' => $userEmail,
                 'user_name' => $userName,
@@ -387,12 +387,12 @@ class JobPostingService
                 'ip_address' => $ipAddress,
                 'activity_type' => 3, // Job posting activity type
                 'activity_details' => $positionName . ' Job ' . $action,
-                'platform_type' => 'API',
+                'platform_type' => 'WEB',
                 'created_at' => now()
             ]);
-        // } catch (Exception $e) {
-        //     Log::warning('Failed to log user activity: ' . $e->getMessage());
-        // }
+        } catch (Exception $e) {
+            Log::warning('Failed to log user activity: ' . $e->getMessage());
+        }
     }
 
     /**
