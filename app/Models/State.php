@@ -31,6 +31,9 @@ class State extends Model
                     'country_code' => $country->country_code,
                     'country_name' => $country->name,
                     'state_code' => $name,
+                    'type'  => 'state',
+                    'latitude'  => 0,
+                    'longitude'  => 0,
                     'is_active'=> 1
                 ]);
     }
