@@ -383,7 +383,7 @@ class JobPostingService
             DB::table('user_activities')->insert([
                 'user_email' => $userEmail,
                 'user_name' => $userName,
-                'user_type' => 'EMPLOYER',
+                'user_type' => 'ADMIN',
                 'ip_address' => $ipAddress,
                 'activity_type' => 3, // Job posting activity type
                 'activity_details' => $positionName . ' Job ' . $action,
