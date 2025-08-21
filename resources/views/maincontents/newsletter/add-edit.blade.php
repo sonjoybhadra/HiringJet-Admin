@@ -36,11 +36,13 @@ $controllerRoute = $module['controller_route'];
                 $description    = $row->description;
                 $to_users       = $row->to_users;
                 $users          = json_decode($row->users);
+                $status         = $row->status;
             } else {
                 $title          = '';
                 $description    = '';
                 $to_users       = '';
                 $users          = [];
+                $status         = '';
             }
             ?>
             <div class="card-body">

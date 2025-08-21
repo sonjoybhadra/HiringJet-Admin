@@ -72,6 +72,7 @@ class NewsletterController extends Controller
                         'description'       => strip_tags($postData['description']),
                         'to_users'          => strip_tags($postData['to_users']),
                         'users'             => json_encode($actual_users),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Newsletter::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -121,6 +122,7 @@ class NewsletterController extends Controller
                         'description'       => strip_tags($postData['description']),
                         'to_users'          => strip_tags($postData['to_users']),
                         'users'             => json_encode($actual_users),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Newsletter::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
