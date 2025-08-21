@@ -51,7 +51,7 @@ $controllerRoute = $module['controller_route'];
                     <div class="row">
                         <div class="col-md-6">
                             <label for="faq_category_id" class="form-label">User Type</label>
-                            <select class="form-control" name="to_users" id="to_users" onchange="getUsers(this.value);">
+                            <select class="form-control" name="to_users" id="to_users">
                                 <option value="" selected>Select User Type</option>
                                 <option value="0" <?=(($to_users == 0)?'selected':'')?>>All</option>
                                 <option value="1" <?=(($to_users == 1)?'selected':'')?>>Jobseeker</option>
