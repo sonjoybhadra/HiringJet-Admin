@@ -269,6 +269,8 @@ Route::group([
 
     Route::get('/posted-jobs', [EmployerPostJobController::class, 'getMyPostedJobs']);
     Route::post('/post-a-job', [EmployerPostJobController::class, 'postJob']);
+    Route::get('/posted-jobs/{$id}', [EmployerPostJobController::class, 'getJobsDetails']);
+    Route::post('/post-a-job/{$id}', [EmployerPostJobController::class, 'updateJob']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);
