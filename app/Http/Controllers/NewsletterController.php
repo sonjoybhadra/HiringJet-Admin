@@ -18,7 +18,7 @@ use Auth;
 use Session;
 use Hash;
 
-use App\Mail\Newsletter;
+use App\Mail\NewsletterContent;
 
 class NewsletterController extends Controller
 {
@@ -237,7 +237,7 @@ class NewsletterController extends Controller
                     $full_name      = (($getUserInfo)?$getUserInfo->first_name . ' ' . $getUserInfo->last_name:'');
                     if($to_email != ''){
                         // $this->sendMail(strtolower($to_email), $subject, $message);
-                        Mail::to($to_email)->send(new Newsletter($full_name, $message, $model->title));
+                        Mail::to($to_email)->send(new NewsletterContent($full_name, $message, $model->title));
                     }
                 } }
             /* mail function */
