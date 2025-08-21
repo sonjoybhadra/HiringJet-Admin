@@ -65,7 +65,7 @@ $controllerRoute = $module['controller_route'];
                                  <div class="row">
                                     <ul>
                                        <?php
-                                       $users = json_decode($value->users);
+                                       $users = json_decode($row->users);
                                        if(!empty($users)){ for($u=0;$u<count($users);$u++){
                                        $extractUser      = $users[$u];
                                        $getUserInfo      = User::select('first_name', 'last_name')->where('id', '=', $extractUser)->first();
@@ -88,16 +88,16 @@ $controllerRoute = $module['controller_route'];
                                  <?php }?>
                               </td>
                               <td>
-                                 <?php if(!$value->is_send){?>
-                                    <a href="<?=url('admin/' . $controllerRoute . '/edit/'.Helper::encoded($value->id))?>" class="btn btn-outline-primary btn-sm" title="Edit <?=$module['title']?>"><i class="fa fa-edit"></i></a>
-                                    <a href="<?=url('admin/' . $controllerRoute . '/send/'.Helper::encoded($value->id))?>" class="btn btn-outline-info btn-sm" title="Send" onclick="return confirm('Do you want to send this notifications ?');"><i class="fa fa-envelope"></i></a>
-                                    <?php if($value->status){?>
-                                    <a href="<?=url('admin/' . $controllerRoute . '/change-status/'.Helper::encoded($value->id))?>" class="btn btn-outline-success btn-sm" title="Activate <?=$module['title']?>"><i class="fa fa-check"></i></a>
+                                 <?php if(!$row->is_send){?>
+                                    <a href="<?=url('admin/' . $controllerRoute . '/edit/'.Helper::encoded($row->id))?>" class="btn btn-outline-primary btn-sm" title="Edit <?=$module['title']?>"><i class="fa fa-edit"></i></a>
+                                    <a href="<?=url('admin/' . $controllerRoute . '/send/'.Helper::encoded($row->id))?>" class="btn btn-outline-info btn-sm" title="Send" onclick="return confirm('Do you want to send this notifications ?');"><i class="fa fa-envelope"></i></a>
+                                    <?php if($row->status){?>
+                                    <a href="<?=url('admin/' . $controllerRoute . '/change-status/'.Helper::encoded($row->id))?>" class="btn btn-outline-success btn-sm" title="Activate <?=$module['title']?>"><i class="fa fa-check"></i></a>
                                     <?php } else {?>
-                                    <a href="<?=url('admin/' . $controllerRoute . '/change-status/'.Helper::encoded($value->id))?>" class="btn btn-outline-warning btn-sm" title="Deactivate <?=$module['title']?>"><i class="fa fa-times"></i></a>
+                                    <a href="<?=url('admin/' . $controllerRoute . '/change-status/'.Helper::encoded($row->id))?>" class="btn btn-outline-warning btn-sm" title="Deactivate <?=$module['title']?>"><i class="fa fa-times"></i></a>
                                     <?php }?>
                                  <?php }?>
-                                 <a href="<?=url('admin/' . $controllerRoute . '/delete/'.Helper::encoded($value->id))?>" class="btn btn-outline-danger btn-sm" title="Delete <?=$module['title']?>" onclick="return confirm('Do You Want To Delete This <?=$module['title']?>');"><i class="fa fa-trash"></i></a>
+                                 <a href="<?=url('admin/' . $controllerRoute . '/delete/'.Helper::encoded($row->id))?>" class="btn btn-outline-danger btn-sm" title="Delete <?=$module['title']?>" onclick="return confirm('Do You Want To Delete This <?=$module['title']?>');"><i class="fa fa-trash"></i></a>
                               </td>
                            </tr>
                      <?php } } else {?>

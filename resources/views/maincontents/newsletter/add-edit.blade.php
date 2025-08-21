@@ -88,16 +88,16 @@ $controllerRoute = $module['controller_route'];
                             <textarea name="title" class="form-control" id="title" rows="5" required><?=$title?></textarea>
                         </div>
                         <div class="col-md-6">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea name="description" class="form-control" id="ckeditor1"><?=$description?></textarea>
-                        </div>
-
-                        <div class="col-md-6">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
                             <div class="form-check form-switch mt-0 ">
                                 <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
                                 <label class="form-check-label" for="status">Active</label>
                             </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" class="form-control" id="ckeditor1"><?=$description?></textarea>
                         </div>
                     </div>
                     <div class="mt-2">
