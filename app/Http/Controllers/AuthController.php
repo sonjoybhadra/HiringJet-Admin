@@ -730,7 +730,7 @@ class AuthController extends Controller
             }
         }
         public function testEmail(){
-            $to = 'subhomoy.freelancer.samanta@gmail.com';
+            $to = 'subhomoysamanta1989@gmail.com';
             $subject = "Test Email Subject On " . date('Y-m-d H:i:s');
             $message = "Test Email Body On " . date('Y-m-d H:i:s');
             $this->sendMail($to,$subject,$message);
