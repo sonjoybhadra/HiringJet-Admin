@@ -11,9 +11,14 @@ use App\Models\Newsletter;
 use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+
 use Auth;
 use Session;
 use Hash;
+
+use App\Mail\Newsletter;
 
 class NewsletterController extends Controller
 {
@@ -210,4 +215,35 @@ class NewsletterController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
+    /* send mail */
+        public function send(Request $request, $id)
+        {
+            $id             = Helper::decoded($id);
+            $model          = Newsletter::find($id);
+            /* mail function */
+                $generalSetting             = GeneralSetting::find('1');
+                $subject                    = Helper::getSettingValue('site_name').' :: '.$model->title;
+                $requestData                = [
+                    'title'         => $model->title,
+                    'description'   => $model->description
+                ];
+                // $message                    = view('mails.newsletter',$requestData);
+                $message = $model->description;
+                $users = json_decode($model->users);
+                if(!empty($users)){ for($u=0;$u<count($users);$u++){
+                    $extractUser    = $users[$u];
+                    $getUserInfo    = User::select('email', 'first_name', 'last_name')->where('id', '=', $extractUser)->first();
+                    $to_email       = (($getUserInfo)?$getUserInfo->email:'');
+                    $full_name      = (($getUserInfo)?$getUserInfo->first_name . ' ' . $getUserInfo->last_name:'');
+                    if($to_email != ''){
+                        // $this->sendMail(strtolower($to_email), $subject, $message);
+                        Mail::to($to_email)->send(new Newsletter($full_name, $message, $model->title));
+                    }
+                } }
+            /* mail function */
+            $model->is_send = 1;
+            $model->save();
+            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Send Successfully !!!');
+        }
+    /* send mail */
 }
