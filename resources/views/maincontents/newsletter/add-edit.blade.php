@@ -115,8 +115,8 @@ $controllerRoute = $module['controller_route'];
     <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
     <script>
         $(function(){
-            var to_users = $('#to_users').val();
-            if(to_users == '0'){
+            var to_users = '<?=$to_users?>';
+            if(to_users == 0){
                 $('#all_users').show();
                 $('#all_users').attr('required', true);
 
@@ -125,7 +125,7 @@ $controllerRoute = $module['controller_route'];
 
                 $('#employer_users').hide();
                 $('#employer_users').attr('required', false);
-            } else if(to_users == '1'){
+            } else if(to_users == 1){
                 $('#all_users').hide();
                 $('#all_users').attr('required', false);
 
@@ -134,7 +134,7 @@ $controllerRoute = $module['controller_route'];
 
                 $('#employer_users').hide();
                 $('#employer_users').attr('required', false);
-            } else if(to_users == '2'){
+            } else if(to_users == 2){
                 $('#all_users').hide();
                 $('#all_users').attr('required', false);
 
@@ -144,6 +144,38 @@ $controllerRoute = $module['controller_route'];
                 $('#employer_users').show();
                 $('#employer_users').attr('required', true);
             }
+
+            $('#to_users').on('change', function(){
+                var to_users = $('#to_users').val();
+                if(to_users == '0'){
+                    $('#all_users').show();
+                    $('#all_users').attr('required', true);
+
+                    $('#jobseeker_users').hide();
+                    $('#jobseeker_users').attr('required', false);
+
+                    $('#employer_users').hide();
+                    $('#employer_users').attr('required', false);
+                } else if(to_users == '1'){
+                    $('#all_users').hide();
+                    $('#all_users').attr('required', false);
+
+                    $('#jobseeker_users').show();
+                    $('#jobseeker_users').attr('required', true);
+
+                    $('#employer_users').hide();
+                    $('#employer_users').attr('required', false);
+                } else if(to_users == '2'){
+                    $('#all_users').hide();
+                    $('#all_users').attr('required', false);
+
+                    $('#jobseeker_users').hide();
+                    $('#jobseeker_users').attr('required', false);
+
+                    $('#employer_users').show();
+                    $('#employer_users').attr('required', true);
+                }
+            });
         })
     </script>
 @endsection
