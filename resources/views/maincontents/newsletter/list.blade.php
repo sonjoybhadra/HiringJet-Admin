@@ -100,7 +100,11 @@ $controllerRoute = $module['controller_route'];
                                  <a href="<?=url('admin/' . $controllerRoute . '/delete/'.Helper::encoded($value->id))?>" class="btn btn-outline-danger btn-sm" title="Delete <?=$module['title']?>" onclick="return confirm('Do You Want To Delete This <?=$module['title']?>');"><i class="fa fa-trash"></i></a>
                               </td>
                            </tr>
-                     <?php } }?>
+                     <?php } } else {?>
+                           <tr>
+                              <td colspan="7" style="color:red; text-align:center;">No records found</td>
+                           </tr>
+                     <?php }?>
                   </tbody>
                </table>
             </div>
