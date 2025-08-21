@@ -13,7 +13,7 @@ $generalSetting             = GeneralSetting::find('1');
     <section style="padding: 80px 0; height: 380vh; margin: 0 3px;">
         <div style="max-width: 900px; background: #ffffff; margin: 0 auto; border-radius: 15px; padding: 20px 15px; box-shadow: 0 0 30px -5px #ccc;">
           <div style="text-align: center;">
-            <img src="<?=env('UPLOADS_URL').Helper::getSettingValue('site_logo')?>" alt="<?=Helper::getSettingValue('site_name')?>" style=" width: 100%; max-width: 250px;">
+            <img src="https://hjadmin.hiringjet.com/public/uploads/1751293708logo%20variation%201.png" alt="<?=Helper::getSettingValue('site_name')?>" style=" width: 100%; max-width: 250px;">
           </div>
           <div>
             <?=$content?>
