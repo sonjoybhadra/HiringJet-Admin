@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 use App\Models\PostJob;
+use App\Models\EmployerPostJobDraft;
 use App\Models\User;
 use App\Models\Country;
 use App\Models\City;
@@ -35,8 +36,17 @@ class EmployerPostJobController extends BaseApiController
                         ->with('designationRelation')
                         ->with('functionalArea')
                         ->with('applied_users');
-        if(!empty($request->job_status)){
 
+        if(!empty($request->job_status)){
+            $status_array = [
+                'pending'=> 0,
+                'approve' => 1,
+                'published' => 1,
+                'reject'=> 2,
+                'deleted'=> 3,
+            ];
+
+            $sql->where('status', $status_array[strtolower($request->job_status)]);
         }
         if(auth()->user()->parent_id > 0){
             $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
@@ -64,6 +74,17 @@ class EmployerPostJobController extends BaseApiController
     }
 
     /**
+        * Draft Jobs list for employers
+        @response json
+    */
+    public function getMyDraftedJobs(Request $request){
+        $list = EmployerPostJobDraft::where('user_id', auth()->user()->id)
+                                    ->latest()->get();
+
+        return $this->sendResponse($list, 'List of drafted jobs');
+    }
+
+    /**
      * Create new job posting - matches your existing controller
      *
      * @param Request $request
@@ -72,6 +93,26 @@ class EmployerPostJobController extends BaseApiController
     public function postJob(Request $request)
     {
         try {
+            //If request for draft no further process will required. Save and exit.
+            if(isset($request->is_draft) && !empty($request->is_draft)){
+                $validator = Validator::make($request->all(), [
+                    'position_name' => 'required|string'
+                ]);
+                if ($validator->fails()) {
+                    return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
+
+                $draftRequest = $request->all();
+                unset($draftRequest['is_draft']);
+                EmployerPostJobDraft::create([
+                    'user_id'=> auth()->user()->id,
+                    'position_name'=> $request->position_name,
+                    'job_no'=> 'Draft-HJ-' . time(),
+                    'request_json'=> json_encode($draftRequest)
+                ]);
+
+                return $this->sendResponse([], 'Your job has successfully saved in draft.');
+            }
             // STEP 1: Clean and sanitize request data
             $cleanedRequest = $this->sanitizeRequestData($request);
             // Validate job posting data
@@ -172,6 +213,10 @@ class EmployerPostJobController extends BaseApiController
                     $result['errors'] ?? $result['error'] ?? null,
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
+            }
+            //Removed from draft if drafted job is posted
+            if(isset($request->draft_id) && !empty($request->draft_id)){
+                EmployerPostJobDraft::find($request->draft_id)->delete();
             }
 
             return $this->sendResponse([
@@ -480,6 +525,17 @@ class EmployerPostJobController extends BaseApiController
                         ->whereIn('id', json_decode($cityJson, true))
                         ->orderBy('name', 'ASC')
                         ->get();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+    */
+    public function destroyDraft(string $id)
+    {
+        $data = EmployerPostJobDraft::findOrFail($id);
+        $data->delete();
+
+        return $this->sendResponse([], 'Draft is deleted successfully.');
     }
 
 }

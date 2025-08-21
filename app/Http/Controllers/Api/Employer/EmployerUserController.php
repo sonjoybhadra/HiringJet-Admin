@@ -72,7 +72,8 @@ class EmployerUserController extends BaseApiController
                 'country_code' => $request->country_code,
                 'phone'=> $request->phone,
                 'password'=> Hash::make($pwd),
-                'status'=> 1
+                'status'=> 1,
+                'emp_reg_type'=> 1
             ]);
 
             if($user_id){
@@ -84,7 +85,7 @@ class EmployerUserController extends BaseApiController
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
                     'designation_id'=> $request->designation_id,
-                    'completed_steps'=> 1
+                    'completed_steps'=> 2
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
@@ -159,7 +160,7 @@ class EmployerUserController extends BaseApiController
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
                     'designation_id'=> $request->designation_id,
-                    'completed_steps'=> 1
+                    'completed_steps'=> 2
                 ]);
 
             return $this->sendResponse([], 'Member data has successfully updated.');

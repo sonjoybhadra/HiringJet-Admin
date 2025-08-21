@@ -316,7 +316,7 @@ class JobPostingService
             'walkin_details' => $data['walkin_details'] ?? NULL,
             'created_by' => $userId,
             'updated_by' => $userId,
-            'status' => 0, // 0 = pending , 1 = active , 2 = rejected , 3 = deleted
+            'status' => 0, // 0 = pending , 1 = active , 2 = rejected , 3 = deleted, 10 = draft
             'created_at' => now(),
             'updated_at' => now()
         ];

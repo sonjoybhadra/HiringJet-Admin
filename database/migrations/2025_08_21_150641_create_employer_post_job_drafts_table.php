@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employer_cv_folders', function (Blueprint $table) {
+        Schema::create('employer_post_job_drafts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('user_employer_id')->constrained('user_employers');
-            $table->string('folder_name');
-            $table->foreignId('owner_id')->constrained('users');
-            $table->bigInteger('parent_id')->nullable();
-            $table->integer('status');
-            $table->softDeletes();
+            $table->string('job_no', 20);
+            $table->string('position_name');
+            $table->text('request_json');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employer_cv_folders');
+        Schema::dropIfExists('employer_post_job_drafts');
     }
 };

@@ -68,7 +68,7 @@ class EmployerFolderController extends BaseApiController
         }else{
             $folder_id_array = EmployerCvFolder::where('user_id', auth()->user()->id)
                                             ->where('owner_id', '!=', auth()->user()->id)
-                                            ->where('folder_name', 'ilike', '%'.$data->folder_name.'%')
+                                            ->where('parent_id', $data->parent_id)
                                             ->get()->pluck('id')->toArray();
         }
         $data->jobseekers_profiles = EmployerCvProfile::select('users.id', 'users.first_name','users.last_name', 'users.email')
@@ -76,11 +76,6 @@ class EmployerFolderController extends BaseApiController
                                                         ->whereIn('employer_cv_profiles.cv_folders_id', $folder_id_array)
                                                         ->get();
 
-        /* $jobseeker_id = $data->profile_cv ? $data->profile_cv->pluck('jobseeker_id')->toArray() : [];
-        $data->profile_cv_jobseeker = [];
-        if(count($jobseeker_id) > 0){
-            $data->profile_cv_jobseeker = User::with('user_profile')->whereIn('id', $jobseeker_id)->get();
-        } */
         return $this->sendResponse($data, 'Details CV folders');
     }
 
@@ -122,7 +117,7 @@ class EmployerFolderController extends BaseApiController
 
     /**
      * Remove the specified resource from storage.
-     */
+    */
     public function destroy(string $id)
     {
         $data = EmployerCvFolder::findOrFail($id);
@@ -196,10 +191,10 @@ class EmployerFolderController extends BaseApiController
             foreach($own_list as $index => $val){
                 $own_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
                 $own_list[$index]->shared_employers = EmployerCvFolder::select('folder_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
-                                                            ->join('users', 'users.id', '=', 'employer_cv_folders.user_id')
+                                                            ->join('users', 'users.id', '=', 'employer_cv_folders.owner_id')
                                                             ->where('user_id', '!=', auth()->user()->id)
                                                             ->where('owner_id', auth()->user()->id)
-                                                            ->where('folder_name', $val->folder_name)
+                                                            ->where('parent_id', $val->id)
                                                             ->get()->toArray();
             }
         }
@@ -211,7 +206,7 @@ class EmployerFolderController extends BaseApiController
                                 ->get();
         if($shared_list->count() > 0){
             foreach($shared_list as $index => $val){
-                $shared_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
+                $shared_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->parent_id)->count();
                 $shared_list[$index]->shared_employers = [];
             }
         }
@@ -234,15 +229,9 @@ class EmployerFolderController extends BaseApiController
 
         try{
             $folder = EmployerCvFolder::find($id);
-           /*  $has_data = EmployerCvFolder::where('user_id', $request->emplyer_id)
-                                        ->where('folder_name', strtolower($folder->folder_name))
-                                        ->count();
-            if($has_data > 0){
-                return $this->sendError('Error', 'Same name folder is already exists.', Response::HTTP_UNPROCESSABLE_ENTITY);
-            } */
             EmployerCvFolder::where('user_id', '!=', auth()->user()->id)
                             ->where('owner_id', auth()->user()->id)
-                            ->where('folder_name', $folder->folder_name)
+                            ->where('parent_id', $id)
                             ->delete();
 
             foreach($request->emplyer_id as $emplyer_id){
@@ -251,8 +240,9 @@ class EmployerFolderController extends BaseApiController
                     EmployerCvFolder::create([
                         'user_id'=> $emplyer_id,
                         'user_employer_id'=> $employer->user_employer_details->id,
-                        'folder_name'=> strtolower($folder->folder_name),
+                        'folder_name'=> $folder->folder_name,
                         'owner_id'=> $folder->owner_id,
+                        'parent_id'=> $id,
                         'status'=> 1
                     ]);
                 }

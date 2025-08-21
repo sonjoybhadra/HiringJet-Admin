@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('tag_name');
             $table->foreignId('owner_id')->constrained('users');
+            $table->bigInteger('parent_id')->nullable();
             $table->integer('status');
             $table->softDeletes();
             $table->timestamps();

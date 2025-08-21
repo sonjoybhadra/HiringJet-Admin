@@ -74,7 +74,7 @@ class EmployerTagsController extends BaseApiController
         }else{
             $tag_id_array = EmployerTag::where('user_id', auth()->user()->id)
                                             ->where('owner_id', '!=', auth()->user()->id)
-                                            ->where('tag_name', 'ilike', '%'.$data->tag_name.'%')
+                                            ->where('parent_id', $data->parent_id)
                                             ->get()->pluck('id')->toArray();
         }
         $data->jobseekers_profiles = TagJobseekerMapping::select('users.id', 'users.first_name','users.last_name', 'users.email')
@@ -191,10 +191,10 @@ class EmployerTagsController extends BaseApiController
         if($own_list->count() > 0){
             foreach($own_list as $index => $val){
                 $own_list[$index]->shared_employers = EmployerTag::select('tag_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
-                                                            ->join('users', 'users.id', '=', 'employer_tags.user_id')
+                                                            ->join('users', 'users.id', '=', 'employer_tags.owner_id')
                                                             ->where('user_id', '!=', auth()->user()->id)
                                                             ->where('owner_id', auth()->user()->id)
-                                                            ->where('tag_name', $val->tag_name)
+                                                            ->where('parent_id', $val->id)
                                                             ->get()->toArray();
             }
         }
@@ -230,15 +230,9 @@ class EmployerTagsController extends BaseApiController
 
         try{
             $tag = EmployerTag::find($id);
-            /* $has_duplicate = EmployerTag::where('user_id', $request->emplyer_id)
-                                            ->where('tag_name', 'ilike', '%'.$tag->tag_name.'%')
-                                            ->get()->count();
-            if($has_duplicate > 0){
-                return $this->sendError('Duplicate Error', 'Duplicate tag is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
-            } */
             EmployerTag::where('user_id', '!=', auth()->user()->id)
                         ->where('owner_id', auth()->user()->id)
-                        ->where('tag_name', $tag->tag_name)
+                        ->where('parent_id', $id)
                         ->delete();
             foreach($request->emplyer_id as $emplyer_id){
                 if(!empty($emplyer_id)){
@@ -246,6 +240,7 @@ class EmployerTagsController extends BaseApiController
                         'user_id'=> $emplyer_id,
                         'tag_name'=> $tag->tag_name,
                         'owner_id'=> $tag->owner_id,
+                        'parent_id'=> $id,
                         'status'=> 1
                     ]);
                 }
