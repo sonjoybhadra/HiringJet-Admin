@@ -121,6 +121,7 @@ Route::post('/get-jobs/{job_type}/{id}', [JobSearchController::class, 'getJobDet
 Route::get('/get-saved-jobs', [JobSearchController::class, 'getSavedJobs']);
 
 Route::post('/candidate-search-filter', [CandidateSearchController::class, 'searchCandidates']);
+Route::get('/candidate-cv-preview/{id}', [CandidateSearchController::class, 'previewCV']);
 
 Route::group([
     'middleware' => ['auth:api'],
