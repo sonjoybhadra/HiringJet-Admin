@@ -118,63 +118,65 @@ $controllerRoute = $module['controller_route'];
             $('.select2').select2();
             var to_users = '<?=$to_users?>';
             if(to_users == 0){
-                $('#all_users').show();
-                $('#all_users').attr('required', true);
+                // $("select[name='fruits']").hide();
+                $("select[name='all_users[]']").show();
+                $("select[name='all_users[]']").attr('required', true);
 
-                $('#jobseeker_users').hide();
-                $('#jobseeker_users').attr('required', false);
+                $("select[name='jobseeker_users[]']").hide();
+                $("select[name='jobseeker_users[]']").attr('required', false);
 
-                $('#employer_users').hide();
-                $('#employer_users').attr('required', false);
+                $("select[name='employer_users[]']").hide();
+                $("select[name='employer_users[]']").attr('required', false);
             } else if(to_users == 1){
-                $('#all_users').hide();
-                $('#all_users').attr('required', false);
+                $("select[name='all_users[]']").hide();
+                $("select[name='all_users[]']").attr('required', false);
 
-                $('#jobseeker_users').show();
-                $('#jobseeker_users').attr('required', true);
+                $("select[name='jobseeker_users[]']").show();
+                $("select[name='jobseeker_users[]']").attr('required', true);
 
-                $('#employer_users').hide();
-                $('#employer_users').attr('required', false);
+                $("select[name='employer_users[]']").hide();
+                $("select[name='employer_users[]']").attr('required', false);
             } else if(to_users == 2){
-                $('#all_users').hide();
-                $('#all_users').attr('required', false);
+                $("select[name='all_users[]']").hide();
+                $("select[name='all_users[]']").attr('required', false);
 
-                $('#jobseeker_users').hide();
-                $('#jobseeker_users').attr('required', false);
+                $("select[name='jobseeker_users[]']").hide();
+                $("select[name='jobseeker_users[]']").attr('required', false);
 
-                $('#employer_users').show();
-                $('#employer_users').attr('required', true);
+                $("select[name='employer_users[]']").show();
+                $("select[name='employer_users[]']").attr('required', true);
             }
 
             $('#to_users').on('change', function(){
-                var to_users = $('#to_users').val();
-                if(to_users == '0'){
-                    $('#all_users').show();
-                    $('#all_users').attr('required', true);
+                var to_users = parseInt($('#to_users').val());
+                if(to_users == 0){
+                    // $("select[name='fruits']").hide();
+                    $("select[name='all_users[]']").show();
+                    $("select[name='all_users[]']").attr('required', true);
 
-                    $('#jobseeker_users').hide();
-                    $('#jobseeker_users').attr('required', false);
+                    $("select[name='jobseeker_users[]']").hide();
+                    $("select[name='jobseeker_users[]']").attr('required', false);
 
-                    $('#employer_users').hide();
-                    $('#employer_users').attr('required', false);
-                } else if(to_users == '1'){
-                    $('#all_users').hide();
-                    $('#all_users').attr('required', false);
+                    $("select[name='employer_users[]']").hide();
+                    $("select[name='employer_users[]']").attr('required', false);
+                } else if(to_users == 1){
+                    $("select[name='all_users[]']").hide();
+                    $("select[name='all_users[]']").attr('required', false);
 
-                    $('#jobseeker_users').show();
-                    $('#jobseeker_users').attr('required', true);
+                    $("select[name='jobseeker_users[]']").show();
+                    $("select[name='jobseeker_users[]']").attr('required', true);
 
-                    $('#employer_users').hide();
-                    $('#employer_users').attr('required', false);
-                } else if(to_users == '2'){
-                    $('#all_users').hide();
-                    $('#all_users').attr('required', false);
+                    $("select[name='employer_users[]']").hide();
+                    $("select[name='employer_users[]']").attr('required', false);
+                } else if(to_users == 2){
+                    $("select[name='all_users[]']").hide();
+                    $("select[name='all_users[]']").attr('required', false);
 
-                    $('#jobseeker_users').hide();
-                    $('#jobseeker_users').attr('required', false);
+                    $("select[name='jobseeker_users[]']").hide();
+                    $("select[name='jobseeker_users[]']").attr('required', false);
 
-                    $('#employer_users').show();
-                    $('#employer_users').attr('required', true);
+                    $("select[name='employer_users[]']").show();
+                    $("select[name='employer_users[]']").attr('required', true);
                 }
             });
         })
