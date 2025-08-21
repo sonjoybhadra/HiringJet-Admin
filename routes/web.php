@@ -50,6 +50,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\ReportBugController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\EmployerUserController;
+use App\Http\Controllers\NewsletterController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -440,4 +441,12 @@ Route::middleware(['auth'])->group(function () {
     /* report bugs */
         Route::get('report-bugs/list', [ReportBugController::class, 'list']);
     /* report bugs */
+    /* newsletter */
+        Route::get('newsletter/list', [NewsletterController::class, 'list']);
+        Route::match(['get', 'post'], 'newsletter/add', [NewsletterController::class, 'add']);
+        Route::match(['get', 'post'], 'newsletter/edit/{id}', [NewsletterController::class, 'edit']);
+        Route::get('newsletter/delete/{id}', [NewsletterController::class, 'delete']);
+        Route::get('newsletter/change-status/{id}', [NewsletterController::class, 'change_status']);
+        Route::get('newsletter/send/{id}', [NewsletterController::class, 'send']);
+    /* newsletter */
 });

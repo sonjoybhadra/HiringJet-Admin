@@ -541,13 +541,23 @@ $role_id = (($user)?$user->role_id:0);
   <?php }?>
 
   <?php if(in_array(15, $moduleIds)){?>
-    <!-- Contact Us -->
+    <!-- CRM Membership Plans -->
     <li class="menu-item <?=(($pageSegment == 'package')?'active':'')?>">
       <a href="<?=url('/package/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-money-bill"></i>
         <div data-i18n="CRM Membership Plans">CRM Membership Plans</div>
       </a>
     </li>
+  <?php }?>
+
+  <?php if(in_array(15, $moduleIds)){?>
+    <!-- Newsletter -->
+    <!-- <li class="menu-item <?=(($pageSegment == 'newsletter')?'active':'')?>">
+      <a href="<?=url('/newsletter/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-money-bill"></i>
+        <div data-i18n="Newsletters">Newsletters</div>
+      </a>
+    </li> -->
   <?php }?>
 
   <?php if(in_array(15, $moduleIds)){?>
