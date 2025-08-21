@@ -60,21 +60,27 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <div class="col-md-6">
                             <label for="users" class="form-label">Users</label>
-                            <select class="select2" id="all_users" name="all_users[]" multiple style="display:none;">
-                                <?php if($all_users){ foreach($all_users as $all_user){?>
-                                    <option value="<?=$all_user->id?>" <?=((in_array($all_user->id, $users))?'selected':'')?>><?=$all_user->first_name . ' ' . $all_user->last_name?></option>
-                                <?php } }?>
-                            </select>
-                            <select class="select2" id="jobseeker_users" name="jobseeker_users[]" multiple style="display:none;">
-                                <?php if($jobseeker_users){ foreach($jobseeker_users as $jobseeker_user){?>
-                                    <option value="<?=$jobseeker_user->id?>" <?=((in_array($jobseeker_user->id, $users))?'selected':'')?>><?=$jobseeker_user->first_name . ' ' . $jobseeker_user->last_name?></option>
-                                <?php } }?>
-                            </select>
-                            <select class="select2" id="employer_users" name="employer_users[]" multiple style="display:none;">
-                                <?php if($employer_users){ foreach($employer_users as $employer_user){?>
-                                    <option value="<?=$employer_user->id?>" <?=((in_array($employer_user->id, $users))?'selected':'')?>><?=$employer_user->first_name . ' ' . $employer_user->last_name?></option>
-                                <?php } }?>
-                            </select>
+                            <div id="all_users_wrapper" style="display:none;">
+                                <select class="select2" id="all_users" name="all_users[]" multiple>
+                                    <?php if($all_users){ foreach($all_users as $all_user){?>
+                                        <option value="<?=$all_user->id?>" <?=((in_array($all_user->id, $users))?'selected':'')?>><?=$all_user->first_name . ' ' . $all_user->last_name?></option>
+                                    <?php } }?>
+                                </select>
+                            </div>
+                            <div id="jobseeker_users_wrapper" style="display:none;">
+                                <select class="select2" id="jobseeker_users" name="jobseeker_users[]" multiple>
+                                    <?php if($jobseeker_users){ foreach($jobseeker_users as $jobseeker_user){?>
+                                        <option value="<?=$jobseeker_user->id?>" <?=((in_array($jobseeker_user->id, $users))?'selected':'')?>><?=$jobseeker_user->first_name . ' ' . $jobseeker_user->last_name?></option>
+                                    <?php } }?>
+                                </select>
+                            </div>
+                            <div id="employer_users_wrapper" style="display:none;">
+                                <select class="select2" id="employer_users" name="employer_users[]" multiple>
+                                    <?php if($employer_users){ foreach($employer_users as $employer_user){?>
+                                        <option value="<?=$employer_user->id?>" <?=((in_array($employer_user->id, $users))?'selected':'')?>><?=$employer_user->first_name . ' ' . $employer_user->last_name?></option>
+                                    <?php } }?>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -119,64 +125,64 @@ $controllerRoute = $module['controller_route'];
             var to_users = '<?=$to_users?>';
             if(to_users == 0){
                 // $("select[name='fruits']").hide();
-                $("select[name='all_users[]']").show();
-                $("select[name='all_users[]']").attr('required', true);
+                $('#all_users_wrapper').show();
+                $('#all_users_wrapper').attr('required', true);
 
-                $("select[name='jobseeker_users[]']").hide();
-                $("select[name='jobseeker_users[]']").attr('required', false);
+                $('#jobseeker_users_wrapper').hide();
+                $('#jobseeker_users_wrapper').attr('required', false);
 
-                $("select[name='employer_users[]']").hide();
-                $("select[name='employer_users[]']").attr('required', false);
+                $('#employer_users_wrapper').hide();
+                $('#employer_users_wrapper').attr('required', false);
             } else if(to_users == 1){
-                $("select[name='all_users[]']").hide();
-                $("select[name='all_users[]']").attr('required', false);
+                $('#all_users_wrapper').hide();
+                $('#all_users_wrapper').attr('required', false);
 
-                $("select[name='jobseeker_users[]']").show();
-                $("select[name='jobseeker_users[]']").attr('required', true);
+                $('#jobseeker_users_wrapper').show();
+                $('#jobseeker_users_wrapper').attr('required', true);
 
-                $("select[name='employer_users[]']").hide();
-                $("select[name='employer_users[]']").attr('required', false);
+                $('#employer_users_wrapper').hide();
+                $('#employer_users_wrapper').attr('required', false);
             } else if(to_users == 2){
-                $("select[name='all_users[]']").hide();
-                $("select[name='all_users[]']").attr('required', false);
+                $('#all_users_wrapper').hide();
+                $('#all_users_wrapper').attr('required', false);
 
-                $("select[name='jobseeker_users[]']").hide();
-                $("select[name='jobseeker_users[]']").attr('required', false);
+                $('#jobseeker_users_wrapper').hide();
+                $('#jobseeker_users_wrapper').attr('required', false);
 
-                $("select[name='employer_users[]']").show();
-                $("select[name='employer_users[]']").attr('required', true);
+                $('#employer_users_wrapper').show();
+                $('#employer_users_wrapper').attr('required', true);
             }
 
             $('#to_users').on('change', function(){
                 var to_users = parseInt($('#to_users').val());
                 if(to_users == 0){
                     // $("select[name='fruits']").hide();
-                    $("select[name='all_users[]']").show();
-                    $("select[name='all_users[]']").attr('required', true);
+                    $('#all_users_wrapper').show();
+                    $('#all_users_wrapper').attr('required', true);
 
-                    $("select[name='jobseeker_users[]']").hide();
-                    $("select[name='jobseeker_users[]']").attr('required', false);
+                    $('#jobseeker_users_wrapper').hide();
+                    $('#jobseeker_users_wrapper').attr('required', false);
 
-                    $("select[name='employer_users[]']").hide();
-                    $("select[name='employer_users[]']").attr('required', false);
+                    $('#employer_users_wrapper').hide();
+                    $('#employer_users_wrapper').attr('required', false);
                 } else if(to_users == 1){
-                    $("select[name='all_users[]']").hide();
-                    $("select[name='all_users[]']").attr('required', false);
+                    $('#all_users_wrapper').hide();
+                    $('#all_users_wrapper').attr('required', false);
 
-                    $("select[name='jobseeker_users[]']").show();
-                    $("select[name='jobseeker_users[]']").attr('required', true);
+                    $('#jobseeker_users_wrapper').show();
+                    $('#jobseeker_users_wrapper').attr('required', true);
 
-                    $("select[name='employer_users[]']").hide();
-                    $("select[name='employer_users[]']").attr('required', false);
+                    $('#employer_users_wrapper').hide();
+                    $('#employer_users_wrapper').attr('required', false);
                 } else if(to_users == 2){
-                    $("select[name='all_users[]']").hide();
-                    $("select[name='all_users[]']").attr('required', false);
+                    $('#all_users_wrapper').hide();
+                    $('#all_users_wrapper').attr('required', false);
 
-                    $("select[name='jobseeker_users[]']").hide();
-                    $("select[name='jobseeker_users[]']").attr('required', false);
+                    $('#jobseeker_users_wrapper').hide();
+                    $('#jobseeker_users_wrapper').attr('required', false);
 
-                    $("select[name='employer_users[]']").show();
-                    $("select[name='employer_users[]']").attr('required', true);
+                    $('#employer_users_wrapper').show();
+                    $('#employer_users_wrapper').attr('required', true);
                 }
             });
         })
