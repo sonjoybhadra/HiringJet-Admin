@@ -90,7 +90,7 @@ $controllerRoute = $module['controller_route'];
                               <td>
                                  <?php if(!$row->is_send){?>
                                     <a href="<?=url($controllerRoute . '/edit/'.Helper::encoded($row->id))?>" class="btn btn-outline-primary btn-sm" title="Edit <?=$module['title']?>"><i class="fa fa-edit"></i></a>
-                                    <a href="<?=url($controllerRoute . '/send/'.Helper::encoded($row->id))?>" class="btn btn-outline-info btn-sm" title="Send" onclick="return confirm('Do you want to send this notifications ?');"><i class="fa fa-envelope"></i></a>
+                                    <a href="<?=url($controllerRoute . '/send/'.Helper::encoded($row->id))?>" class="btn btn-outline-info btn-sm" title="Send" onclick="return confirm('Do you want to send this newsletter ?');"><i class="fa fa-envelope"></i></a>
                                     <?php if($row->status){?>
                                     <a href="<?=url($controllerRoute . '/change-status/'.Helper::encoded($row->id))?>" class="btn btn-outline-success btn-sm" title="Activate <?=$module['title']?>"><i class="fa fa-check"></i></a>
                                     <?php } else {?>
