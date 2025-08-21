@@ -30,7 +30,7 @@ abstract class Controller
         $mailLibrary->Port          = Helper::getSettingValue('smtp_port');
         $mailLibrary->Username      = Helper::getSettingValue('smtp_username');
         $mailLibrary->Password      = Helper::getSettingValue('smtp_password');
-        $mailLibrary->SMTPSecure    = 'ssl';
+        $mailLibrary->SMTPSecure    = 'tls';
         $mailLibrary->From          = Helper::getSettingValue('from_email');
         $mailLibrary->FromName      = Helper::getSettingValue('from_name');
         // $mailLibrary->AddReplyTo($generalSetting->from_email, $generalSetting->from_name);
@@ -49,7 +49,7 @@ abstract class Controller
         if (!empty($file)):
             $mailLibrary->AddAttachment($file);
         endif;
-        Helper::pr($mailLibrary);
+        // Helper::pr($mailLibrary);
         return (!$mailLibrary->send()) ? false : true;
     }
     // single file upload
