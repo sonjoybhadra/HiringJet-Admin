@@ -116,7 +116,7 @@ $controllerRoute = $module['controller_route'];
     <script>
         $(function(){
             var to_users = $('#to_users').val();
-            if(to_users == 0){
+            if(to_users == '0'){
                 $('#all_users').show();
                 $('#all_users').attr('required', true);
 
@@ -125,7 +125,7 @@ $controllerRoute = $module['controller_route'];
 
                 $('#employer_users').hide();
                 $('#employer_users').attr('required', false);
-            } else if(to_users == 1){
+            } else if(to_users == '1'){
                 $('#all_users').hide();
                 $('#all_users').attr('required', false);
 
@@ -134,7 +134,7 @@ $controllerRoute = $module['controller_route'];
 
                 $('#employer_users').hide();
                 $('#employer_users').attr('required', false);
-            } else if(to_users == 2){
+            } else if(to_users == '2'){
                 $('#all_users').hide();
                 $('#all_users').attr('required', false);
 
