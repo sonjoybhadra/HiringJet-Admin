@@ -55,8 +55,8 @@ class EmployerPostJobController extends BaseApiController
 
         if($list->count() > 0){
             foreach($list as $key => $data){
-                $list[$key]->location->countries_data = $this->returnCountryList($data->location_countries);
-                $list[$key]->location->cities_data = $this->returnCityList($data->location_cities);
+                $list[$key]->location_countries_data = $this->returnCountryList($data->location_countries);
+                $list[$key]->location_cities_data = $this->returnCityList($data->location_cities);
             }
         }
 
