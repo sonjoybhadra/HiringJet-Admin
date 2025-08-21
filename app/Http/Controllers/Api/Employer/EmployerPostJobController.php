@@ -338,8 +338,8 @@ class EmployerPostJobController extends BaseApiController
                         ->with('functionalArea')
                         ->with('applied_users')
                         ->first();
-        $data->location->countries_data = $this->returnCountryList($data->location_countries);
-        $data->location->cities_data = $this->returnCityList($data->location_cities);
+        $data->location_countries_data = $this->returnCountryList($data->location_countries);
+        $data->location_cities_data = $this->returnCityList($data->location_cities);
 
         return $this->sendResponse($data, 'Job details');
     }
