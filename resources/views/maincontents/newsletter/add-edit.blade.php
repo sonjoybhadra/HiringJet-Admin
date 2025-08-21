@@ -115,6 +115,7 @@ $controllerRoute = $module['controller_route'];
     <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
     <script>
         $(function(){
+            $('.select2').select2();
             var to_users = '<?=$to_users?>';
             if(to_users == 0){
                 $('#all_users').show();
