@@ -106,37 +106,44 @@ $controllerRoute = $module['controller_route'];
 </div>
 @endsection
 @section('scripts')
-<script>
-    $(function(){
-        var to_users = $('#to_users').val();
-        if(to_users == 0){
-            $('#all_users').show();
-            $('#all_users').attr('required', true);
+    <!-- Vendors JS -->
+    <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+    <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+    <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/select2/select2.js"></script>
+    <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/@form-validation/popular.js"></script>
+    <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/@form-validation/bootstrap5.js"></script>
+    <script src="<?= config('constants.admin_assets_url') ?>assets/vendor/libs/@form-validation/auto-focus.js"></script>
+    <script>
+        $(function(){
+            var to_users = $('#to_users').val();
+            if(to_users == 0){
+                $('#all_users').show();
+                $('#all_users').attr('required', true);
 
-            $('#jobseeker_users').hide();
-            $('#jobseeker_users').attr('required', false);
+                $('#jobseeker_users').hide();
+                $('#jobseeker_users').attr('required', false);
 
-            $('#employer_users').hide();
-            $('#employer_users').attr('required', false);
-        } else if(to_users == 1){
-            $('#all_users').hide();
-            $('#all_users').attr('required', false);
+                $('#employer_users').hide();
+                $('#employer_users').attr('required', false);
+            } else if(to_users == 1){
+                $('#all_users').hide();
+                $('#all_users').attr('required', false);
 
-            $('#jobseeker_users').show();
-            $('#jobseeker_users').attr('required', true);
+                $('#jobseeker_users').show();
+                $('#jobseeker_users').attr('required', true);
 
-            $('#employer_users').hide();
-            $('#employer_users').attr('required', false);
-        } else if(to_users == 2){
-            $('#all_users').hide();
-            $('#all_users').attr('required', false);
+                $('#employer_users').hide();
+                $('#employer_users').attr('required', false);
+            } else if(to_users == 2){
+                $('#all_users').hide();
+                $('#all_users').attr('required', false);
 
-            $('#jobseeker_users').hide();
-            $('#jobseeker_users').attr('required', false);
+                $('#jobseeker_users').hide();
+                $('#jobseeker_users').attr('required', false);
 
-            $('#employer_users').show();
-            $('#employer_users').attr('required', true);
-        }
-    })
-</script>
+                $('#employer_users').show();
+                $('#employer_users').attr('required', true);
+            }
+        })
+    </script>
 @endsection
