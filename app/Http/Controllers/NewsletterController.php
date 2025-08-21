@@ -33,7 +33,7 @@ class NewsletterController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'newsletter.list';
-            $data['rows']                   = Newsletter::where('status', '!=', 3)->get();
+            $data['rows']                   = Newsletter::where('status', '!=', 3)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
