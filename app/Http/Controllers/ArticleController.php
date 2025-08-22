@@ -45,6 +45,7 @@ class ArticleController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'page_name'                 => 'required',
+                    'type'                      => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -91,6 +92,7 @@ class ArticleController extends Controller
                     /* page image */
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
+                        'type'                      => strip_tags($postData['type']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
                         'page_content'              => html_entity_decode($request->page_content),
                         'page_banner_image'         => '/uploads/' . $upload_folder . '/' . $page_banner_image,
@@ -125,6 +127,7 @@ class ArticleController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'page_name'                 => 'required',
+                    'type'                      => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* page banner image */
@@ -163,6 +166,7 @@ class ArticleController extends Controller
                     /* page image */
                     $fields = [
                         'page_name'                 => strip_tags($postData['page_name']),
+                        'type'                      => strip_tags($postData['type']),
                         'page_slug'                 => Helper::clean(strip_tags($postData['page_name'])),
                         'page_content'              => html_entity_decode($request->page_content),
                         'page_banner_image'         => $pageBannerImageLink,

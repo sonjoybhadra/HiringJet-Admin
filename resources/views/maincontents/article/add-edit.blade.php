@@ -34,6 +34,7 @@ $controllerRoute = $module['controller_route'];
             if($row){
                 $id                     = $row->id;
                 $page_name              = $row->page_name;
+                $type                   = $row->type;
                 $page_content           = $row->page_content;
                 $page_banner_image      = $row->page_banner_image;
                 $page_image             = $row->page_image;
@@ -44,6 +45,7 @@ $controllerRoute = $module['controller_route'];
             } else {
                 $id                     = '';
                 $page_name              = '';
+                $type                   = '';
                 $page_content           = '';
                 $page_banner_image      = '';
                 $page_image             = '';
@@ -61,7 +63,15 @@ $controllerRoute = $module['controller_route'];
                             <label for="page_name" class="form-label">Article Name <small class="text-danger">*</small></label>
                             <input class="form-control" type="text" id="page_name" name="page_name" value="<?=$page_name?>" required placeholder="Article Name" autofocus />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
+                            <select class="select2" id="type" name="type" required>
+                                <option label="" value="" selected disabled>Select Type</option>
+                                <option value="Jobseeker" <?= (($type == 'Jobseeker') ? 'selected' : '') ?>>Jobseeker</option>
+                                <option value="Employer" <?= (($type == 'Employer') ? 'selected' : '') ?>>Employer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <label for="status" class="form-label d-block">Status <small class="text-danger">*</small></label>
                             <div class="form-check form-switch mt-0 ">
                                 <input class="form-check-input" type="checkbox" name="status" role="switch" id="status" <?=(($status == 1)?'checked':'')?>>
