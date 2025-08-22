@@ -189,10 +189,10 @@ class CommonController extends BaseApiController
 
     public function get_currency($res = '')
     {
-        $list = Country::select('id', 'currency_code as name', 'country_short_code')
+        $list = Country::selectRaw('currency_code, MIN(id) as id, MIN(country_short_code) as country_short_code')
                         ->where('status', 1)
                         ->where('currency_code','<>','')
-                        ->groupBy('currency_code', 'id', 'country_short_code')
+                        ->groupBy('currency_code')
                         ->get();
         if($res != ''){
             return $list;
