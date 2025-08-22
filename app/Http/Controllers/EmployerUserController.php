@@ -445,7 +445,8 @@ class EmployerUserController extends Controller
 
             $data['brands']               = DB::table('employer_brands')
                                                 ->join('industries', 'industries.id', '=', 'employer_brands.industry_id')
-                                                ->select('employer_brands.*', 'industries.name as industry_name')
+                                                ->join('users', 'users.id', '=', 'employer_brands.contact_person_id')
+                                                ->select('employer_brands.*', 'industries.name as industry_name', 'users.first_name', 'users.last_name')
                                                 // ->where('employer_brands.id', '=', $id)
                                                 ->where('employer_brands.user_id', '=', $user_id)
                                                 ->where('employer_brands.status', '=', 1)
