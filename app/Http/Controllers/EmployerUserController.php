@@ -429,15 +429,24 @@ class EmployerUserController extends Controller
                                                 ->where('user_employers.id', '=', $id)
                                                 ->first();
             $data['business_id']            = (($data['row'])?$data['row']->business_id:0);
-            $data['user_id']                = (($data['row'])?$data['row']->user_id:0);
+            $user_id                        = (($data['row'])?$data['row']->user_id:0);
+            $data['user_id']                = $user_id;
 
             $data['subusers']               = DB::table('user_employers')
                                                 ->join('users', 'users.id', '=', 'user_employers.user_id')
                                                 ->join('designations', 'designations.id', '=', 'user_employers.designation_id')
                                                 ->select('user_employers.*', 'designations.name as designation_name')
                                                 // ->where('user_employers.id', '=', $id)
-                                                ->where('users.parent_id', '=', $data['user_id'])
+                                                ->where('users.parent_id', '=', $user_id)
                                                 ->where('users.status', '=', 1)
+                                                ->get();
+
+            $data['brands']               = DB::table('employer_brands')
+                                                ->join('industries', 'industries.id', '=', 'employer_brands.industry_id')
+                                                ->select('employer_brands.*', 'industries.name as industry_name')
+                                                // ->where('employer_brands.id', '=', $id)
+                                                ->where('employer_brands.user_id', '=', $user_id)
+                                                ->where('employer_brands.status', '=', 1)
                                                 ->get();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');

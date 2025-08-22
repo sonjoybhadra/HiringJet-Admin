@@ -160,13 +160,18 @@ $controllerRoute = $module['controller_route'];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:150px; height:70px;"></td>
-                                                            <td>TCS</td>
-                                                            <td>IT</td>
-                                                            <td>7042398540</td>
-                                                        </tr>
+                                                        <?php
+                                                        $sl_no=1;
+                                                        if($brands){ foreach($brands as $brand){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:150px; height:70px;"></td>
+                                                                <td><?=$brand->company_name?></td>
+                                                                <td><?=$brand->industry_name?></td>
+                                                                <td><?=$brand->contact_person_id?></td>
+                                                            </tr>
+                                                        <?php } } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
