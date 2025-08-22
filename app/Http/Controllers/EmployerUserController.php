@@ -440,6 +440,7 @@ class EmployerUserController extends Controller
                                                 // ->where('user_employers.id', '=', $id)
                                                 ->where('users.parent_id', '=', $user_id)
                                                 ->where('users.status', '=', 1)
+                                                ->orderBy('users.id', 'DESC')
                                                 ->get();
 
             $data['brands']               = DB::table('employer_brands')
@@ -448,9 +449,10 @@ class EmployerUserController extends Controller
                                                 // ->where('employer_brands.id', '=', $id)
                                                 ->where('employer_brands.user_id', '=', $user_id)
                                                 ->where('employer_brands.status', '=', 1)
+                                                ->orderBy('employer_brands.id', 'DESC')
                                                 ->get();
 
-            $data['saved_searches']         = UserJobSearchHistory::where('user_id', '=', $user_id)->get();
+            $data['saved_searches']         = UserJobSearchHistory::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');
