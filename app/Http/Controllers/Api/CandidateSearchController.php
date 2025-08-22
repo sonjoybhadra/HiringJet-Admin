@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Models\User;
+use App\Models\UserEmployment;
+use App\Models\Designation;
+use App\Models\ShortlistedJob;
+use App\Models\PostJobUserApplied;
+use App\Models\PostJob;
+use App\Models\ProfileComplete;
+use App\Models\UserProfile;
+use App\Models\UserProfileCompletedPercentage;
+
 class CandidateSearchController extends BaseApiController{
  
   public function searchCandidates(Request $request){
@@ -106,5 +116,71 @@ class CandidateSearchController extends BaseApiController{
         ], 500);
     }
   }
+
+  public function previewCV($id)
+    {
+      $data = User::where('id', $id)
+      ->with('user_profile')
+      ->with('user_skills')
+      ->with('user_employments')
+      ->with('user_education')
+      // ->with('user_profile_completed_percentages')
+      ->with('user_languages')
+      ->with('user_certification')
+      ->with('user_online_profile')
+      ->with('user_work_sample')
+      ->with('user_it_skill')
+      ->with('user_cv')
+      ->first();
+
+$profileComplete = ProfileComplete::select('id', 'name', 'percentage')->get()->toArray();
+$profile_completed_percentages = [];
+$total_completed_percentage = 0;
+foreach($profileComplete as $value){
+  $has_user_data = UserProfileCompletedPercentage::where('user_id', $id)
+                                                  ->where('profile_completes_id', $value['id'])
+                                                  ->first();
+  $value['completed_percentage'] = $has_user_data ? (int)$value['percentage'] : 0;
+  $value['has_completed'] = $has_user_data ? 1 : 0;
+  if($has_user_data){
+      $total_completed_percentage += (int)$value['percentage'];
+  }
+
+  array_push($profile_completed_percentages, $value);
+}
+$data->user_profile->profile_completed_percentage = $total_completed_percentage;
+
+UserProfile::where('user_id', $id)
+          ->where('profile_completed_percentage', '!=', $total_completed_percentage)
+          ->update(['profile_completed_percentage'=> $total_completed_percentage]);
+
+$data->user_profile_completed_percentages = $profile_completed_percentages;
+
+
+$user_employment = UserEmployment::where('user_id', $id)
+                                  ->where('is_current_job', 1)
+                                  ->with('employer')
+                                  ->first();
+if(!$user_employment){
+  $user_employment = UserEmployment::where('user_id', $id)
+                                  ->latest()
+                                  ->with('employer')
+                                  ->first();
+}
+$data->current_designation = $user_employment ? Designation::find($user_employment->last_designation) : [];
+$data->current_company = $user_employment ? $user_employment->employer : [];
+$data->shortlisted_jobs_count = ShortlistedJob::where('user_id', $id)->count();
+$data->applied_jobs_count = PostJobUserApplied::where('user_id', $id)->count();
+$data->job_alerts_count = 0;
+
+        try {
+            return $this->sendResponse(
+                $data,
+                'User Details'
+            );
+        } catch (\Exception $e) {
+            return $this->sendError('Error', 'Sorry, something went wrong, unable to fetch user details.',  Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
   
 }
