@@ -420,7 +420,7 @@ class EmployerUserController extends Controller
     /* profile */
         public function profile(Request $request, $id){
             $data['module']                 = $this->data;
-            $id                             = Helper::decoded($id);
+            echo $id                             = Helper::decoded($id);
             $page_name                      = 'employer-user.profile';
             $data['id']                     = $id;
             $data['row']                    = DB::table('user_employers')
@@ -429,7 +429,7 @@ class EmployerUserController extends Controller
                                                 ->where('user_employers.id', '=', $id)
                                                 ->first();
             $data['business_id']            = (($data['row'])?$data['row']->business_id:0);
-            $data['user_id']                = (($data['row'])?$data['row']->user_id:0);
+            echo $data['user_id']                = (($data['row'])?$data['row']->user_id:0);
 
             $data['subusers']               = DB::table('user_employers')
                                                 ->join('users', 'users.id', '=', 'user_employers.user_id')
@@ -438,7 +438,7 @@ class EmployerUserController extends Controller
                                                 ->where('user_employers.id', '=', $id)
                                                 ->where('users.parent_id', '=', $data['user_id'])
                                                 ->where('users.status', '=', 1)
-                                                ->first();
+                                                ->get();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');
