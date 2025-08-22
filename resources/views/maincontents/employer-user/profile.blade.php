@@ -132,27 +132,18 @@ $controllerRoute = $module['controller_route'];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>AAAAAAAAA</td>
-                                                            <td>a@a.com</td>
-                                                            <td>+91 9999999999</td>
-                                                            <td>Front End Developer</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>2</td>
-                                                            <td>BBBBBBBBBBBBB</td>
-                                                            <td>b@b.com</td>
-                                                            <td>+91 9999999999</td>
-                                                            <td>Front End Developer</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>3</td>
-                                                            <td>CCCCCCCCCCCC</td>
-                                                            <td>c@c.com</td>
-                                                            <td>+91 9999999999</td>
-                                                            <td>Front End Developer</td>
-                                                        </tr>
+                                                        <?php
+                                                        $sl_no=1;
+                                                        if($subusers){ foreach($subusers as $subuser){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><?=$subuser->first_name.' '.$subuser->last_name?></td>
+                                                                <td><?=$subuser->email?></td>
+                                                                <td><?=$subuser->country_code?> <?=$subuser->phone?></td>
+                                                                <td><?=$subuser->designation_name?></td>
+                                                            </tr>
+                                                        <?php } } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
