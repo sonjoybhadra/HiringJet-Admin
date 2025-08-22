@@ -161,13 +161,14 @@ class PostJob extends Model
                 $sql->orWhere(function ($query) use ($skill_names) {
                     foreach ($skill_names as $skill_name) {
                         // Handle both null and empty string cases, cast to jsonb and check containment
-                        $query->orWhereRaw(
-                            "CASE
-                                WHEN skill_names IS NULL OR skill_names = '' THEN FALSE
-                                ELSE skill_names::jsonb @> ?::jsonb
-                            END",
-                            [json_encode([$skill_name])]
-                        );
+                        // $query->orWhereRaw(
+                        //     "CASE
+                        //         WHEN skill_names IS NULL OR skill_names = '' THEN FALSE
+                        //         ELSE skill_names::jsonb @> ?::jsonb
+                        //     END",
+                        //     [json_encode([$skill_name])]
+                        // );
+                        $query->orWhereJsonContains('skill_names', $skill_name);
                     }
                 });
             }
