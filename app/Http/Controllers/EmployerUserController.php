@@ -429,13 +429,14 @@ class EmployerUserController extends Controller
                                                 ->where('user_employers.id', '=', $id)
                                                 ->first();
             $data['business_id']            = (($data['row'])?$data['row']->business_id:0);
+            $data['user_id']                = (($data['row'])?$data['row']->user_id:0);
 
             $data['subusers']               = DB::table('user_employers')
                                                 ->join('users', 'users.id', '=', 'user_employers.user_id')
                                                 ->join('designations', 'designations.id', '=', 'user_employers.designation_id')
                                                 ->select('user_employers.*', 'designations.name as designation_name')
                                                 ->where('user_employers.id', '=', $id)
-                                                ->where('users.parent_id', '=', $id)
+                                                ->where('users.parent_id', '=', $data['user_id'])
                                                 ->where('users.status', '=', 1)
                                                 ->first();
 
