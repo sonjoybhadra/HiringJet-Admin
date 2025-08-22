@@ -428,6 +428,7 @@ class EmployerUserController extends Controller
                                                 ->select('employers.*', 'user_employers.*')
                                                 ->where('user_employers.id', '=', $id)
                                                 ->first();
+            $data['business_id']            = (($data['row'])?$data['row']->business_id:0);
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');
