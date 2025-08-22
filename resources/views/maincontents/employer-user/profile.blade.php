@@ -350,7 +350,6 @@ $controllerRoute = $module['controller_route'];
                                                     </thead>
                                                     <tbody>
                                                         <?php
-                                                        echo $business_id;
                                                         $postedJobs = PostJob::select('id', 'job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by')->where('employer_id', '=', $business_id)->where('status', '=', 1)->orderBy('id', 'DESC')->get();
                                                         $sl_no=1;
                                                         if($postedJobs){ foreach($postedJobs as $postedJob){
