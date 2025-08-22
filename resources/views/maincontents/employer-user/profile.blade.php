@@ -166,7 +166,7 @@ $controllerRoute = $module['controller_route'];
                                                         ?>
                                                             <tr>
                                                                 <td><?=$sl_no++?></td>
-                                                                <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:150px; height:70px;"></td>
+                                                                <td><img src="<?=url('/') . '/' . $brand->company_namecompany_logo?>" alt="<?=$brand->company_name?>"></td>
                                                                 <td><?=$brand->company_name?></td>
                                                                 <td><?=$brand->industry_name?></td>
                                                                 <td><?=$brand->contact_person_id?></td>
