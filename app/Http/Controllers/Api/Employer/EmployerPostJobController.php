@@ -390,6 +390,16 @@ class EmployerPostJobController extends BaseApiController
     }
 
     /**
+        * Draft Jobs list for employers
+        @response json
+    */
+    public function getMyDraftedJobsDetsils(Request $request, $id){
+        $data = EmployerPostJobDraft::where('user_id', auth()->user()->id)
+                                    ->where('id', $id)->first();
+
+        return $this->sendResponse($data, 'Details of drafted jobs');
+    }
+    /**
      * Update an existing job posting - matches your existing controller
      *
      * @param Request $request
