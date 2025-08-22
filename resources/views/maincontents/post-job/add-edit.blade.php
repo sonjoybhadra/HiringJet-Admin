@@ -518,7 +518,7 @@ $controllerRoute = $module['controller_route'];
                                                 </div>
                                                 <div class="col-sm-12 mb-3" id="apply_on_email_row" style="display:none;">
                                                     <label class="form-label" for="apply_on_email">Apply To (Email)</label>
-                                                    <input type="text" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?= $apply_on_email ?>" />
+                                                    <input type="email" name="apply_on_email" id="apply_on_email" class="form-control" placeholder="Apply To (Email)" value="<?= $apply_on_email ?>" />
                                                 </div>
                                                 <div class="col-sm-12 mb-3" id="apply_on_link_row" style="display:none;">
                                                     <label class="form-label" for="apply_on_link">Apply To (Link)</label>

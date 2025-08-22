@@ -5,6 +5,7 @@ use App\Models\City;
 use App\Models\Industry;
 use App\Models\Designation;
 use App\Models\Employer;
+use App\Models\PostJob;
 use App\Models\UserEmployer;
 
 use App\Helpers\Helper;
@@ -131,27 +132,18 @@ $controllerRoute = $module['controller_route'];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>AAAAAAAAA</td>
-                                                            <td>a@a.com</td>
-                                                            <td>+91 9999999999</td>
-                                                            <td>Front End Developer</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>2</td>
-                                                            <td>BBBBBBBBBBBBB</td>
-                                                            <td>b@b.com</td>
-                                                            <td>+91 9999999999</td>
-                                                            <td>Front End Developer</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>3</td>
-                                                            <td>CCCCCCCCCCCC</td>
-                                                            <td>c@c.com</td>
-                                                            <td>+91 9999999999</td>
-                                                            <td>Front End Developer</td>
-                                                        </tr>
+                                                        <?php
+                                                        $sl_no=1;
+                                                        if($subusers){ foreach($subusers as $subuser){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><?=$subuser->first_name.' '.$subuser->last_name?></td>
+                                                                <td><?=$subuser->email?></td>
+                                                                <td><?=$subuser->country_code?> <?=$subuser->phone?></td>
+                                                                <td><?=$subuser->designation_name?></td>
+                                                            </tr>
+                                                        <?php } } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -168,13 +160,18 @@ $controllerRoute = $module['controller_route'];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td><img src="https://hjadmin.itiffyconsultants.xyz/public/uploads/175017025461sA2spgQ4L.jpg" style="width:150px; height:70px;"></td>
-                                                            <td>TCS</td>
-                                                            <td>IT</td>
-                                                            <td>7042398540</td>
-                                                        </tr>
+                                                        <?php
+                                                        $sl_no=1;
+                                                        if($brands){ foreach($brands as $brand){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><img src="<?=url('/') . '/' . $brand->company_logo?>" alt="<?=$brand->company_name?>" style="width: 200px;height: 60px;"></td>
+                                                                <td><?=$brand->company_name?></td>
+                                                                <td><?=$brand->industry_name?></td>
+                                                                <td><?=$brand->contact_person_id?></td>
+                                                            </tr>
+                                                        <?php } } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -280,12 +277,17 @@ $controllerRoute = $module['controller_route'];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>202.8.119.226</td>
-                                                            <td>{"country":[],"city":[],"industry":[],"nationality":[],"designation":[],"employer":[],"freshness":null,"gender":null,"experience":null,"salary_range":null,"title":null,"location":null,"keyword":null,"job_category":null,"job_type":"on-site-jobs","page":1}</td>
-                                                            <td>14 Aug 2025</td>
-                                                        </tr>
+                                                        <?php
+                                                        $sl_no=1;
+                                                        if($saved_searches){ foreach($saved_searches as $saved_search){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><?=$saved_search->ip?></td>
+                                                                <td><?=$saved_search->search_string?></td>
+                                                                <td><?=$saved_search->created_at?></td>
+                                                            </tr>
+                                                        <?php } }?>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -344,40 +346,26 @@ $controllerRoute = $module['controller_route'];
                                                             <th>Posting Open Date</th>
                                                             <th>Posting Close Date</th>
                                                             <th>Created At</th>
-                                                            <th>Created By</th>
+                                                            <!-- <th>Created By</th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>HJ-J-0000020</td>
-                                                            <td>Accounts Receivable Clerk</td>
-                                                            <td>walk-in-jobs</td>
-                                                            <td>2025-08-15</td>
-                                                            <td>2025-09-15</td>
-                                                            <td>2025-08-13 18:55:38</td>
-                                                            <td>Demo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>HJ-J-0000020</td>
-                                                            <td>Accounts Receivable Clerk</td>
-                                                            <td>walk-in-jobs</td>
-                                                            <td>2025-08-15</td>
-                                                            <td>2025-09-15</td>
-                                                            <td>2025-08-13 18:55:38</td>
-                                                            <td>Demo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>HJ-J-0000020</td>
-                                                            <td>Accounts Receivable Clerk</td>
-                                                            <td>walk-in-jobs</td>
-                                                            <td>2025-08-15</td>
-                                                            <td>2025-09-15</td>
-                                                            <td>2025-08-13 18:55:38</td>
-                                                            <td>Demo</td>
-                                                        </tr>
+                                                        <?php
+                                                        $postedJobs = PostJob::select('id', 'job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by')->where('employer_id', '=', $business_id)->where('status', '=', 1)->orderBy('id', 'DESC')->get();
+                                                        $sl_no=1;
+                                                        if($postedJobs){ foreach($postedJobs as $postedJob){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><?=$postedJob->job_no?></td>
+                                                                <td><?=$postedJob->position_name?></td>
+                                                                <td><?=$postedJob->job_type?></td>
+                                                                <td><?=(($postedJob->posting_open_date != '')?date_format(date_create($postedJob->posting_open_date), "Y-m-d"):'')?></td>
+                                                                <td><?=(($postedJob->posting_close_date != '')?date_format(date_create($postedJob->posting_close_date), "Y-m-d"):'')?></td>
+                                                                <td><?=$postedJob->created_at?></td>
+                                                                <!-- <td><?=$postedJob->created_by?></td> -->
+                                                            </tr>
+                                                        <?php } }?>
                                                     </tbody>
                                                 </table>
                                             </div>

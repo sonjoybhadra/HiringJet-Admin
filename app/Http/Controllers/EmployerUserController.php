@@ -24,6 +24,7 @@ use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use App\Models\User;
+use App\Models\UserJobSearchHistory;
 use Auth;
 use Session;
 use DB;
@@ -428,6 +429,30 @@ class EmployerUserController extends Controller
                                                 ->select('employers.*', 'user_employers.*')
                                                 ->where('user_employers.id', '=', $id)
                                                 ->first();
+            $data['business_id']            = (($data['row'])?$data['row']->business_id:0);
+            $user_id                        = (($data['row'])?$data['row']->user_id:0);
+            $data['user_id']                = $user_id;
+
+            $data['subusers']               = DB::table('user_employers')
+                                                ->join('users', 'users.id', '=', 'user_employers.user_id')
+                                                ->join('designations', 'designations.id', '=', 'user_employers.designation_id')
+                                                ->select('user_employers.*', 'designations.name as designation_name')
+                                                // ->where('user_employers.id', '=', $id)
+                                                ->where('users.parent_id', '=', $user_id)
+                                                ->where('users.status', '=', 1)
+                                                ->orderBy('users.id', 'DESC')
+                                                ->get();
+
+            $data['brands']               = DB::table('employer_brands')
+                                                ->join('industries', 'industries.id', '=', 'employer_brands.industry_id')
+                                                ->select('employer_brands.*', 'industries.name as industry_name')
+                                                // ->where('employer_brands.id', '=', $id)
+                                                ->where('employer_brands.user_id', '=', $user_id)
+                                                ->where('employer_brands.status', '=', 1)
+                                                ->orderBy('employer_brands.id', 'DESC')
+                                                ->get();
+
+            $data['saved_searches']         = UserJobSearchHistory::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');
