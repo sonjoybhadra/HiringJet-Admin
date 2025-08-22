@@ -5,6 +5,7 @@ use App\Models\City;
 use App\Models\Industry;
 use App\Models\Designation;
 use App\Models\Employer;
+use App\Models\PostJob;
 use App\Models\UserEmployer;
 
 use App\Helpers\Helper;
@@ -344,40 +345,27 @@ $controllerRoute = $module['controller_route'];
                                                             <th>Posting Open Date</th>
                                                             <th>Posting Close Date</th>
                                                             <th>Created At</th>
-                                                            <th>Created By</th>
+                                                            <!-- <th>Created By</th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>HJ-J-0000020</td>
-                                                            <td>Accounts Receivable Clerk</td>
-                                                            <td>walk-in-jobs</td>
-                                                            <td>2025-08-15</td>
-                                                            <td>2025-09-15</td>
-                                                            <td>2025-08-13 18:55:38</td>
-                                                            <td>Demo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>HJ-J-0000020</td>
-                                                            <td>Accounts Receivable Clerk</td>
-                                                            <td>walk-in-jobs</td>
-                                                            <td>2025-08-15</td>
-                                                            <td>2025-09-15</td>
-                                                            <td>2025-08-13 18:55:38</td>
-                                                            <td>Demo</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>HJ-J-0000020</td>
-                                                            <td>Accounts Receivable Clerk</td>
-                                                            <td>walk-in-jobs</td>
-                                                            <td>2025-08-15</td>
-                                                            <td>2025-09-15</td>
-                                                            <td>2025-08-13 18:55:38</td>
-                                                            <td>Demo</td>
-                                                        </tr>
+                                                        <?php
+                                                        echo $id;
+                                                        $postedJobs = PostJob::select('id', 'job_no', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by')->where('employer_id', '=', $id)->where('status', '=', 1)->orderBy('id', 'DESC')->get();
+                                                        $sl_no=1;
+                                                        if($postedJobs){ foreach($postedJobs as $postedJob){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><?=$postedJob->job_no?></td>
+                                                                <td><?=$postedJob->position_name?></td>
+                                                                <td><?=$postedJob->job_type?></td>
+                                                                <td><?=(($postedJob->posting_open_date != '')?date_format(date_create($postedJob->posting_open_date), "Y-m-d"):'')?></td>
+                                                                <td><?=(($postedJob->posting_close_date != '')?date_format(date_create($postedJob->posting_close_date), "Y-m-d"):'')?></td>
+                                                                <td><?=$postedJob->created_at?></td>
+                                                                <!-- <td><?=$postedJob->created_by?></td> -->
+                                                            </tr>
+                                                        <?php } }?>
                                                     </tbody>
                                                 </table>
                                             </div>
