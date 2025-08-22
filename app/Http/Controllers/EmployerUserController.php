@@ -24,6 +24,7 @@ use App\Models\UserActivity;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use App\Models\User;
+use App\Models\UserJobSearchHistory;
 use Auth;
 use Session;
 use DB;
@@ -448,6 +449,8 @@ class EmployerUserController extends Controller
                                                 ->where('employer_brands.user_id', '=', $user_id)
                                                 ->where('employer_brands.status', '=', 1)
                                                 ->get();
+
+            $data['saved_searches']         = UserJobSearchHistory::where('user_id', '=', $user_id)->get();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');

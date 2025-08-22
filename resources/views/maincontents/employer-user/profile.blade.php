@@ -277,12 +277,17 @@ $controllerRoute = $module['controller_route'];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>202.8.119.226</td>
-                                                            <td>{"country":[],"city":[],"industry":[],"nationality":[],"designation":[],"employer":[],"freshness":null,"gender":null,"experience":null,"salary_range":null,"title":null,"location":null,"keyword":null,"job_category":null,"job_type":"on-site-jobs","page":1}</td>
-                                                            <td>14 Aug 2025</td>
-                                                        </tr>
+                                                        <?php
+                                                        $sl_no=1;
+                                                        if($saved_searches){ foreach($saved_searches as $saved_search){
+                                                        ?>
+                                                            <tr>
+                                                                <td><?=$sl_no++?></td>
+                                                                <td><?=$saved_search->ip?></td>
+                                                                <td><?=$saved_search->search_string?></td>
+                                                                <td><?=$saved_search->created_at?></td>
+                                                            </tr>
+                                                        <?php } }?>
                                                     </tbody>
                                                 </table>
                                             </div>
