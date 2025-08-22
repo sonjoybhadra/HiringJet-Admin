@@ -65,7 +65,7 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <div class="col-md-3">
                             <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
-                            <select class="select2" id="type" name="type" required>
+                            <select class="form-control" id="type" name="type" required>
                                 <option label="" value="" selected disabled>Select Type</option>
                                 <option value="Jobseeker" <?= (($type == 'Jobseeker') ? 'selected' : '') ?>>Jobseeker</option>
                                 <option value="Employer" <?= (($type == 'Employer') ? 'selected' : '') ?>>Employer</option>
