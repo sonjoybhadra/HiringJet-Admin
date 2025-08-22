@@ -192,6 +192,7 @@ class CommonController extends BaseApiController
         $list = Country::select('id', 'currency_code as name', 'country_short_code')
                         ->where('status', 1)
                         ->where('currency_code','<>','')
+                        ->groupBy('currency_code', 'id', 'country_short_code')
                         ->get();
         if($res != ''){
             return $list;
