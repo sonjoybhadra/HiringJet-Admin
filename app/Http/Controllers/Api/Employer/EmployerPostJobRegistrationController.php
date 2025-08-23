@@ -17,6 +17,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Mail\SignupOtp;
+use App\Models\EmployerPostJobDraft;
 use App\Mail\RegistrationSuccess;
 use Illuminate\Http\Request;
 
@@ -124,12 +125,33 @@ class EmployerPostJobRegistrationController extends BaseApiController
   public function postJobComplete(Request $request)
     {
         try {
+
             // Check authentication first
             $user = User::find(auth()->user()->id);
+
             if (!$user) {
                 return $this->sendError('Unauthorized', 'Please login first', 401);
             }
+            //If request for draft no further process will required. Save and exit.
+            if(isset($request->is_draft) && !empty($request->is_draft)){
+                $validator = Validator::make($request->all(), [
+                    'position_name' => 'required|string'
+                ]);
+                if ($validator->fails()) {
+                    return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
 
+                $draftRequest = $request->all();
+                unset($draftRequest['is_draft']);
+                EmployerPostJobDraft::create([
+                    'user_id'=> auth()->user()->id,
+                    'position_name'=> $request->position_name,
+                    'job_no'=> 'Draft-HJ-' . time(),
+                    'request_json'=> json_encode($draftRequest)
+                ]);
+
+                return $this->sendResponse([], 'Your job has successfully saved in draft.');
+            }
             // Get or create employer details
             $userEmployer = UserEmployer::where('user_id', $user->id)->first();
             if (!$userEmployer) {
