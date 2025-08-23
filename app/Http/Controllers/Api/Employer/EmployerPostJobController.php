@@ -509,9 +509,8 @@ class EmployerPostJobController extends BaseApiController
             }
 
             return $this->sendResponse([
-                'job_id' => $result['job_id'],
-                'job_number' => $result['job_number']
-            ], 'Your job post has successfully done.');
+                'job_id' => $result['job_id']
+            ], 'Post job has updated successfully.');
 
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
