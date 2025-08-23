@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\CmsArticleController;
 
 use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\ReportBugController;
+use App\Http\Controllers\Api\NewsletterSubscribersController;
 
 use App\Http\Controllers\Api\JobSearchController;
 use App\Http\Controllers\Api\CandidateSearchController;
@@ -115,6 +116,8 @@ Route::get('/get-article', [CmsArticleController::class, 'getArticle']);
 
 Route::post('/contact-us', [ContactUsController::class, 'postContactUs']);
 Route::post('/report-bug', [ReportBugController::class, 'postReportBug']);
+
+Route::post('/newsletter', [NewsletterSubscribersController::class, 'store']);
 
 Route::post('/get-jobs/{job_type}', [JobSearchController::class, 'getJobsByParams']);
 Route::post('/get-jobs/{job_type}/{id}', [JobSearchController::class, 'getJobDetails']);
@@ -227,6 +230,7 @@ use App\Http\Controllers\Api\Employer\EmployerTagsController;
 use App\Http\Controllers\Api\Employer\EmployerEmailTemplateController;
 use App\Http\Controllers\Api\Employer\EmployerPostJobController;
 use App\Http\Controllers\Api\Search\EmployerSearchController;
+use App\Http\Controllers\Api\Employer\DemoRequestsController;
 
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
@@ -241,6 +245,7 @@ Route::post('/employer/forgot-password/otp-verification', [ForgotpasswordControl
 Route::post('/employer/forgot-password/reset-password', [ForgotpasswordController::class, 'resetPassword']);
 Route::post('/employer/search/result', [EmployerSearchController::class, 'getEmployerBySearch']);
 
+Route::post('/employer/demo-requests', [DemoRequestsController::class, 'store']);
 
 
 Route::post('/employer/login', [EmployerAuthController::class, 'login']);

@@ -1,45 +1,46 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Employer;
 
 use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
-use App\Models\ContactUs;
+use App\Models\DemoRequest;
 
-class ContactUsController extends BaseApiController
+class DemoRequestsController extends BaseApiController
 {
-    public function postContactUs(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string',
-            'email' => 'required|email',
-            'phone' => 'required|string',
-            'city' => 'required|integer',
+            'country_code' => 'required',
+            'phone' => 'required|unique:demo_requests',
+            'email' => 'required|string|email|unique:demo_requests',
+            'city' => 'required|string',
             'organization' => 'required|string',
-            // 'interested_in' => 'required|string'
+            'interested_in' => 'required|string'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            ContactUs::insertGetId([
-                'user_id'=> auth()->check() ? auth()->user()->id : NULL,
+            DemoRequest::insertGetId([
                 'name'=> $request->name,
-                'email'=> $request->email,
+                'country_code'=> $request->country_code,
                 'phone'=> $request->phone,
-                'city_id'=> $request->city,
-                'country_id'=> $request->country_id,
+                'email'=> $request->email,
+                'city'=> $request->city,
                 'organization'=> $request->organization,
                 'interested_in'=> $request->interested_in,
             ]);
 
-            return $this->sendResponse([], 'Contact us request is submitted successfully.');
+            return $this->sendResponse([], 'Demo request is submitted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
         }
     }
+
 }
