@@ -202,7 +202,13 @@ class TableController extends Controller
 
         $columns = array_filter($columns, fn($col) => strtolower($col) !== 'actions');
 
-        $query = DB::table($table)->select($columns);
+        if($filename != 'Jobseeker'){
+            $query = DB::table($table)->select($columns);
+        } else {
+            $query = DB::table($table)
+                            ->select($columns)
+                            ->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
+        }        
 
         $conditions = json_decode(urldecode($request->input('conditions')), true);
         if (!empty($conditions)) {
@@ -217,6 +223,10 @@ class TableController extends Controller
             $query->whereNull('users.parent_id');
         }
 
+        // if ($table === 'users' && $col == 'profile_completed_percentage') {
+        //     return 'user_profiles.profile_completed_percentage';
+        // }
+
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
                 foreach ($columns as $col) {
@@ -226,6 +236,7 @@ class TableController extends Controller
         }
 
         $rawData = $query->orderBy("$table.$orderBy", $orderType)->get()->toArray();
+        // Helper::pr($rawData);
 
         // Add Sl. No. to data
         $data = [];
@@ -271,7 +282,7 @@ class TableController extends Controller
                 return Excel::download(new \App\Exports\ArrayExport($columns, $data), 'export.xlsx');
 
             case 'pdf':
-                ini_set('memory_limit', '1024M'); // 👈 Increase memory limit
+                ini_set('memory_limit', '10240M'); // 👈 Increase memory limit
                 $pdf = PDF::loadView('exports.table', ['columns' => $headers, 'data' => $data, 'titles' => $titles]);
                 // // Option 1: Stream it in browser
                 // return $pdf->stream('filename.pdf');
