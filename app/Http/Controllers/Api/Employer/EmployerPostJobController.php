@@ -436,6 +436,7 @@ class EmployerPostJobController extends BaseApiController
 
             // Prepare job data matching the database schema
             $jobData = [
+                'employer_id' => auth()->user()->user_employer_details->business_id,
                 'position_name' => $cleanedRequest->get('position_name'),
                 'job_type' => $cleanedRequest->get('job_type'),
                 'location_countries' => $cleanedRequest->get('location_countries'),
