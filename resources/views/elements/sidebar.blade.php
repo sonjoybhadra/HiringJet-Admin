@@ -580,34 +580,88 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
+  <?php if(in_array(17, $moduleIds) || in_array(18, $moduleIds) || in_array(19, $moduleIds)){?>
+    <!-- Logs -->
+    <li class="menu-item active <?=(($pageSegment == 'email-logs' || $pageSegment == 'login-logs' || $pageSegment == 'user-activity-logs')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-right-to-bracket"></i>
+        <div data-i18n="Logs">Logs</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(17, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
+            <a href="<?=url('/email-logs/')?>" class="menu-link">
+              <div data-i18n="Email Logs"><i class="fa-solid fa-arrow-right"></i> Email Logs</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(18, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
+            <a href="<?=url('/login-logs/')?>" class="menu-link">
+              <div data-i18n="Login Logs"><i class="fa-solid fa-arrow-right"></i> Login Logs</div>
+            </a>
+          </li>
+        <?php }?>
+        
+        <?php if(in_array(19, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
+            <a href="<?=url('/user-activity-logs/')?>" class="menu-link">
+              <div data-i18n="User Activity Logs"><i class="fa-solid fa-arrow-right"></i> User Activity Logs</div>
+            </a>
+          </li>
+        <?php }?>
+      </ul>
+    </li>
+  <?php }?>
+
+  <?php if(in_array(17, $moduleIds)){?>
+    <!-- Reports -->
+    <li class="menu-item active <?=(($pageSegment == 'reports')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-chart-line"></i>
+        <div data-i18n="Reports">Reports</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(17, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'registration-count-report')?'active':'')?>">
+            <a href="<?=url('/reports/registration-count-report/')?>" class="menu-link">
+              <div data-i18n="Registration Count Reports"><i class="fa-solid fa-arrow-right"></i> Registration Count Reports</div>
+            </a>
+          </li>
+        <?php }?>
+      </ul>
+    </li>
+  <?php }?>
+
   <?php if(in_array(17, $moduleIds)){?>
     <!-- Email Logs -->
-    <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
+    <!-- <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
       <a href="<?=url('/email-logs')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-envelope"></i>
         <div data-i18n="Email Logs">Email Logs</div>
       </a>
-    </li>
+    </li> -->
   <?php }?>
 
   <?php if(in_array(18, $moduleIds)){?>
     <!-- Login Logs -->
-    <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
+    <!-- <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
       <a href="<?=url('/login-logs')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-right-to-bracket"></i>
         <div data-i18n="Login Logs">Login Logs</div>
       </a>
-    </li>
+    </li> -->
   <?php }?>
 
   <?php if(in_array(19, $moduleIds)){?>
     <!-- User Activity Logs -->
-    <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
+    <!-- <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
       <a href="<?=url('/user-activity-logs')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-chart-line"></i>
         <div data-i18n="User Activity Logs">User Activity Logs</div>
       </a>
-    </li>
+    </li> -->
   <?php }?>
 
   <?php if(in_array(20, $moduleIds)){?>
