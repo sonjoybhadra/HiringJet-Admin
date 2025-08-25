@@ -61,8 +61,12 @@ class EmployerPostJobController extends BaseApiController
 
             $sql->whereIn('employer_id', $child_user_business_array);
         }
-
-        $list = $sql->latest()->get();
+        if($request->sort_order){
+            $sql->orderBy('position_name', $request->sort_order);
+        }else{
+            $sql->latest();
+        }
+        $list = $sql->get();
 
         if($list->count() > 0){
             foreach($list as $key => $data){
