@@ -81,16 +81,33 @@ use App\Models\PostJob;
                <table id="simpletable" class="table table-striped table-bordered nowrap">
                   <thead>
                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Employer</th>
                         <th scope="col">Jobseeker</th>
                      </tr>
                   </thead>
                   <tbody>
+                     <?php $sl_no=1; $total_employer=0; $total_jobseeker=0;  if($registration_data){ foreach($registration_data as $registration){?>
                      <tr>
-                        <td><?=$employer_count?></td>
-                        <td><?=$jobseeker_count?></td>
+                        <td><?=$sl_no++?></td>
+                        <td><?=$registration['date_no']?></td>
+                        <td style="text-align: right;"><?=$registration['employer_count']?></td>
+                        <td style="text-align: right;"><?=$registration['jobseeker_count']?></td>
                      </tr>
+                     <?php
+                     $total_employer += $registration['employer_count'];
+                     $total_jobseeker += $registration['jobseeker_count'];
+                     ?>
+                  <?php } }?>
                   </tbody>
+                  <tfoot>
+                     <tr>
+                        <th colspan="2" style="text-align: right; font-weight: bold;">TOTAL&nbsp;&nbsp;<i class="fa fa-arrow-right"></i></th>
+                        <th style="text-align: right; font-weight: bold;"><?=$total_employer?></th>
+                        <th style="text-align: right; font-weight: bold;"><?=$total_jobseeker?></th>
+                     </tr>
+                  </tfoot>
                </table>
             </div>
         </div>

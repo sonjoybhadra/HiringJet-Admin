@@ -29,6 +29,9 @@ use Auth;
 use Session;
 use Hash;
 use DB;
+use DatePeriod;
+use DateTime;
+use DateInterval;
 
 class ReportController extends Controller
 {
@@ -49,16 +52,44 @@ class ReportController extends Controller
             $data['module']                 = $this->data;
             $page_name                      = 'reports.registration-count-report';
             $title                          = 'Registration Count Reports';
-            $data['employer_count']         = DB::table('users')
-                                                ->where('users.status', '=', 1)
-                                                ->where('users.role_id', 2)
-                                                ->count();
-            $data['jobseeker_count']        = DB::table('users')
-                                                ->where('users.status', '=', 1)
-                                                ->where('users.role_id', 3)
-                                                ->count();
+            $today                          = date('Y-m-d');
 
-            $data['search_day_id']          = 'all';
+            $fromDate                       = new DateTime($today);
+            $toDate                         = new DateTime($today);
+
+            // $period = new DatePeriod(
+            //     new DateTime($fromDate),
+            //     new DateInterval('P1D'), // interval = 1 day
+            //     (new DateTime($toDate))->modify('+1 day') // include end date
+            // );
+
+            $registration_data = [];
+            for ($date = $toDate; $date >= $fromDate; $date->modify('-1 day')) {
+                $single_date = $date->format("Y-m-d");
+
+                $employer_count         = DB::table('users')
+                                                    ->where('users.status', '=', 1)
+                                                    ->where('users.role_id', 2)
+                                                    ->whereDate('created_at', '>=', $single_date)
+                                                    ->whereDate('created_at', '<=', $single_date)
+                                                    ->count();
+                $jobseeker_count        = DB::table('users')
+                                                    ->where('users.status', '=', 1)
+                                                    ->where('users.role_id', 3)
+                                                    ->whereDate('created_at', '>=', $single_date)
+                                                    ->whereDate('created_at', '<=', $single_date)
+                                                    ->count();
+
+                $registration_data[] = [
+                    'date_no'           => $single_date,
+                    'employer_count'    => $employer_count,
+                    'jobseeker_count'   => $jobseeker_count,
+                ];
+            }
+
+            $data['registration_data']      = $registration_data;
+
+            $data['search_day_id']          = 'today';
             $data['is_search']              = 0;
             $data['from_date']              = '';
             $data['to_date']                = '';
@@ -116,18 +147,40 @@ class ReportController extends Controller
                     $data['from_date']            = $from_date;
                     $data['to_date']              = $to_date;
 
-                    $data['employer_count']         = DB::table('users')
+                    $fromDate                     = new DateTime($from_date);
+                    $toDate                       = new DateTime($to_date);
+
+                    // $period = new DatePeriod(
+                    //     new DateTime($fromDate),
+                    //     new DateInterval('P1D'), // interval = 1 day
+                    //     (new DateTime($toDate))->modify('-1 day') // include end date
+                    // );
+
+                    $registration_data = [];
+                    for ($date = $toDate; $date >= $fromDate; $date->modify('-1 day')) {
+                        $single_date = $date->format("Y-m-d");
+
+                        $employer_count         = DB::table('users')
                                                             ->where('users.status', '=', 1)
                                                             ->where('users.role_id', 2)
-                                                            ->whereDate('created_at', '>=', $from_date)
-                                                            ->whereDate('created_at', '<=', $to_date)
+                                                            ->whereDate('created_at', '>=', $single_date)
+                                                            ->whereDate('created_at', '<=', $single_date)
                                                             ->count();
-                    $data['jobseeker_count']        = DB::table('users')
+                        $jobseeker_count        = DB::table('users')
                                                             ->where('users.status', '=', 1)
                                                             ->where('users.role_id', 3)
-                                                            ->whereDate('created_at', '>=', $from_date)
-                                                            ->whereDate('created_at', '<=', $to_date)
+                                                            ->whereDate('created_at', '>=', $single_date)
+                                                            ->whereDate('created_at', '<=', $single_date)
                                                             ->count();
+
+                        $registration_data[] = [
+                            'date_no'           => $single_date,
+                            'employer_count'    => $employer_count,
+                            'jobseeker_count'   => $jobseeker_count,
+                        ];
+                    }
+                    // Helper::pr($registration_data);
+                    $data['registration_data']      = $registration_data;
                 }
             }
             
