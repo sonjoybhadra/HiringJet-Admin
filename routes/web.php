@@ -51,6 +51,7 @@ use App\Http\Controllers\ReportBugController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\EmployerUserController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\ReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -453,4 +454,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('newsletter/change-status/{id}', [NewsletterController::class, 'change_status']);
         Route::get('newsletter/send/{id}', [NewsletterController::class, 'send']);
     /* newsletter */
+    /* reports */
+        Route::get('reports/registration-count-report', [ReportController::class, 'registrationCountReport']);
+    /* reports */
 });
