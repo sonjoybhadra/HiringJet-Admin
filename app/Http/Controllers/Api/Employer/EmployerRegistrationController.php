@@ -85,7 +85,7 @@ class EmployerRegistrationController extends BaseApiController
                 ]);
 
                 Employer::find($request->business_id)->update([
-                    'status'=> 0    // Waiting for admin approval
+                    'status'=> 1    // Waiting for admin approval
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;

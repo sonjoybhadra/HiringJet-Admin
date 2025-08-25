@@ -378,6 +378,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('post-job/cancel/{id}', [PostJobController::class, 'cancel']);
         Route::get('post-job/approve/{id}', [PostJobController::class, 'approve']);
         Route::get('post-job/reject/{id}', [PostJobController::class, 'reject']);
+
+        Route::match(['get', 'post'], 'job/edit/{id}', [PostJobController::class, 'edit']);
+        Route::get('job/delete/{id}', [PostJobController::class, 'delete']);
+        Route::get('job/change-status/{id}', [PostJobController::class, 'change_status']);
     /* post job */
 
     /* upload post job */
