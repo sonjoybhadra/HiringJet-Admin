@@ -28,7 +28,7 @@ class SubscriberController extends Controller
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Subscriber',
+            'title'             => 'Newsletter Subscriber',
             'controller'        => 'SubscriberController',
             'controller_route'  => 'subscriber',
             'primary_key'       => 'id',
