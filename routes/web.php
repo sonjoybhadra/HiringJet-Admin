@@ -449,6 +449,7 @@ Route::middleware(['auth'])->group(function () {
     /* report bugs */
     /* subscriber */
         Route::get('subscriber/list', [SubscriberController::class, 'list']);
+        Route::get('subscriber/delete/{id}', [SubscriberController::class, 'delete']);
     /* subscriber */
     /* newsletter */
         Route::get('newsletter/list', [NewsletterController::class, 'list']);
