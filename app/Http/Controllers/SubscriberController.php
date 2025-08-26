@@ -47,11 +47,11 @@ class SubscriberController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = Newsletter::find($id);
+            $model                          = NewsletterSubscriber::find($id);
             $fields = [
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            Newsletter::where($this->data['primary_key'], '=', $id)->update($fields);
+            NewsletterSubscriber::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -59,7 +59,7 @@ class SubscriberController extends Controller
                     'user_type'         => 'ADMIN',
                     'ip_address'        => $request->ip(),
                     'activity_type'     => 3,
-                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'activity_details'  => $model->email . ' ' . $this->data['title'] . ' Deleted',
                     'platform_type'     => 'WEB',
                 ];
                 UserActivity::insert($activityData);
