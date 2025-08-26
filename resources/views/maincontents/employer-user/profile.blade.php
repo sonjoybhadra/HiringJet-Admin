@@ -7,6 +7,7 @@ use App\Models\Designation;
 use App\Models\Employer;
 use App\Models\PostJob;
 use App\Models\UserEmployer;
+use App\Models\EmployerCvProfile;
 
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -190,12 +191,18 @@ $controllerRoute = $module['controller_route'];
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>HR DEMO</td>
-                                                                    <td>75</td>
-                                                                    <td>10 Sept 2024</td>
-                                                                </tr>
+                                                                <?php
+                                                                $sl_no=1;
+                                                                if($folders){ foreach($folders as $folder){
+                                                                    $cv_count = EmployerCvProfile::where('user_id', '=', $user_id)->where('cv_folders_id', '=', $folder->id)->count();
+                                                                ?>
+                                                                    <tr>
+                                                                        <td><?=$sl_no++?></td>
+                                                                        <td><?=$folder->folder_name?></td>
+                                                                        <td><?=$cv_count?></td>
+                                                                        <td><?=$folder->updated_at?></td>
+                                                                    </tr>
+                                                                <?php } }?>
                                                             </tbody>
                                                         </table>
                                                     </div>

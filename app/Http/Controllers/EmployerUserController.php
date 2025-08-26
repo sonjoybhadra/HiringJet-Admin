@@ -455,6 +455,8 @@ class EmployerUserController extends Controller
 
             $data['saved_searches']         = UserJobSearchHistory::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
 
+            $data['folders']                = EmployerCvFolder::where('user_id', '=', $user_id)->where('status', '=', 1)->orderBy('id', 'DESC')->get();
+
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');
             $title                          = $this->data['title'].' Profile : '.$name.' ('.$phone.')';
