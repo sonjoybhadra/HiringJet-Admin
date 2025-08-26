@@ -179,8 +179,8 @@ $controllerRoute = $module['controller_route'];
                                             <div class="tab-pane fade" id="navs-pills-justified-3" role="tabpanel">
                                                 <h5>Folders</h5>
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h6 class="theme-color-text">My CV Folders (15)</h6>
+                                                    <div class="col-md-12">
+                                                        <h6 class="theme-color-text">CV Folders (<?=count($folders)?>)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -206,7 +206,7 @@ $controllerRoute = $module['controller_route'];
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <!-- <div class="col-md-6">
                                                         <h6 class="theme-color-text">Folders of other Users (19)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
@@ -226,7 +226,7 @@ $controllerRoute = $module['controller_route'];
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-4" role="tabpanel">
