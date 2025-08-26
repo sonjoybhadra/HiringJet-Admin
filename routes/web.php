@@ -52,6 +52,7 @@ use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\EmployerUserController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SubscriberController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -446,6 +447,9 @@ Route::middleware(['auth'])->group(function () {
     /* report bugs */
         Route::get('report-bugs/list', [ReportBugController::class, 'list']);
     /* report bugs */
+    /* subscriber */
+        Route::get('subscriber/list', [SubscriberController::class, 'list']);
+    /* subscriber */
     /* newsletter */
         Route::get('newsletter/list', [NewsletterController::class, 'list']);
         Route::match(['get', 'post'], 'newsletter/add', [NewsletterController::class, 'add']);

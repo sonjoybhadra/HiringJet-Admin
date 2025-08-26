@@ -550,14 +550,41 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
+  <?php if(in_array(15, $moduleIds) || in_array(18, $moduleIds)){?>
+    <!-- Newsletter -->
+    <li class="menu-item active <?=(($pageSegment == 'subscriber' || $pageSegment == 'newsletter')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-money-bill"></i>
+        <div data-i18n="Newsletter">Newsletter</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(15, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'subscriber')?'active':'')?>">
+            <a href="<?=url('/subscriber/list/')?>" class="menu-link">
+              <div data-i18n="Subscribers"><i class="fa-solid fa-arrow-right"></i> Subscribers</div>
+            </a>
+          </li>
+        <?php }?>
+
+        <?php if(in_array(15, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'newsletter')?'active':'')?>">
+            <a href="<?=url('/newsletter/list/')?>" class="menu-link">
+              <div data-i18n="Newsletters"><i class="fa-solid fa-arrow-right"></i> Newsletters</div>
+            </a>
+          </li>
+        <?php }?>
+      </ul>
+    </li>
+  <?php }?>
+
   <?php if(in_array(15, $moduleIds)){?>
     <!-- Newsletter -->
-    <li class="menu-item <?=(($pageSegment == 'newsletter')?'active':'')?>">
+    <!-- <li class="menu-item <?=(($pageSegment == 'newsletter')?'active':'')?>">
       <a href="<?=url('/newsletter/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-money-bill"></i>
         <div data-i18n="Newsletters">Newsletters</div>
       </a>
-    </li>
+    </li> -->
   <?php }?>
 
   <?php if(in_array(15, $moduleIds)){?>
