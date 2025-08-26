@@ -192,9 +192,9 @@ class EmployerFolderController extends BaseApiController
                 $own_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();
                 $own_list[$index]->shared_employers = EmployerCvFolder::select('folder_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
                                                             ->join('users', 'users.id', '=', 'employer_cv_folders.owner_id')
-                                                            ->where('user_id', '!=', auth()->user()->id)
-                                                            ->where('owner_id', auth()->user()->id)
-                                                            ->where('parent_id', $val->id)
+                                                            ->where('employer_cv_folders.user_id', '!=', auth()->user()->id)
+                                                            ->where('employer_cv_folders.owner_id', auth()->user()->id)
+                                                            ->where('employer_cv_folders.parent_id', $val->id)
                                                             ->get()->toArray();
             }
         }

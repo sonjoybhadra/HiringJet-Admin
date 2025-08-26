@@ -31,6 +31,7 @@ use DB;
 
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
+use App\Models\EmployerEmailtemplate;
 
 class EmployerUserController extends Controller
 {
@@ -454,6 +455,9 @@ class EmployerUserController extends Controller
                                                 ->get();
 
             $data['saved_searches']         = UserJobSearchHistory::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
+            $data['folders']                = EmployerCvFolder::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
+            $data['tags']                   = EmployerTag::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
+            $data['templates']              = EmployerEmailtemplate::where('user_id', '=', $user_id)->orderBy('id', 'DESC')->get();
 
             $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
             $phone                          = (($data['row'])?$data['row']->phone:'');

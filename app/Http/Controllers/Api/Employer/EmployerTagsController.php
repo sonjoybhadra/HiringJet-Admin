@@ -192,9 +192,9 @@ class EmployerTagsController extends BaseApiController
             foreach($own_list as $index => $val){
                 $own_list[$index]->shared_employers = EmployerTag::select('tag_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
                                                             ->join('users', 'users.id', '=', 'employer_tags.owner_id')
-                                                            ->where('user_id', '!=', auth()->user()->id)
-                                                            ->where('owner_id', auth()->user()->id)
-                                                            ->where('parent_id', $val->id)
+                                                            ->where('employer_tags.user_id', '!=', auth()->user()->id)
+                                                            ->where('employer_tags.owner_id', auth()->user()->id)
+                                                            ->where('employer_tags.parent_id', $val->id)
                                                             ->get()->toArray();
             }
         }

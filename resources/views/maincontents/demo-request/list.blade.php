@@ -1,13 +1,13 @@
 <?php
 use App\Helpers\Helper;
-$controllerRoute = $module['controller_route'];
+$user_type = session('type');
 ?>
 @extends('layouts.main')
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
    <div class="row g-6">
       <h4><?=$page_header?></h4>
-      <h6 class="breadcrumb-wrapper">
+      <h6 class="py-3 breadcrumb-wrapper mb-4">
          <span class="text-muted fw-light"><a href="<?=url('dashboard')?>">Dashboard</a> /</span> <?=$page_header?>
       </h6>
       <div class="nav-align-top mb-4">
@@ -28,9 +28,6 @@ $controllerRoute = $module['controller_route'];
             </div>
          <?php }?>
          <div class="card mb-4">
-            <!-- <div class="card-header">
-                <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
-            </div> -->
             <div class="card-body">
                <div id="table-overlay-loader" class="text-loader">
                   Fetching data. Please wait <span id="dot-animation">.</span>
@@ -38,28 +35,18 @@ $controllerRoute = $module['controller_route'];
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
-                  'table' => 'users',
-                  'columns' => ['users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'user_profiles.profile_completed_percentage', 'users.created_at', 'users.status'],
-                  'visibleColumns' => ['first_name', 'last_name', 'email', 'country_code', 'phone', 'profile_completed_percentage', 'created_at'],
-                  'headers' => ['#', 'First Name', 'Last Name', 'Email', 'Country Code', 'Phone', 'Profile Complete (%)', 'Created At'],
-                  'filename' => "Jobseeker",
+                  'table' => 'demo_requests',
+                  'columns' => ['name', 'country_code', 'phone', 'email', 'city', 'organization', 'interested_in', 'created_at'],
+                  'visibleColumns' => ['name', 'country_code', 'phone', 'email', 'city', 'organization', 'interested_in', 'created_at'],
+                  'headers' => ['#', 'Name', 'Country Code', 'Phone', 'Email', 'City', 'Organization', 'Interested In', 'Created At'],
+                  'filename' => "Demo_request",
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                     ['column' => 'status', 'operator' => '!=', 'value' => 3],
-                     ['column' => 'role_id', 'operator' => '=', 'value' => 3]
+                  
                   ],
-                  'routePrefix' => 'jobseeker',
-                  'showActions' => true, // set to false to hide actions
-                  'statusColumn' => 'status',
-                  'joins' => [
-                     [
-                        'table' => 'user_profiles',
-                        'localKey' => 'id',
-                        'foreignKey' => 'user_id',
-                        'select' => ['profile_completed_percentage as profile_completed_percentage']
-                     ]
-                  ]
+                  'routePrefix' => 'demo-request',
+                  'showActions' => false
                 ])
             </div>
         </div>

@@ -51,6 +51,9 @@ use App\Http\Controllers\ReportBugController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\EmployerUserController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\DemoRequestController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -378,6 +381,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('post-job/cancel/{id}', [PostJobController::class, 'cancel']);
         Route::get('post-job/approve/{id}', [PostJobController::class, 'approve']);
         Route::get('post-job/reject/{id}', [PostJobController::class, 'reject']);
+
+        Route::match(['get', 'post'], 'job/edit/{id}', [PostJobController::class, 'edit']);
+        Route::get('job/delete/{id}', [PostJobController::class, 'delete']);
+        Route::get('job/change-status/{id}', [PostJobController::class, 'change_status']);
     /* post job */
 
     /* upload post job */
@@ -438,9 +445,16 @@ Route::middleware(['auth'])->group(function () {
     /* contact us */
         Route::get('contact-us/list', [ContactUsController::class, 'list']);
     /* contact us */
+    /* demo requests */
+        Route::get('demo-request/list', [DemoRequestController::class, 'list']);
+    /* demo requests */
     /* report bugs */
         Route::get('report-bugs/list', [ReportBugController::class, 'list']);
     /* report bugs */
+    /* subscriber */
+        Route::get('subscriber/list', [SubscriberController::class, 'list']);
+        Route::get('subscriber/delete/{id}', [SubscriberController::class, 'delete']);
+    /* subscriber */
     /* newsletter */
         Route::get('newsletter/list', [NewsletterController::class, 'list']);
         Route::match(['get', 'post'], 'newsletter/add', [NewsletterController::class, 'add']);
@@ -449,4 +463,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('newsletter/change-status/{id}', [NewsletterController::class, 'change_status']);
         Route::get('newsletter/send/{id}', [NewsletterController::class, 'send']);
     /* newsletter */
+    /* reports */
+        Route::get('reports/registration-count-report', [ReportController::class, 'registrationCountReport']);
+    /* reports */
 });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use App\Services\JobPostingService;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 use App\Models\PostJob;
@@ -28,6 +29,7 @@ class EmployerPostJobController extends BaseApiController
     */
     public function getMyPostedJobs(Request $request){
         $sql = PostJob::select('*')
+                        ->addSelect(DB::raw('(SELECT count(job_id) FROM post_job_user_applieds x WHERE x.job_id = post_jobs.id) as total_applied_jobjeekers'))
                         ->with('employer')
                         ->with('industryRelation')
                         ->with('jobCategory')
@@ -36,7 +38,6 @@ class EmployerPostJobController extends BaseApiController
                         ->with('designationRelation')
                         ->with('functionalArea')
                         ->with('applied_users');
-
         if(!empty($request->job_status)){
             $status_array = [
                 'pending'=> 0,
@@ -60,8 +61,12 @@ class EmployerPostJobController extends BaseApiController
 
             $sql->whereIn('employer_id', $child_user_business_array);
         }
-
-        $list = $sql->latest()->get();
+        if($request->sort_order){
+            $sql->orderBy('position_name', $request->sort_order);
+        }else{
+            $sql->latest();
+        }
+        $list = $sql->get();
 
         if($list->count() > 0){
             foreach($list as $key => $data){
@@ -71,6 +76,27 @@ class EmployerPostJobController extends BaseApiController
         }
 
         return $this->sendResponse($list, 'List of posted jobs');
+    }
+
+    /**
+     * get the details of my posted job
+    */
+    public function getJobsDetails($id){
+        $data = PostJob::select('*')
+                        ->where('id', $id)
+                        ->with('employer')
+                        ->with('industryRelation')
+                        ->with('jobCategory')
+                        ->with('nationalityRelation')
+                        ->with('contractType')
+                        ->with('designationRelation')
+                        ->with('functionalArea')
+                        ->with('applied_users')
+                        ->first();
+        $data->location_countries_data = $this->returnCountryList($data->location_countries);
+        $data->location_cities_data = $this->returnCityList($data->location_cities);
+
+        return $this->sendResponse($data, 'Job details');
     }
 
     /**
@@ -371,24 +397,6 @@ class EmployerPostJobController extends BaseApiController
         return Validator::make($request->all(), $rules, $messages);
     }
 
-    public function getJobsDetails($id){
-        $data = PostJob::select('*')
-                        ->where('id', $id)
-                        ->with('employer')
-                        ->with('industryRelation')
-                        ->with('jobCategory')
-                        ->with('nationalityRelation')
-                        ->with('contractType')
-                        ->with('designationRelation')
-                        ->with('functionalArea')
-                        ->with('applied_users')
-                        ->first();
-        $data->location_countries_data = $this->returnCountryList($data->location_countries);
-        $data->location_cities_data = $this->returnCityList($data->location_cities);
-
-        return $this->sendResponse($data, 'Job details');
-    }
-
     /**
         * Draft Jobs list for employers
         @response json
@@ -436,6 +444,7 @@ class EmployerPostJobController extends BaseApiController
 
             // Prepare job data matching the database schema
             $jobData = [
+                'employer_id' => auth()->user()->user_employer_details->business_id,
                 'position_name' => $cleanedRequest->get('position_name'),
                 'job_type' => $cleanedRequest->get('job_type'),
                 'location_countries' => $cleanedRequest->get('location_countries'),
@@ -508,9 +517,8 @@ class EmployerPostJobController extends BaseApiController
             }
 
             return $this->sendResponse([
-                'job_id' => $result['job_id'],
-                'job_number' => $result['job_number']
-            ], 'Your job post has successfully done.');
+                'job_id' => $result['job_id']
+            ], 'Post job has updated successfully.');
 
         } catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
