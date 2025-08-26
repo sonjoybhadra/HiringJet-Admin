@@ -232,8 +232,8 @@ $controllerRoute = $module['controller_route'];
                                             <div class="tab-pane fade" id="navs-pills-justified-4" role="tabpanel">
                                                 <h5>Tags</h5>
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h6 class="theme-color-text">My Tag (15)</h6>
+                                                    <div class="col-md-12">
+                                                        <h6 class="theme-color-text">Tag (<?=count($tags)?>)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -243,15 +243,20 @@ $controllerRoute = $module['controller_route'];
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>Backend Developer</td>
-                                                                    <td>10 Sept 2024</td>
-                                                                </tr>
+                                                                <?php
+                                                                $sl_no=1;
+                                                                if($tags){ foreach($tags as $tag){
+                                                                ?>
+                                                                    <tr>
+                                                                        <td><?=$sl_no++?></td>
+                                                                        <td><?=$tag->tag_name?></td>
+                                                                        <td><?=$tag->updated_at?></td>
+                                                                    </tr>
+                                                                <?php } }?>
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <!-- <div class="col-md-6">
                                                         <h6 class="theme-color-text">Tags of other Users (19)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
@@ -269,7 +274,7 @@ $controllerRoute = $module['controller_route'];
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-5" role="tabpanel">
@@ -301,8 +306,8 @@ $controllerRoute = $module['controller_route'];
                                             <div class="tab-pane fade" id="navs-pills-justified-6" role="tabpanel">
                                                 <h5>Email Templates</h5>
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h6 class="theme-color-text">My Templates (8)</h6>
+                                                    <div class="col-md-12">
+                                                        <h6 class="theme-color-text">My Templates (<?=count($templates)?>)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -312,15 +317,20 @@ $controllerRoute = $module['controller_route'];
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>HR DEMO</td>
-                                                                    <td>10 Sept 2024</td>
-                                                                </tr>
+                                                                <?php
+                                                                $sl_no=1;
+                                                                if($templates){ foreach($templates as $template){
+                                                                ?>
+                                                                    <tr>
+                                                                        <td><?=$sl_no++?></td>
+                                                                        <td><?=$template->template_name?></td>
+                                                                        <td><?=$template->updated_at?></td>
+                                                                    </tr>
+                                                                <?php } }?>
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <!-- <div class="col-md-12">
                                                         <h6 class="theme-color-text">Templates of other Users (19)</h6>
                                                         <table class="table table-striped">
                                                             <thead>
@@ -338,7 +348,7 @@ $controllerRoute = $module['controller_route'];
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="navs-pills-justified-7" role="tabpanel">
