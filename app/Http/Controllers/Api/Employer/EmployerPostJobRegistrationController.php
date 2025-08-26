@@ -149,6 +149,11 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'job_no'=> 'Draft-HJ-' . time(),
                     'request_json'=> json_encode($draftRequest)
                 ]);
+                $userEmployer = UserEmployer::where('user_id', $user->id)->first();
+                if (!$userEmployer) {
+                    $userEmployer->complete_steps = 2;
+                    $userEmployer->save();
+                }
 
                 return $this->sendResponse([], 'Your job has successfully saved in draft.');
             }
@@ -172,7 +177,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             if (!$profileUpdated) {
                 return $this->sendError('Profile Error', 'Failed to update employer profile', 400);
             }
-
+            $userEmployer = UserEmployer::where('user_id', $user->id)->first();
             // FIXED: Handle application_through properly - keep as string
             $applicationThrough = $cleanedRequest->get('application_through');
 
