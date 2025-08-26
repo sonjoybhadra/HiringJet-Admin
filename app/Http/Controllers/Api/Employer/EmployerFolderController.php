@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Employer;
 
 use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
@@ -61,7 +62,7 @@ class EmployerFolderController extends BaseApiController
      */
     public function show(string $id)
     {
-        $data = EmployerCvFolder::where('id', $id)->first()->with('profile_cv')->first();
+        $data = EmployerCvFolder::where('id', $id)->with('profile_cv')->first();
         $data->is_own_tag = ($data->user_id == auth()->user()->id && $data->owner_id == auth()->user()->id) ? true : false;
         if($data->is_own_tag){
             $folder_id_array = [$id];
@@ -71,10 +72,73 @@ class EmployerFolderController extends BaseApiController
                                             ->where('parent_id', $data->parent_id)
                                             ->get()->pluck('id')->toArray();
         }
+        /** 
         $data->jobseekers_profiles = EmployerCvProfile::select('users.id', 'users.first_name','users.last_name', 'users.email')
                                                         ->join('users', 'users.id', '=', 'employer_cv_profiles.jobseeker_id')
                                                         ->whereIn('employer_cv_profiles.cv_folders_id', $folder_id_array)
                                                         ->get();
+        */
+        $data->jobseekers_profiles = DB::table('users')
+                                        ->join('user_employments', 'users.id', '=', 'user_employments.user_id')
+                                        ->join('employers', 'user_employments.employer_id', '=', 'employers.id')
+                                        ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+                                        ->leftJoin('user_employments as current_employment', function ($join) {
+                                            $join->on('users.id', '=', 'current_employment.user_id')
+                                            ->where('current_employment.is_current_job', 1);
+                                        })
+                                        ->leftJoin('designations', DB::raw("NULLIF(current_employment.last_designation, '')::BIGINT"), '=', 'designations.id')
+                                        ->leftJoin('employers as current_employer', 'current_employment.employer_id', '=', 'current_employer.id')
+                                        ->leftJoin('user_skills', 'users.id', '=', 'user_skills.user_id')
+                                        ->leftJoin('keyskills', 'user_skills.keyskill_id', '=', 'keyskills.id')
+                                        ->leftJoin('countries', 'user_profiles.country_id', '=', 'countries.id')
+                                        ->leftJoin('cities', 'user_profiles.city_id', '=', 'cities.id')
+                                        ->leftJoin('countries as currencies', 'current_employment.currency_id', '=', 'currencies.id')
+                                        ->leftJoin('nationalities', DB::raw("user_profiles.nationality_id::BIGINT"), '=', 'nationalities.id')
+                                        ->join('employer_cv_profiles', 'employer_cv_profiles.jobseeker_id', '=', 'users.id')
+                                        ->leftJoin('tag_jobseeker_mappings', function($join) {
+                                            $join->on('tag_jobseeker_mappings.jobseeker_id', '=', 'users.id')
+                                                 ->where('tag_jobseeker_mappings.user_id', auth()->user()->id);
+                                        })
+                                        ->leftJoin('employer_tags', 'tag_jobseeker_mappings.tag_id', '=', 'employer_tags.id')                                    
+                                        ->whereIn('employer_cv_profiles.cv_folders_id', $folder_id_array)
+                                        ->select(
+                                            'users.id',
+                                            'user_profiles.first_name',
+                                            'user_profiles.last_name',
+                                            'user_profiles.profile_image',
+                                            'user_profiles.gender',
+                                            'user_profiles.resume_headline',
+                                            'current_employment.total_experience_years',
+                                            'current_employment.total_experience_months',
+                                            'current_employment.current_salary',
+                                            'designations.name as current_designation_name',
+                                            'current_employer.name as current_employer_name',
+                                            DB::raw("COALESCE(STRING_AGG(DISTINCT keyskills.name, ', '), '') as skill_names"),
+                                            'countries.name as country_name',
+                                            'cities.name as city_name',
+                                            'currencies.currency_code as currency_code',
+                                            'nationalities.name as nationality_name',
+                                            DB::raw("COALESCE(STRING_AGG(DISTINCT employer_tags.tag_name, ', '), '') as tag_names")
+                                          )
+                                        ->groupBy(
+                                            'users.id',
+                                            'user_profiles.first_name',
+                                            'user_profiles.last_name',
+                                            'user_profiles.profile_image',
+                                            'user_profiles.gender',
+                                            'user_profiles.resume_headline',
+                                            'current_employment.total_experience_years',
+                                            'current_employment.total_experience_months',
+                                            'current_employment.current_salary',
+                                            'designations.name',
+                                            'current_employer.name',
+                                            'countries.name',
+                                            'cities.name',
+                                            'currencies.currency_code',
+                                            'nationalities.name'
+                                        )
+                                        ->distinct()
+                                        ->get();
 
         return $this->sendResponse($data, 'Details CV folders');
     }

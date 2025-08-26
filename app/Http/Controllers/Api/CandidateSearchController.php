@@ -28,6 +28,7 @@ class CandidateSearchController extends BaseApiController{
     $gender         = $request->gender ?? null;
     $minExperience  = $request->min_experience ?? null;
     $maxExperience  = $request->max_experience ?? null;
+    $employerId = $request->employer_id;
 
     try {
       $result = DB::table('users')
@@ -46,6 +47,11 @@ class CandidateSearchController extends BaseApiController{
         ->leftJoin('cities', 'user_profiles.city_id', '=', 'cities.id')
         ->leftJoin('countries as currencies', 'current_employment.currency_id', '=', 'currencies.id')
         ->leftJoin('nationalities', DB::raw("user_profiles.nationality_id::BIGINT"), '=', 'nationalities.id')
+        ->leftJoin('tag_jobseeker_mappings', function($join) use ($employerId) {
+          $join->on('tag_jobseeker_mappings.jobseeker_id', '=', 'users.id')
+               ->where('tag_jobseeker_mappings.user_id', $employerId);
+        })      
+        ->leftJoin('employer_tags', 'tag_jobseeker_mappings.tag_id', '=', 'employer_tags.id')                                    
         ->where('users.role_id', 3)
         ->when(!empty($designationIds), function ($q) use ($designationIds) {
           return $q->whereIn(DB::raw("NULLIF(user_employments.last_designation, '')::BIGINT"), $designationIds);
@@ -87,7 +93,8 @@ class CandidateSearchController extends BaseApiController{
           'countries.name as country_name',
           'cities.name as city_name',
           'currencies.currency_code as currency_code',
-          'nationalities.name as nationality_name'
+          'nationalities.name as nationality_name',
+          DB::raw("COALESCE(STRING_AGG(DISTINCT employer_tags.tag_name, ', '), '') as tag_names")
         )
         ->groupBy(
           'users.id',
