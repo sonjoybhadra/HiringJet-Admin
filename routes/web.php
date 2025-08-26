@@ -53,6 +53,7 @@ use App\Http\Controllers\EmployerUserController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\DemoRequestController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -444,6 +445,9 @@ Route::middleware(['auth'])->group(function () {
     /* contact us */
         Route::get('contact-us/list', [ContactUsController::class, 'list']);
     /* contact us */
+    /* demo requests */
+        Route::get('demo-request/list', [DemoRequestController::class, 'list']);
+    /* demo requests */
     /* report bugs */
         Route::get('report-bugs/list', [ReportBugController::class, 'list']);
     /* report bugs */

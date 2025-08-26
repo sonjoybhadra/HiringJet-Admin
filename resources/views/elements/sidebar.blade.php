@@ -578,21 +578,21 @@ $role_id = (($user)?$user->role_id:0);
   <?php }?>
 
   <?php if(in_array(15, $moduleIds)){?>
-    <!-- Newsletter -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'newsletter')?'active':'')?>">
-      <a href="<?=url('/newsletter/list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-money-bill"></i>
-        <div data-i18n="Newsletters">Newsletters</div>
-      </a>
-    </li> -->
-  <?php }?>
-
-  <?php if(in_array(15, $moduleIds)){?>
     <!-- Contact Us -->
     <li class="menu-item <?=(($pageSegment == 'contact-us')?'active':'')?>">
       <a href="<?=url('/contact-us/list')?>" class="menu-link">
         <i class="menu-icon fa-solid fa-address-book"></i>
         <div data-i18n="Contact Us">Contact Us</div>
+      </a>
+    </li>
+  <?php }?>
+
+  <?php if(in_array(15, $moduleIds)){?>
+    <!-- Contact Us -->
+    <li class="menu-item <?=(($pageSegment == 'demo-request')?'active':'')?>">
+      <a href="<?=url('/demo-request/list')?>" class="menu-link">
+        <i class="menu-icon fa-solid fa-address-book"></i>
+        <div data-i18n="Demo Requests">Demo Requests</div>
       </a>
     </li>
   <?php }?>
