@@ -192,7 +192,7 @@ class TableController extends Controller
             });
         }
 
-        // DB::enableQueryLog();
+        DB::enableQueryLog();
 
         // Count before pagination
         $total = (clone $query)->count();
@@ -208,10 +208,10 @@ class TableController extends Controller
             });
 
         // Get last query
-        // $queries = DB::getQueryLog();
-        // $lastQuery = end($queries);
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
 
-        // print_r($lastQuery);
+        print_r($lastQuery);
 
         return response()->json([
             'data' => $data,
