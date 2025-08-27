@@ -249,6 +249,7 @@ class EmployerFolderController extends BaseApiController
     private function getList(){
         $own_list = EmployerCvFolder::with('profile_cv')
                                 ->where('user_id', auth()->user()->id)
+                                ->where('owner_id', auth()->user()->id)
                                 ->orderBy('folder_name', 'ASC')
                                 ->get();
         if($own_list->count() > 0){

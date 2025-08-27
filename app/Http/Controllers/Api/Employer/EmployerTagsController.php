@@ -187,7 +187,10 @@ class EmployerTagsController extends BaseApiController
     }
 
     private function getList(){
-        $own_list = EmployerTag::where('user_id', auth()->user()->id)->orderBy('tag_name', 'ASC')->get();
+        $own_list = EmployerTag::where('user_id', auth()->user()->id)
+                                ->where('owner_id', auth()->user()->id)
+                                ->orderBy('tag_name', 'ASC')
+                                ->get();
         if($own_list->count() > 0){
             foreach($own_list as $index => $val){
                 $own_list[$index]->shared_employers = EmployerTag::select('tag_name', 'first_name', 'last_name', 'users.id AS user_employer_id')

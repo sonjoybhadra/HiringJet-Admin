@@ -209,6 +209,7 @@ class EmployerEmailTemplateController extends BaseApiController
                                 ->with('cities')
                                 ->with('currency')
                                 ->where('user_id', auth()->user()->id)
+                                ->where('owner_id', auth()->user()->id)
                                 ->latest()
                                 ->get();
         if($own_list->count() > 0){
