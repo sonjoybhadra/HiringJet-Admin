@@ -411,6 +411,7 @@ Route::middleware(['auth'])->group(function () {
 
     /* jobseeker */
         Route::get('jobseeker/list', [JobseekerController::class, 'list']);
+        Route::get('jobseeker/profile-complete-list/{id}', [JobseekerController::class, 'profileCompleteList']);
         Route::match(['get', 'post'], 'jobseeker/add', [JobseekerController::class, 'add']);
         Route::match(['get', 'post'], 'jobseeker/edit/{id}', [JobseekerController::class, 'edit']);
         Route::get('jobseeker/delete/{id}', [JobseekerController::class, 'delete']);

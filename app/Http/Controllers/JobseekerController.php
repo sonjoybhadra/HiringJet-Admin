@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
 use App\Models\User;
 use App\Models\UserActivity;
+use App\Models\ProfileComplete;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
@@ -34,6 +35,16 @@ class JobseekerController extends Controller
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
             $page_name                      = 'jobseeker.list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function profileCompleteList($profile_completes_id){
+            $profile_completes_id           = Helper::decoded($profile_completes_id);
+            $get_profile_complete           = ProfileComplete::select('name')->where('id', '=', $profile_completes_id)->first();
+            $data['module']                 = $this->data;
+            $title                          = (($get_profile_complete)?$get_profile_complete->name:'') . ' : ' . $this->data['title'].' List';
+            $data['profile_completes_id']   = $profile_completes_id;
+            $page_name                      = 'jobseeker.profile-complete-list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Common;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
@@ -13,6 +14,7 @@ class TableController extends Controller
         // Helper::pr($request->all());
         $table = $request->input('table');
         $routes = $request->input('routes');
+        $filename = $request->input('filename');
         $orderBy = $request->input('orderBy', 'id');
         $orderType = $request->input('orderType', 'desc');
         $rawColumns = explode(',', $request->input('columns'));
@@ -60,6 +62,10 @@ class TableController extends Controller
         }
         if ($table === 'users' && $routes == 'jobseeker') {
             $query->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
+            
+            if($filename == 'ProfileComplete'){
+                $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
+            }
         }
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
@@ -153,6 +159,23 @@ class TableController extends Controller
             $query->whereNotNull('user_employers.business_id');
         }
 
+        $routeName    = Route::current();
+        $url          = $request->fullUrl();
+        $pageName     = explode("/", $routeName->uri());
+        $pageSegment  = $pageName[0];
+        $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
+
+        if($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list'){
+            if($pageFunction == 'profile-complete-list'){
+                $url_break      = explode("profile-complete-list/", $url);
+                $pageParam      = Helper::decoded($url_break[1]);
+            } else {
+                $pageParam      = '';
+            }
+
+            $query->where('user_profile_completed_percentages.profile_completes_id', '=', $pageParam);
+        }
+        
         // Search
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
@@ -162,6 +185,8 @@ class TableController extends Controller
                 }
             });
         }
+
+        // DB::enableQueryLog();
 
         // Count before pagination
         $total = (clone $query)->count();
@@ -175,6 +200,11 @@ class TableController extends Controller
                 $item->encoded_id = urlencode(base64_encode($item->id));
                 return $item;
             });
+
+        // Get last query
+        // $queries = DB::getQueryLog();
+        // $lastQuery = end($queries);
+        // print_r($lastQuery);
 
         return response()->json([
             'data' => $data,

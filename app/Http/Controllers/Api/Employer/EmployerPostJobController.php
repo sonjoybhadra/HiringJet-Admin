@@ -169,6 +169,7 @@ class EmployerPostJobController extends BaseApiController
             $jobData = [
                 'employer_id' => auth()->user()->user_employer_details->business_id,
                 'position_name' => $cleanedRequest->get('position_name'),
+                'brand' => $cleanedRequest->get('brand'),
                 'job_type' => $cleanedRequest->get('job_type'),
                 'location_countries' => $cleanedRequest->get('location_countries'),
                 'location_cities' => $cleanedRequest->get('location_cities'),
@@ -311,6 +312,7 @@ class EmployerPostJobController extends BaseApiController
         $rules = [
             // Required fields matching database schema
             'position_name' => 'required|string|max:255',
+            'brand' => 'required|integer|min:1',
             'job_type' => 'required|string|in:walk-in-jobs,remote-jobs,on-site-jobs,temp-role-jobs',
             'location_countries' => 'required', // JSON array or single integer
             'location_cities' => 'nullable', // JSON array or single integer, can be null
@@ -367,6 +369,7 @@ class EmployerPostJobController extends BaseApiController
 
         $messages = [
             'position_name.required' => 'Position name is required',
+            'brand.required' => 'Brand is required',
             'job_type.required' => 'Job type is required',
             'location_countries.required' => 'Location country is required',
             'industry.required' => 'Industry is required',
@@ -446,6 +449,7 @@ class EmployerPostJobController extends BaseApiController
             $jobData = [
                 'employer_id' => auth()->user()->user_employer_details->business_id,
                 'position_name' => $cleanedRequest->get('position_name'),
+                'brand' => $cleanedRequest->get('brand'),
                 'job_type' => $cleanedRequest->get('job_type'),
                 'location_countries' => $cleanedRequest->get('location_countries'),
                 'location_cities' => $cleanedRequest->get('location_cities'),

@@ -314,6 +314,7 @@ class JobPostingService
             'walkin_latitude' => $data['walkin_latitude'] ?? null,
             'walkin_longitude' => $data['walkin_longitude'] ?? null,
             'walkin_details' => $data['walkin_details'] ?? NULL,
+            'brand_id' => $data['brand_id'] ?? null,
             'created_by' => $userId,
             'updated_by' => $userId,
             'status' => 0, // 0 = pending , 1 = active , 2 = rejected , 3 = deleted, 10 = draft

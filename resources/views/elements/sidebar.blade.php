@@ -1,15 +1,19 @@
 <?php
+use Illuminate\Support\Facades\Request;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Route;
 use App\Models\Role;
+use App\Models\ProfileComplete;
 use App\Models\User;
 
 $routeName    = Route::current();
+$url          = Request::fullUrl();
 $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
 $role_id = (($user)?$user->role_id:0);
+
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
@@ -532,11 +536,34 @@ $role_id = (($user)?$user->role_id:0);
   
   <?php if(in_array(14, $moduleIds)){?>
     <!-- Jobseekers -->
-    <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
-      <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+    <li class="menu-item active <?=(($pageSegment == 'jobseeker')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-users"></i>
         <div data-i18n="Jobseekers">Jobseekers</div>
       </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'list')?'active':'')?>">
+          <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+            <div data-i18n="All"><i class="fa-solid fa-arrow-right"></i> All</div>
+          </a>
+        </li>
+        <?php
+        if($pageFunction == 'profile-complete-list'){
+          $url_break      = explode("profile-complete-list/", $url);
+          $pageParam      = $url_break[1];
+        } else {
+          $pageParam      = '';
+        }
+        $profile_completes = ProfileComplete::select('id', 'name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
+        if($profile_completes){ foreach($profile_completes as $profile_complete){
+        ?>
+          <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list' && $pageParam == Helper::encoded($profile_complete->id))?'active':'')?>">
+            <a href="<?=url('/jobseeker/profile-complete-list/' . Helper::encoded($profile_complete->id))?>" class="menu-link">
+              <div data-i18n="<?=$profile_complete->name?>"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
+            </a>
+          </li>
+        <?php } }?>        
+      </ul>
     </li>
   <?php }?>
 
@@ -659,37 +686,7 @@ $role_id = (($user)?$user->role_id:0);
         <?php }?>
       </ul>
     </li>
-  <?php }?>
-
-  <?php if(in_array(17, $moduleIds)){?>
-    <!-- Email Logs -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
-      <a href="<?=url('/email-logs')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-envelope"></i>
-        <div data-i18n="Email Logs">Email Logs</div>
-      </a>
-    </li> -->
-  <?php }?>
-
-  <?php if(in_array(18, $moduleIds)){?>
-    <!-- Login Logs -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
-      <a href="<?=url('/login-logs')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-right-to-bracket"></i>
-        <div data-i18n="Login Logs">Login Logs</div>
-      </a>
-    </li> -->
-  <?php }?>
-
-  <?php if(in_array(19, $moduleIds)){?>
-    <!-- User Activity Logs -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
-      <a href="<?=url('/user-activity-logs')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-chart-line"></i>
-        <div data-i18n="User Activity Logs">User Activity Logs</div>
-      </a>
-    </li> -->
-  <?php }?>
+  <?php }?>  
 
   <?php if(in_array(20, $moduleIds)){?>
     <!-- Settings -->
