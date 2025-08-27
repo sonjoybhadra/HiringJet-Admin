@@ -223,7 +223,7 @@ class EmployerEmailTemplateController extends BaseApiController
         }
         $shared_list = $users_data_list = [];
         //for employer's users
-        if(empty(auth()->user()->parent_id)){
+        if(!empty(auth()->user()->parent_id)){
             $shared_list = EmployerEmailtemplate::with('from_email_user')
                                     ->with('designations')
                                     ->with('countries')
@@ -240,7 +240,7 @@ class EmployerEmailTemplateController extends BaseApiController
             }
         }
         //for employers
-        if(!empty(auth()->user()->parent_id)){
+        if(empty(auth()->user()->parent_id)){
             $child_users_id = User::where('parent_id', auth()->user()->id)->get()->pluck('id')->toArray();
             if(!empty($child_users_id)){
                 $users_data_list = EmployerEmailtemplate::with('from_email_user')
