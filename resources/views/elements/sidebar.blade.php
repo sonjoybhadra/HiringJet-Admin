@@ -11,6 +11,7 @@ $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
 $role_id = (($user)?$user->role_id:0);
+print_r($routeName);
 print_r($pageName);
 ?>
 <div class="app-brand demo">
