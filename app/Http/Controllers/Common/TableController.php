@@ -153,6 +153,10 @@ class TableController extends Controller
             $query->whereNotNull('user_employers.business_id');
         }
 
+        if($routes == 'jobseeker'){
+            $query->where('user_profile_completed_percentages.profile_completes_id', '=', 3);
+        }
+
         // Search
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
