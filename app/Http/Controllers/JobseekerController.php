@@ -42,7 +42,7 @@ class JobseekerController extends Controller
             $profile_completes_id           = Helper::decoded($profile_completes_id);
             $get_profile_complete           = ProfileComplete::select('name')->where('id', '=', $profile_completes_id)->first();
             $data['module']                 = $this->data;
-            $title                          = $this->data['title'].' '. (($get_profile_complete)?$get_profile_complete->name:'') .' List';
+            $title                          = (($get_profile_complete)?$get_profile_complete->name:'') . ' : ' . $this->data['title'].' List';
             $page_name                      = 'jobseeker.profile-complete-list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
