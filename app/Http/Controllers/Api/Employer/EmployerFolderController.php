@@ -72,7 +72,7 @@ class EmployerFolderController extends BaseApiController
                                             ->where('parent_id', $data->parent_id)
                                             ->get()->pluck('id')->toArray();
         }
-        /** 
+        /**
         $data->jobseekers_profiles = EmployerCvProfile::select('users.id', 'users.first_name','users.last_name', 'users.email')
                                                         ->join('users', 'users.id', '=', 'employer_cv_profiles.jobseeker_id')
                                                         ->whereIn('employer_cv_profiles.cv_folders_id', $folder_id_array)
@@ -99,7 +99,7 @@ class EmployerFolderController extends BaseApiController
                                             $join->on('tag_jobseeker_mappings.jobseeker_id', '=', 'users.id')
                                                  ->where('tag_jobseeker_mappings.user_id', auth()->user()->id);
                                         })
-                                        ->leftJoin('employer_tags', 'tag_jobseeker_mappings.tag_id', '=', 'employer_tags.id')                                    
+                                        ->leftJoin('employer_tags', 'tag_jobseeker_mappings.tag_id', '=', 'employer_tags.id')
                                         ->whereIn('employer_cv_profiles.cv_folders_id', $folder_id_array)
                                         ->select(
                                             'users.id',
@@ -262,22 +262,44 @@ class EmployerFolderController extends BaseApiController
                                                             ->get()->toArray();
             }
         }
+        $shared_list = $users_data_list = [];
+        //for employer's users
+        if(empty(auth()->user()->parent_id)){
+            $shared_list = EmployerCvFolder::with('profile_cv')
+                                    ->where('user_id', auth()->user()->id)
+                                    ->where('owner_id', '!=', auth()->user()->id)
+                                    ->orderBy('folder_name', 'ASC')
+                                    ->get();
+            if($shared_list->count() > 0){
+                foreach($shared_list as $index => $val){
+                    $shared_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->parent_id)->count();
+                    $shared_list[$index]->shared_employers = [];
+                }
+            }
+        }
 
-        $shared_list = EmployerCvFolder::with('profile_cv')
-                                ->where('user_id', auth()->user()->id)
-                                ->where('owner_id', '!=', auth()->user()->id)
-                                ->orderBy('folder_name', 'ASC')
-                                ->get();
-        if($shared_list->count() > 0){
-            foreach($shared_list as $index => $val){
-                $shared_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->parent_id)->count();
-                $shared_list[$index]->shared_employers = [];
+        //for employers
+        if(!empty(auth()->user()->parent_id)){
+            $child_users_id = User::where('parent_id', auth()->user()->id)->get()->pluck('id')->toArray();
+            if(!empty($child_users_id)){
+                $users_data_list = EmployerCvFolder::with('profile_cv')
+                                                    ->whereIn('user_id', $child_users_id)
+                                                    ->whereIn('owner_id', $child_users_id)
+                                                    ->orderBy('folder_name', 'ASC')
+                                                    ->get();
+
+                if($users_data_list->count() > 0){
+                    foreach($users_data_list as $index => $val){
+                        $users_data_list[$index]->shared_employers = [];
+                    }
+                }
             }
         }
 
         return [
             'own_list' => $own_list,
-            'shared_list'  => $shared_list
+            'shared_list'  => $shared_list,
+            'users_data_list'  => $users_data_list
         ];
     }
 

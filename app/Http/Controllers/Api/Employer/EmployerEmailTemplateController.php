@@ -221,24 +221,50 @@ class EmployerEmailTemplateController extends BaseApiController
                                                             ->get()->toArray();
             }
         }
-        $shared_list = EmployerEmailtemplate::with('from_email_user')
-                                ->with('designations')
-                                ->with('countries')
-                                ->with('cities')
-                                ->with('currency')
-                                ->where('user_id', auth()->user()->id)
-                                ->where('owner_id', '!=', auth()->user()->id)
-                                ->latest()
-                                ->get();
-        if($shared_list->count() > 0){
-            foreach($shared_list as $index => $val){
-                $shared_list[$index]->shared_employers = [];
+        $shared_list = $users_data_list = [];
+        //for employer's users
+        if(empty(auth()->user()->parent_id)){
+            $shared_list = EmployerEmailtemplate::with('from_email_user')
+                                    ->with('designations')
+                                    ->with('countries')
+                                    ->with('cities')
+                                    ->with('currency')
+                                    ->where('user_id', auth()->user()->id)
+                                    ->where('owner_id', '!=', auth()->user()->id)
+                                    ->latest()
+                                    ->get();
+            if($shared_list->count() > 0){
+                foreach($shared_list as $index => $val){
+                    $shared_list[$index]->shared_employers = [];
+                }
+            }
+        }
+        //for employers
+        if(!empty(auth()->user()->parent_id)){
+            $child_users_id = User::where('parent_id', auth()->user()->id)->get()->pluck('id')->toArray();
+            if(!empty($child_users_id)){
+                $users_data_list = EmployerEmailtemplate::with('from_email_user')
+                                                        ->with('designations')
+                                                        ->with('countries')
+                                                        ->with('cities')
+                                                        ->with('currency')
+                                                        ->whereIn('user_id', $child_users_id)
+                                                        ->whereIn('owner_id', $child_users_id)
+                                                        ->latest()
+                                                        ->get();
+
+                if($users_data_list->count() > 0){
+                    foreach($users_data_list as $index => $val){
+                        $users_data_list[$index]->shared_employers = [];
+                    }
+                }
             }
         }
 
         return [
             'own_list' => $own_list,
-            'shared_list'  => $shared_list
+            'shared_list'  => $shared_list,
+            'users_data_list'  => $users_data_list
         ];
     }
 
