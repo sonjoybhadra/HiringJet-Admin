@@ -61,7 +61,15 @@ class TableController extends Controller
         }
         if ($table === 'users' && $routes == 'jobseeker') {
             $query->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
-            $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
+            $routeName    = Route::current();
+            $url          = $request->fullUrl();
+            $pageName     = explode("/", $routeName->uri());
+            $pageSegment  = $pageName[0];
+            $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
+
+            if($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list'){
+                $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
+            }
         }
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
