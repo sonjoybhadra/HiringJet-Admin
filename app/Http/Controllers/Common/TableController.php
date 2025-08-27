@@ -156,7 +156,7 @@ class TableController extends Controller
         }
 
         $routeName    = Route::current();
-        $url          = Request::fullUrl();
+        $url          = $request->fullUrl();
         $pageName     = explode("/", $routeName->uri());
         $pageSegment  = $pageName[0];
         $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
