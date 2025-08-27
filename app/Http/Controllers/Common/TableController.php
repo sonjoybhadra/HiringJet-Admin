@@ -67,9 +67,9 @@ class TableController extends Controller
             $pageSegment  = $pageName[0];
             $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 
-            if($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list'){
+            //if($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list'){
                 $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
-            }
+            //}
         }
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
@@ -176,9 +176,11 @@ class TableController extends Controller
             } else {
                 $pageParam      = '';
             }
+
             
-            $query->where('user_profile_completed_percentages.profile_completes_id', '=', $pageParam);
         }
+
+        $query->where('user_profile_completed_percentages.profile_completes_id', '=', $pageParam);
         
         // Search
         if ($search) {
