@@ -63,7 +63,7 @@ class TableController extends Controller
             $query->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
             $routeName    = Route::current();
             $url          = $request->fullUrl();
-            $pageName     = explode("/", $routeName->uri());
+            $pageName     = explode("/", $url);
             $pageSegment  = $pageName[0];
             $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
             echo $pageFunction;die;
