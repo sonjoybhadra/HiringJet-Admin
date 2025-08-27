@@ -181,6 +181,8 @@ class TableController extends Controller
                 return $item;
             });
 
+        echo $query->getLastQuery();
+
         return response()->json([
             'data' => $data,
             'total' => $total,
