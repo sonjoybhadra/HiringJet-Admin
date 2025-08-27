@@ -6,13 +6,14 @@ use App\Models\ProfileComplete;
 use App\Models\User;
 
 $routeName    = Route::current();
+$url          = $routeName->full();
 $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 $user_id = session('user_id');
 $role_id = (($user)?$user->role_id:0);
-print_r($routeName->uri());
-print_r($pageName);
+print_r($url);
+// print_r($pageName);
 ?>
 <div class="app-brand demo">
   <a href="<?=url('/dashboard')?>" class="app-brand-link">
