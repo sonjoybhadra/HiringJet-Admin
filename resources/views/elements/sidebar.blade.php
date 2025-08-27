@@ -546,6 +546,7 @@ $role_id = (($user)?$user->role_id:0);
         </li>
         <?php
         $profile_completes = ProfileComplete::select('id', 'name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
+        echo $pageFunction;
         if($profile_completes){ foreach($profile_completes as $profile_complete){
         ?>
           <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'list')?'active':'')?>">
