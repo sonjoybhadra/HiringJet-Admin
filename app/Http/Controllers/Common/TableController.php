@@ -11,9 +11,10 @@ class TableController extends Controller
 {
     public function fetch(Request $request)
     {
-        Helper::pr($request->all());
+        // Helper::pr($request->all());
         $table = $request->input('table');
         $routes = $request->input('routes');
+        $filename = $request->input('filename');
         $orderBy = $request->input('orderBy', 'id');
         $orderType = $request->input('orderType', 'desc');
         $rawColumns = explode(',', $request->input('columns'));
@@ -61,13 +62,8 @@ class TableController extends Controller
         }
         if ($table === 'users' && $routes == 'jobseeker') {
             $query->leftJoin('user_profiles', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profiles.user_id AS TEXT)"));
-            $routeName    = Route::current();
-            $url          = $request->fullUrl();
-            $pageName     = explode("/", $url);
-            $pageSegment  = $pageName[0];
-            $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
-            // echo '<pre>';print_r($pageName);
-            // echo $pageFunction;die;
+            
+            echo $filename;die;
             //if($pageFunction == 'profile-complete-list'){
                 $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
             //}
