@@ -549,7 +549,7 @@ $role_id = (($user)?$user->role_id:0);
         if($profile_completes){ foreach($profile_completes as $profile_complete){
         ?>
           <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'list')?'active':'')?>">
-            <a href="<?=url('/jobseeker/profile-complete-list/')?>" class="menu-link">
+            <a href="<?=url('/jobseeker/profile-complete-list/' . Helper::encoded($profile_complete->id))?>" class="menu-link">
               <div data-i18n="<?=$profile_complete->name?>"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
             </a>
           </li>
