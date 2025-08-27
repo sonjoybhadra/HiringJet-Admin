@@ -47,7 +47,8 @@ $controllerRoute = $module['controller_route'];
                   'orderType' => 'desc',
                   'conditions' => [
                      ['column' => 'users.status', 'operator' => '!=', 'value' => 3],
-                     ['column' => 'users.role_id', 'operator' => '=', 'value' => 3]
+                     ['column' => 'users.role_id', 'operator' => '=', 'value' => 3],
+                     ['column' => 'user_profile_completed_percentages.profile_completes_id', 'operator' => '=', 'value' => $profile_completes_id]
                   ],
                   'routePrefix' => 'jobseeker',
                   'showActions' => true, // set to false to hide actions
@@ -58,6 +59,12 @@ $controllerRoute = $module['controller_route'];
                         'localKey' => 'id',
                         'foreignKey' => 'user_id',
                         'select' => ['profile_completed_percentage as profile_completed_percentage']
+                     ],
+                     [
+                        'table' => 'user_profile_completed_percentages',
+                        'localKey' => 'id',
+                        'foreignKey' => 'user_id',
+                        'select' => ['percentage as percentage']
                      ]
                   ]
                 ])
