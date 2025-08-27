@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Common;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
@@ -154,10 +155,22 @@ class TableController extends Controller
             $query->whereNotNull('user_employers.business_id');
         }
 
-        if($routes == 'jobseeker'){
-            $query->where('user_profile_completed_percentages.profile_completes_id', '=', 5);
-        }
+        $routeName    = Route::current();
+        $url          = Request::fullUrl();
+        $pageName     = explode("/", $routeName->uri());
+        $pageSegment  = $pageName[0];
+        $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
 
+        if($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list'){
+            if($pageFunction == 'profile-complete-list'){
+                $url_break      = explode("profile-complete-list/", $url);
+                $pageParam      = Helper::decoded($url_break[1]);
+            } else {
+                $pageParam      = '';
+            }
+            $query->where('user_profile_completed_percentages.profile_completes_id', '=', $pageParam);
+        }
+        
         // Search
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
