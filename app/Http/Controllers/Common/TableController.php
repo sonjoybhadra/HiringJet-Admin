@@ -176,7 +176,7 @@ class TableController extends Controller
             } else {
                 $pageParam      = '';
             }
-            echo $pageParam;
+            
             $query->where('user_profile_completed_percentages.profile_completes_id', '=', $pageParam);
         }
         
