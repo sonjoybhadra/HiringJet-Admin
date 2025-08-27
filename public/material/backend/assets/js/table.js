@@ -22,6 +22,7 @@ function loadTable(config) {
                 page: page,
                 perPage: perPage,
                 search: search,
+                filename: config.filename,
                 orderBy: config.orderBy,
                 orderType: config.orderType,
                 conditions: JSON.stringify(config.conditions || []),
