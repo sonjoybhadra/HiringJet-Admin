@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Request;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Route;
 use App\Models\Role;
@@ -6,7 +7,7 @@ use App\Models\ProfileComplete;
 use App\Models\User;
 
 $routeName    = Route::current();
-$url          = $routeName->full();
+$url          = Request::fullUrl();
 $pageName     = explode("/", $routeName->uri());
 $pageSegment  = $pageName[0];
 $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
