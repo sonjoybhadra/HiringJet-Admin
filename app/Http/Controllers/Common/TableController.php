@@ -66,6 +66,7 @@ class TableController extends Controller
             $pageName     = explode("/", $url);
             $pageSegment  = $pageName[0];
             $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
+            echo '<pre>';print_r($pageName);
             echo $pageFunction;die;
             //if($pageFunction == 'profile-complete-list'){
                 $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
