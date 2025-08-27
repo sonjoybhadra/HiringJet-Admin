@@ -533,7 +533,7 @@ $role_id = (($user)?$user->role_id:0);
   
   <?php if(in_array(14, $moduleIds)){?>
     <!-- Jobseekers -->
-    <li class="menu-item active <?=(($pageSegment == 'employer-user')?'open':'')?>">
+    <li class="menu-item active <?=(($pageSegment == 'jobseeker')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-users"></i>
         <div data-i18n="Jobseekers">Jobseekers</div>
@@ -550,7 +550,7 @@ $role_id = (($user)?$user->role_id:0);
         ?>
           <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'list')?'active':'')?>">
             <a href="<?=url('/jobseeker/list')?>" class="menu-link">
-              <div data-i18n="Non-Verified"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
+              <div data-i18n="<?=$profile_complete->name?>"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
             </a>
           </li>
         <?php } }?>        
