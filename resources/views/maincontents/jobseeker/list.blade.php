@@ -46,8 +46,8 @@ $controllerRoute = $module['controller_route'];
                   'orderBy' => 'id',
                   'orderType' => 'desc',
                   'conditions' => [
-                     ['column' => 'status', 'operator' => '!=', 'value' => 3],
-                     ['column' => 'role_id', 'operator' => '=', 'value' => 3]
+                     ['column' => 'users.status', 'operator' => '!=', 'value' => 3],
+                     ['column' => 'users.role_id', 'operator' => '=', 'value' => 3]
                   ],
                   'routePrefix' => 'jobseeker',
                   'showActions' => true, // set to false to hide actions
