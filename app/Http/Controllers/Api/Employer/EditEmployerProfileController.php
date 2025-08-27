@@ -29,7 +29,7 @@ class EditEmployerProfileController extends BaseApiController
             'phone' => 'required|max:15|unique:users,phone,'.auth()->user()->id,
             /* 'password' => 'required|min:6',
             'c_password' => 'required|same:password', */
-            'business_id' => 'required|integer',
+            // 'business_id' => 'required|integer',
             'designation_id' => 'required|integer',
         ]);
 
@@ -58,10 +58,12 @@ class EditEmployerProfileController extends BaseApiController
                 // 'email'=> $request->email,
                 'country_code'=> $request->country_code,
                 'phone' => $request->phone,
-                'business_id'=> $request->business_id,
                 'designation_id'=> $request->designation_id,
                 'profile_image'=> $image_path
             ];
+            if(!empty($request->business_id)){
+                $update_data['business_id'] = $request->business_id;
+            }
 
             UserEmployer::where('user_id', auth()->user()->id)->update($update_data);
 
