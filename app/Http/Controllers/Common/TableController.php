@@ -155,7 +155,7 @@ class TableController extends Controller
         }
 
         if($routes == 'jobseeker'){
-            $query->where('user_profile_completed_percentages.profile_completes_id', '=', 3);
+            $query->where('user_profile_completed_percentages.profile_completes_id', '=', 5);
         }
 
         // Search

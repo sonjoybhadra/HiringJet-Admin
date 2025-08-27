@@ -59,12 +59,6 @@ $controllerRoute = $module['controller_route'];
                         'localKey' => 'id',
                         'foreignKey' => 'user_id',
                         'select' => ['profile_completed_percentage as profile_completed_percentage']
-                     ],
-                     [
-                        'table' => 'user_profile_completed_percentages',
-                        'localKey' => 'id',
-                        'foreignKey' => 'user_id',
-                        'select' => ['percentage as percentage']
                      ]
                   ]
                 ])
