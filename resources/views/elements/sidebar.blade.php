@@ -2,6 +2,7 @@
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Route;
 use App\Models\Role;
+use App\Models\ProfileComplete;
 use App\Models\User;
 
 $routeName    = Route::current();
@@ -532,11 +533,28 @@ $role_id = (($user)?$user->role_id:0);
   
   <?php if(in_array(14, $moduleIds)){?>
     <!-- Jobseekers -->
-    <li class="menu-item <?=(($pageSegment == 'jobseeker')?'active':'')?>">
-      <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+    <li class="menu-item active <?=(($pageSegment == 'employer-user')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon fa-solid fa-users"></i>
         <div data-i18n="Jobseekers">Jobseekers</div>
       </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'list')?'active':'')?>">
+          <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+            <div data-i18n="All"><i class="fa-solid fa-arrow-right"></i> All</div>
+          </a>
+        </li>
+        <?php
+        $profile_completes = ProfileComplete::select('id', 'name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
+        if($profile_completes){ foreach($profile_completes as $profile_complete){
+        ?>
+          <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'list')?'active':'')?>">
+            <a href="<?=url('/jobseeker/list')?>" class="menu-link">
+              <div data-i18n="Non-Verified"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
+            </a>
+          </li>
+        <?php } }?>        
+      </ul>
     </li>
   <?php }?>
 
@@ -659,37 +677,7 @@ $role_id = (($user)?$user->role_id:0);
         <?php }?>
       </ul>
     </li>
-  <?php }?>
-
-  <?php if(in_array(17, $moduleIds)){?>
-    <!-- Email Logs -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'email-logs')?'active':'')?>">
-      <a href="<?=url('/email-logs')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-envelope"></i>
-        <div data-i18n="Email Logs">Email Logs</div>
-      </a>
-    </li> -->
-  <?php }?>
-
-  <?php if(in_array(18, $moduleIds)){?>
-    <!-- Login Logs -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'login-logs')?'active':'')?>">
-      <a href="<?=url('/login-logs')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-right-to-bracket"></i>
-        <div data-i18n="Login Logs">Login Logs</div>
-      </a>
-    </li> -->
-  <?php }?>
-
-  <?php if(in_array(19, $moduleIds)){?>
-    <!-- User Activity Logs -->
-    <!-- <li class="menu-item <?=(($pageSegment == 'user-activity-logs')?'active':'')?>">
-      <a href="<?=url('/user-activity-logs')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-chart-line"></i>
-        <div data-i18n="User Activity Logs">User Activity Logs</div>
-      </a>
-    </li> -->
-  <?php }?>
+  <?php }?>  
 
   <?php if(in_array(20, $moduleIds)){?>
     <!-- Settings -->
