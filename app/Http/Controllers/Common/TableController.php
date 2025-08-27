@@ -66,10 +66,10 @@ class TableController extends Controller
             $pageName     = explode("/", $routeName->uri());
             $pageSegment  = $pageName[0];
             $pageFunction = ((count($pageName)>1)?$pageName[1]:'');
-
-            if($pageFunction == 'profile-complete-list'){
+            echo $pageFunction;
+            //if($pageFunction == 'profile-complete-list'){
                 $query->leftJoin('user_profile_completed_percentages', DB::raw("CAST($table.id AS TEXT)"), '=', DB::raw("CAST(user_profile_completed_percentages.user_id AS TEXT)"));
-            }
+            //}
         }
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
