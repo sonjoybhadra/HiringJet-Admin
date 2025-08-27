@@ -548,8 +548,12 @@ $role_id = (($user)?$user->role_id:0);
           </a>
         </li>
         <?php
-        $url_break      = explode("profile-complete-list/", $url);
-        $pageParam      = $url_break[1];
+        if($pageFunction == 'profile-complete-list'){
+          $url_break      = explode("profile-complete-list/", $url);
+          $pageParam      = $url_break[1];
+        } else {
+          $pageParam      = '';
+        }
         $profile_completes = ProfileComplete::select('id', 'name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
         if($profile_completes){ foreach($profile_completes as $profile_complete){
         ?>
