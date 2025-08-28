@@ -20,15 +20,20 @@ use App\Models\UserProfileCompletedPercentage;
 class CandidateSearchController extends BaseApiController{
  
   public function searchCandidates(Request $request){
-    $designationIds = json_decode($request->included_designation, true) ?? [];
+    $designationIds       = json_decode($request->included_designation, true) ?? [];
     $excludedDesignationIds = json_decode($request->excluded_designation, true) ?? [];
-    $industryIds    = json_decode($request->included_industry, true) ?? [];
-    $excludedIndustryIds = json_decode($request->excluded_industry, true) ?? [];
-    $nationalityIds = json_decode($request->nationality_id, true) ?? [];
-    $gender         = $request->gender ?? null;
-    $minExperience  = $request->min_experience ?? null;
-    $maxExperience  = $request->max_experience ?? null;
-    $employerId = $request->employer_id;
+    $industryIds          = json_decode($request->included_industry, true) ?? [];
+    $excludedIndustryIds  = json_decode($request->excluded_industry, true) ?? [];
+    $nationalityIds       = json_decode($request->nationality_id, true) ?? [];
+    $gender               = $request->gender ?? null;
+    $minExperience        = $request->min_experience ?? null;
+    $maxExperience        = $request->max_experience ?? null;
+    $employerId           = $request->employer_id;
+
+    // new salary-related filters
+    $salaryCurrencyId     = $request->salaryCurrencyId ?? null;
+    $minSalary            = $request->minSalary ?? null;
+    $maxSalary            = $request->maxSalary ?? null;
 
     try {
       $result = DB::table('users')
@@ -37,7 +42,7 @@ class CandidateSearchController extends BaseApiController{
         ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
         ->leftJoin('user_employments as current_employment', function ($join) {
           $join->on('users.id', '=', 'current_employment.user_id')
-          ->where('current_employment.is_current_job', 1);
+               ->where('current_employment.is_current_job', 1);
         })
         ->leftJoin('designations', DB::raw("NULLIF(current_employment.last_designation, '')::BIGINT"), '=', 'designations.id')
         ->leftJoin('employers as current_employer', 'current_employment.employer_id', '=', 'current_employer.id')
@@ -53,6 +58,8 @@ class CandidateSearchController extends BaseApiController{
         })      
         ->leftJoin('employer_tags', 'tag_jobseeker_mappings.tag_id', '=', 'employer_tags.id')                                    
         ->where('users.role_id', 3)
+
+        // existing filters...
         ->when(!empty($designationIds), function ($q) use ($designationIds) {
           return $q->whereIn(DB::raw("NULLIF(user_employments.last_designation, '')::BIGINT"), $designationIds);
         })
@@ -77,6 +84,18 @@ class CandidateSearchController extends BaseApiController{
         ->when(is_numeric($maxExperience), function ($q) use ($maxExperience) {
           return $q->where('current_employment.total_experience_years', '<=', $maxExperience);
         })
+
+        // 🔹 New salary filters
+        ->when(!empty($salaryCurrencyId), function ($q) use ($salaryCurrencyId) {
+          return $q->where('current_employment.currency_id', $salaryCurrencyId);
+        })
+        ->when(is_numeric($minSalary), function ($q) use ($minSalary) {
+          return $q->where('current_employment.current_salary', '>=', $minSalary);
+        })
+        ->when(is_numeric($maxSalary), function ($q) use ($maxSalary) {
+          return $q->where('current_employment.current_salary', '<=', $maxSalary);
+        })
+
         ->select(
           'users.id',
           'user_profiles.first_name',
@@ -122,7 +141,7 @@ class CandidateSearchController extends BaseApiController{
             'error' => $e->getMessage()
         ], 500);
     }
-  }
+}
 
   public function previewCV($id)
     {
