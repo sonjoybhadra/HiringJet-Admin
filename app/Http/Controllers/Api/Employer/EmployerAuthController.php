@@ -14,13 +14,9 @@ use Illuminate\Support\Facades\Storage;
 use Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificationEmail;
+use App\Mail\SignupOtp;
 // use JWTAuth;
 use App\Models\User;
-use App\Models\UserEmployment;
-use App\Models\Designation;
-use App\Models\ShortlistedJob;
-use App\Models\PostJobUserApplied;
-use App\Models\PostJob;
 
 class EmployerAuthController extends BaseApiController
 {
@@ -60,6 +56,23 @@ class EmployerAuthController extends BaseApiController
             // Set guard to "api" for the current request
             auth()->shouldUse('api');
             if(auth()->user()->status == 0){
+                if(!empty(auth()->user()->remember_token)){
+                    $user = User::find(auth()->user()->id);
+                    $otp = mt_rand(1111, 9999);
+                    $otp_mail_hash = base64_encode($otp);
+
+                    $user->remember_token = $otp_mail_hash;
+                    $user->email_verified_at = date('Y-m-d H:i:s', strtotime('+'.env('OTP_VALIDATION_DURATION_MINUTES').' minutes'));
+                    $user->save();
+
+                    $full_name = $user->first_name.' '.$user->last_name;
+                    $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
+                    Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
+
+                    return $this->sendResponse([
+                                    'account_otp_verification'=> 0
+                                    ], 'Your account is not verified yet. Please check your registered email for account verification OTP.');
+                }
                 return $this->sendError('Unauthorized', 'Your account is not active. Please contact to the admin.', Response::HTTP_UNAUTHORIZED);
             }
 
@@ -68,6 +81,7 @@ class EmployerAuthController extends BaseApiController
                                         'token' => $token,
                                         'user' => $this->getEmployerDetails(),
                                         'expires_in' => config('jwt.ttl') * 60,
+                                        'account_otp_verification'=> 1,
                                         'completed_steps'=> [
                                             '0' => 'Registration step 1 completed but OTP verification is pending',
                                             '1' => 'OTP verification is done but setup profile is pending',
