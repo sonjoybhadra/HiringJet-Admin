@@ -47,6 +47,7 @@ class EmployerEmailTemplateController extends BaseApiController
             'currency_id' => 'required|integer',
             'salary_max' => 'required|integer',
             'salary_min' => 'required|integer',
+            'subject' => 'required|string',
             'message' => 'required|string'
         ]);
 
@@ -82,6 +83,7 @@ class EmployerEmailTemplateController extends BaseApiController
                 'currency_id' => $request->currency_id,
                 'salary_max' => $request->salary_max,
                 'salary_min' => $request->salary_min,
+                'subject'=> $request->subject,
                 'message'=> $request->message,
                 'owner_id'=> auth()->user()->id,
                 'status'=> 1
@@ -126,6 +128,7 @@ class EmployerEmailTemplateController extends BaseApiController
             'currency_id' => 'required|integer',
             'salary_max' => 'required|integer',
             'salary_min' => 'required|integer',
+            'subject' => 'required|string',
             'message' => 'required|string'
         ]);
 
@@ -161,6 +164,7 @@ class EmployerEmailTemplateController extends BaseApiController
                 'currency_id' => $request->currency_id,
                 'salary_max' => $request->salary_max,
                 'salary_min' => $request->salary_min,
+                'subject'=> $request->subject,
                 'message'=> $request->message,
                 'status'=> 1
             ]);
