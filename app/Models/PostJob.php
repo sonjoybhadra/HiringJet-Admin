@@ -114,7 +114,17 @@ class PostJob extends Model
 
     public function applied_users()
     {
-        return $this->belongsToMany(User::class, 'post_job_user_applieds', 'job_id', 'user_id');
+        return $this->belongsToMany(User::class, 'post_job_user_applieds', 'job_id', 'user_id')
+            ->withPivot('status', 'created_at', 'updated_at')
+            ->addSelect([
+                'users.*',
+                DB::raw("(
+                    SELECT COALESCE(STRING_AGG(DISTINCT employer_tags.tag_name, ', '), '')
+                    FROM tag_jobseeker_mappings
+                    INNER JOIN employer_tags ON employer_tags.id = tag_jobseeker_mappings.tag_id
+                    WHERE tag_jobseeker_mappings.jobseeker_id = users.id
+                ) as tag_names")
+            ]);
     }
 
     public function get_job_search_custom_sql()
