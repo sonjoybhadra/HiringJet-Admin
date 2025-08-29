@@ -194,13 +194,16 @@ class EmployerBrandsController extends BaseApiController
         return $this->sendResponse($this->getList(), 'Brand status updated successfully.');
     }
 
-    private function getList(){
-        $list = EmployerBrand::with('industry')
+    private function getList(Request $request){
+        $sql = EmployerBrand::with('industry')
                                 ->with('contact_person')
                                 ->with('contact_person_designation')
                                 ->where('user_id', auth()->user()->id)
-                                ->orderBy('company_name', 'ASC')
-                                ->get();
+                                ->orderBy('company_name', 'ASC');
+        if(!empty($request->status) && $request->status == 'active'){
+            $sql->where('status', $request->status);
+        }
+        $list = $sql->get();
 
         return $list;
     }
