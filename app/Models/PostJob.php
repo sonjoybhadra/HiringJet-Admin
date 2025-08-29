@@ -113,19 +113,17 @@ class PostJob extends Model
     // }
 
     public function applied_users()
-    {
-        return $this->belongsToMany(User::class, 'post_job_user_applieds', 'job_id', 'user_id')
-            ->leftJoin('employer_tags', 'users.id', '=', 'employer_tags.user_id')
-            ->addSelect([
-                'users.*',
-                DB::raw("COALESCE(STRING_AGG(DISTINCT employer_tags.tag_name, ', '), '') as tag_names")
-            ])
-            ->groupBy([
-                'users.id',
-                'post_job_user_applieds.job_id',
-                'post_job_user_applieds.user_id'
-            ]);
-    }
+        {
+            return $this->belongsToMany(User::class, 'post_job_user_applieds', 'job_id', 'user_id')
+                ->addSelect([
+                    'users.*',
+                    DB::raw("(
+                        SELECT COALESCE(STRING_AGG(DISTINCT employer_tags.tag_name, ', '), '')
+                        FROM employer_tags
+                        WHERE employer_tags.user_id = users.id
+                    ) as tag_names")
+                ]);
+        }
 
     public function get_job_search_custom_sql()
     {
