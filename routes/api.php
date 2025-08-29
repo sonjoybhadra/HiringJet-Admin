@@ -274,6 +274,7 @@ Route::group([
     Route::get('/get-blocked-jobseeker', [EmployerJobseekerController::class, 'getBlockedByJobseeker']);
 
     Route::get('/posted-jobs', [EmployerPostJobController::class, 'getMyPostedJobs']);
+    Route::get('/posted-jobs-by-users', [EmployerPostJobController::class, 'getMyUserPostedJobs']);
     Route::post('/post-a-job', [EmployerPostJobController::class, 'postJob']);
     Route::get('/posted-jobs/{id}', [EmployerPostJobController::class, 'getJobsDetails']);
     Route::put('/post-a-job/{id}', [EmployerPostJobController::class, 'updateJob']);
