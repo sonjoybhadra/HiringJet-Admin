@@ -180,7 +180,6 @@ class EmployerTagsController extends BaseApiController
                 'jobseeker_id'=> $request->jobseeker_id
             ]);
 
-
             return $this->sendResponse([], 'Profile added in selected tag successfully.');
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -194,6 +193,7 @@ class EmployerTagsController extends BaseApiController
                                 ->get();
         if($own_list->count() > 0){
             foreach($own_list as $index => $val){
+                $own_list[$index]->profile_cv_count = TagJobseekerMapping::where('tag_id', $val->id)->count();
                 $own_list[$index]->shared_employers = EmployerTag::select('tag_name', 'first_name', 'last_name', 'users.id AS user_employer_id')
                                                             ->join('users', 'users.id', '=', 'employer_tags.owner_id')
                                                             ->where('employer_tags.user_id', '!=', auth()->user()->id)
@@ -211,6 +211,7 @@ class EmployerTagsController extends BaseApiController
 
             if($shared_list->count() > 0){
                 foreach($shared_list as $index => $val){
+                    $shared_list[$index]->profile_cv_count = TagJobseekerMapping::where('tag_id', $val->id)->count();
                     $shared_list[$index]->shared_employers = [];
                 }
             }
@@ -225,6 +226,7 @@ class EmployerTagsController extends BaseApiController
 
                 if($users_data_list->count() > 0){
                     foreach($users_data_list as $index => $val){
+                        $users_data_list[$index]->profile_cv_count = TagJobseekerMapping::where('tag_id', $val->id)->count();
                         $users_data_list[$index]->shared_employers = [];
                     }
                 }

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('currency_id')->constrained('countries');
             $table->integer('salary_max');
             $table->integer('salary_min');
+            $table->text('subject')->nullable();
             $table->text('message');
             $table->foreignId('owner_id')->constrained('users');
             $table->integer('status');

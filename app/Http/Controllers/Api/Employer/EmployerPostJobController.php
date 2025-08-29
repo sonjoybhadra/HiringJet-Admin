@@ -24,7 +24,7 @@ class EmployerPostJobController extends BaseApiController
     }
 
     /**
-        * Jobs list for employers
+        * Jobs list for employers or employer's users
         @response json
     */
     public function getMyPostedJobs(Request $request){
@@ -49,9 +49,13 @@ class EmployerPostJobController extends BaseApiController
 
             $sql->where('status', $status_array[strtolower($request->job_status)]);
         }
-        if(auth()->user()->parent_id > 0){
+
+        $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
+        // this is for employer's users
+        /* if(auth()->user()->parent_id > 0){
             $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
         }else{
+            // this is for employers
             $child_user_business_array = User::select('user_employers.business_id')
                                 ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
                                 ->where('users.parent_id', auth()->user()->id)
@@ -60,7 +64,8 @@ class EmployerPostJobController extends BaseApiController
             array_push($child_user_business_array, auth()->user()->user_employer_details->business_id);
 
             $sql->whereIn('employer_id', $child_user_business_array);
-        }
+        } */
+
         if($request->sort_order){
             $sql->orderBy('position_name', $request->sort_order);
         }else{
@@ -76,6 +81,58 @@ class EmployerPostJobController extends BaseApiController
         }
 
         return $this->sendResponse($list, 'List of posted jobs');
+    }
+
+     /**
+        * Jobs list for employer to it's all users
+        @response json
+    */
+    public function getMyUserPostedJobs(Request $request){
+        $sql = PostJob::select('*')
+                        ->addSelect(DB::raw('(SELECT count(job_id) FROM post_job_user_applieds x WHERE x.job_id = post_jobs.id) as total_applied_jobjeekers'))
+                        ->with('employer')
+                        ->with('industryRelation')
+                        ->with('jobCategory')
+                        ->with('nationalityRelation')
+                        ->with('contractType')
+                        ->with('designationRelation')
+                        ->with('functionalArea')
+                        ->with('applied_users');
+        if(!empty($request->job_status)){
+            $status_array = [
+                'pending'=> 0,
+                'approve' => 1,
+                'published' => 1,
+                'reject'=> 2,
+                'deleted'=> 3,
+            ];
+
+            $sql->where('status', $status_array[strtolower($request->job_status)]);
+        }
+        // this is for employers
+        $child_user_business_array = User::select('user_employers.business_id')
+                            ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
+                            ->where('users.parent_id', auth()->user()->id)
+                            ->get()->pluck('business_id')->toArray();
+
+        // array_push($child_user_business_array, auth()->user()->user_employer_details->business_id);
+        $sql->whereIn('employer_id', $child_user_business_array);
+
+        if($request->sort_order){
+            $sql->orderBy('position_name', $request->sort_order);
+        }else{
+            $sql->latest();
+        }
+        $list = $sql->get();
+
+        if($list->count() > 0){
+            foreach($list as $key => $data){
+                $list[$key]->location_countries_data = $this->returnCountryList($data->location_countries);
+                $list[$key]->location_cities_data = $this->returnCityList($data->location_cities);
+            }
+        }
+
+        return $this->sendResponse($list, 'List of posted jobs by others');
     }
 
     /**

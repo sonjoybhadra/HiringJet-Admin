@@ -23,6 +23,7 @@ class EmployerEmailtemplate extends Model
         'currency_id',
         'salary_max',
         'salary_min',
+        'subject',
         'message',
         'owner_id'
     ];

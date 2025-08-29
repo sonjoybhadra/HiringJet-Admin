@@ -291,6 +291,7 @@ class EmployerFolderController extends BaseApiController
 
                 if($users_data_list->count() > 0){
                     foreach($users_data_list as $index => $val){
+                        $users_data_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->parent_id)->count();
                         $users_data_list[$index]->shared_employers = [];
                     }
                 }
