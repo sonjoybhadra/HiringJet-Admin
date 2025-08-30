@@ -70,8 +70,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
 
             $user_id = User::insertGetId([
                 'role_id'=> $this->employer,
-                'first_name'=> "Change",
-                'last_name'=> "Name",
+                'first_name'=> "User",
+                'last_name'=> "Surname",
                 'email'=> $request->email,
                 'country_code' => $request->country_code,
                 'phone'=> $request->phone,
