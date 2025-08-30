@@ -763,7 +763,7 @@ class CommonController extends BaseApiController
             'phone'
         );
 
-        if($roll_id > 0){
+        if($role_id > 0){
             $sql->where('role_id', $role_id);
         }
 
