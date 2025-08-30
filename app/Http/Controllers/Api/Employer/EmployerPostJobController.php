@@ -116,7 +116,7 @@ class EmployerPostJobController extends BaseApiController
                             ->where('users.parent_id', auth()->user()->id)
                             ->get()->pluck('business_id')->toArray(); */
 
-        $sql->whereIn('employer_id', auth()->user()->user_employer_details->business_id);
+        $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
         $sql->where('user_id', '!=', auth()->user()->id);
 
         if($request->sort_order){
