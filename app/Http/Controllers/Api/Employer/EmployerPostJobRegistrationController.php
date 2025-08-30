@@ -18,7 +18,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Mail\SignupOtp;
 use App\Models\EmployerPostJobDraft;
-use App\Mail\RegistrationSuccess;
+use App\Mail\NewJobPost;
 use Illuminate\Http\Request;
 
 class EmployerPostJobRegistrationController extends BaseApiController
@@ -85,7 +85,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             if($user_id){
                 UserEmployer::insert([
                     'user_id'=> $user_id,
-                    'first_name'=> "Change",
+                    'first_name'=> "User",
                     'last_name'=> "Name",
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
@@ -97,8 +97,16 @@ class EmployerPostJobRegistrationController extends BaseApiController
 
                 $user = User::with('user_employer_details')->findOrFail($user_id);
                 $full_name = $user->first_name.' '.$user->last_name;
-                $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
-                //Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
+                $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
+                try {
+                    Mail::to($user->email)->send(
+                        new RegistrationSuccess($user->email, $full_name, $message)
+                    );
+                } catch (\Throwable $e) {
+                    // Silently bypass mail error (do nothing)
+                    // If you want, you can still log it for developers:
+                    // \Log::warning("Mail failed for {$user->email}: ".$e->getMessage());
+                }
                 $token = JWTAuth::fromUser($user);
                 // Set guard to "api" for the current request
                 auth()->setUser($user);
@@ -251,6 +259,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $jobData['walkin_longitude'] = null;
                 $jobData['walkin_details'] = null;
             }
+            $user = User::with('user_employer_details')->findOrFail($user_id);
+
 
             // Call job service
             $result = $this->jobService->createJobPost(
@@ -261,7 +271,23 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $request->ip()
             );
 
+            $full_name = $user->first_name.' '.$user->last_name;
+            $message = 'Hi '.$full_name.', your job (Job No: '.$result['job_number'].') has been submitted successfully and is now under admin review. You will be notified once it is approved.';
 
+            try {
+                Mail::to($user->email)->send(
+                    new NewJobPost(
+                        $user->email,
+                        $full_name,
+                        $message,
+                        '',
+                        $result['job_id'],
+                        $result['job_number']
+                    )
+                );
+            } catch (\Throwable $e) {
+                // silently bypass error
+            }
 
             if ($result['success']) {
                 return $this->sendResponse([
