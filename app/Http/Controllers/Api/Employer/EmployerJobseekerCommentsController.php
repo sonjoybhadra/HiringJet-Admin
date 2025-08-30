@@ -25,6 +25,7 @@ class EmployerJobseekerCommentsController extends BaseApiController
     public function index(Request $request)
     {
         $list = EmployerJobseekerComments::where('employer_id', auth()->user()->id)
+                                        ->with('jobseekers')
                                         ->latest()->get();
         return $this->sendResponse($list, 'Jobseeker Comments List.');
     }

@@ -310,7 +310,7 @@ Route::group([
     Route::resource('/email-templates', EmployerEmailTemplateController::class);
 
     Route::resource('/jobseeker-comments', EmployerJobseekerCommentsController::class);
-    Route::resource('/sav-cv-search', EmployerSaveCvSearchController::class);
+    Route::resource('/save-cv-search', EmployerSaveCvSearchController::class);
 
 });
 
