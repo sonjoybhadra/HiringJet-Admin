@@ -754,7 +754,7 @@ class CommonController extends BaseApiController
         );
     }
 
-    public function get_all_users($roll_id = 1){
+    public function get_all_users($role_id = 1){
         $sql = User::select(
             'id',
             'first_name',
@@ -764,7 +764,7 @@ class CommonController extends BaseApiController
         );
 
         if($roll_id > 0){
-            $sql->where('roll_id', $roll_id);
+            $sql->where('role_id', $role_id);
         }
 
         return $this->sendResponse(
