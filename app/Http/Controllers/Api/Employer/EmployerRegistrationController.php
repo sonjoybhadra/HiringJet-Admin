@@ -17,6 +17,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Employer;
+use App\Models\EmployerBrand;
 
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
@@ -274,7 +275,9 @@ class EmployerRegistrationController extends BaseApiController
                 'employe_type'=> $request->employe_type,
                 'completed_steps'=> 2,
             ]);
-
+            /**
+                *  Update company/business data
+            */
             Employer::find($user_employer->business_id)->update([
                 'country_id'=> $country_id,
                 'city_id'=> $city_id,
@@ -292,6 +295,24 @@ class EmployerRegistrationController extends BaseApiController
                 'web_url'=> $request->web_url,
                 'employe_type'=> $request->employe_type,
                 'status'=> 0    // Unverified employer
+            ]);
+            /**
+                *  Add company as brand for company owner employer
+            */
+            $employer = Employer::find($user_employer->business_id);
+            EmployerBrand::insert([
+                'user_id'=> $user->id,
+                'company_name'=> $employer->name,
+                'company_logo'=> $logo,
+                'info'=> $request->description,
+                'industry_id'=> $request->industrie_id,
+                'contact_person_id'=> $user->id,
+                'contact_person_designation_id'=> $user_employer->designation_id,
+                'web_url' => $request->web_url,
+                'address' => $request->address,
+                'country' => $country_id,
+                'zip_code' => NULL,
+                'status'=> 1
             ]);
 
             return $this->sendResponse($this->getEmployerDetails(), 'Setup company profile has successfully done.');

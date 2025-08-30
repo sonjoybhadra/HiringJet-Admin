@@ -247,11 +247,14 @@ class EmployerFolderController extends BaseApiController
     }
 
     private function getList(){
-        $own_list = EmployerCvFolder::with('profile_cv')
+        $own_list_sql = EmployerCvFolder::with('profile_cv')
                                 ->where('user_id', auth()->user()->id)
                                 ->where('owner_id', auth()->user()->id)
-                                ->orderBy('folder_name', 'ASC')
-                                ->get();
+                                ->orderBy('folder_name', 'ASC');
+        if(isset($_GET['status']) && $_GET['status'] != ""){
+            $own_list_sql->where('status', 1);
+        }
+        $own_list = $own_list_sql->get();
         if($own_list->count() > 0){
             foreach($own_list as $index => $val){
                 $own_list[$index]->profile_cv_count = EmployerCvProfile::where('cv_folders_id', $val->id)->count();

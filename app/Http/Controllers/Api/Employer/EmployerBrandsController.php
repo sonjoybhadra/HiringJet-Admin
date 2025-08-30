@@ -42,8 +42,7 @@ class EmployerBrandsController extends BaseApiController
             'contact_person' => 'required|integer',
             'contact_person_designation' => 'required|integer',
             'address' => 'required',
-            'country' => 'required',
-            'zip_code' => 'required|numeric',
+            'country' => 'required'
         ]);
 
         if($validator->fails()){
@@ -79,7 +78,7 @@ class EmployerBrandsController extends BaseApiController
                 'web_url' => $request->web_url,
                 'address' => $request->address,
                 'country' => $country_id,
-                'zip_code' => $request->zip_code,
+                'zip_code' => $request->zip_code??NULL,
                 'status'=> 1
             ]);
 
@@ -118,8 +117,7 @@ class EmployerBrandsController extends BaseApiController
             'contact_person' => 'required|integer',
             'contact_person_designation' => 'required|integer',
             'address' => 'required',
-            'country' => 'required',
-            'zip_code' => 'required|numeric',
+            'country' => 'required'
         ]);
 
         if($validator->fails()){
@@ -147,7 +145,7 @@ class EmployerBrandsController extends BaseApiController
                 'web_url' => $request->web_url,
                 'address' => $request->address,
                 'country' => $country_id,
-                'zip_code' => $request->zip_code,
+                'zip_code' => $request->zip_code??NULL,
             ];
             if (request()->hasFile('logo')) {
                 $file = request()->file('logo');
@@ -198,10 +196,17 @@ class EmployerBrandsController extends BaseApiController
         $sql = EmployerBrand::with('industry')
                                 ->with('contact_person')
                                 ->with('contact_person_designation')
-                                ->where('user_id', auth()->user()->id)
                                 ->orderBy('company_name', 'ASC');
-        if(isset($_GET['status']) && $_GET['status'] == 'active'){
-            $sql->where('status', $_GET['status']);
+        if(auth()->user()->id > 0){
+            //Employer's users tagged brand
+            $sql->where('contact_person', auth()->user()->id);
+        }else{
+            //Employer own brand
+            $sql->where('user_id', auth()->user()->id);
+        }
+
+        if(isset($_GET['status']) && $_GET['status'] != ""){
+            $sql->where('status', 1);
         }
         $list = $sql->get();
 

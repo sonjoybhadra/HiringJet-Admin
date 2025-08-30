@@ -122,7 +122,7 @@ class EmployerTagsController extends BaseApiController
 
     /**
      * Remove the specified resource from storage.
-     */
+    */
     public function destroy(string $id)
     {
         $data = EmployerTag::findOrFail($id);
@@ -187,10 +187,13 @@ class EmployerTagsController extends BaseApiController
     }
 
     private function getList(){
-        $own_list = EmployerTag::where('user_id', auth()->user()->id)
+        $own_list_sql = EmployerTag::where('user_id', auth()->user()->id)
                                 ->where('owner_id', auth()->user()->id)
-                                ->orderBy('tag_name', 'ASC')
-                                ->get();
+                                ->orderBy('tag_name', 'ASC');
+        if(isset($_GET['status']) && $_GET['status'] != ""){
+            $own_list_sql->where('status', 1);
+        }
+        $own_list = $own_list_sql->get();
         if($own_list->count() > 0){
             foreach($own_list as $index => $val){
                 $own_list[$index]->profile_cv_count = TagJobseekerMapping::where('tag_id', $val->id)->count();

@@ -234,4 +234,9 @@ class User extends Authenticatable implements JWTSubject
                     ->with('profile_cv');
     }
 
+    public function brand(): HasOne
+    {
+        return $this->HasOne(EmployerBrand::class, 'contact_person_id');
+    }
+
 }
