@@ -755,22 +755,23 @@ class CommonController extends BaseApiController
     }
 
     public function get_all_users($roll_id = 1){
-    $sql = User::select(
-        'id',
-        DB::raw("CONCAT(first_name, ' ', last_name) as name"),
-        'email',
-        'phone'
-    );
+        $sql = User::select(
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'phone'
+        );
 
-    if($roll_id > 0){
-        $sql->where('roll_id', $roll_id);
+        if($roll_id > 0){
+            $sql->where('roll_id', $roll_id);
+        }
+
+        return $this->sendResponse(
+            $sql->get(),
+            'List'
+        );
     }
-
-    return $this->sendResponse(
-        $sql->get(),
-        'List'
-    );
-}
 
 
 }
