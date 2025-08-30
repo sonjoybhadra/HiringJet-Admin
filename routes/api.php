@@ -232,6 +232,9 @@ use App\Http\Controllers\Api\Employer\EmployerPostJobController;
 use App\Http\Controllers\Api\Search\EmployerSearchController;
 use App\Http\Controllers\Api\Employer\DemoRequestsController;
 
+use App\Http\Controllers\Api\Employer\EmployerJobseekerCommentsController;
+use App\Http\Controllers\Api\Employer\EmployerSaveCvSearchController;
+
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -305,6 +308,9 @@ Route::group([
     Route::post('/email-templates/delete/{id}', [EmployerEmailTemplateController::class, 'destroy']);
     Route::post('/email-templates/status/{id}', [EmployerEmailTemplateController::class, 'changeStatus']);
     Route::resource('/email-templates', EmployerEmailTemplateController::class);
+
+    Route::resource('/jobseeker-comments', EmployerJobseekerCommentsController::class);
+    Route::resource('/sav-cv-search', EmployerSaveCvSearchController::class);
 
 });
 
