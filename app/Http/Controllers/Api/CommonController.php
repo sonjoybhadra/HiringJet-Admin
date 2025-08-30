@@ -40,6 +40,7 @@ use App\Models\Testimonial;
 use App\Models\PostJob;
 use App\Models\User;
 
+
 class CommonController extends BaseApiController
 {
     //
@@ -76,7 +77,10 @@ class CommonController extends BaseApiController
             'report_bug_category'=> $this->get_report_bug_category(1),
             'interestedIn'=> $this->get_interestedIn(1),
             'itSkill'=> $this->get_itSkill(1),
-            'contract_type'=> $this->get_contractType(1)
+            'contract_type'=> $this->get_contractType(1),
+            'allusers'=> $this->get_all_users(0),
+            'jobseekers'=> $this->get_all_users(1),
+            'employers'=> $this->get_all_users(2),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -750,6 +754,23 @@ class CommonController extends BaseApiController
         );
     }
 
+    public function get_all_users($roll_id = 1){
+    $sql = User::select(
+        'id',
+        DB::raw("CONCAT(first_name, ' ', last_name) as name"),
+        'email',
+        'phone'
+    );
+
+    if($roll_id > 0){
+        $sql->where('roll_id', $roll_id);
+    }
+
+    return $this->sendResponse(
+        $sql->get(),
+        'List'
+    );
+}
 
 
 }
