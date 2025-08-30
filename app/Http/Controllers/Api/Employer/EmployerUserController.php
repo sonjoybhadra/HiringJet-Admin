@@ -84,6 +84,7 @@ class EmployerUserController extends BaseApiController
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
+                    'business_id'=> auth()->user()->user_employer_details->business_id,
                     'designation_id'=> $request->designation_id,
                     'completed_steps'=> 2
                 ]);
@@ -107,7 +108,7 @@ class EmployerUserController extends BaseApiController
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
+    */
     public function show($id)
     {
         $list = User::where('id', $id)

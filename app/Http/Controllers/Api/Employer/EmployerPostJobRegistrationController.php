@@ -16,6 +16,7 @@ use App\Models\Employer;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\EmployerBrand;
 use App\Mail\SignupOtp;
 use App\Models\EmployerPostJobDraft;
 use App\Mail\RegistrationSuccess;
@@ -496,6 +497,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'pincode' => $request->get('pincode') ?: '',
                     'landline' => $request->get('landline') ?: '',
                     'industrie_id' => $request->get('industrie_id'),
+                    'designation_id' => $request->get('designation'),
                     'description' => $request->get('description') ?: '',
                     'business_id' => $employer->id,
                     'web_url' => $request->get('web_url') ?: '',
@@ -509,6 +511,24 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 }
 
                 $user_employer = UserEmployer::where('user_id', $user->id)->update($updateData);
+                /**
+                    *  Add company as brand for company owner employer
+                */
+                $userEmployerDetails = UserEmployer::where('user_id', $user->id)->first();
+                EmployerBrand::insert([
+                    'user_id'=> $user->id,
+                    'company_name'=> $employer->name,
+                    'company_logo'=> $uploadedFiles['logo'] ?? '', // Use empty string instead of null
+                    'info'=> $request->get('description') ?: '',
+                    'industry_id'=> $request->get('industrie_id'),
+                    'contact_person_id'=> $user->id,
+                    'contact_person_designation_id'=> $userEmployerDetails->designation_id,
+                    'web_url' => $request->get('web_url') ?: '',
+                    'address' => $request->get('address') ?: '',
+                    'country' => $country_id,
+                    'zip_code' => NULL,
+                    'status'=> 1
+                ]);
                 return $user_employer ? true : false;
             }
 

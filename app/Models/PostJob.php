@@ -57,6 +57,7 @@ class PostJob extends Model
         'status',
         'created_by',
         'updated_by',
+        'user_id'
     ];
 
     protected $casts = [

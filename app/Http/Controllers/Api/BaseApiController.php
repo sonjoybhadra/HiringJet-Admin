@@ -125,6 +125,7 @@ class BaseApiController extends Controller
         $data = User::where('id', auth()->user()->id)
                     ->with('user_employer_details')
                     ->with('user_folders')
+                    ->with('brand')
                     ->first()->toArray();
 
         if (array_key_exists('user_employer_details', $data)) {

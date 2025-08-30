@@ -51,6 +51,7 @@ class EmployerPostJobController extends BaseApiController
         }
 
         $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
+        $sql->where('user_id', auth()->user()->id);
         // this is for employer's users
         /* if(auth()->user()->parent_id > 0){
             $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
@@ -110,13 +111,13 @@ class EmployerPostJobController extends BaseApiController
             $sql->where('status', $status_array[strtolower($request->job_status)]);
         }
         // this is for employers
-        $child_user_business_array = User::select('user_employers.business_id')
+        /* $child_user_business_array = User::select('user_employers.business_id')
                             ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
                             ->where('users.parent_id', auth()->user()->id)
-                            ->get()->pluck('business_id')->toArray();
+                            ->get()->pluck('business_id')->toArray(); */
 
-        // array_push($child_user_business_array, auth()->user()->user_employer_details->business_id);
-        $sql->whereIn('employer_id', $child_user_business_array);
+        $sql->whereIn('employer_id', auth()->user()->user_employer_details->business_id);
+        $sql->where('user_id', '!=', auth()->user()->id);
 
         if($request->sort_order){
             $sql->orderBy('position_name', $request->sort_order);

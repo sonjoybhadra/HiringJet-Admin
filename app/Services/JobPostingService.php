@@ -319,7 +319,8 @@ class JobPostingService
             'updated_by' => $userId,
             'status' => 0, // 0 = pending , 1 = active , 2 = rejected , 3 = deleted, 10 = draft
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
+            'user_id' => $userId,
         ];
     }
 
