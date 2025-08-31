@@ -199,7 +199,7 @@ class EmployerBrandsController extends BaseApiController
                                 ->orderBy('company_name', 'ASC');
         if(auth()->user()->id > 0){
             //Employer's users tagged brand
-            $sql->where('contact_person', auth()->user()->id);
+            $sql->where('contact_person_id', auth()->user()->id);
         }else{
             //Employer own brand
             $sql->where('user_id', auth()->user()->id);
