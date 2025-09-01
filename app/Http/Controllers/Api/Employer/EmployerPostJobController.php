@@ -606,7 +606,7 @@ class EmployerPostJobController extends BaseApiController
     public function share(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'emplyer_id' => 'required|array',
+            'user_id' => 'required|array',
         ]);
 
         if($validator->fails()){
@@ -614,17 +614,17 @@ class EmployerPostJobController extends BaseApiController
         }
 
         try{
-            foreach($request->emplyer_id as $emplyer_id){
-                if(!empty($emplyer_id)){
+            foreach($request->user_id as $user_id){
+                if(!empty($user_id)){
                     $has_data = PostJobEmployerSharing::where('job_id', $id)
                                                         ->where('owner_id', auth()->user()->id)
-                                                        ->where('sharing_user_id', $emplyer_id)
+                                                        ->where('sharing_user_id', $user_id)
                                                         ->count();
                     if($has_data <= 0){
                         PostJobEmployerSharing::create([
                             'job_id'=> $id,
                             'owner_id'=> auth()->user()->id,
-                            'sharing_user_id'=> $emplyer_id,
+                            'sharing_user_id'=> $user_id,
                         ]);
                     }
                 }
