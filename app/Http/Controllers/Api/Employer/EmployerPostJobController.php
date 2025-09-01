@@ -642,7 +642,7 @@ class EmployerPostJobController extends BaseApiController
     */
     public function getUserSharedJobs(Request $request){
         $job_id = PostJobEmployerSharing::where('sharing_user_id', auth()->user()->id)
-                                            ->get()->plick('job_id')->toArray();
+                                            ->get()->pluck('job_id')->toArray();
         $list = [];
         if(count($job_id) > 0){
             $list = $this->getList($request, 'shared', $job_id);
