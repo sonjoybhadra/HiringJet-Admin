@@ -52,7 +52,9 @@ class EmployerJobseekerCommentsController extends BaseApiController
             $id = EmployerJobseekerComments::insertGetId([
                 'employer_id' => auth()->user()->id,
                 'jobseeker_id'=> $request->jobseeker_id,
-                'comment'=> $request->comment
+                'comment'=> $request->comment,
+                'status' => 1,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             if($id){
@@ -102,6 +104,7 @@ class EmployerJobseekerCommentsController extends BaseApiController
             $data = EmployerJobseekerComments::findOrFail($id);
             $data->jobseeker_id = $request->jobseeker_id;
             $data->comment = $request->comment;
+            $data->updated_at = date('Y-m-d h:i:s');
             $data->save();
 
             return $this->sendResponse([$data], 'Comment has successfully updated.');

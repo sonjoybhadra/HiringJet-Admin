@@ -13,6 +13,8 @@ class EmployerTag extends Model
         'user_id',
         'tag_name',
         'owner_id',
-        'status'
+        'status',
+        'created_at',
+        'updated_at'
     ];
 }

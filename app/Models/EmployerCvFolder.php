@@ -16,6 +16,8 @@ class EmployerCvFolder extends Model
         'folder_name',
         'owner_id',
         'status',
+        'created_at',
+        'updated_at'
     ];
 
     /**

@@ -73,7 +73,8 @@ class EmployerUserController extends BaseApiController
                 'phone'=> $request->phone,
                 'password'=> Hash::make($pwd),
                 'status'=> 1,
-                'emp_reg_type'=> 1
+                'emp_reg_type'=> 1,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             if($user_id){
@@ -86,7 +87,8 @@ class EmployerUserController extends BaseApiController
                     'phone' => $request->phone,
                     'business_id'=> auth()->user()->user_employer_details->business_id,
                     'designation_id'=> $request->designation_id,
-                    'completed_steps'=> 2
+                    'completed_steps'=> 2,
+                    'created_at'=> date('Y-m-d h:i:s')
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;

@@ -52,6 +52,8 @@ class EmployerSaveCvSearchController extends BaseApiController
                 'employer_id' => auth()->user()->id,
                 'search_json'=> json_encode($request->search_json),
                 'title'=> $request->title,
+                'status' => 1,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             if($id){
@@ -101,6 +103,7 @@ class EmployerSaveCvSearchController extends BaseApiController
             $data = EmployerCvSearch::findOrFail($id);
             $data->search_json = json_encode($request->search_json);
             $data->title = $request->title;
+            $data->updated_at = date('Y-m-d h:i:s');
             $data->save();
 
             return $this->sendResponse([$data], 'Search data has successfully updated.');

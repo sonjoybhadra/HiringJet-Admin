@@ -25,7 +25,9 @@ class EmployerEmailtemplate extends Model
         'salary_min',
         'subject',
         'message',
-        'owner_id'
+        'owner_id',
+        'created_at',
+        'updated_at'
     ];
 
     /**

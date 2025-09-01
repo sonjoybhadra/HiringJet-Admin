@@ -32,6 +32,7 @@ class ReportBugController extends BaseApiController
                 'category'=> $request->category,
                 'description'=> $request->description,
                 'source'=> $request->source,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             return $this->sendResponse([], 'Report bug is submitted successfully.');

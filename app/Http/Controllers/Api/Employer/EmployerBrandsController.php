@@ -79,7 +79,8 @@ class EmployerBrandsController extends BaseApiController
                 'address' => $request->address,
                 'country' => $country_id,
                 'zip_code' => $request->zip_code??NULL,
-                'status'=> 1
+                'status'=> 1,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             return $this->sendResponse($this->getList(), 'Brand added successfully.');
@@ -145,7 +146,7 @@ class EmployerBrandsController extends BaseApiController
                 'web_url' => $request->web_url,
                 'address' => $request->address,
                 'country' => $country_id,
-                'zip_code' => $request->zip_code??NULL,
+                'zip_code' => $request->zip_code??NULL
             ];
             if (request()->hasFile('logo')) {
                 $file = request()->file('logo');

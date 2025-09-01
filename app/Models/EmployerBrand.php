@@ -22,7 +22,9 @@ class EmployerBrand extends Model
         'address',
         'country',
         'zip_code',
-        'status'
+        'status',
+        'created_at',
+        'updated_at'
     ];
     /**
      * Get the role details of associated user.

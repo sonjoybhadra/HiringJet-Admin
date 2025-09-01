@@ -34,6 +34,8 @@ class UserEmployer extends Model
         'description',
         'web_url',
         'is_active',
+        'created_at',
+        'updated_at'
     ];
 
     public function designation(): BelongsTo

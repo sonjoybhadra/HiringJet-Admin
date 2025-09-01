@@ -54,7 +54,8 @@ class EmployerTagsController extends BaseApiController
                 'user_id'=> auth()->user()->id,
                 'tag_name'=> $request->tag_name,
                 'owner_id'=> auth()->user()->id,
-                'status'=> 1
+                'status'=> 1,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             return $this->sendResponse($this->getList(), 'Tag added successfully.');

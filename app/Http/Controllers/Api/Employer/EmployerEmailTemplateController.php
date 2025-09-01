@@ -86,7 +86,8 @@ class EmployerEmailTemplateController extends BaseApiController
                 'subject'=> $request->subject,
                 'message'=> $request->message,
                 'owner_id'=> auth()->user()->id,
-                'status'=> 1
+                'status'=> 1,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             return $this->sendResponse($this->getList(), 'Email template added successfully.');
