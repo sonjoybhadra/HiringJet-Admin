@@ -46,7 +46,7 @@ class EmployerRegistrationController extends BaseApiController
             'phone' => 'required|max:15|unique:users',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
-            'business_id' => 'required|integer',
+            'business_id' => 'required',
             'designation_id' => 'required|integer',
         ]);
 
@@ -73,19 +73,32 @@ class EmployerRegistrationController extends BaseApiController
             ]);
 
             if($user_id){
-                UserEmployer::insert([
+                $business_id = $request->business_id;
+                $has_business = Employer::where('name', $business_id)->count();
+                if($has_business <= 0 && is_string($request->business_id)){
+                    $employer = Employer::create([
+                        'name'=> $request->business_id,
+                        'logo'=> 'logo',
+                        'description'=> 'description',
+                        'industry_id'=> 1,
+                        'no_of_employee'=> 1,
+                        'status'=> 0
+                    ]);
+                    $business_id = $employer->id;
+                }
+                UserEmployer::create([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
                     'last_name'=> $request->last_name,
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'business_id'=> $request->business_id,
+                    'business_id'=> $business_id,
                     'designation_id'=> $request->designation_id,
                     'completed_steps'=> 0
                 ]);
 
-                Employer::find($request->business_id)->update([
+                Employer::find($business_id)->update([
                     'status'=> 1    // Waiting for admin approval
                 ]);
 
