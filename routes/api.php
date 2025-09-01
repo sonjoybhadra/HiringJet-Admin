@@ -284,6 +284,8 @@ Route::group([
     Route::get('/get-draft-jobs', [EmployerPostJobController::class, 'getMyDraftedJobs']);
     Route::get('/get-draft-jobs/{id}', [EmployerPostJobController::class, 'getMyDraftedJobsDetsils']);
     Route::post('/del-draft-job/{id}', [EmployerPostJobController::class, 'destroyDraft']);
+    Route::post('/posted-jobs/share/{id}', [EmployerPostJobController::class, 'share']);
+    Route::get('/get-shared-jobs', [EmployerPostJobController::class, 'getUserSharedJobs']);
 
     Route::post('/cv-folder/share/{id}', [EmployerFolderController::class, 'share']);
     Route::post('/cv-folder/save-profile', [EmployerFolderController::class, 'saveProfile']);

@@ -11,7 +11,7 @@ use Validator;
 
 use App\Models\PostJob;
 use App\Models\EmployerPostJobDraft;
-use App\Models\User;
+use App\Models\PostJobEmployerSharing;
 use App\Models\Country;
 use App\Models\City;
 
@@ -28,7 +28,7 @@ class EmployerPostJobController extends BaseApiController
         @response json
     */
     public function getMyPostedJobs(Request $request){
-        $sql = PostJob::select('*')
+        /* $sql = PostJob::select('*')
                         ->addSelect(DB::raw('(SELECT count(job_id) FROM post_job_user_applieds x WHERE x.job_id = post_jobs.id) as total_applied_jobjeekers'))
                         ->with('employer')
                         ->with('industryRelation')
@@ -52,20 +52,6 @@ class EmployerPostJobController extends BaseApiController
 
         $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
         $sql->where('user_id', auth()->user()->id);
-        // this is for employer's users
-        /* if(auth()->user()->parent_id > 0){
-            $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
-        }else{
-            // this is for employers
-            $child_user_business_array = User::select('user_employers.business_id')
-                                ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
-                                ->where('users.parent_id', auth()->user()->id)
-                                ->get()->pluck('business_id')->toArray();
-
-            array_push($child_user_business_array, auth()->user()->user_employer_details->business_id);
-
-            $sql->whereIn('employer_id', $child_user_business_array);
-        } */
 
         if($request->sort_order){
             $sql->orderBy('position_name', $request->sort_order);
@@ -79,9 +65,9 @@ class EmployerPostJobController extends BaseApiController
                 $list[$key]->location_countries_data = $this->returnCountryList($data->location_countries);
                 $list[$key]->location_cities_data = $this->returnCityList($data->location_cities);
             }
-        }
+        } */
 
-        return $this->sendResponse($list, 'List of posted jobs');
+        return $this->sendResponse($this->getList($request, 'self-posted'), 'List of posted jobs');
     }
 
      /**
@@ -89,7 +75,7 @@ class EmployerPostJobController extends BaseApiController
         @response json
     */
     public function getMyUserPostedJobs(Request $request){
-        $sql = PostJob::select('*')
+        /* $sql = PostJob::select('*')
                         ->addSelect(DB::raw('(SELECT count(job_id) FROM post_job_user_applieds x WHERE x.job_id = post_jobs.id) as total_applied_jobjeekers'))
                         ->with('employer')
                         ->with('industryRelation')
@@ -110,12 +96,6 @@ class EmployerPostJobController extends BaseApiController
 
             $sql->where('status', $status_array[strtolower($request->job_status)]);
         }
-        // this is for employers
-        /* $child_user_business_array = User::select('user_employers.business_id')
-                            ->join('user_employers', 'user_employers.user_id', '=', 'users.id')
-                            ->where('users.parent_id', auth()->user()->id)
-                            ->get()->pluck('business_id')->toArray(); */
-
         $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
         $sql->where('user_id', '!=', auth()->user()->id);
 
@@ -131,9 +111,9 @@ class EmployerPostJobController extends BaseApiController
                 $list[$key]->location_countries_data = $this->returnCountryList($data->location_countries);
                 $list[$key]->location_cities_data = $this->returnCityList($data->location_cities);
             }
-        }
+        } */
 
-        return $this->sendResponse($list, 'List of posted jobs by others');
+        return $this->sendResponse($this->getList($request, 'other-user'), 'List of posted jobs by others');
     }
 
     /**
@@ -616,6 +596,115 @@ class EmployerPostJobController extends BaseApiController
         $data->delete();
 
         return $this->sendResponse([], 'Draft is deleted successfully.');
+    }
+
+    /**
+     * Registered member step 1.
+     *
+     * @return \Illuminate\Http\JsonResponse
+    */
+    public function share(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'emplyer_id' => 'required|array',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            foreach($request->emplyer_id as $emplyer_id){
+                if(!empty($emplyer_id)){
+                    $has_data = PostJobEmployerSharing::where('job_id', $id)
+                                                        ->where('owner_id', auth()->user()->id)
+                                                        ->where('sharing_user_id', $emplyer_id)
+                                                        ->count();
+                    if($has_data <= 0){
+                        PostJobEmployerSharing::create([
+                            'job_id'=> $id,
+                            'owner_id'=> auth()->user()->id,
+                            'sharing_user_id'=> $emplyer_id,
+                        ]);
+                    }
+                }
+            }
+
+            return $this->sendResponse([], 'Job has been shared with selected users successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    /**
+        * Jobs list for employer's users shared by the employers
+        @response json
+    */
+    public function getUserSharedJobs(Request $request){
+        $job_id = PostJobEmployerSharing::where('sharing_user_id', auth()->user()->id)
+                                            ->get()->plick('job_id')->toArray();
+        $list = [];
+        if(count($job_id) > 0){
+            $list = $this->getList($request, 'shared', $job_id);
+        }
+
+        return $this->sendResponse($list, 'Shared by employer');
+    }
+
+    /*
+        @payload $request(object), $for(string), $job_id(array):optional
+        @return list
+    */
+    private function getList($request, $for, $job_id = []){
+        $sql = PostJob::select('*')
+                        ->addSelect(DB::raw('(SELECT count(job_id) FROM post_job_user_applieds x WHERE x.job_id = post_jobs.id) as total_applied_jobjeekers'))
+                        ->with('employer')
+                        ->with('industryRelation')
+                        ->with('jobCategory')
+                        ->with('nationalityRelation')
+                        ->with('contractType')
+                        ->with('designationRelation')
+                        ->with('functionalArea')
+                        ->with('applied_users');
+        if(!empty($request->job_status)){
+            $status_array = [
+                'pending'=> 0,
+                'approve' => 1,
+                'published' => 1,
+                'reject'=> 2,
+                'deleted'=> 3,
+            ];
+
+            $sql->where('status', $status_array[strtolower($request->job_status)]);
+        }
+
+        if($for == 'other-user'){
+            $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
+            $sql->where('user_id', '!=', auth()->user()->id);
+        }else if($for == 'shared'){
+            $sql->whereIn('id', $job_id);
+        }else if($for == 'self-posted'){
+            $sql->where('employer_id', auth()->user()->user_employer_details->business_id);
+            $sql->where('user_id', auth()->user()->id);
+        }else{
+            $sql->where('id', 0);
+        }
+
+        if($request->sort_order){
+            $sql->orderBy('position_name', $request->sort_order);
+        }else{
+            $sql->latest();
+        }
+        $list = $sql->get();
+
+        if($list->count() > 0){
+            foreach($list as $key => $data){
+                $list[$key]->location_countries_data = $this->returnCountryList($data->location_countries);
+                $list[$key]->location_cities_data = $this->returnCityList($data->location_cities);
+            }
+        }
+
+        return $list?? [];
     }
 
 }

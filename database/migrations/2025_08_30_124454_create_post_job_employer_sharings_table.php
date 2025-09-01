@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('job_id')->constrained('post_jobs');
             $table->foreignId('owner_id')->constrained('users');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('sharing_user_id')->constrained('users');
             $table->timestamps();
         });
     }
