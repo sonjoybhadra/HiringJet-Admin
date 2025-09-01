@@ -15,6 +15,7 @@ class Employer extends Model
         'logo',
         'description',
         'industry_id',
+        'no_of_employee',
         'country_id',
         'city_id',
         'state_id',
