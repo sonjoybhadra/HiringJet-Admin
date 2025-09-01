@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use App\Models\EmployerCvSearch;
+use App\Models\User;
 /**-------------------------- SME -------------------------------- */
 class EmployerSaveCvSearchController extends BaseApiController
 {
@@ -24,9 +25,28 @@ class EmployerSaveCvSearchController extends BaseApiController
     */
     public function index(Request $request)
     {
-        $list = EmployerCvSearch::where('employer_id', auth()->user()->id)
+        $own_list = EmployerCvSearch::where('employer_id', auth()->user()->id)
                                 ->latest()->get();
-        return $this->sendResponse($list, 'Search CV List.');
+        $users_data_list = [];
+        //for employers
+        if(empty(auth()->user()->parent_id)){
+            $child_users_id = User::where('parent_id', auth()->user()->id)->get()->pluck('id')->toArray();
+            if(!empty($child_users_id)){
+                $users_data_list = EmployerCvSearch::whereIn('employer_id', $child_users_id)
+                                                    ->latest()->get();
+
+                /* if($users_data_list->count() > 0){
+                    foreach($users_data_list as $index => $val){
+                        $users_data_list[$index]->profile_cv_count = EmployerCvSearch::where('tag_id', $val->id)->count();
+                        $users_data_list[$index]->shared_employers = [];
+                    }
+                } */
+            }
+        }
+        return $this->sendResponse([
+            'own_list' => $own_list,
+            'users_data_list' => $users_data_list,
+        ], 'Search CV List.');
     }
 
     /**
@@ -52,6 +72,8 @@ class EmployerSaveCvSearchController extends BaseApiController
                 'employer_id' => auth()->user()->id,
                 'search_json'=> json_encode($request->search_json),
                 'title'=> $request->title,
+                'email_ids'=> !empty($request->email_ids) ? json_encode($request->email_ids) : NULL,
+                'alert_frequency'=> $request->alert_frequency,
                 'status' => 1,
                 'created_at'=> date('Y-m-d h:i:s')
             ]);
@@ -103,6 +125,8 @@ class EmployerSaveCvSearchController extends BaseApiController
             $data = EmployerCvSearch::findOrFail($id);
             $data->search_json = json_encode($request->search_json);
             $data->title = $request->title;
+            $data->email_ids = !empty($request->email_ids) ? json_encode($request->email_ids) : NULL;
+            $data->alert_frequency = $request->alert_frequency;
             $data->updated_at = date('Y-m-d h:i:s');
             $data->save();
 

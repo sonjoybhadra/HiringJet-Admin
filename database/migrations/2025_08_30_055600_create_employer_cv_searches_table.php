@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('employer_id')->constrained('users');
             $table->text('search_json');
             $table->string('title');
+            $table->string('email_ids')->nullable();
+            $table->integer('alert_frequency')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();
