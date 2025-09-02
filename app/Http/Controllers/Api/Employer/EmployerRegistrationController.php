@@ -46,7 +46,7 @@ class EmployerRegistrationController extends BaseApiController
             'phone' => 'required|max:15|unique:users',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
-            'business_id' => 'required',
+            // 'business_id' => 'required',
             'designation_id' => 'required|integer',
         ]);
 
@@ -55,6 +55,21 @@ class EmployerRegistrationController extends BaseApiController
         }
 
         try{
+            $business_id = $request->business_id;
+            if(!empty($request->business_name)){
+                $employer = Employer::create([
+                    'name'=> $request->business_name,
+                    'logo'=> 'logo',
+                    'description'=> 'description',
+                    'industry_id'=> 1,
+                    'no_of_employee'=> 1,
+                    'status'=> 0
+                ]);
+                $business_id = $employer->id;
+            }
+            if(empty($business_id)){
+                return $this->sendError('Validation Error', 'Business is required to complete registration.', Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
             $otp = mt_rand(1111, 9999);
             $otp_mail_hash = base64_encode($otp);
 
@@ -73,19 +88,6 @@ class EmployerRegistrationController extends BaseApiController
             ]);
 
             if($user_id){
-                $business_id = $request->business_id;
-                $has_business = Employer::where('name', $business_id)->count();
-                if($has_business <= 0 && is_string($request->business_id)){
-                    $employer = Employer::create([
-                        'name'=> $request->business_id,
-                        'logo'=> 'logo',
-                        'description'=> 'description',
-                        'industry_id'=> 1,
-                        'no_of_employee'=> 1,
-                        'status'=> 0
-                    ]);
-                    $business_id = $employer->id;
-                }
                 UserEmployer::create([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
