@@ -696,8 +696,8 @@ class EmployerPostJobController extends BaseApiController
         if(!empty($request->search_key)){
             $search_key = $request->search_key;
             $sql->where(function ($query) use ($search_key) {
-                $query->where('position_name', 'ilike', $search_key)
-                    ->orWhere('job_no', 'ilike', $search_key);
+                $query->where('position_name', 'ilike', '%'.$search_key.'%')
+                    ->orWhere('job_no', 'ilike', '%'.$search_key.'%');
             });
         }
 
