@@ -326,7 +326,7 @@ class EmployerRegistrationController extends BaseApiController
                 'web_url' => $request->web_url,
                 'address' => $request->address,
                 'country' => $country_id,
-                'zip_code' => NULL,
+                'zip_code' => $request->pincode??NULL,
                 'status'=> 1
             ]);
 

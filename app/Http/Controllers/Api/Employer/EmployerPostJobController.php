@@ -690,8 +690,23 @@ class EmployerPostJobController extends BaseApiController
             $sql->where('id', 0);
         }
 
-        if($request->sort_order){
-            $sql->orderBy('position_name', $request->sort_order);
+        if(!empty($request->job_type)){
+            $sql->where('job_type', $request->job_type);
+        }
+        if(!empty($request->search_key)){
+            $search_key = $request->search_key;
+            $sql->where(function ($query) use ($search_key) {
+                $query->where('position_name', 'ilike', $search_key)
+                    ->orWhere('job_no', 'ilike', $search_key);
+            });
+        }
+
+        if(!empty($request->sort_order) && !empty($request->sort_by)){
+            if($request->sort_by == 'posted_date')
+                $sql->orderBy('created_at', $request->sort_order);
+
+            if($request->sort_by == 'title')
+                $sql->orderBy('position_name', $request->sort_order);
         }else{
             $sql->latest();
         }
