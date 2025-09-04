@@ -55,7 +55,7 @@ class EmployerBrandsController extends BaseApiController
                                             ->where('contact_person_id', $request->contact_person)
                                             ->get()->count();
             if($has_duplicate > 0){
-                return $this->sendError('Duplicate Error', 'Duplicate brand mapping is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
+                return $this->sendError('Duplicate Error', [['company_name'=> 'Duplicate brand mapping is exists']], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $logo = "";
@@ -132,7 +132,7 @@ class EmployerBrandsController extends BaseApiController
                                             ->where('id', '!=', $id)
                                             ->get()->count();
             if($has_duplicate > 0){
-                return $this->sendError('Duplicate Error', 'Duplicate brand mapping is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
+                return $this->sendError('Duplicate Error', [['company_name'=> 'Duplicate brand mapping is exists']], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $country = new Country();
