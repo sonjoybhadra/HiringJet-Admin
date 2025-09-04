@@ -67,7 +67,7 @@ class EmployerBrandsController extends BaseApiController
             }
             $country = new Country();
             $country_id = $country->getCountryId($request->country);
-            EmployerBrand::insert([
+            EmployerBrand::create([
                 'user_id'=> auth()->user()->id,
                 'company_name'=> $request->company_name,
                 'company_logo'=> $logo,
@@ -198,7 +198,7 @@ class EmployerBrandsController extends BaseApiController
                                 ->with('contact_person')
                                 ->with('contact_person_designation')
                                 ->orderBy('company_name', 'ASC');
-        if(auth()->user()->id > 0){
+        if(auth()->user()->parent_id > 0){
             //Employer's users tagged brand
             $sql->where('contact_person_id', auth()->user()->id);
         }else{
