@@ -21,7 +21,7 @@ class NewsletterSubscribersController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            NewsletterSubscriber::insertGetId([
+            NewsletterSubscriber::create([
                 'email'=> $request->email,
                 'ip'=> $request->ip()
             ]);

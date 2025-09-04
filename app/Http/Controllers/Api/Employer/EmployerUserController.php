@@ -78,7 +78,7 @@ class EmployerUserController extends BaseApiController
             ]);
 
             if($user_id){
-                UserEmployer::insert([
+                UserEmployer::create([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
                     'last_name'=> $request->last_name,

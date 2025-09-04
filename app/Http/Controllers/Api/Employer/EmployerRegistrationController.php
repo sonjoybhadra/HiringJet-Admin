@@ -84,7 +84,8 @@ class EmployerRegistrationController extends BaseApiController
                 'status'=> 0,
                 'remember_token' => $otp_mail_hash,
                 'email_verified_at' => date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes')),
-                'emp_reg_type' => 1,
+                'emp_reg_type' => 1,                
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             if($user_id){
@@ -315,7 +316,7 @@ class EmployerRegistrationController extends BaseApiController
                 *  Add company as brand for company owner employer
             */
             $employer = Employer::find($user_employer->business_id);
-            EmployerBrand::insert([
+            EmployerBrand::create([
                 'user_id'=> $user->id,
                 'company_name'=> $employer->name,
                 'company_logo'=> $logo,

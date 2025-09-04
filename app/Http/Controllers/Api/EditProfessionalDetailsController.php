@@ -89,7 +89,7 @@ class EditProfessionalDetailsController extends BaseApiController
             if(!empty($request->keyskills)){
                 UserSkill::where('user_id', auth()->user()->id)->delete();
                 foreach($request->keyskills as $keyskill){
-                    UserSkill::insert([
+                    UserSkill::create([
                         'user_id'=> auth()->user()->id,
                         'keyskill_id'=> $keyskill,
                         'proficiency_level' => 'Beginner',
@@ -168,7 +168,7 @@ class EditProfessionalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            UserItSkill::insert([
+            UserItSkill::create([
                 'user_id'=> auth()->user()->id,
                 'itkill_id'=> $request->itkill_id,
                 'version'=> $request->version,
@@ -290,6 +290,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'currency_id'=> $request->salary_currency,
                     'current_salary'=> $request->current_salary,
                     'is_current_job'=> 1,
+                    'created_at'=> date('Y-m-d h:i:s')
                 ]);
             }
 
@@ -298,7 +299,7 @@ class EditProfessionalDetailsController extends BaseApiController
             if(!empty($request->industry)){
                 UserEmploymentIndustry::where('user_employment_id', $id)->delete();
                 foreach($request->industry as $industry_id){
-                    UserEmploymentIndustry::insert([
+                    UserEmploymentIndustry::create([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
                         'industry'=> $industry_id,
@@ -309,7 +310,7 @@ class EditProfessionalDetailsController extends BaseApiController
             if(!empty($request->functional_area)){
                 UserEmploymentFunctionalArea::where('user_employment_id', $id)->delete();
                 foreach($request->functional_area as $functional_area_id){
-                    UserEmploymentFunctionalArea::insert([
+                    UserEmploymentFunctionalArea::create([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
                         'functional_area'=> $functional_area_id,
@@ -320,7 +321,7 @@ class EditProfessionalDetailsController extends BaseApiController
             if(!empty($request->perk_benefits)){
                 UserEmploymentParkBenefit::where('user_employment_id', $id)->delete();
                 foreach($request->perk_benefits as $perk_benefit_id){
-                    UserEmploymentParkBenefit::insert([
+                    UserEmploymentParkBenefit::create([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
                         'perk_benefit'=> $perk_benefit_id,

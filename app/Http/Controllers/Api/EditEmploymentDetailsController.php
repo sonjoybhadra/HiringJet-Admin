@@ -116,7 +116,7 @@ class EditEmploymentDetailsController extends BaseApiController
             if(!empty($request->skills)){
                 UserEmploymentSkill::where('user_employment_id', $id)->delete();
                 foreach($request->skills as $skill){
-                    UserEmploymentSkill::insert([
+                    UserEmploymentSkill::create([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
                         'keyskill_id'=> $skill,
@@ -179,13 +179,14 @@ class EditEmploymentDetailsController extends BaseApiController
                 'working_since_to_month'=> $request->is_current_job == 0 ? $request->working_since_to_month : 0,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
-                'notice_period'=> $request->notice_period
+                'notice_period'=> $request->notice_period,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
             if($employment_id){
                 $this->calculate_profile_completed_percentage(auth()->user()->id, 'employment-details'); //Employment details completes
                 if(!empty($request->skills)){
                     foreach($request->skills as $skill){
-                        UserEmploymentSkill::insert([
+                        UserEmploymentSkill::create([
                             'user_id'=> auth()->user()->id,
                             'user_employment_id'=> $employment_id,
                             'keyskill_id'=> $skill,

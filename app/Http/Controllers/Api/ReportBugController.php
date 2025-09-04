@@ -25,7 +25,7 @@ class ReportBugController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            ReportBug::insertGetId([
+            ReportBug::create([
                 'user_id'=> auth()->check() ? auth()->user()->id : NULL,
                 'email'=> $request->email,
                 'phone'=> $request->phone,

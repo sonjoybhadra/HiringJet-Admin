@@ -88,7 +88,7 @@ class EditPersonalDetailsController extends BaseApiController
             if(!empty($request->language)){
                 UserLanguage::where('user_id', auth()->user()->id)->delete();
                 foreach($request->language as $index => $language){
-                    UserLanguage::insert([
+                    UserLanguage::create([
                         'user_id'=> auth()->user()->id,
                         'language_id'=> $language,
                         'can_read'=> $request->can_read[$index],

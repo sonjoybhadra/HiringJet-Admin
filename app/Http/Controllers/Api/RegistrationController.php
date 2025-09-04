@@ -92,11 +92,12 @@ class RegistrationController extends BaseApiController
                 'password'=> Hash::make($request->password),
                 'status'=> 0,
                 'remember_token' => $otp_mail_hash,
-                'email_verified_at' => date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes'))
+                'email_verified_at' => date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes')),
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             if($user_id){
-                UserProfile::insert([
+                UserProfile::create([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
                     'last_name'=> $request->last_name,
@@ -114,7 +115,7 @@ class RegistrationController extends BaseApiController
                 }
 
                 if($image_path != ""){
-                    UserResume::insert([
+                    UserResume::create([
                         'user_id' => $user_id,
                         'cv' => $image_path,
                         'is_default' => 1
@@ -347,7 +348,7 @@ class RegistrationController extends BaseApiController
             if(!empty($request->keyskills)){
                 UserSkill::where('user_id', $user->id)->delete();
                 foreach($request->keyskills as $keyskill){
-                    UserSkill::insert([
+                    UserSkill::create([
                         'user_id'=> $user->id,
                         'keyskill_id'=> $keyskill,
                         'proficiency_level' => 'Beginner',
@@ -524,7 +525,7 @@ class RegistrationController extends BaseApiController
                     $profile_data_array['languages'] = $languages;
                     /* if($languages->count() > 0){
                         foreach($languages as $index => $language){
-                            UserLanguage::insert([
+                            UserLanguage::create([
                                 'user_id'=> auth()->user()->id,
                                 'language_id'=> $language,
                                 'can_read'=> 0,

@@ -113,7 +113,7 @@ class EditEducationalDetailsController extends BaseApiController
             $specialization_id = is_numeric($request->specialization) ? $request->specialization : $specialization->getSpecializationId($request->specialization, $course_id, $qualification_id);
 
             // UserEducation::where('user_id', auth()->user()->id)->delete();
-            UserEducation::insert([
+            UserEducation::create([
                 'user_id'=> auth()->user()->id,
                 'qualification_id'=> $request->qualification,
                 'university_id'=> $university_id,

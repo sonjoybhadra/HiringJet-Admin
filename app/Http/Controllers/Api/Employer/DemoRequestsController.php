@@ -27,7 +27,7 @@ class DemoRequestsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            DemoRequest::insertGetId([
+            DemoRequest::create([
                 'name'=> $request->name,
                 'country_code'=> $request->country_code,
                 'phone'=> $request->phone,

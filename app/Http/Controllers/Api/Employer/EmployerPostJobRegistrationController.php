@@ -81,10 +81,11 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 'remember_token' => '',
                 'email_verified_at' =>date('Y-m-d H:i:s'),
                 'emp_reg_type' => 2,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             if($user_id){
-                UserEmployer::insert([
+                UserEmployer::create([
                     'user_id'=> $user_id,
                     'first_name'=> "User",
                     'last_name'=> "Name",
@@ -541,7 +542,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     *  Add company as brand for company owner employer
                 */
                 $userEmployerDetails = UserEmployer::where('user_id', $user->id)->first();
-                EmployerBrand::insert([
+                EmployerBrand::create([
                     'user_id'=> $user->id,
                     'company_name'=> $employer->name,
                     'company_logo'=> $uploadedFiles['logo'] ?? '', // Use empty string instead of null

@@ -104,7 +104,7 @@ class EditAccomplishmentsController extends BaseApiController
                 Storage::disk('public')->put('uploads/user/certification/'.$fileName, file_get_contents($file));
                 $image_path = 'public/storage/uploads/user/certification/'.$fileName;
             }
-            UserCertification::insert([
+            UserCertification::create([
                 'user_id'=> auth()->user()->id,
                 'certification_name'=> $request->certification_name,
                 'certification_provider'=> $request->certification_provider,
@@ -192,7 +192,7 @@ class EditAccomplishmentsController extends BaseApiController
                 ];
             }
 
-            UserOnlineProfile::insert($data_array);
+            UserOnlineProfile::create($data_array);
 
             return $this->sendResponse([], 'Online profile updated successfully.');
         } catch (\Exception $e) {
@@ -289,7 +289,7 @@ class EditAccomplishmentsController extends BaseApiController
                 Storage::disk('public')->put('uploads/user/work/'.$fileName, file_get_contents($file));
                 $image_path = 'public/storage/uploads/user/work/'.$fileName;
             }
-            UserWorkSample::insert([
+            UserWorkSample::create([
                 'user_id'=> auth()->user()->id,
                 'sample_title'=> $request->sample_title,
                 'sample_url'=> $request->sample_url,

@@ -26,7 +26,7 @@ class ContactUsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
-            ContactUs::insertGetId([
+            ContactUs::create([
                 'user_id'=> auth()->check() ? auth()->user()->id : NULL,
                 'name'=> $request->name,
                 'email'=> $request->email,

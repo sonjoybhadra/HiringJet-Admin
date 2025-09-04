@@ -55,7 +55,7 @@ class EditResumeController extends BaseApiController
                         'is_default' => 1
                     ]);
                 }else{
-                    UserResume::insert([
+                    UserResume::create([
                         'user_id' => auth()->user()->id,
                         'cv' => $image_path,
                         'is_default' => 1

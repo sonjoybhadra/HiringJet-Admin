@@ -50,7 +50,7 @@ class EmployerTagsController extends BaseApiController
                 return $this->sendError('Duplicate Error', 'Duplicate tag is exists', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            EmployerTag::insert([
+            EmployerTag::create([
                 'user_id'=> auth()->user()->id,
                 'tag_name'=> $request->tag_name,
                 'owner_id'=> auth()->user()->id,
@@ -266,7 +266,7 @@ class EmployerTagsController extends BaseApiController
                         ->delete();
             foreach($request->emplyer_id as $emplyer_id){
                 if(!empty($emplyer_id)){
-                    EmployerTag::insert([
+                    EmployerTag::create([
                         'user_id'=> $emplyer_id,
                         'tag_name'=> $tag->tag_name,
                         'owner_id'=> $tag->owner_id,

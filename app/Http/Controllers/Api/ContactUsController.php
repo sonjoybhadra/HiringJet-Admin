@@ -35,6 +35,7 @@ class ContactUsController extends BaseApiController
                 'country_id'=> $request->country_id,
                 'organization'=> $request->organization,
                 'interested_in'=> $request->interested_in,
+                'created_at'=> date('Y-m-d h:i:s')
             ]);
 
             return $this->sendResponse([], 'Contact us request is submitted successfully.');

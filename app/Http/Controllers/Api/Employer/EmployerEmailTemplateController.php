@@ -71,7 +71,7 @@ class EmployerEmailTemplateController extends BaseApiController
 
             $designation = new Designation();
             $designation_id = $designation->getDesignationId($request->designation);
-            EmployerEmailtemplate::insert([
+            EmployerEmailtemplate::create([
                 'user_id'=> auth()->user()->id,
                 'template_name'=> $request->template_name,
                 'from_email_user_id'=> $request->from_email_user_id,
@@ -300,7 +300,7 @@ class EmployerEmailTemplateController extends BaseApiController
                             ->delete();
             foreach($request->emplyer_id as $emplyer_id){
                 if(!empty($emplyer_id)){
-                    EmployerEmailtemplate::insert([
+                    EmployerEmailtemplate::create([
                         'user_id'=> $emplyer_id,
                         'template_name'=> $template->template_name,
                         'from_email_user_id'=> $template->from_email_user_id,
