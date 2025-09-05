@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class DemoRequest extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'country_code',
+        'phone',
+        'email',
+        'city',
+        'organization',
+        'interested_in',
+        'created_at',
+        'updated_at'
+    ];
 }
