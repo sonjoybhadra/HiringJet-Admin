@@ -445,22 +445,22 @@ $role_id = (($user)?$user->role_id:0);
       <ul class="menu-sub">
         <!-- approved job list -->
         <?php if(in_array(12, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
-            <a href="<?=url('/post-job/list')?>" class="menu-link">
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'verified-employer-approve-job')?'active':'')?>">
+            <a href="<?=url('/post-job/verified-employer-approve-job')?>" class="menu-link">
               <div data-i18n="Verified Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Verified Employer Approved Jobs</div>
             </a>
           </li>
         <?php }?>
         <?php if(in_array(12, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
-            <a href="<?=url('/post-job/list')?>" class="menu-link">
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'non-verified-employer-approve-job')?'active':'')?>">
+            <a href="<?=url('/post-job/non-verified-employer-approve-job')?>" class="menu-link">
               <div data-i18n="Non-Verified Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Non-Verified Employer Approved Jobs</div>
             </a>
           </li>
         <?php }?>
         <?php if(in_array(12, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
-            <a href="<?=url('/post-job/list')?>" class="menu-link">
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'internal-employer-approve-job')?'active':'')?>">
+            <a href="<?=url('/post-job/internal-employer-approve-job')?>" class="menu-link">
               <div data-i18n="Internal Employee Jobs"><i class="fa-solid fa-arrow-right"></i> Internal Employee Jobs</div>
             </a>
           </li>
