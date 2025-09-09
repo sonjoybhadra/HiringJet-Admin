@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserSkill extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['user_id', 'keyskill_id', 'proficiency_level', 'years_of_experience', 'is_primary', 'is_active'];
+
     /**
      * Get the key_skills details of associated ID.
     */
