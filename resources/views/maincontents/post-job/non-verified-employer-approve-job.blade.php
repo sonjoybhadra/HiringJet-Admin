@@ -48,7 +48,7 @@ $controllerRoute = $module['controller_route'];
                 'orderType' => 'desc',
                 'conditions' => [
                     ['column' => 'post_jobs.status', 'operator' => '=', 'value' => 1],
-                    ['column' => 'employers.status', 'operator' => '=', 'value' => 4],
+                    ['column' => 'employers.status', 'operator' => '=', 'value' => 0],
                 ],
                 'joins' => [
                      [

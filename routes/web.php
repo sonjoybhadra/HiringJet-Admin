@@ -367,7 +367,15 @@ Route::middleware(['auth'])->group(function () {
     
     /* post job */
         Route::get('post-job/list', [PostJobController::class, 'list']);
+        Route::get('post-job/verified-employer-approve-job', [PostJobController::class, 'verified_employer_approve_job']);
+        Route::get('post-job/non-verified-employer-approve-job', [PostJobController::class, 'non_verified_employer_approve_job']);
+        Route::get('post-job/internal-employer-approve-job', [PostJobController::class, 'internal_employer_approve_job']);
+
         Route::get('job/pending-list', [PostJobController::class, 'pendingList']);
+        Route::get('job/verified-employer-pending-job', [PostJobController::class, 'verified_employer_pending_job']);
+        Route::get('job/non-verified-employer-pending-job', [PostJobController::class, 'non_verified_employer_pending_job']);
+        Route::get('job/internal-employer-pending-job', [PostJobController::class, 'internal_employer_pending_job']);
+
         Route::get('job/reject-list', [PostJobController::class, 'rejectList']);
         Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
         Route::match(['get', 'post'], 'post-job/edit/{id}', [PostJobController::class, 'edit']);
