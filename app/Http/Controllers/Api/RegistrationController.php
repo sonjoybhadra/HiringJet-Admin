@@ -269,7 +269,7 @@ class RegistrationController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        //try{
+        try{
             $image_path = "";
             if (request()->hasFile('profile_image')) {
                 $file = request()->file('profile_image');
@@ -361,9 +361,9 @@ class RegistrationController extends BaseApiController
 
             return $this->sendResponse($this->getUserDetails(), 'Setup profile has done. Please complete your profile now.');
 
-        // } catch (\Exception $e) {
-        //     return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
-        // }
+        } catch (\Exception $e) {
+            return $this->sendError('Error', 'Sorry!! Unable to complete setup profile.');
+        }
     }
 
     public function completeProfile(Request $request, User $user)
