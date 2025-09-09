@@ -33,6 +33,8 @@ class UserEmployer extends Model
         'profile_image',
         'description',
         'web_url',
+        'employe_type',
+        'completed_steps',
         'is_active',
         'created_at',
         'updated_at'
