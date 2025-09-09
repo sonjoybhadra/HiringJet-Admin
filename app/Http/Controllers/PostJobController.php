@@ -83,7 +83,7 @@ class PostJobController extends Controller
         }
         public function verified_employer_pending_job(){
             $data['module']                 = $this->data;
-            $title                          = $this->data['title']. ' Pending List';
+            $title                          = 'Verified Employer Pending Job List';
             $page_name                      = 'post-job.verified-employer-pending-job';
             // $data['rows']                   = PostJob::where('status', '=', 0)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
@@ -91,7 +91,7 @@ class PostJobController extends Controller
         }
         public function non_verified_employer_pending_job(){
             $data['module']                 = $this->data;
-            $title                          = $this->data['title']. ' Pending List';
+            $title                          = 'Non-Verified Employer Pending Job List';
             $page_name                      = 'post-job.non-verified-employer-pending-job';
             // $data['rows']                   = PostJob::where('status', '=', 0)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
@@ -99,7 +99,7 @@ class PostJobController extends Controller
         }
         public function internal_employer_pending_job(){
             $data['module']                 = $this->data;
-            $title                          = $this->data['title']. ' Pending List';
+            $title                          = 'Internal Employer Pending Job List';
             $page_name                      = 'post-job.internal-employer-pending-job';
             // $data['rows']                   = PostJob::where('status', '=', 0)->orderBy('id', 'DESC')->get();
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
