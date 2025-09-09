@@ -447,7 +447,21 @@ $role_id = (($user)?$user->role_id:0);
         <?php if(in_array(12, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
             <a href="<?=url('/post-job/list')?>" class="menu-link">
-              <div data-i18n="Approved Job List"><i class="fa-solid fa-arrow-right"></i> Approved Job List</div>
+              <div data-i18n="Verified Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Verified Employer Approved Jobs</div>
+            </a>
+          </li>
+        <?php }?>
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
+            <a href="<?=url('/post-job/list')?>" class="menu-link">
+              <div data-i18n="Non-Verified Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Non-Verified Employer Approved Jobs</div>
+            </a>
+          </li>
+        <?php }?>
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'list')?'active':'')?>">
+            <a href="<?=url('/post-job/list')?>" class="menu-link">
+              <div data-i18n="Internal Employee Jobs"><i class="fa-solid fa-arrow-right"></i> Internal Employee Jobs</div>
             </a>
           </li>
         <?php }?>
