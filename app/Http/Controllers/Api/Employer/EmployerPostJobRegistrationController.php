@@ -263,7 +263,6 @@ class EmployerPostJobRegistrationController extends BaseApiController
             }
             $user = User::with('user_employer_details')->findOrFail($user->id);
 
-
             // Call job service
             $result = $this->jobService->createJobPost(
                 $jobData,
