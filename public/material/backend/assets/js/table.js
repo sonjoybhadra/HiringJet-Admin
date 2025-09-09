@@ -122,7 +122,22 @@ function loadTable(config) {
                     html += `<a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
                         <i class="fa-solid fa-trash"></i>
                     </a>`;
-                }                
+                }
+
+                if(config.routePrefix == 'jobseeker'){
+                    if (status == 1) {
+                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-success btn-sm me-1" title="Deactivate">
+                            <i class="fa-solid fa-check"></i>
+                        </a>`;
+                    } else {
+                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-warning btn-sm me-1" title="Activate">
+                            <i class="fas fa-times"></i>
+                        </a>`;
+                    }
+                    html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-info btn-sm" title="Profile" target="_blank">
+                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
+                                </a>`;
+                }
 
                 if(config.routePrefix == 'post-job'){
                     var job_no = row['job_no'];
@@ -138,12 +153,6 @@ function loadTable(config) {
                     var job_no = row['job_no'];
                     html += `<br><br><a href="${base}/view-details/${encodedId}" class="btn btn-warning btn-sm me-1" title="View Jobs">
                                     <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Details</a>`;
-                }
-
-                if(config.routePrefix == 'jobseeker'){
-                    html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-info btn-sm" title="Profile" target="_blank">
-                                    <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Profile
-                                </a>`;
                 }
 
                 if(config.routePrefix == 'employer-user'){
