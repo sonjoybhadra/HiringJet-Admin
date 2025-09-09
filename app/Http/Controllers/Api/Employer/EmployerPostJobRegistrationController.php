@@ -553,7 +553,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'web_url' => $request->get('web_url') ?: '',
                     'address' => $request->get('address') ?: '',
                     'country' => $country_id,
-                    'zip_code' => NULL,
+                    'zip_code' => $request->get('pincode'),
                     'status'=> 1
                 ]);
                 return $user_employer ? true : false;
