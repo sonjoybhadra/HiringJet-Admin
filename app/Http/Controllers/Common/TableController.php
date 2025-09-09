@@ -69,6 +69,7 @@ class TableController extends Controller
         }
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
+            $query->leftJoin('employers', DB::raw("CAST($table.employer_id AS TEXT)"), '=', DB::raw("CAST(employers.id AS TEXT)"));
         }
         if ($table === 'contact_us') {
             $query->leftJoin('cities', DB::raw("CAST($table.city_id AS TEXT)"), '=', DB::raw("CAST(cities.id AS TEXT)"));
@@ -125,8 +126,14 @@ class TableController extends Controller
             if ($table === 'report_bugs' && $col === 'user_id') {
                 return 'users.first_name as name';
             }
-            if ($table === 'post_jobs' && $col === 'created_by') {
-                return 'users.first_name as created_by_name';
+            if ($table === 'post_jobs') {
+                if ($col === 'created_by') {
+                    return 'users.first_name as created_by_name';
+                }
+                if ($col === 'employer_id') {
+                    return 'employers.name as employer_name';
+                }
+                // return 'users.first_name as created_by_name';
             }
             if ($table === 'users' && $col == 'profile_completed_percentage') {
                 return 'user_profiles.profile_completed_percentage';

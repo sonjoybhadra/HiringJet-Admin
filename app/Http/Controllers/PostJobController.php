@@ -51,6 +51,28 @@ class PostJobController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
+        public function verified_employer_approve_job(){
+            $data['module']                 = $this->data;
+            $title                          = 'Verified Employer Approved Job List';
+            $page_name                      = 'post-job.verified-employer-approve-job';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function non_verified_employer_approve_job(){
+            $data['module']                 = $this->data;
+            $title                          = 'Non-Verified Employer Approved Job List';
+            $page_name                      = 'post-job.non-verified-employer-approve-job';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function internal_employer_approve_job(){
+            $data['module']                 = $this->data;
+            $title                          = 'Internal Employer Approved Job List';
+            $page_name                      = 'post-job.internal-employer-approve-job';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+
         public function pendingList(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title']. ' Pending List';
