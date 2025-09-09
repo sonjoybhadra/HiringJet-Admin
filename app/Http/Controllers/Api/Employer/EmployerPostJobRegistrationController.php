@@ -261,7 +261,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $jobData['walkin_longitude'] = null;
                 $jobData['walkin_details'] = null;
             }
-            $user = User::with('user_employer_details')->findOrFail($user_id);
+            $user = User::with('user_employer_details')->findOrFail($user->id);
 
 
             // Call job service
