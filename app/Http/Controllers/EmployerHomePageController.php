@@ -58,7 +58,7 @@ class EmployerHomePageController extends Controller
                 $rules = [
                     'section1_title'           => 'required',
                     'section2_title'           => 'required',
-                    // 'section3_title'           => 'required',
+                    'section3_title'           => 'required',
                     'section4_title'           => 'required',
                     'section5_title'           => 'required',
                 ];
@@ -132,75 +132,59 @@ class EmployerHomePageController extends Controller
                                 $images    = [];
                             }
                         }
-                        $image_link3 = [];
+                        $image_link2 = [];
                         if(!empty($images)){
                             for($i=0;$i<count($images);$i++){
-                                $image_link3[] = '/uploads/'.'home-page/'.$images[$i];
+                                $image_link2[] = '/uploads/'.'home-page/'.$images[$i];
+                            }
+                        } else {
+
+                            $image_link2 = array_map(function($item) {
+                                return $item->box_image;
+                            }, $section2_db->box);
+                        }
+                    /* Section 2 images */
+                    /* Section 3 images */
+                        $section3_box_text = array_values(array_filter($postData['section3_box_text'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+                        $section3_box_description = array_values(array_filter($postData['section3_box_description'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+                        $section3_box_button1_text = array_values(array_filter($postData['section3_box_button1_text'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+                        $section3_box_button1_link = array_values(array_filter($postData['section3_box_button1_link'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+                        $section3_box_button2_text = array_values(array_filter($postData['section3_box_button2_text'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+                        $section3_box_button2_link = array_values(array_filter($postData['section3_box_button2_link'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+
+                        $image_array3            = $request->file('section3_box_image');
+                        if(!empty($image_array3)){
+                            $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array3, 'image');
+                            if(!empty($uploadedFile)){
+                                $images3    = $uploadedFile;
+                            } else {
+                                $images3    = [];
+                            }
+                        }
+                        $image_link3 = [];
+                        if(!empty($images3)){
+                            for($i=0;$i<count($images3);$i++){
+                                $image_link3[] = '/uploads/'.'home-page/'.$images3[$i];
                             }
                         } else {
 
                             $image_link3 = array_map(function($item) {
                                 return $item->box_image;
                             }, $section2_db->box);
-                            // $image_link3 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
-                            // Helper::pr($section2_db->box);
                         }
-                    /* Section 2 images */
-                    /* Section 5 images */
-                        // $section5_box_name = array_values(array_filter($postData['section5_box_name'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
-
-                        // $image_array            = $request->file('section5_box_image');
-                        // if(!empty($image_array)){
-                        //     $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array, 'image');
-                        //     if(!empty($uploadedFile)){
-                        //         $images    = $uploadedFile;
-                        //     } else {
-                        //         $images    = [];
-                        //     }
-                        // }
-                        // $image_link5 = [];
-                        // if(!empty($images)){
-                        //     for($i=0;$i<count($images);$i++){
-                        //         $image_link5[] = '/uploads/'.'home-page/'.$images[$i];
-                        //     }
-                        // } else {
-                        //     $image_link5 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
-                        // }
-                    /* Section 5 images */
-                    /* Section 7 images */
-                        // $section7_box_name = array_values(array_filter($postData['section7_box_name'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
-                        // $section7_box_link_name = array_values(array_filter($postData['section7_box_link_name'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
-                        // $section7_box_link_url = array_values(array_filter($postData['section7_box_link_url'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
-                        // $section7_box_description = array_values(array_filter($postData['section7_box_description'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
-
-                        // $image_array            = $request->file('section7_box_image');
-                        // if(!empty($image_array)){
-                        //     $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array, 'image');
-                        //     if(!empty($uploadedFile)){
-                        //         $images    = $uploadedFile;
-                        //     } else {
-                        //         $images    = [];
-                        //     }
-                        // }
-                        // $image_link7 = [];
-                        // if(!empty($images)){
-                        //     for($i=0;$i<count($images);$i++){
-                        //         $image_link7[] = '/uploads/'.'home-page/'.$images[$i];
-                        //     }
-                        // } else {
-                        //     $image_link7 = (($data['row'])?json_decode($data['row']->section7_box_image):[]);
-                        // }
-                    /* Section 7 images */
+                    /* Section 3 images */
 
                     $section1 = [];
                     $section2 = [];
@@ -213,78 +197,52 @@ class EmployerHomePageController extends Controller
                         'description'   => strip_tags($postData['section1_description']),
                         'button_text'   => strip_tags($postData['section1_button_text']),
                     ];
-                    // $section2 = [
-                    //     'title'         => strip_tags($postData['section2_title']),
-                    //     'description'   => strip_tags($postData['section2_description']),
-                    //     'button_text'   => strip_tags($postData['section2_button_text']),
-                    // ];
                     
-                    $box2 = [];
-                    if(!empty($section2_box_text)){
-                        for($k=0;$k<count($section2_box_text);$k++){
-                            $box2[] = [
-                                'box_text'      => $section2_box_text[$k],
-                                'box_link'      => $section2_box_link[$k],
-                                'box_image'     => $image_link3[$k],
-                            ];
+                    // section 2
+                        $box2 = [];
+                        if(!empty($section2_box_text)){
+                            for($k=0;$k<count($section2_box_text);$k++){
+                                $box2[] = [
+                                    'box_text'      => $section2_box_text[$k],
+                                    'box_link'      => $section2_box_link[$k],
+                                    'box_image'     => $image_link2[$k],
+                                ];
+                            }
                         }
-                    }
-                    $section2 = [
-                        'title'     => strip_tags($postData['section2_title']),
-                        'box'       => $box2
-                    ];
-                    // Helper::pr($section2);
+                        $section2 = [
+                            'title'     => strip_tags($postData['section2_title']),
+                            'box'       => $box2
+                        ];
+                    // section 2
+
+                    // section 3
+                        $box3 = [];
+                        if(!empty($section3_box_text)){
+                            for($k=0;$k<count($section3_box_text);$k++){
+                                $box3[] = [
+                                    'box_text'              => $section3_box_text[$k],
+                                    'box_description'       => $section3_box_description[$k],
+                                    'box_button1_text'      => $section3_box_button1_text[$k],
+                                    'box_button1_link'      => $section3_box_button1_link[$k],
+                                    'box_button2_text'      => $section3_box_button2_text[$k],
+                                    'box_button2_link'      => $section3_box_button2_link[$k],
+                                    'box_image'             => $image_link3[$k],
+                                ];
+                            }
+                        }
+                        $section2 = [
+                            'title'     => strip_tags($postData['section2_title']),
+                            'box'       => $box3
+                        ];
+                        Helper::pr($section2);
+                    // section 3
 
                     $section4 = [
                         'title'         => strip_tags($postData['section4_title']),
                         'description'   => strip_tags($postData['section4_description']),
                         'button_text'   => strip_tags($postData['section4_button_text']),
-                    ];
+                    ];                    
                     
-                    // $section_data = [];
-                    // if(!empty($section5_box_name)){
-                    //     for($k=0;$k<count($section5_box_name);$k++){
-                    //         $section_data[] = [
-                    //             'box_text'      => $section5_box_name[$k],
-                    //             'box_image'     => $image_link5[$k],
-                    //         ];
-                    //     }
-                    // }
-                    // $section5 = [
-                    //     'title'                 => strip_tags($postData['section5_title']),
-                    //     'section_data'          => $section_data,
-                    // ];
-                    // $section6 = [
-                    //     'title'                 => strip_tags($postData['section6_title']),
-                    //     'description'           => strip_tags($postData['section6_description']),
-                    //     'button_text'           => strip_tags($postData['section6_button_text']),
-                    // ];
-
-                    // $section_data7 = [];
-                    // if(!empty($section7_box_name)){
-                    //     for($k=0;$k<count($section7_box_name);$k++){
-                    //         $section_data7[] = [
-                    //             'box_name'              => $section7_box_name[$k],
-                    //             'box_link_name'         => $section7_box_link_name[$k],
-                    //             'box_link_url'          => $section7_box_link_url[$k],
-                    //             'box_description'       => $section7_box_description[$k],
-                    //             'box_image'             => $image_link7[$k],
-                    //         ];
-                    //     }
-                    // }
-                    // $section7 = [
-                    //     'title'                 => strip_tags($postData['section7_title']),
-                    //     'description'           => strip_tags($postData['section7_description']),
-                    //     'section_data'          => $section_data7,
-                    // ];
-                    // $section8 = [
-                    //     'title'                    => strip_tags($postData['section8_title']),
-                    //     'description'              => strip_tags($postData['section8_description']),
-                    // ];
-                    // $section9 = [
-                    //     'title'                    => strip_tags($postData['section9_title']),
-                    //     'description'              => strip_tags($postData['section9_description']),
-                    // ];
                     $section5 = [
                         'title'                   => strip_tags($postData['section5_title']),
                         'description'             => strip_tags($postData['section5_description']),
