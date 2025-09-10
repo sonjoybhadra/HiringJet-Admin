@@ -237,7 +237,7 @@ class RegistrationController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',// Max:5MB
-            'resume_headline' => 'required|string|max:255',
+            'resume_headline' => 'required|string|max:500',
             'currently_employed' => 'required|in:1,0',//yes/no
             'total_experience_years' => 'required_if:currently_employed,1',
             'total_experience_months' => 'required_if:currently_employed,1',

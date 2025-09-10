@@ -42,7 +42,7 @@ class EditProfessionalDetailsController extends BaseApiController
     public function postResumeHeadline(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'resume_headline' => 'required|string|max:255'
+            'resume_headline' => 'required|string|max:500'
         ]);
 
         if($validator->fails()){
