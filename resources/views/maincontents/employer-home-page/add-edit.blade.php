@@ -87,8 +87,9 @@ $controllerRoute = $module['controller_route'];
                                 <input class="form-control" type="text" id="section2_title" name="section2_title" value="<?= ((!empty($section2)) ? $section2->title : '') ?>" required placeholder="Section 1 Title" autofocus />
                             </div>
                             <?php
+                            Helper::pr($section2);
                             $box = ((!empty($section2)) ? ((!empty($section2->box))?json_decode($section2->box):[]) : []);
-                            Helper::pr($box,0);
+                            Helper::pr($box);
                             ?>
                             <div class="col-md-12">
                                 <div class="field_wrapper2 mt-3">
