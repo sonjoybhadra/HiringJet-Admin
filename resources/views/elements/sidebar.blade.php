@@ -423,7 +423,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- Employer Home Page -->
     <li class="menu-item <?=(($pageSegment == 'employer-home-page')?'active':'')?>">
       <a href="<?=url('/employer-home-page/list')?>" class="menu-link">
-        <i class="menu-icon fa-solid fa-gear"></i>
+        <i class="menu-icon fa-solid fa-home"></i>
         <div data-i18n="Employer Home Page">Employer Home Page</div>
       </a>
     </li>
