@@ -10,6 +10,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class EmployerJobseekerComments extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'employer_id',
+        'jobseeker_id',
+        'comment',
+        'status'
+    ];
+
     /**
      * Get the role details of associated user.
     */

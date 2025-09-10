@@ -9,6 +9,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserExperience extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'job_title',
+        'job_description',
+        'company_id',
+        'industry_id',
+        'country_id',
+        'city_id',
+        'start_date',
+        'end_date',
+        'is_current',
+        'is_active'
+    ];
     /**
      * Get the role details of associated user.
     */
