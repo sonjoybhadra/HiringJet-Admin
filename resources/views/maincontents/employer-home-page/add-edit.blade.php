@@ -171,10 +171,15 @@ $controllerRoute = $module['controller_route'];
                                                 <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 3 Box Image</label><br>
                                                     <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                                    <?php if (!empty($box3[$k]->box_image)) {
+                                                        if ($box3[$k]->box_image != '') { ?>
+                                                            <img src="<?= (($box3[$k]->box_image != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $box3[$k]->box_image : config('constants.no_image')) ?>" alt="<?= $box3[$k]->box_text ?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                    <?php }
+                                                    } ?>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
-                                                    <a href="javascript:void(0);" class="add_button3" title="Add row">
-                                                        <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                                    <a href="javascript:void(0);" class="remove_button3" title="Remove row">
+                                                        <i class="fa fa-minus-circle fa-2x text-danger"></i>
                                                     </a>
                                                 </div>
 
