@@ -41,8 +41,8 @@ class EditAccomplishmentsController extends BaseApiController
             // 'certification_url' => 'required|integer',
             'from_month' => 'required',
             'from_year' => 'required',
-            'to_month' => 'required',
-            'to_year' => 'required',
+            // 'to_month' => 'required',
+            // 'to_year' => 'required',
             'has_expire' => 'required|boolean',
             'certification_image' => 'required|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
@@ -87,8 +87,8 @@ class EditAccomplishmentsController extends BaseApiController
             // 'certification_url' => 'required|integer',
             'from_month' => 'required',
             'from_year' => 'required',
-            'to_month' => 'required',
-            'to_year' => 'required',
+            // 'to_month' => 'required',
+            // 'to_year' => 'required',
             'has_expire' => 'required|boolean',
             'certification_image' => 'required|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
@@ -160,39 +160,44 @@ class EditAccomplishmentsController extends BaseApiController
                 $data_array[] = [
                     'user_id'=> auth()->user()->id,
                     'profile_key'=> 'personal_website',
-                    'value'=>$request->personal_website
+                    'value'=>$request->personal_website,
+                    'created_at'=> date('Y-m-d H:i:s')
                 ];
             }
             if(!empty($request->linkedin)){
                 $data_array[] = [
                     'user_id'=> auth()->user()->id,
                     'profile_key'=> 'linkedin',
-                    'value'=>$request->linkedin
+                    'value'=>$request->linkedin,
+                    'created_at'=> date('Y-m-d H:i:s')
                 ];
             }
             if(!empty($request->twitter)){
                 $data_array[] = [
                     'user_id'=> auth()->user()->id,
                     'profile_key'=> 'twitter',
-                    'value'=>$request->twitter
+                    'value'=>$request->twitter,
+                    'created_at'=> date('Y-m-d H:i:s')
                 ];
             }
             if(!empty($request->youtube)){
                 $data_array[] = [
                     'user_id'=> auth()->user()->id,
                     'profile_key'=> 'youtube',
-                    'value'=>$request->youtube
+                    'value'=>$request->youtube,
+                    'created_at'=> date('Y-m-d H:i:s')
                 ];
             }
             if(!empty($request->instagram)){
                 $data_array[] = [
                     'user_id'=> auth()->user()->id,
                     'profile_key'=> 'instagram',
-                    'value'=>$request->instagram
+                    'value'=>$request->instagram,
+                    'created_at'=> date('Y-m-d H:i:s')
                 ];
             }
 
-            UserOnlineProfile::create($data_array);
+            UserOnlineProfile::insert($data_array);
 
             return $this->sendResponse([], 'Online profile updated successfully.');
         } catch (\Exception $e) {
@@ -225,8 +230,8 @@ class EditAccomplishmentsController extends BaseApiController
             'sample_url' => 'nullable|url',
             'from_month' => 'required',
             'from_year' => 'required',
-            'to_month' => 'required',
-            'to_year' => 'required',
+            // 'to_month' => 'required',
+            // 'to_year' => 'required',
             'currently_working' => 'required|boolean',
             'sample_description' => 'nullable|string',
             'sample_image' => 'required|mimes:jpeg,png,jpg,webp|max:2048',
@@ -271,8 +276,8 @@ class EditAccomplishmentsController extends BaseApiController
             'sample_url' => 'nullable|url',
             'from_month' => 'required',
             'from_year' => 'required',
-            'to_month' => 'required',
-            'to_year' => 'required',
+            // 'to_month' => 'required',
+            // 'to_year' => 'required',
             'currently_working' => 'required|boolean',
             'sample_description' => 'nullable|string',
             'sample_image' => 'required|mimes:jpeg,png,jpg,webp|max:2048',

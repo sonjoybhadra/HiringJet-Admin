@@ -844,7 +844,6 @@ class SocialAuthController extends BaseApiController
 
         \Log::info("createNewUser:Creating new user for {$provider} with data:", $userData);
         $user = User::create($userData);
-
         $this->calculate_profile_completed_percentage($user->id, 'full-name'); //Full name completes
 
         // Create user profile
@@ -863,6 +862,8 @@ class SocialAuthController extends BaseApiController
             'user_id' => $user->id,
             'email' => $user->email,
         ]);
+
+        $user->role_id = (int)$user->role_id;
 
         return $user;
     }
