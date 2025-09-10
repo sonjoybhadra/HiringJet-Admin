@@ -44,20 +44,12 @@ class EmployerHomePageController extends Controller
             $section4_db         = [];
             $section5_db         = [];
 
-            // $section5_image1        = '';
-            // $section5_image2        = '';
-            // $section5_image3        = '';
-
             if($data['row']){
                 $section1_db         = (($data['row']->section1 != '')?json_decode($data['row']->section1):[]);
                 $section2_db         = (($data['row']->section2 != '')?json_decode($data['row']->section2):[]);
                 $section3_db         = (($data['row']->section3 != '')?json_decode($data['row']->section3):[]);
                 $section4_db         = (($data['row']->section4 != '')?json_decode($data['row']->section4):[]);
                 $section5_db         = (($data['row']->section5 != '')?json_decode($data['row']->section5):[]);
-
-                // $section5_image1        = ((!empty($section5))?$section5->image1:'');
-                // $section5_image2        = ((!empty($section5))?$section5->image2:'');
-                // $section5_image3        = ((!empty($section5))?$section5->image3:'');
             }
             
             if($request->isMethod('post')){
@@ -65,7 +57,7 @@ class EmployerHomePageController extends Controller
                 
                 $rules = [
                     'section1_title'           => 'required',
-                    // 'section2_title'           => 'required',
+                    'section2_title'           => 'required',
                     // 'section3_title'           => 'required',
                     'section4_title'           => 'required',
                     'section5_title'           => 'required',
@@ -123,32 +115,32 @@ class EmployerHomePageController extends Controller
                         }
                     /* section5_image3 */                    
 
-                    /* Section 3 images */
-                        // $section3_box_text = array_values(array_filter($postData['section3_box_text'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
-                        // $section3_box_number = array_values(array_filter($postData['section3_box_number'], function($value) {
-                        //     return !(is_null($value) || $value === '');
-                        // }));
+                    /* Section 2 images */
+                        $section2_box_text = array_values(array_filter($postData['section2_box_text'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
+                        $section2_box_link = array_values(array_filter($postData['section2_box_link'], function($value) {
+                            return !(is_null($value) || $value === '');
+                        }));
 
-                        // $image_array            = $request->file('section3_box_image');
-                        // if(!empty($image_array)){
-                        //     $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array, 'image');
-                        //     if(!empty($uploadedFile)){
-                        //         $images    = $uploadedFile;
-                        //     } else {
-                        //         $images    = [];
-                        //     }
-                        // }
-                        // $image_link3 = [];
-                        // if(!empty($images)){
-                        //     for($i=0;$i<count($images);$i++){
-                        //         $image_link3[] = '/uploads/'.'home-page/'.$images[$i];
-                        //     }
-                        // } else {
-                        //     $image_link3 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
-                        // }
-                    /* Section 3 images */
+                        $image_array            = $request->file('section2_box_image');
+                        if(!empty($image_array)){
+                            $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array, 'image');
+                            if(!empty($uploadedFile)){
+                                $images    = $uploadedFile;
+                            } else {
+                                $images    = [];
+                            }
+                        }
+                        $image_link3 = [];
+                        if(!empty($images)){
+                            for($i=0;$i<count($images);$i++){
+                                $image_link3[] = '/uploads/'.'home-page/'.$images[$i];
+                            }
+                        } else {
+                            $image_link3 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
+                        }
+                    /* Section 2 images */
                     /* Section 5 images */
                         // $section5_box_name = array_values(array_filter($postData['section5_box_name'], function($value) {
                         //     return !(is_null($value) || $value === '');
@@ -221,20 +213,23 @@ class EmployerHomePageController extends Controller
                     //     'description'   => strip_tags($postData['section2_description']),
                     //     'button_text'   => strip_tags($postData['section2_button_text']),
                     // ];
-                    // $section3 = [
-                    //     'box_text'          => ((!empty($section3_box_text))?json_encode($section3_box_text):''),
-                    //     'box_number'        => ((!empty($section3_box_number))?json_encode($section3_box_number):''),
-                    //     'box_image'         => ((!empty($image_link3))?json_encode($image_link3):''),
-                    // ];
-                    // if(!empty($section3_box_text)){
-                    //     for($k=0;$k<count($section3_box_text);$k++){
-                    //         $section3[] = [
-                    //             'box_text'      => $section3_box_text[$k],
-                    //             'box_number'    => $section3_box_number[$k],
-                    //             'box_image'     => $image_link3[$k],
-                    //         ];
-                    //     }
-                    // }
+                    
+                    $box2 = [];
+                    if(!empty($section2_box_text)){
+                        for($k=0;$k<count($section2_box_text);$k++){
+                            $box2[] = [
+                                'box_text'      => $section2_box_text[$k],
+                                'box_link'      => $section2_box_link[$k],
+                                'box_image'     => $image_link3[$k],
+                            ];
+                        }
+                    }
+                    $section2 = [
+                        'title'     => strip_tags($postData['section2_title']),
+                        'box'       => $box2
+                    ];
+                    Helper::pr($section2);
+
                     $section4 = [
                         'title'         => strip_tags($postData['section4_title']),
                         'description'   => strip_tags($postData['section4_description']),
@@ -292,7 +287,6 @@ class EmployerHomePageController extends Controller
                         'image2'                  => $section5Image2,
                         'image3'                  => $section5Image3,
                     ];
-                    // Helper::pr($section5);
 
                     $fields = [
                         'section1'                          => json_encode($section1),
