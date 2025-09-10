@@ -230,11 +230,11 @@ class EmployerHomePageController extends Controller
                                 ];
                             }
                         }
-                        $section2 = [
+                        $section3 = [
                             'title'     => strip_tags($postData['section3_title']),
                             'box'       => $box3
                         ];
-                        // Helper::pr($section2);
+                        // Helper::pr($section3);
                     // section 3
 
                     $section4 = [
