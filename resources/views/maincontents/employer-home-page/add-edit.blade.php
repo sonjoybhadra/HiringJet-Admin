@@ -87,27 +87,27 @@ $controllerRoute = $module['controller_route'];
                                 <input class="form-control" type="text" id="section2_title" name="section2_title" value="<?= ((!empty($section2)) ? $section2->title : '') ?>" required placeholder="Section 1 Title" autofocus />
                             </div>
                             <?php
-                            $box = ((!empty($section2)) ? ((!empty($section2->box))?$section2->box:[]) : []);
+                            $box2 = ((!empty($section2)) ? ((!empty($section2->box))?$section2->box:[]) : []);
                             ?>
                             <div class="col-md-12">
                                 <div class="field_wrapper2 mt-3">
-                                    <?php if (!empty($box)) {
-                                        for ($k = 0; $k < count($box); $k++) { ?>
+                                    <?php if (!empty($box2)) {
+                                        for ($k = 0; $k < count($box2); $k++) { ?>
                                             <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
                                                 <div class="col-lg-4 col-md-4">
                                                     <label class="form-label">Section 2 Box Name</label>
-                                                    <input type="text" class="form-control" name="section2_box_text[]" value="<?= $box[$k]->box_text ?>" placeholder="Section 2 Box Name" />
+                                                    <input type="text" class="form-control" name="section2_box_text[]" value="<?= $box2[$k]->box_text ?>" placeholder="Section 2 Box Name" />
                                                 </div>
                                                 <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 2 Box Link</label>
-                                                    <input type="text" class="form-control" name="section2_box_link[]" value="<?= $box[$k]->box_link ?>" placeholder="Section 2 Box Link" />
+                                                    <input type="text" class="form-control" name="section2_box_link[]" value="<?= $box2[$k]->box_link ?>" placeholder="Section 2 Box Link" />
                                                 </div>
                                                 <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 2 Box Image</label><br>
                                                     <input type="file" class="account-file-input" name="section2_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
-                                                    <?php if (!empty($box[$k]->box_image)) {
-                                                        if ($box[$k]->box_image != '') { ?>
-                                                            <img src="<?= (($box[$k]->box_image != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $box[$k]->box_image : config('constants.no_image')) ?>" alt="<?= $box[$k]->box_text ?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                    <?php if (!empty($box2[$k]->box_image)) {
+                                                        if ($box2[$k]->box_image != '') { ?>
+                                                            <img src="<?= (($box2[$k]->box_image != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $box2[$k]->box_image : config('constants.no_image')) ?>" alt="<?= $box2[$k]->box_text ?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
                                                     <?php }
                                                     } ?>
                                                 </div>
@@ -143,6 +143,66 @@ $controllerRoute = $module['controller_route'];
                         </div>
                         <hr class="mt-2">
                         <!-- section 2 -->
+                                
+                        <!-- section 3 -->
+                            <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
+                                <h5>Section 3</h5>
+
+                                <div class="col-md-12">
+                                    <label for="section3_title" class="form-label">Section 3 Title <small class="text-danger">*</small></label>
+                                    <input class="form-control" type="text" id="section3_title" name="section3_title" value="<?= ((!empty($section3)) ? $section3->title : '') ?>" required placeholder="Section 3 Title" autofocus />
+                                </div>
+                                <?php
+                                $box3 = ((!empty($section3)) ? ((!empty($section3->box))?$section3->box:[]) : []);
+                                ?>
+                                <div class="col-md-12">
+                                    <div class="field_wrapper3 mt-3">
+                                        <?php if (!empty($box3)) {
+                                            for ($k = 0; $k < count($box3); $k++) { ?>
+                                                
+                                        <?php }
+                                        } ?>
+                                        <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                            <div class="col-lg-3 col-md-3">
+                                                <label class="form-label">Section 3 Box Text</label>
+                                                <input type="text" class="form-control" name="section3_box_text[]" placeholder="Section 3 Box Text" />
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <label class="form-label">Section 3 Box Description</label>
+                                                <input type="text" class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" />
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                                <label class="form-label">Section 3 Box Image</label><br>
+                                                <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                            </div>
+                                            <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                                <a href="javascript:void(0);" class="add_button3" title="Add row">
+                                                    <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                                </a>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-3">
+                                                <label class="form-label">Section 3 Box Button 1 Text</label>
+                                                <input type="text" class="form-control" name="section3_box_button1_text[]" placeholder="Section 3 Box Button 1 Text" />
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                                <label class="form-label">Section 3 Box Button 1 Link</label>
+                                                <input type="text" class="form-control" name="section3_box_button1_link[]" placeholder="Section 3 Box Button 1 Link" />
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                                <label class="form-label">Section 3 Box Button 2 Text</label>
+                                                <input type="text" class="form-control" name="section3_box_button2_text[]" placeholder="Section 3 Box Button 2 Text" />
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                                <label class="form-label">Section 3 Box Button 2 Link</label>
+                                                <input type="text" class="form-control" name="section3_box_button2_link[]" placeholder="Section 3 Box Button 2 Link" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                        <!-- section 3 -->
 
                         <!-- section 4 -->
                         <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
@@ -306,6 +366,66 @@ $controllerRoute = $module['controller_route'];
 
         // Once remove button is clicked
         $(wrapper).on('click', '.remove_button2', function(e) {
+            e.preventDefault();
+            $(this).parent('div').parent('div').remove(); //Remove field html
+            x--; //Decrease field counter
+        });
+    });
+    $(document).ready(function() {
+        var maxField = 10; //Input fields increment limitation
+        var addButton = $('.add_button3'); //Add button selector
+        var wrapper = $('.field_wrapper3'); //Input field wrapper
+        var fieldHTML = `<div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                    <div class="col-lg-3 col-md-3">
+                                        <label class="form-label">Section 3 Box Text</label>
+                                        <input type="text" class="form-control" name="section3_box_text[]" placeholder="Section 3 Box Text" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <label class="form-label">Section 3 Box Description</label>
+                                        <input type="text" class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" />
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
+                                        <label class="form-label">Section 3 Box Image</label><br>
+                                        <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                    </div>
+                                    <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                        <a href="javascript:void(0);" class="remove_button3" title="Remove row">
+                                            <i class="fa fa-minus-circle fa-2x text-danger"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3">
+                                        <label class="form-label">Section 3 Box Button 1 Text</label>
+                                        <input type="text" class="form-control" name="section3_box_button1_text[]" placeholder="Section 3 Box Button 1 Text" />
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
+                                        <label class="form-label">Section 3 Box Button 1 Link</label>
+                                        <input type="text" class="form-control" name="section3_box_button1_link[]" placeholder="Section 3 Box Button 1 Link" />
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
+                                        <label class="form-label">Section 3 Box Button 2 Text</label>
+                                        <input type="text" class="form-control" name="section3_box_button2_text[]" placeholder="Section 3 Box Button 2 Text" />
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
+                                        <label class="form-label">Section 3 Box Button 2 Link</label>
+                                        <input type="text" class="form-control" name="section3_box_button2_link[]" placeholder="Section 3 Box Button 2 Link" />
+                                    </div>
+                                </div>`; //New input field html 
+        var x = 1; //Initial field counter is 1
+
+        // Once add button is clicked
+        $(addButton).click(function() {
+            //Check maximum number of input fields
+            if (x < maxField) {
+                x++; //Increase field counter
+                $(wrapper).append(fieldHTML); //Add field html
+            } else {
+                alert('A maximum of ' + maxField + ' fields are allowed to be added. ');
+            }
+        });
+
+        // Once remove button is clicked
+        $(wrapper).on('click', '.remove_button3', function(e) {
             e.preventDefault();
             $(this).parent('div').parent('div').remove(); //Remove field html
             x--; //Decrease field counter
