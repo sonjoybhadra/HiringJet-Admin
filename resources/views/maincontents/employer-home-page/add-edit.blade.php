@@ -157,11 +157,44 @@ $controllerRoute = $module['controller_route'];
                                 ?>
                                 <div class="col-md-12">
                                     <div class="field_wrapper3 mt-3">
-                                        <?php if (!empty($box3)) {
-                                            for ($k = 0; $k < count($box3); $k++) { ?>
-                                                
-                                        <?php }
-                                        } ?>
+                                        <?php if (!empty($box3)) { for ($k = 0; $k < count($box3); $k++) { ?>
+                                            <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
+                                                <div class="col-lg-3 col-md-3">
+                                                    <label class="form-label">Section 3 Box Text</label>
+                                                    <input type="text" class="form-control" name="section3_box_text[]" value="<?= $box3[$k]->box_text ?>" placeholder="Section 3 Box Text" />
+                                                </div>
+                                                <div class="col-lg-4 col-md-4">
+                                                    <label class="form-label">Section 3 Box Description</label>
+                                                    <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description"><?= $box3[$k]->box_description ?></textarea>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3">
+                                                    <label class="form-label">Section 3 Box Image</label><br>
+                                                    <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                                </div>
+                                                <div class="col-lg-2 col-md-2" style="margin-top: 15px;">
+                                                    <a href="javascript:void(0);" class="add_button3" title="Add row">
+                                                        <i class="fa fa-plus-circle fa-2x text-success"></i>
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-3">
+                                                    <label class="form-label">Section 3 Box Button 1 Text</label>
+                                                    <input type="text" class="form-control" name="section3_box_button1_text[]" value="<?= $box3[$k]->box_button1_text ?>" placeholder="Section 3 Box Button 1 Text" />
+                                                </div>
+                                                <div class="col-lg-3 col-md-3">
+                                                    <label class="form-label">Section 3 Box Button 1 Link</label>
+                                                    <input type="text" class="form-control" name="section3_box_button1_link[]" value="<?= $box3[$k]->box_button1_link ?>" placeholder="Section 3 Box Button 1 Link" />
+                                                </div>
+                                                <div class="col-lg-3 col-md-3">
+                                                    <label class="form-label">Section 3 Box Button 2 Text</label>
+                                                    <input type="text" class="form-control" name="section3_box_button2_text[]" value="<?= $box3[$k]->box_button2_text ?>" placeholder="Section 3 Box Button 2 Text" />
+                                                </div>
+                                                <div class="col-lg-3 col-md-3">
+                                                    <label class="form-label">Section 3 Box Button 2 Link</label>
+                                                    <input type="text" class="form-control" name="section3_box_button2_link[]" value="<?= $box3[$k]->box_button2_link ?>" placeholder="Section 3 Box Button 2 Link" />
+                                                </div>
+                                            </div>
+                                        <?php } } ?>
                                         <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
                                             <div class="col-lg-3 col-md-3">
                                                 <label class="form-label">Section 3 Box Text</label>
