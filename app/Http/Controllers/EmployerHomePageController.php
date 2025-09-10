@@ -270,7 +270,7 @@ class EmployerHomePageController extends Controller
                         'image2'                  => $section5Image2,
                         'image3'                  => $section5Image3,
                     ];
-                    // Helper::pr($section7);
+                    Helper::pr($section5);
 
                     $fields = [
                         'section1'                          => json_encode($section1),
