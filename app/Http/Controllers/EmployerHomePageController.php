@@ -182,7 +182,7 @@ class EmployerHomePageController extends Controller
 
                             $image_link3 = array_map(function($item) {
                                 return $item->box_image;
-                            }, $section2_db->box);
+                            }, $section3_db->box);
                         }
                     /* Section 3 images */
 
