@@ -61,15 +61,15 @@ $controllerRoute = $module['controller_route'];
                         <h5>Section 1</h5>
                         <div class="col-md-3">
                             <label for="section1_title" class="form-label">Section 1 Title <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="section1_title" name="section1_title" value="" required placeholder="Section 1 Title" autofocus />
+                            <input class="form-control" type="text" id="section1_title" name="section1_title" value="<?=((!empty($section1))?$section1['title']:'')?>" required placeholder="Section 1 Title" autofocus />
                         </div>
                         <div class="col-md-3">
                             <label for="section1_button_text" class="form-label">Section 1 Button Text <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="section1_button_text" name="section1_button_text" value="" placeholder="Section 1 Button Text" />
+                            <input class="form-control" type="text" id="section1_button_text" name="section1_button_text" value="<?=((!empty($section1))?$section1['button_text']:'')?>" placeholder="Section 1 Button Text" />
                         </div>
                         <div class="col-md-6">
                             <label for="section1_description" class="form-label">Section 1 Description <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="section1_description" name="section1_description" placeholder="Section 1 Description" rows="5"></textarea>
+                            <textarea class="form-control" id="section1_description" name="section1_description" placeholder="Section 1 Description" rows="5"><?=((!empty($section1))?$section1['description']:'')?></textarea>
                         </div>
                     </div>
                     <hr class="mt-2">
