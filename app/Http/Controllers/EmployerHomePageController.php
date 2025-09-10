@@ -45,7 +45,7 @@ class EmployerHomePageController extends Controller
                     'section1_title'           => 'required',
                     // 'section2_title'           => 'required',
                     // 'section3_title'           => 'required',
-                    // 'section4_title'           => 'required',
+                    'section4_title'           => 'required',
                     // 'section5_title'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
@@ -213,11 +213,11 @@ class EmployerHomePageController extends Controller
                     //         ];
                     //     }
                     // }
-                    // $section4 = [
-                    //     'title'         => strip_tags($postData['section4_title']),
-                    //     'country'       => ((!empty($section4_country))?json_encode($section4_country):''),
-                    //     'city'          => ((!empty($section4_city))?json_encode($section4_city):''),
-                    // ];
+                    $section4 = [
+                        'title'         => strip_tags($postData['section4_title']),
+                        'description'   => strip_tags($postData['section4_description']),
+                        'button_text'   => strip_tags($postData['section4_button_text']),
+                    ];
                     
                     // $section_data = [];
                     // if(!empty($section5_box_name)){
@@ -282,6 +282,7 @@ class EmployerHomePageController extends Controller
                     ];
                     // Helper::pr($fields);
                     EmployerHomePage::where($this->data['primary_key'], '=', 1)->update($fields);
+                    
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],

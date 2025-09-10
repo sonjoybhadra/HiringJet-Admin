@@ -57,6 +57,7 @@ $controllerRoute = $module['controller_route'];
             <div class="card-body">
                 <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <!-- section 1 -->
                     <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
                         <h5>Section 1</h5>
                         <div class="col-md-3">
@@ -73,8 +74,26 @@ $controllerRoute = $module['controller_route'];
                         </div>
                     </div>
                     <hr class="mt-2">
-
+                    <!-- section 1 -->
                     
+                    <!-- section 4 -->
+                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
+                        <h5>Section 4</h5>
+                        <div class="col-md-3">
+                            <label for="section4_title" class="form-label">Section 4 Title <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="section4_title" name="section4_title" value="<?=((!empty($section4))?$section4->title:'')?>" required placeholder="Section 4 Title" autofocus />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="section4_button_text" class="form-label">Section 4 Button Text <small class="text-danger">*</small></label>
+                            <input class="form-control" type="text" id="section4_button_text" name="section4_button_text" value="<?=((!empty($section4))?$section4->button_text:'')?>" placeholder="Section 4 Button Text" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="section4_description" class="form-label">Section 4 Description <small class="text-danger">*</small></label>
+                            <textarea class="form-control" id="section4_description" name="section4_description" placeholder="Section 4 Description" rows="5"><?=((!empty($section4))?$section4->description:'')?></textarea>
+                        </div>
+                    </div>
+                    <hr class="mt-2">
+                    <!-- section 4 -->
 
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary btn-sm me-2">Save Changes</button>
