@@ -133,7 +133,7 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <img src="<?=(($section5_image1 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image1:config('constants.no_image'))?>" alt="<?=$section5_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                                <img src="<?=(($section5_image1 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image1:config('constants.no_image'))?>" alt="<?=((!empty($section5))?$section5->title:'')?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
@@ -157,7 +157,7 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <img src="<?=(($section5_image2 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image2:config('constants.no_image'))?>" alt="<?=$section5_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                                <img src="<?=(($section5_image2 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image2:config('constants.no_image'))?>" alt="<?=((!empty($section5))?$section5->title:'')?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
@@ -181,7 +181,7 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <img src="<?=(($section5_image3 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image3:config('constants.no_image'))?>" alt="<?=$section5_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                                <img src="<?=(($section5_image3 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image3:config('constants.no_image'))?>" alt="<?=((!empty($section5))?$section5->title:'')?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
                             </div>
                         </div>
                         <hr class="mt-2">
