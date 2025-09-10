@@ -46,60 +46,60 @@ class EmployerHomePageController extends Controller
                     // 'section2_title'           => 'required',
                     // 'section3_title'           => 'required',
                     'section4_title'           => 'required',
-                    // 'section5_title'           => 'required',
+                    'section5_title'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    /* section10_image1 */
-                        // $upload_folder = 'home-page';
-                        // $imageFile      = $request->file('section10_image1');
-                        // if($imageFile != ''){
-                        //     $imageName      = $imageFile->getClientOriginalName();
-                        //     $uploadedFile   = $this->upload_single_file('section10_image1', $imageName, $upload_folder, 'image');
-                        //     if($uploadedFile['status']){
-                        //         $section10_image1 = $uploadedFile['newFilename'];
-                        //         $section10Image1 = '/uploads/' . $upload_folder . '/' . $section10_image1;
-                        //     } else {
-                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                        //     }
-                        // } else {
-                        //     $section10_image1 = $data['row']->section10_image1;
-                        //     $section10Image1 = $section10_image1;
-                        // }
-                    /* section10_image1 */
-                    /* section10_image2 */
-                        // $upload_folder = 'home-page';
-                        // $imageFile      = $request->file('section10_image2');
-                        // if($imageFile != ''){
-                        //     $imageName      = $imageFile->getClientOriginalName();
-                        //     $uploadedFile   = $this->upload_single_file('section10_image2', $imageName, $upload_folder, 'image');
-                        //     if($uploadedFile['status']){
-                        //         $section10_image2 = $uploadedFile['newFilename'];
-                        //         $section10Image2 = '/uploads/' . $upload_folder . '/' . $section10_image2;
-                        //     } else {
-                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                        //     }
-                        // } else {
-                        //     $section10_image2 = $data['row']->section10_image2;
-                        //     $section10Image2 = $section10_image2;
-                        // }
-                    /* section10_image2 */
-                    /* section10_image3 */
-                        // $upload_folder = 'home-page';
-                        // $imageFile      = $request->file('section10_image3');
-                        // if($imageFile != ''){
-                        //     $imageName      = $imageFile->getClientOriginalName();
-                        //     $uploadedFile   = $this->upload_single_file('section10_image3', $imageName, $upload_folder, 'image');
-                        //     if($uploadedFile['status']){
-                        //         $section10_image3 = $uploadedFile['newFilename'];
-                        //         $section10Image3 = '/uploads/' . $upload_folder . '/' . $section10_image3;
-                        //     } else {
-                        //         return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
-                        //     }
-                        // } else {
-                        //     $section10_image3 = $data['row']->section10_image3;
-                        //     $section10Image3 = $section10_image3;
-                        // }
-                    /* section10_image3 */                    
+                    /* section5_image1 */
+                        $upload_folder = 'home-page';
+                        $imageFile      = $request->file('section5_image1');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('section5_image1', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $section5_image1 = $uploadedFile['newFilename'];
+                                $section5Image1 = '/uploads/' . $upload_folder . '/' . $section5_image1;
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            $section5_image1 = $data['row']->section5_image1;
+                            $section5Image1 = $section5_image1;
+                        }
+                    /* section5_image1 */
+                    /* section5_image2 */
+                        $upload_folder = 'home-page';
+                        $imageFile      = $request->file('section5_image2');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('section5_image2', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $section5_image2 = $uploadedFile['newFilename'];
+                                $section5Image2 = '/uploads/' . $upload_folder . '/' . $section5_image2;
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            $section5_image2 = $data['row']->section5_image2;
+                            $section5Image2 = $section5_image2;
+                        }
+                    /* section5_image2 */
+                    /* section5_image3 */
+                        $upload_folder = 'home-page';
+                        $imageFile      = $request->file('section5_image3');
+                        if($imageFile != ''){
+                            $imageName      = $imageFile->getClientOriginalName();
+                            $uploadedFile   = $this->upload_single_file('section5_image3', $imageName, $upload_folder, 'image');
+                            if($uploadedFile['status']){
+                                $section5_image3 = $uploadedFile['newFilename'];
+                                $section5Image3 = '/uploads/' . $upload_folder . '/' . $section5_image3;
+                            } else {
+                                return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
+                            }
+                        } else {
+                            $section5_image3 = $data['row']->section5_image3;
+                            $section5Image3 = $section5_image3;
+                        }
+                    /* section5_image3 */                    
 
                     /* Section 3 images */
                         // $section3_box_text = array_values(array_filter($postData['section3_box_text'], function($value) {
@@ -263,13 +263,13 @@ class EmployerHomePageController extends Controller
                     //     'title'                    => strip_tags($postData['section9_title']),
                     //     'description'              => strip_tags($postData['section9_description']),
                     // ];
-                    // $section10 = [
-                    //     'title'                   => strip_tags($postData['section10_title']),
-                    //     'description'             => strip_tags($postData['section10_description']),
-                    //     'image1'                  => $section10Image1,
-                    //     'image2'                  => $section10Image2,
-                    //     'image3'                  => $section10Image3,
-                    // ];
+                    $section5 = [
+                        'title'                   => strip_tags($postData['section5_title']),
+                        'description'             => strip_tags($postData['section5_description']),
+                        'image1'                  => $section5Image1,
+                        'image2'                  => $section5Image2,
+                        'image3'                  => $section5Image3,
+                    ];
                     // Helper::pr($section7);
 
                     $fields = [
@@ -282,7 +282,7 @@ class EmployerHomePageController extends Controller
                     ];
                     // Helper::pr($fields);
                     EmployerHomePage::where($this->data['primary_key'], '=', 1)->update($fields);
-                    
+
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],

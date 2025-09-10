@@ -58,42 +58,129 @@ $controllerRoute = $module['controller_route'];
                 <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!-- section 1 -->
-                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
-                        <h5>Section 1</h5>
-                        <div class="col-md-3">
-                            <label for="section1_title" class="form-label">Section 1 Title <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="section1_title" name="section1_title" value="<?=((!empty($section1))?$section1->title:'')?>" required placeholder="Section 1 Title" autofocus />
+                        <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
+                            <h5>Section 1</h5>
+                            <div class="col-md-3">
+                                <label for="section1_title" class="form-label">Section 1 Title <small class="text-danger">*</small></label>
+                                <input class="form-control" type="text" id="section1_title" name="section1_title" value="<?=((!empty($section1))?$section1->title:'')?>" required placeholder="Section 1 Title" autofocus />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="section1_button_text" class="form-label">Section 1 Button Text <small class="text-danger">*</small></label>
+                                <input class="form-control" type="text" id="section1_button_text" name="section1_button_text" value="<?=((!empty($section1))?$section1->button_text:'')?>" placeholder="Section 1 Button Text" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="section1_description" class="form-label">Section 1 Description <small class="text-danger">*</small></label>
+                                <textarea class="form-control" id="section1_description" name="section1_description" placeholder="Section 1 Description" rows="5"><?=((!empty($section1))?$section1->description:'')?></textarea>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="section1_button_text" class="form-label">Section 1 Button Text <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="section1_button_text" name="section1_button_text" value="<?=((!empty($section1))?$section1->button_text:'')?>" placeholder="Section 1 Button Text" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="section1_description" class="form-label">Section 1 Description <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="section1_description" name="section1_description" placeholder="Section 1 Description" rows="5"><?=((!empty($section1))?$section1->description:'')?></textarea>
-                        </div>
-                    </div>
-                    <hr class="mt-2">
+                        <hr class="mt-2">
                     <!-- section 1 -->
                     
                     <!-- section 4 -->
-                    <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
-                        <h5>Section 4</h5>
-                        <div class="col-md-3">
-                            <label for="section4_title" class="form-label">Section 4 Title <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="section4_title" name="section4_title" value="<?=((!empty($section4))?$section4->title:'')?>" required placeholder="Section 4 Title" autofocus />
+                        <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
+                            <h5>Section 4</h5>
+                            <div class="col-md-3">
+                                <label for="section4_title" class="form-label">Section 4 Title <small class="text-danger">*</small></label>
+                                <input class="form-control" type="text" id="section4_title" name="section4_title" value="<?=((!empty($section4))?$section4->title:'')?>" required placeholder="Section 4 Title" autofocus />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="section4_button_text" class="form-label">Section 4 Button Text <small class="text-danger">*</small></label>
+                                <input class="form-control" type="text" id="section4_button_text" name="section4_button_text" value="<?=((!empty($section4))?$section4->button_text:'')?>" placeholder="Section 4 Button Text" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="section4_description" class="form-label">Section 4 Description <small class="text-danger">*</small></label>
+                                <textarea class="form-control" id="section4_description" name="section4_description" placeholder="Section 4 Description" rows="5"><?=((!empty($section4))?$section4->description:'')?></textarea>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="section4_button_text" class="form-label">Section 4 Button Text <small class="text-danger">*</small></label>
-                            <input class="form-control" type="text" id="section4_button_text" name="section4_button_text" value="<?=((!empty($section4))?$section4->button_text:'')?>" placeholder="Section 4 Button Text" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="section4_description" class="form-label">Section 4 Description <small class="text-danger">*</small></label>
-                            <textarea class="form-control" id="section4_description" name="section4_description" placeholder="Section 4 Description" rows="5"><?=((!empty($section4))?$section4->description:'')?></textarea>
-                        </div>
-                    </div>
-                    <hr class="mt-2">
+                        <hr class="mt-2">
                     <!-- section 4 -->
+
+                    <!-- section 5 -->
+                        <div class="row mt-2" style="border:1px solid #092b61; padding: 10px; border-radius: 10px;">
+                            <h5>Section 5</h5>
+                            <div class="col-md-6">
+                                <label for="section5_title" class="form-label">Section 5 Title <small class="text-danger">*</small></label>
+                                <input class="form-control" type="text" id="section5_title" name="section5_title" value="<?=$section5_title?>" required placeholder="Section 5 Title" autofocus />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="section5_description" class="form-label">Section 5 Description <small class="text-danger">*</small></label>
+                                <textarea class="form-control" id="section5_description" name="section5_description" placeholder="Section 5 Description" rows="5"><?=$section5_description?></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
+                                    <div class="button-wrapper">
+                                        <label for="section5_image1" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                            <span class="d-none d-sm-block">Section 5 Image 1</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input type="file" id="section5_image1" class="account-file-input" name="section5_image1" hidden accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                        </label>
+                                        <?php
+                                        if(!empty($row)){
+                                            $pageLink = Request::url();
+                                        ?>
+                                            <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image1/id/' . 1)?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">Reset</span>
+                                            </a>
+                                        <?php }?>
+                                        <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <img src="<?=(($section5_image1 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image1:config('constants.no_image'))?>" alt="<?=$section5_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
+                                    <div class="button-wrapper">
+                                        <label for="section5_image2" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                            <span class="d-none d-sm-block">Section 5 Image 2</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input type="file" id="section5_image2" class="account-file-input" name="section5_image2" hidden accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                        </label>
+                                        <?php
+                                        if(!empty($row)){
+                                            $pageLink = Request::url();
+                                        ?>
+                                            <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image2/id/' . 1)?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">Reset</span>
+                                            </a>
+                                        <?php }?>
+                                        <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <img src="<?=(($section5_image2 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image2:config('constants.no_image'))?>" alt="<?=$section5_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
+                                    <div class="button-wrapper">
+                                        <label for="section5_image3" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                            <span class="d-none d-sm-block">Section 5 Image 3</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input type="file" id="section5_image3" class="account-file-input" name="section5_image3" hidden accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
+                                        </label>
+                                        <?php
+                                        if(!empty($row)){
+                                            $pageLink = Request::url();
+                                        ?>
+                                            <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image3/id/' . 1)?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">Reset</span>
+                                            </a>
+                                        <?php }?>
+                                        <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <img src="<?=(($section5_image3 != '')?config('constants.app_url') . config('constants.uploads_url_path') . $section5_image3:config('constants.no_image'))?>" alt="<?=$section5_title?>" class="img-thumbnail mt-3" height="200" width="200" id="uploadedAvatar" />
+                            </div>
+                        </div>
+                        <hr class="mt-2">
+                    <!-- section 5 -->
 
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary btn-sm me-2">Save Changes</button>
