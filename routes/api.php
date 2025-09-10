@@ -108,6 +108,9 @@ Route::get('/get-contract-type', [CommonController::class, 'get_contractType']);
 
 Route::get('/get-jobsearch-keys', [CommonController::class, 'get_jobsearch_keys']);
 
+Route::get('/get-employer-homepage', [CommonController::class, 'get_employer_homepage']);
+
+
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);
 Route::get('/get-faq-by-category', [FaqController::class, 'getFaqByCategory']);
 

@@ -39,7 +39,7 @@ use App\Models\GeneralSetting;
 use App\Models\Testimonial;
 use App\Models\PostJob;
 use App\Models\User;
-
+use App\Models\EmployerHomePage;
 
 class CommonController extends BaseApiController
 {
@@ -770,6 +770,15 @@ class CommonController extends BaseApiController
         return $this->sendResponse(
             $sql->get(),
             'List'
+        );
+    }
+
+    public function get_employer_homepage(){
+        $list = EmployerHomePage::where('status', 1)
+                                ->latest()->first();
+        return $this->sendResponse(
+            $list,
+            'Employer Home page details'
         );
     }
 

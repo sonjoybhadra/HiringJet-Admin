@@ -25,10 +25,15 @@ class CmsArticleController extends BaseApiController
                 'CMS list.'
             );
     }
-
+    /**
+     * Jobseeker/Employer
+    */
     public function getArticle(Request $request)
     {
         $sql = Article::where('status', 1);
+        if(!empty($request->type)){
+            $sql->where('type', 'ilike', $request->type);
+        }
         if(!empty($request->slug)){
             $list = $sql->where('page_slug', $request->slug)->first();
             $list->page_content = html_entity_decode($list->page_content);
