@@ -100,12 +100,17 @@ $controllerRoute = $module['controller_route'];
                             <h5>Section 5</h5>
                             <div class="col-md-6">
                                 <label for="section5_title" class="form-label">Section 5 Title <small class="text-danger">*</small></label>
-                                <input class="form-control" type="text" id="section5_title" name="section5_title" value="<?=$section5_title?>" required placeholder="Section 5 Title" autofocus />
+                                <input class="form-control" type="text" id="section5_title" name="section5_title" value="<?=((!empty($section5))?$section5->title:'')?>" required placeholder="Section 5 Title" autofocus />
                             </div>
                             <div class="col-md-6">
                                 <label for="section5_description" class="form-label">Section 5 Description <small class="text-danger">*</small></label>
-                                <textarea class="form-control" id="section5_description" name="section5_description" placeholder="Section 5 Description" rows="5"><?=$section5_description?></textarea>
+                                <textarea class="form-control" id="section5_description" name="section5_description" placeholder="Section 5 Description" rows="5"><?=((!empty($section5))?$section5->description:'')?></textarea>
                             </div>
+                            <?php
+                            $section5_image1 = ((!empty($section5))?$section5->image1:'');
+                            $section5_image2 = ((!empty($section5))?$section5->image2:'');
+                            $section5_image3 = ((!empty($section5))?$section5->image3:'');
+                            ?>
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-start align-items-sm-center gap-4 mt-3">
                                     <div class="button-wrapper">
