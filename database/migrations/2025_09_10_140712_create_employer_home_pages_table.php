@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('employer_home_pages', function (Blueprint $table) {
             $table->id();
-            $table->longtext('section1');
-            $table->longtext('section2');
-            $table->longtext('section3');
-            $table->longtext('section4');
-            $table->longtext('section5');
+            $table->longtext('section1')->nullable();
+            $table->longtext('section2')->nullable();
+            $table->longtext('section3')->nullable();
+            $table->longtext('section4')->nullable();
+            $table->longtext('section5')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
