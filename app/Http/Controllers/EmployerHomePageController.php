@@ -37,6 +37,28 @@ class EmployerHomePageController extends Controller
             $title                          = $this->data['title'].' Update';
             $page_name                      = 'employer-home-page.add-edit';
             $data['row']                    = EmployerHomePage::where('id', '=', 1)->first();
+
+            $section1_db         = [];
+            $section2_db         = [];
+            $section3_db         = [];
+            $section4_db         = [];
+            $section5_db         = [];
+
+            // $section5_image1        = '';
+            // $section5_image2        = '';
+            // $section5_image3        = '';
+
+            if($data['row']){
+                $section1_db         = (($data['row']->section1 != '')?json_decode($data['row']->section1):[]);
+                $section2_db         = (($data['row']->section2 != '')?json_decode($data['row']->section2):[]);
+                $section3_db         = (($data['row']->section3 != '')?json_decode($data['row']->section3):[]);
+                $section4_db         = (($data['row']->section4 != '')?json_decode($data['row']->section4):[]);
+                $section5_db         = (($data['row']->section5 != '')?json_decode($data['row']->section5):[]);
+
+                // $section5_image1        = ((!empty($section5))?$section5->image1:'');
+                // $section5_image2        = ((!empty($section5))?$section5->image2:'');
+                // $section5_image3        = ((!empty($section5))?$section5->image3:'');
+            }
             
             if($request->isMethod('post')){
                 $postData = $request->all();
@@ -62,7 +84,7 @@ class EmployerHomePageController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            $section5_image1 = $data['row']->section5_image1;
+                            $section5_image1 = ((!empty($section5))?$section5->image1:'');
                             $section5Image1 = $section5_image1;
                         }
                     /* section5_image1 */
@@ -79,7 +101,7 @@ class EmployerHomePageController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            $section5_image2 = $data['row']->section5_image2;
+                            $section5_image2 = ((!empty($section5))?$section5->image2:'');
                             $section5Image2 = $section5_image2;
                         }
                     /* section5_image2 */
@@ -96,7 +118,7 @@ class EmployerHomePageController extends Controller
                                 return redirect()->back()->with(['error_message' => $uploadedFile['message']]);
                             }
                         } else {
-                            $section5_image3 = $data['row']->section5_image3;
+                            $section5_image3 = ((!empty($section5))?$section5->image3:'');
                             $section5Image3 = $section5_image3;
                         }
                     /* section5_image3 */                    
