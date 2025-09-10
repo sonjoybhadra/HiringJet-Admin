@@ -99,11 +99,11 @@ $controllerRoute = $module['controller_route'];
                                                     <label class="form-label">Section 2 Box Name</label>
                                                     <input type="text" class="form-control" name="section2_box_text[]" value="<?= $section2_box_text[$k] ?>" placeholder="Section 2 Box Name" />
                                                 </div>
-                                                <div class="col-lg-2 col-md-2">
+                                                <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 2 Box Link</label>
                                                     <input type="text" class="form-control" name="section2_box_link[]" value="<?= $section2_box_link[$k] ?>" placeholder="Section 2 Box Link" />
                                                 </div>
-                                                <div class="col-lg-4 col-md-4">
+                                                <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 2 Box Image</label><br>
                                                     <input type="file" class="account-file-input" name="section2_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                                     <?php if (!empty($section2_box_image)) {
@@ -125,11 +125,11 @@ $controllerRoute = $module['controller_route'];
                                             <label class="form-label">Section 2 Box Text</label>
                                             <input type="text" class="form-control" name="section2_box_text[]" placeholder="Section 2 Box Text" />
                                         </div>
-                                        <div class="col-lg-2 col-md-2">
+                                        <div class="col-lg-3 col-md-3">
                                             <label class="form-label">Section 2 Box Link</label>
                                             <input type="text" class="form-control" name="section2_box_link[]" placeholder="Section 2 Box Link" />
                                         </div>
-                                        <div class="col-lg-4 col-md-4">
+                                        <div class="col-lg-3 col-md-3">
                                             <label class="form-label">Section 2 Box Image</label><br>
                                             <input type="file" class="account-file-input" name="section2_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                         </div>
@@ -278,11 +278,11 @@ $controllerRoute = $module['controller_route'];
                                         <label class="form-label">Section 2 Box Text</label>
                                         <input type="text" class="form-control" name="section2_box_text[]" placeholder="Section 2 Box Text"/>
                                     </div>
-                                    <div class="col-lg-2 col-md-2">
+                                    <div class="col-lg-3 col-md-3">
                                         <label class="form-label">Section 2 Box Link</label>
                                         <input type="text" class="form-control" name="section2_box_link[]" placeholder="Section 2 Box Link"/>
                                     </div>
-                                    <div class="col-lg-4 col-md-4">
+                                    <div class="col-lg-3 col-md-3">
                                         <label class="form-label">Section 2 Box Image</label><br>
                                         <input type="file" class="account-file-input" name="section2_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                     </div>

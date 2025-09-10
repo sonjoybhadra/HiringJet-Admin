@@ -228,7 +228,7 @@ class EmployerHomePageController extends Controller
                         'title'     => strip_tags($postData['section2_title']),
                         'box'       => $box2
                     ];
-                    Helper::pr($section2);
+                    // Helper::pr($section2);
 
                     $section4 = [
                         'title'         => strip_tags($postData['section4_title']),
