@@ -54,6 +54,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\DemoRequestController;
+use App\Http\Controllers\EmployerHomePageController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -475,4 +476,7 @@ Route::middleware(['auth'])->group(function () {
     /* reports */
         Route::get('reports/registration-count-report', [ReportController::class, 'registrationCountReport']);
     /* reports */
+    /* Employer Home Page */
+        Route::match(['get', 'post'], 'employer-home-page/list', [EmployerHomePageController::class, 'list']);
+    /* Employer Home Page */
 });
