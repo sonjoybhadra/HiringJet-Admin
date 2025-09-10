@@ -477,6 +477,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('reports/registration-count-report', [ReportController::class, 'registrationCountReport']);
     /* reports */
     /* Employer Home Page */
-        Route::match(['get', 'post'], 'employer-home-page/list', [EmployerHomePageController::class, 'manage']);
+        Route::match(['get', 'post'], 'employer-home-page/manage', [EmployerHomePageController::class, 'manage']);
     /* Employer Home Page */
 });
