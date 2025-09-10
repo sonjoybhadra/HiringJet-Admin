@@ -154,6 +154,7 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                                 <?php
                                 $box3 = ((!empty($section3)) ? ((!empty($section3->box))?$section3->box:[]) : []);
+                                Helper::pr($box3);
                                 ?>
                                 <div class="col-md-12">
                                     <div class="field_wrapper3 mt-3">
