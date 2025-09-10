@@ -169,7 +169,7 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="col-lg-4 col-md-4">
                                                 <label class="form-label">Section 3 Box Description</label>
-                                                <input type="text" class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" />
+                                                <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description"></textarea>
                                             </div>
                                             <div class="col-lg-3 col-md-3">
                                                 <label class="form-label">Section 3 Box Image</label><br>
@@ -382,7 +382,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-lg-4 col-md-4">
                                         <label class="form-label">Section 3 Box Description</label>
-                                        <input type="text" class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" />
+                                        <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description"></textarea>
                                     </div>
                                     <div class="col-lg-3 col-md-3">
                                         <label class="form-label">Section 3 Box Image</label><br>
