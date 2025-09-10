@@ -154,7 +154,6 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                                 <?php
                                 $box3 = ((!empty($section3)) ? ((!empty($section3->box))?$section3->box:[]) : []);
-                                // Helper::pr($section3);
                                 ?>
                                 <div class="col-md-12">
                                     <div class="field_wrapper3 mt-3">
@@ -166,7 +165,7 @@ $controllerRoute = $module['controller_route'];
                                                 </div>
                                                 <div class="col-lg-4 col-md-4">
                                                     <label class="form-label">Section 3 Box Description</label>
-                                                    <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description"><?= $box3[$k]->box_description ?></textarea>
+                                                    <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" rows="5"><?= $box3[$k]->box_description ?></textarea>
                                                 </div>
                                                 <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 3 Box Image</label><br>
@@ -183,19 +182,19 @@ $controllerRoute = $module['controller_route'];
                                                     </a>
                                                 </div>
 
-                                                <div class="col-lg-3 col-md-3">
+                                                <div class="col-lg-3 col-md-3 mt-3">
                                                     <label class="form-label">Section 3 Box Button 1 Text</label>
                                                     <input type="text" class="form-control" name="section3_box_button1_text[]" value="<?= $box3[$k]->box_button1_text ?>" placeholder="Section 3 Box Button 1 Text" />
                                                 </div>
-                                                <div class="col-lg-3 col-md-3">
+                                                <div class="col-lg-3 col-md-3 mt-3">
                                                     <label class="form-label">Section 3 Box Button 1 Link</label>
                                                     <input type="text" class="form-control" name="section3_box_button1_link[]" value="<?= $box3[$k]->box_button1_link ?>" placeholder="Section 3 Box Button 1 Link" />
                                                 </div>
-                                                <div class="col-lg-3 col-md-3">
+                                                <div class="col-lg-3 col-md-3 mt-3">
                                                     <label class="form-label">Section 3 Box Button 2 Text</label>
                                                     <input type="text" class="form-control" name="section3_box_button2_text[]" value="<?= $box3[$k]->box_button2_text ?>" placeholder="Section 3 Box Button 2 Text" />
                                                 </div>
-                                                <div class="col-lg-3 col-md-3">
+                                                <div class="col-lg-3 col-md-3 mt-3">
                                                     <label class="form-label">Section 3 Box Button 2 Link</label>
                                                     <input type="text" class="form-control" name="section3_box_button2_link[]" value="<?= $box3[$k]->box_button2_link ?>" placeholder="Section 3 Box Button 2 Link" />
                                                 </div>
@@ -208,7 +207,7 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="col-lg-4 col-md-4">
                                                 <label class="form-label">Section 3 Box Description</label>
-                                                <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description"></textarea>
+                                                <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" rows="5"></textarea>
                                             </div>
                                             <div class="col-lg-3 col-md-3">
                                                 <label class="form-label">Section 3 Box Image</label><br>
@@ -220,19 +219,19 @@ $controllerRoute = $module['controller_route'];
                                                 </a>
                                             </div>
 
-                                            <div class="col-lg-3 col-md-3">
+                                            <div class="col-lg-3 col-md-3 mt-3">
                                                 <label class="form-label">Section 3 Box Button 1 Text</label>
                                                 <input type="text" class="form-control" name="section3_box_button1_text[]" placeholder="Section 3 Box Button 1 Text" />
                                             </div>
-                                            <div class="col-lg-3 col-md-3">
+                                            <div class="col-lg-3 col-md-3 mt-3">
                                                 <label class="form-label">Section 3 Box Button 1 Link</label>
                                                 <input type="text" class="form-control" name="section3_box_button1_link[]" placeholder="Section 3 Box Button 1 Link" />
                                             </div>
-                                            <div class="col-lg-3 col-md-3">
+                                            <div class="col-lg-3 col-md-3 mt-3">
                                                 <label class="form-label">Section 3 Box Button 2 Text</label>
                                                 <input type="text" class="form-control" name="section3_box_button2_text[]" placeholder="Section 3 Box Button 2 Text" />
                                             </div>
-                                            <div class="col-lg-3 col-md-3">
+                                            <div class="col-lg-3 col-md-3 mt-3">
                                                 <label class="form-label">Section 3 Box Button 2 Link</label>
                                                 <input type="text" class="form-control" name="section3_box_button2_link[]" placeholder="Section 3 Box Button 2 Link" />
                                             </div>
@@ -421,7 +420,7 @@ $controllerRoute = $module['controller_route'];
                                     </div>
                                     <div class="col-lg-4 col-md-4">
                                         <label class="form-label">Section 3 Box Description</label>
-                                        <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description"></textarea>
+                                        <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" rows="5"></textarea>
                                     </div>
                                     <div class="col-lg-3 col-md-3">
                                         <label class="form-label">Section 3 Box Image</label><br>
@@ -433,19 +432,19 @@ $controllerRoute = $module['controller_route'];
                                         </a>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-3">
+                                    <div class="col-lg-3 col-md-3 mt-3">
                                         <label class="form-label">Section 3 Box Button 1 Text</label>
                                         <input type="text" class="form-control" name="section3_box_button1_text[]" placeholder="Section 3 Box Button 1 Text" />
                                     </div>
-                                    <div class="col-lg-3 col-md-3">
+                                    <div class="col-lg-3 col-md-3 mt-3">
                                         <label class="form-label">Section 3 Box Button 1 Link</label>
                                         <input type="text" class="form-control" name="section3_box_button1_link[]" placeholder="Section 3 Box Button 1 Link" />
                                     </div>
-                                    <div class="col-lg-3 col-md-3">
+                                    <div class="col-lg-3 col-md-3 mt-3">
                                         <label class="form-label">Section 3 Box Button 2 Text</label>
                                         <input type="text" class="form-control" name="section3_box_button2_text[]" placeholder="Section 3 Box Button 2 Text" />
                                     </div>
-                                    <div class="col-lg-3 col-md-3">
+                                    <div class="col-lg-3 col-md-3 mt-3">
                                         <label class="form-label">Section 3 Box Button 2 Link</label>
                                         <input type="text" class="form-control" name="section3_box_button2_link[]" placeholder="Section 3 Box Button 2 Link" />
                                     </div>
