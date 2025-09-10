@@ -138,8 +138,12 @@ class EmployerHomePageController extends Controller
                                 $image_link3[] = '/uploads/'.'home-page/'.$images[$i];
                             }
                         } else {
+
+                            $image_link3 = array_map(function($item) {
+                                return $item->box_image;
+                            }, $section2_db->box);
                             // $image_link3 = (($data['row'])?json_decode($data['row']->section5_box_image):[]);
-                            Helper::pr($section2_db->box);
+                            // Helper::pr($section2_db->box);
                         }
                     /* Section 2 images */
                     /* Section 5 images */
