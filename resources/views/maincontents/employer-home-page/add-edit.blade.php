@@ -45,13 +45,13 @@ $controllerRoute = $module['controller_route'];
                 if ($row) {
                     $section1         = (($row->section1 != '') ? json_decode($row->section1) : []);
                     $section2         = (($row->section2 != '') ? json_decode($row->section2) : []);
-                    $section2         = (($row->section2 != '') ? json_decode($row->section2) : []);
+                    $section3         = (($row->section3 != '') ? json_decode($row->section3) : []);
                     $section4         = (($row->section4 != '') ? json_decode($row->section4) : []);
                     $section5         = (($row->section5 != '') ? json_decode($row->section5) : []);
                 } else {
                     $section1         = [];
                     $section2         = [];
-                    $section2         = [];
+                    $section3         = [];
                     $section4         = [];
                     $section5         = [];
                 }
@@ -154,7 +154,7 @@ $controllerRoute = $module['controller_route'];
                                 </div>
                                 <?php
                                 $box3 = ((!empty($section3)) ? ((!empty($section3->box))?$section3->box:[]) : []);
-                                Helper::pr($box3);
+                                // Helper::pr($section3);
                                 ?>
                                 <div class="col-md-12">
                                     <div class="field_wrapper3 mt-3">
