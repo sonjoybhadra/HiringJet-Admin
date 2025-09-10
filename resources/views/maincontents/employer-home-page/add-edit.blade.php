@@ -88,7 +88,6 @@ $controllerRoute = $module['controller_route'];
                             </div>
                             <?php
                             $box = ((!empty($section2)) ? ((!empty($section2->box))?$section2->box:[]) : []);
-                            Helper::pr($box);
                             ?>
                             <div class="col-md-12">
                                 <div class="field_wrapper2 mt-3">
@@ -97,18 +96,18 @@ $controllerRoute = $module['controller_route'];
                                             <div class="row" style="border:1px solid #3c6df085; padding: 10px; border-radius: 10px; margin-bottom: 5px;">
                                                 <div class="col-lg-4 col-md-4">
                                                     <label class="form-label">Section 2 Box Name</label>
-                                                    <input type="text" class="form-control" name="section2_box_text[]" value="<?= $section2_box_text[$k] ?>" placeholder="Section 2 Box Name" />
+                                                    <input type="text" class="form-control" name="section2_box_text[]" value="<?= $box[$k]->box_text ?>" placeholder="Section 2 Box Name" />
                                                 </div>
                                                 <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 2 Box Link</label>
-                                                    <input type="text" class="form-control" name="section2_box_link[]" value="<?= $section2_box_link[$k] ?>" placeholder="Section 2 Box Link" />
+                                                    <input type="text" class="form-control" name="section2_box_link[]" value="<?= $box[$k]->box_link ?>" placeholder="Section 2 Box Link" />
                                                 </div>
                                                 <div class="col-lg-3 col-md-3">
                                                     <label class="form-label">Section 2 Box Image</label><br>
                                                     <input type="file" class="account-file-input" name="section2_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
-                                                    <?php if (!empty($section2_box_image)) {
-                                                        if ($section2_box_image[$k] != '') { ?>
-                                                            <img src="<?= (($section2_box_image[$k] != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $section2_box_image[$k] : config('constants.no_image')) ?>" alt="<?= $section2_box_text[$k] ?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                    <?php if (!empty($box[$k]->box_image)) {
+                                                        if ($box[$k]->box_image != '') { ?>
+                                                            <img src="<?= (($box[$k]->box_image != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $box[$k]->box_image : config('constants.no_image')) ?>" alt="<?= $box[$k]->box_text ?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
                                                     <?php }
                                                     } ?>
                                                 </div>
