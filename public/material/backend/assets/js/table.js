@@ -148,6 +148,10 @@ function loadTable(config) {
                     html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-info btn-sm" title="Applications" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
                                 </a>`;
+
+                    if(config.filename == 'VerifiedEmployerApproveJob' || config.filename == 'NonVerifiedEmployerApproveJob'){
+                        html += `<br><br><a href="/employer-user/profile/${encoded_employer_id}" class="btn btn-success btn-sm me-1" title="Employer Profile" style="font-size: 9px;" target="blank">Employer Profile</a>`;
+                    }
                 }
 
                 if(config.routePrefix == 'job'){
