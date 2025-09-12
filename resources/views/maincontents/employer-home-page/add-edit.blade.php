@@ -163,16 +163,16 @@ $controllerRoute = $module['controller_route'];
                                                     <label class="form-label">Section 3 Box Text</label>
                                                     <input type="text" class="form-control" name="section3_box_text[]" value="<?= $box3[$k]->box_text ?>" placeholder="Section 3 Box Text" />
                                                 </div>
-                                                <div class="col-lg-4 col-md-4">
+                                                <div class="col-lg-5 col-md-5">
                                                     <label class="form-label">Section 3 Box Description</label>
-                                                    <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" rows="5"><?= $box3[$k]->box_description ?></textarea>
+                                                    <textarea class="form-control" name="section3_box_description[]" id="ckeditor<?=($k + 1)?>" placeholder="Section 3 Box Description" rows="5"><?= $box3[$k]->box_description ?></textarea>
                                                 </div>
-                                                <div class="col-lg-3 col-md-3">
+                                                <div class="col-lg-2 col-md-2">
                                                     <label class="form-label">Section 3 Box Image</label><br>
                                                     <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                                     <?php if (!empty($box3[$k]->box_image)) {
                                                         if ($box3[$k]->box_image != '') { ?>
-                                                            <img src="<?= (($box3[$k]->box_image != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $box3[$k]->box_image : config('constants.no_image')) ?>" alt="<?= $box3[$k]->box_text ?>" class="img-thumbnail mt-3" height="30" width="30" id="uploadedAvatar" />
+                                                            <img src="<?= (($box3[$k]->box_image != '') ? config('constants.app_url') . config('constants.uploads_url_path') . $box3[$k]->box_image : config('constants.no_image')) ?>" alt="<?= $box3[$k]->box_text ?>" class="img-thumbnail mt-3" height="150" width="150" id="uploadedAvatar" />
                                                     <?php }
                                                     } ?>
                                                 </div>
@@ -205,11 +205,11 @@ $controllerRoute = $module['controller_route'];
                                                 <label class="form-label">Section 3 Box Text</label>
                                                 <input type="text" class="form-control" name="section3_box_text[]" placeholder="Section 3 Box Text" />
                                             </div>
-                                            <div class="col-lg-4 col-md-4">
+                                            <div class="col-lg-5 col-md-5">
                                                 <label class="form-label">Section 3 Box Description</label>
-                                                <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" rows="5"></textarea>
+                                                <textarea class="form-control" name="section3_box_description[]" id="ckeditor31" placeholder="Section 3 Box Description" rows="5"></textarea>
                                             </div>
-                                            <div class="col-lg-3 col-md-3">
+                                            <div class="col-lg-2 col-md-2">
                                                 <label class="form-label">Section 3 Box Image</label><br>
                                                 <input type="file" class="account-file-input" name="section3_box_image[]" accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/gif" />
                                             </div>

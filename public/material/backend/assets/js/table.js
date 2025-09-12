@@ -100,6 +100,7 @@ function loadTable(config) {
             if (config.showActions) {
                 const status = row[config.statusColumn];
                 const encodedId = row.encoded_id;
+                const encoded_employer_id = row.encoded_employer_id;
                 const base = '/' + config.routePrefix;
 
                 html += `<td>`;
@@ -147,12 +148,20 @@ function loadTable(config) {
                     html += `<br><br><a href="${base}/applications/${encodedId}" class="btn btn-info btn-sm" title="Applications" target="_blank">
                                     <i class="fa-solid fa-briefcase"></i>&nbsp;&nbsp;Applications
                                 </a>`;
+
+                    if(config.filename == 'VerifiedEmployerApproveJob' || config.filename == 'NonVerifiedEmployerApproveJob'){
+                        html += `<br><br><a href="/employer-user/profile/${encoded_employer_id}" class="btn btn-success btn-sm me-1" title="Employer Profile" style="font-size: 9px;" target="blank">Employer Profile</a>`;
+                    }
                 }
 
                 if(config.routePrefix == 'job'){
                     var job_no = row['job_no'];
                     html += `<br><br><a href="${base}/view-details/${encodedId}" class="btn btn-warning btn-sm me-1" title="View Jobs">
-                                    <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Details</a>`;
+                                    <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;View</a>`;
+                    
+                    if(config.filename == 'VerifiedEmployerPendingJob' || config.filename == 'NonVerifiedEmployerPendingJob'){
+                        html += `<br><br><a href="/employer-user/profile/${encoded_employer_id}" class="btn btn-success btn-sm me-1" title="Employer Profile" style="font-size: 9px;" target="blank">Employer Profile</a>`;
+                    }
                 }
 
                 if(config.routePrefix == 'employer-user'){
