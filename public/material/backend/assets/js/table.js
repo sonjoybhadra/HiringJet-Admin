@@ -153,6 +153,7 @@ function loadTable(config) {
                     var job_no = row['job_no'];
                     html += `<br><br><a href="${base}/view-details/${encodedId}" class="btn btn-warning btn-sm me-1" title="View Jobs">
                                     <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Details</a>`;
+                    html += 'filename : ' + config.filename;
                 }
 
                 if(config.routePrefix == 'employer-user'){
