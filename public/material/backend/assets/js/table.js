@@ -100,6 +100,7 @@ function loadTable(config) {
             if (config.showActions) {
                 const status = row[config.statusColumn];
                 const encodedId = row.encoded_id;
+                const encoded_employer_id = row.encoded_employer_id;
                 const base = '/' + config.routePrefix;
 
                 html += `<td>`;
@@ -155,7 +156,7 @@ function loadTable(config) {
                                     <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;View</a>`;
                     
                     if(config.filename == 'VerifiedEmployerPendingJob' || config.filename == 'NonVerifiedEmployerPendingJob'){
-                        html += `<br><br><a href="${base}/employer-user/profile/${encodedId}" class="btn btn-success btn-sm me-1" title="Employer Profile" style="font-size: 9px;">Employer Profile</a>`;
+                        html += `<br><br><a href="${base}/employer-user/profile/${encoded_employer_id}" class="btn btn-success btn-sm me-1" title="Employer Profile" style="font-size: 9px;" target="blank">Employer Profile</a>`;
                     }
                 }
 
