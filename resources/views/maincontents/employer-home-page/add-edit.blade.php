@@ -207,7 +207,7 @@ $controllerRoute = $module['controller_route'];
                                             </div>
                                             <div class="col-lg-4 col-md-4">
                                                 <label class="form-label">Section 3 Box Description</label>
-                                                <textarea class="form-control" name="section3_box_description[]" placeholder="Section 3 Box Description" rows="5"></textarea>
+                                                <textarea class="form-control" name="section3_box_description[]" id="ckeditor31" placeholder="Section 3 Box Description" rows="5"></textarea>
                                             </div>
                                             <div class="col-lg-3 col-md-3">
                                                 <label class="form-label">Section 3 Box Image</label><br>
