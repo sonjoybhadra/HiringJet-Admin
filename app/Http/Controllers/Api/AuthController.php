@@ -138,7 +138,7 @@ class AuthController extends BaseApiController
         $token = JWTAuth::getToken();
         $has_token_same = User::where('auth_token', $token)->get()->count();
         if($has_token_same <= 0){
-            return $this->sendResponse('', 'Session expired.', Response::HTTP_UNAUTHORIZED);
+            return $this->sendError('Error', 'Session expired.',  421);
         }
 
         if(auth()->user()->role_id == env('JOB_SEEKER_ROLE_ID')){
