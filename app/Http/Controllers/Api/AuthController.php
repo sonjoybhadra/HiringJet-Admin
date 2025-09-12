@@ -101,6 +101,12 @@ class AuthController extends BaseApiController
                 return $this->sendError('Unauthorized', 'Your account is not active. Please contact to the admin.', Response::HTTP_UNAUTHORIZED);
             }
 
+            /**
+             * add token to check is token expired or changed
+            */
+            User::find(auth()->user()->id)->update([
+                'auth_token'=> $token
+            ]);
             return $this->sendResponse([
                                         'token_type' => 'bearer',
                                         'token' => $token,
@@ -129,6 +135,12 @@ class AuthController extends BaseApiController
     public function getUser()
     {
         $data = [];
+        $token = JWTAuth::getToken();
+        $has_token_same = User::where('auth_token', $token)->get()->count();
+        if($has_token_same <= 0){
+            return $this->sendResponse('', 'Session expired.', Response::HTTP_UNAUTHORIZED);
+        }
+
         if(auth()->user()->role_id == env('JOB_SEEKER_ROLE_ID')){
             $data = User::where('id', auth()->user()->id)
                     ->with('user_profile')
