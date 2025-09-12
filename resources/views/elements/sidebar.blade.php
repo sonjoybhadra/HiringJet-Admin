@@ -461,30 +461,16 @@ $role_id = (($user)?$user->role_id:0);
               </a>
             </li>
           <?php }?>
-          <?php if(in_array(12, $moduleIds)){?>
-            <!-- <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'non-verified-employer-approve-job')?'active':'')?>">
-              <a href="<?=url('/post-job/non-verified-employer-approve-job')?>" class="menu-link">
-                <div data-i18n="Non-Verified Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Non-Verified Employer Approved Jobs</div>
-              </a>
-            </li> -->
-          <?php }?>
-          <?php if(in_array(12, $moduleIds)){?>
-            <!-- <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'internal-employer-approve-job')?'active':'')?>">
-              <a href="<?=url('/post-job/internal-employer-approve-job')?>" class="menu-link">
-                <div data-i18n="Internal Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Internal Employer Approved Jobs</div>
-              </a>
-            </li> -->
-          <?php }?>
         <!-- approved job list -->
         <!-- pending job list -->
           <?php if(in_array(12, $moduleIds)){?>
-            <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'verified-employer-pending-job')?'active':'')?>">
+            <li class="menu-item <?=(($pageSegment == 'job' && ($pageFunction == 'verified-employer-pending-job' || $pageFunction == 'non-verified-employer-pending-job' || $pageFunction == 'internal-employer-pending-job'))?'active':'')?>">
               <a href="<?=url('/job/verified-employer-pending-job')?>" class="menu-link">
-                <div data-i18n="Verified Employer Pending Jobs"><i class="fa-solid fa-arrow-right"></i> Verified Employer Pending Jobs</div>
+                <div data-i18n="Pending Jobs"><i class="fa-solid fa-arrow-right"></i> Pending Jobs</div>
               </a>
             </li>
           <?php }?>
-          <?php if(in_array(12, $moduleIds)){?>
+          <!-- <?php if(in_array(12, $moduleIds)){?>
             <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'non-verified-employer-pending-job')?'active':'')?>">
               <a href="<?=url('/job/non-verified-employer-pending-job')?>" class="menu-link">
                 <div data-i18n="Non-Verified Employer Pending Jobs"><i class="fa-solid fa-arrow-right"></i> Non-Verified Employer Pending Jobs</div>
@@ -497,7 +483,7 @@ $role_id = (($user)?$user->role_id:0);
                 <div data-i18n="Internal Employer Pending Jobs"><i class="fa-solid fa-arrow-right"></i> Internal Employer Pending Jobs</div>
               </a>
             </li>
-          <?php }?>
+          <?php }?> -->
         <!-- pending job list -->
         <!-- rejected job list -->
         <?php if(in_array(12, $moduleIds)){?>

@@ -37,7 +37,7 @@ $controllerRoute = $module['controller_route'];
             <div class="card-body">
                <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
                   <li class="nav-item">
-                     <a href="<?= url('/post-job/verified-employer-approve-job') ?>" class="nav-link active" role="tab">
+                     <a href="<?= url('/post-job/verified-employer-approve-job') ?>" class="nav-link" role="tab">
                         <i class="tf-icons bx bx-home me-1"></i> Verified Employer Approved Jobs
                      </a>
                   </li>
@@ -47,7 +47,7 @@ $controllerRoute = $module['controller_route'];
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a href="<?= url('/post-job/internal-employer-approve-job') ?>" class="nav-link" role="tab">
+                     <a href="<?= url('/post-job/internal-employer-approve-job') ?>" class="nav-link active" role="tab">
                         <i class="tf-icons bx bx-lock me-1"></i> Internal Employer Approved Jobs
                      </a>
                   </li>
