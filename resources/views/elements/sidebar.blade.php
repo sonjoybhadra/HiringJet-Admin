@@ -455,9 +455,9 @@ $role_id = (($user)?$user->role_id:0);
       <ul class="menu-sub">
         <!-- approved job list -->
           <?php if(in_array(12, $moduleIds)){?>
-            <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'verified-employer-approve-job')?'active':'')?>">
+            <li class="menu-item <?=(($pageSegment == 'post-job' && ($pageFunction == 'verified-employer-approve-job' || $pageFunction == 'non-verified-employer-approve-job' || $pageFunction == 'internal-employer-approve-job'))?'active':'')?>">
               <a href="<?=url('/post-job/verified-employer-approve-job')?>" class="menu-link">
-                <div data-i18n="Verified Employer Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Approved Jobs</div>
+                <div data-i18n="Approved Jobs"><i class="fa-solid fa-arrow-right"></i> Approved Jobs</div>
               </a>
             </li>
           <?php }?>

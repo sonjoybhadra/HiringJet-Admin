@@ -35,47 +35,52 @@ $controllerRoute = $module['controller_route'];
             <div class="card-body">
                <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
                   <li class="nav-item">
-                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile" aria-selected="true"><i class="tf-icons bx bx-home me-1"></i> Verified Employer Approved Jobs</button>
+                     <a href="<?=url('/post-job/verified-employer-approve-job')?>" class="nav-link active" role="tab">
+                        <i class="tf-icons bx bx-home me-1"></i> Verified Employer Approved Jobs
+                     </a>
                   </li>
                   <li class="nav-item">
-                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-general" aria-controls="navs-pills-justified-general" aria-selected="false"><i class="tf-icons bx bx-user me-1"></i> Non-Verified Employer Approved Jobs</button>
+                     <a href="<?=url('/post-job/non-verified-employer-approve-job')?>" class="nav-link" role="tab">
+                        <i class="tf-icons bx bx-user me-1"></i> Non-Verified Employer Approved Jobs
+                     </a>
                   </li>
                   <li class="nav-item">
-                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-password" aria-controls="navs-pills-justified-password" aria-selected="false"><i class="tf-icons bx bx-lock me-1"></i> Internal Employer Approved Jobs</button>
+                     <a href="<?=url('/post-job/internal-employer-approve-job')?>" class="nav-link" role="tab">
+                        <i class="tf-icons bx bx-lock me-1"></i> Internal Employer Approved Jobs
+                     </a>
                   </li>
                </ul>
-
-
-
-               <div id="table-overlay-loader" class="text-loader">
-                  Fetching data. Please wait <span id="dot-animation">.</span>
-               </div>
-                @include('components.table', [
-                'containerId' => 'table1',
-                'searchId' => 'search1',
-                'table' => 'post_jobs',
-                'columns' => ['job_no', 'employer_id', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by', 'status'],
-                'visibleColumns' => ['job_no', 'employer_name', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by_name'],
-                'headers' => ['#', 'Job No.', 'Employer Name', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At', 'Created By'],
-                'filename' => "Job",
-                'orderBy' => 'id',
-                'orderType' => 'desc',
-                'conditions' => [
-                    ['column' => 'post_jobs.status', 'operator' => '=', 'value' => 1],
-                    ['column' => 'employers.status', 'operator' => '=', 'value' => 4],
-                ],
-                'joins' => [
-                     [
-                           'table' => 'users',
-                           'localKey' => 'created_by',
-                           'foreignKey' => 'id',
-                           'select' => ['first_name as created_by_name']
-                     ]
+               <div class="tab-content">
+                  <div id="table-overlay-loader" class="text-loader">
+                     Fetching data. Please wait <span id="dot-animation">.</span>
+                  </div>
+                  @include('components.table', [
+                  'containerId' => 'table1',
+                  'searchId' => 'search1',
+                  'table' => 'post_jobs',
+                  'columns' => ['job_no', 'employer_id', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by', 'status'],
+                  'visibleColumns' => ['job_no', 'employer_name', 'position_name', 'job_type', 'posting_open_date', 'posting_close_date', 'created_at', 'created_by_name'],
+                  'headers' => ['#', 'Job No.', 'Employer Name', 'Position Name', 'Job Type', 'Posting Open Date', 'Posting Close Date', 'Created At', 'Created By'],
+                  'filename' => "Job",
+                  'orderBy' => 'id',
+                  'orderType' => 'desc',
+                  'conditions' => [
+                     ['column' => 'post_jobs.status', 'operator' => '=', 'value' => 1],
+                     ['column' => 'employers.status', 'operator' => '=', 'value' => 4],
                   ],
-                'routePrefix' => 'post-job',
-                'showActions' => true,
-                'statusColumn' => 'status'
-                ])
+                  'joins' => [
+                        [
+                              'table' => 'users',
+                              'localKey' => 'created_by',
+                              'foreignKey' => 'id',
+                              'select' => ['first_name as created_by_name']
+                        ]
+                     ],
+                  'routePrefix' => 'post-job',
+                  'showActions' => true,
+                  'statusColumn' => 'status'
+                  ])
+               </div>
             </div>
         </div>
       </div>
