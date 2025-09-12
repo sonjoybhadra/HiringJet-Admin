@@ -222,7 +222,7 @@ class TableController extends Controller
                     return $item;
                 });
         } else {
-            $data = $query->groupBy($table.'.job_no')->orderBy("$table.$orderBy", $orderType)
+            $data = $query->orderBy("$table.$orderBy", $orderType)
                 ->offset(($page - 1) * $limit)
                 ->limit($limit)
                 ->get()
