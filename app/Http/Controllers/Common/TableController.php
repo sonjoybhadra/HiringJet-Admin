@@ -131,7 +131,7 @@ class TableController extends Controller
                     return 'users.first_name as created_by_name';
                 }
                 if ($col === 'employer_id') {
-                    return 'employers.name as employer_name';
+                    return 'employers.name as employer_name,employers.id as employer_id';
                 }
                 // return 'users.first_name as created_by_name';
             }
