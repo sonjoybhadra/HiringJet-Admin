@@ -70,7 +70,7 @@ class TableController extends Controller
         if ($table === 'post_jobs') {
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
             $query->leftJoin('employers', DB::raw("CAST($table.employer_id AS TEXT)"), '=', DB::raw("CAST(employers.id AS TEXT)"));
-            $query->rightJoin('user_employers', DB::raw("CAST(employers.id AS TEXT)"), '=', DB::raw("CAST(user_employers.business_id AS TEXT)"));
+            $query->leftJoin('user_employers', DB::raw("CAST(employers.id AS TEXT)"), '=', DB::raw("CAST(user_employers.business_id AS TEXT)"));
         }
         if ($table === 'contact_us') {
             $query->leftJoin('cities', DB::raw("CAST($table.city_id AS TEXT)"), '=', DB::raw("CAST(cities.id AS TEXT)"));
@@ -207,8 +207,7 @@ class TableController extends Controller
         $total = (clone $query)->count();
 
         // Paginate
-        if ($table != 'post_jobs') {
-            $data = $query->orderBy("$table.$orderBy", $orderType)
+        $data = $query->distinct()->orderBy("$table.$orderBy", $orderType)
                 ->offset(($page - 1) * $limit)
                 ->limit($limit)
                 ->get()
@@ -221,21 +220,6 @@ class TableController extends Controller
 
                     return $item;
                 });
-        } else {
-            $data = $query->orderBy("$table.$orderBy", $orderType)
-                ->offset(($page - 1) * $limit)
-                ->limit($limit)
-                ->get()
-                ->map(function ($item) use ($table) {
-                    $item->encoded_id = urlencode(base64_encode($item->id));
-
-                    if ($table === 'post_jobs' && isset($item->employer_id)) {
-                        $item->encoded_employer_id = urlencode(base64_encode($item->employer_id));
-                    }
-
-                    return $item;
-                });
-        }
         
 
         // Get last query
