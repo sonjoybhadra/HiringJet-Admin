@@ -78,7 +78,7 @@ $controllerRoute = $module['controller_route'];
                   'select' => ['first_name as created_by_name']
                   ]
                   ],
-                  'routePrefix' => 'post-job',
+                  'routePrefix' => 'job',
                   'showActions' => true,
                   'statusColumn' => 'status'
                   ])
