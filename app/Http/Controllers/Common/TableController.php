@@ -207,19 +207,36 @@ class TableController extends Controller
         $total = (clone $query)->count();
 
         // Paginate
-        $data = $query->orderBy("$table.$orderBy", $orderType)
-            ->offset(($page - 1) * $limit)
-            ->limit($limit)
-            ->get()
-            ->map(function ($item) use ($table) {
-                $item->encoded_id = urlencode(base64_encode($item->id));
+        if ($table != 'post_jobs') {
+            $data = $query->orderBy("$table.$orderBy", $orderType)
+                ->offset(($page - 1) * $limit)
+                ->limit($limit)
+                ->get()
+                ->map(function ($item) use ($table) {
+                    $item->encoded_id = urlencode(base64_encode($item->id));
 
-                if ($table === 'post_jobs' && isset($item->employer_id)) {
-                    $item->encoded_employer_id = urlencode(base64_encode($item->employer_id));
-                }
+                    if ($table === 'post_jobs' && isset($item->employer_id)) {
+                        $item->encoded_employer_id = urlencode(base64_encode($item->employer_id));
+                    }
 
-                return $item;
-            });
+                    return $item;
+                });
+        } else {
+            $data = $query->groupBy($table.'.job_no')->orderBy("$table.$orderBy", $orderType)
+                ->offset(($page - 1) * $limit)
+                ->limit($limit)
+                ->get()
+                ->map(function ($item) use ($table) {
+                    $item->encoded_id = urlencode(base64_encode($item->id));
+
+                    if ($table === 'post_jobs' && isset($item->employer_id)) {
+                        $item->encoded_employer_id = urlencode(base64_encode($item->employer_id));
+                    }
+
+                    return $item;
+                });
+        }
+        
 
         // Get last query
         // $queries = DB::getQueryLog();
