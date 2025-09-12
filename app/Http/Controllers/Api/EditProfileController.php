@@ -51,8 +51,8 @@ class EditProfileController extends BaseApiController
                 // 'email'=> $request->email,
                 'country_code'=> $request->country_code,
                 'phone' => $request->phone,
-                'whatsapp_country_code' => $request->is_whatsapp == 1 ? ($request->country_code) : NULL, //[0/1]
-                'whatsapp_number' => $request->is_whatsapp == 1 ? ($request->phone) : NULL, //[0/1]
+                'whatsapp_country_code' => $request->is_whatsapp == 1 ? ($request->country_code) : $request->whatsapp_country_code, //[0/1]
+                'whatsapp_number' => $request->is_whatsapp == 1 ? ($request->phone) : $request->whatsapp_number, //[0/1]
                 'city_id'=> $request->city
             ];
             if($image_path != ""){
