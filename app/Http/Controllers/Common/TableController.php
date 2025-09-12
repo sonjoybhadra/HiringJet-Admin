@@ -130,8 +130,11 @@ class TableController extends Controller
                 if ($col === 'created_by') {
                     return 'users.first_name as created_by_name';
                 }
+                // if ($col === 'employer_id') {
+                //     return 'employers.name as employer_name';
+                // }
                 if ($col === 'employer_id') {
-                    return 'employers.name as employer_name,employers.id as employer_id';
+                    return "$table.employer_id"; // keep raw employer_id
                 }
                 // return 'users.first_name as created_by_name';
             }
@@ -148,6 +151,10 @@ class TableController extends Controller
             }
             return str_contains($col, '.') ? $col : "$table.$col";
         }, $rawColumns);
+
+        if ($table === 'post_jobs') {
+            $columns[] = 'employers.name as employer_name';
+        }
 
         $query->select($columns);
 
@@ -203,8 +210,13 @@ class TableController extends Controller
             ->offset(($page - 1) * $limit)
             ->limit($limit)
             ->get()
-            ->map(function ($item) {
+            ->map(function ($item) use ($table) {
                 $item->encoded_id = urlencode(base64_encode($item->id));
+
+                if ($table === 'post_jobs' && isset($item->employer_id)) {
+                    $item->encoded_employer_id = urlencode(base64_encode($item->employer_id));
+                }
+
                 return $item;
             });
 
