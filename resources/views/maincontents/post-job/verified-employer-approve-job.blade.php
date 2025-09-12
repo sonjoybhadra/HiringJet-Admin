@@ -33,6 +33,20 @@ $controllerRoute = $module['controller_route'];
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
             </div>
             <div class="card-body">
+               <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+                  <li class="nav-item">
+                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile" aria-selected="true"><i class="tf-icons bx bx-home me-1"></i> Verified Employer Approved Jobs</button>
+                  </li>
+                  <li class="nav-item">
+                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-general" aria-controls="navs-pills-justified-general" aria-selected="false"><i class="tf-icons bx bx-user me-1"></i> Non-Verified Employer Approved Jobs</button>
+                  </li>
+                  <li class="nav-item">
+                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-password" aria-controls="navs-pills-justified-password" aria-selected="false"><i class="tf-icons bx bx-lock me-1"></i> Internal Employer Approved Jobs</button>
+                  </li>
+               </ul>
+
+
+
                <div id="table-overlay-loader" class="text-loader">
                   Fetching data. Please wait <span id="dot-animation">.</span>
                </div>
