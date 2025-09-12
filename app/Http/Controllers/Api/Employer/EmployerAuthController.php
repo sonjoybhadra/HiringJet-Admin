@@ -75,7 +75,12 @@ class EmployerAuthController extends BaseApiController
                 }
                 return $this->sendError('Unauthorized', 'Your account is not active. Please contact to the admin.', Response::HTTP_UNAUTHORIZED);
             }
-
+            /**
+             * add token to check is token expired or changed
+            */
+            User::find(auth()->user()->id)->update([
+                'auth_token'=> $token
+            ]);
             return $this->sendResponse([
                                         'token_type' => 'bearer',
                                         'token' => $token,
