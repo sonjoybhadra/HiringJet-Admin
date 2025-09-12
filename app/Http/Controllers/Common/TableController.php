@@ -207,7 +207,7 @@ class TableController extends Controller
         $total = (clone $query)->count();
 
         // Paginate
-        $data = $query->distinct()->orderBy("$table.$orderBy", $orderType)
+        $data = $query->distinct("$table.id")->orderBy("$table.$orderBy", $orderType)
                 ->offset(($page - 1) * $limit)
                 ->limit($limit)
                 ->get()
