@@ -155,8 +155,7 @@ function loadTable(config) {
                                     <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Details</a>`;
                     
                     if(config.filename == 'VerifiedEmployerPendingJob' || config.filename == 'NonVerifiedEmployerPendingJob'){
-                        html += `<br><br><a href="${base}/employer-user/profile/${encodedId}" class="btn btn-primary btn-sm me-1" title="View Profile">
-                                    <i class="fa-solid fa-info-circle"></i>&nbsp;View Profile</a>`;
+                        html += `<br><br><a href="${base}/employer-user/profile/${encodedId}" class="btn btn-info btn-sm me-1" title="Employer Profile" style="font-size: 11px;">Employer Profile</a>`;
                     }
                 }
 
