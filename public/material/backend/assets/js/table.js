@@ -152,10 +152,10 @@ function loadTable(config) {
                 if(config.routePrefix == 'job'){
                     var job_no = row['job_no'];
                     html += `<br><br><a href="${base}/view-details/${encodedId}" class="btn btn-warning btn-sm me-1" title="View Jobs">
-                                    <i class="fa-solid fa-info-circle"></i>&nbsp;&nbsp;View Details</a>`;
+                                    <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;View</a>`;
                     
                     if(config.filename == 'VerifiedEmployerPendingJob' || config.filename == 'NonVerifiedEmployerPendingJob'){
-                        html += `<br><br><a href="${base}/employer-user/profile/${encodedId}" class="btn btn-info btn-sm me-1" title="Employer Profile" style="font-size: 11px;">Employer Profile</a>`;
+                        html += `<br><br><a href="${base}/employer-user/profile/${encodedId}" class="btn btn-success btn-sm me-1" title="Employer Profile" style="font-size: 11px;">Employer Profile</a>`;
                     }
                 }
 
