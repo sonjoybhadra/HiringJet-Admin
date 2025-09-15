@@ -107,7 +107,7 @@ class JobseekerController extends Controller
                             ];
                         }
                     }
-                    // Helper::pr($response);
+                    $data['response']               = $response;
                 }
             }
 
