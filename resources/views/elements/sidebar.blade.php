@@ -571,6 +571,13 @@ $role_id = (($user)?$user->role_id:0);
             <div data-i18n="All"><i class="fa-solid fa-arrow-right"></i> All</div>
           </a>
         </li>
+
+        <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'percentage-wise-list')?'active':'')?>">
+          <a href="<?=url('/jobseeker/percentage-wise-list/')?>" class="menu-link">
+            <div data-i18n="Percentage Wise List"><i class="fa-solid fa-arrow-right"></i> Percentage Wise List</div>
+          </a>
+        </li>
+
         <?php
         if($pageFunction == 'profile-complete-list'){
           $url_break      = explode("profile-complete-list/", $url);
@@ -581,11 +588,11 @@ $role_id = (($user)?$user->role_id:0);
         $profile_completes = ProfileComplete::select('id', 'name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
         if($profile_completes){ foreach($profile_completes as $profile_complete){
         ?>
-          <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list' && $pageParam == Helper::encoded($profile_complete->id))?'active':'')?>">
+          <!-- <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list' && $pageParam == Helper::encoded($profile_complete->id))?'active':'')?>">
             <a href="<?=url('/jobseeker/profile-complete-list/' . Helper::encoded($profile_complete->id))?>" class="menu-link">
               <div data-i18n="<?=$profile_complete->name?>"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
             </a>
-          </li>
+          </li> -->
         <?php } }?>        
       </ul>
     </li>
@@ -705,6 +712,33 @@ $role_id = (($user)?$user->role_id:0);
           <li class="menu-item <?=(($pageSegment == 'registration-count-report')?'active':'')?>">
             <a href="<?=url('/reports/registration-count-report/')?>" class="menu-link">
               <div data-i18n="Registration Count Reports"><i class="fa-solid fa-arrow-right"></i> Registration Count Reports</div>
+            </a>
+          </li>
+        <?php }?>
+      </ul>
+    </li>
+  <?php }?>
+
+  <?php if(in_array(17, $moduleIds)){?>
+    <!-- CRM -->
+    <li class="menu-item active <?=(($pageSegment == 'ticket-category' || $pageSegment == 'ticket-priority')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-handshake"></i>
+        <div data-i18n="CRM">CRM</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(17, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'ticket-category')?'active':'')?>">
+            <a href="<?=url('/ticket-category/list/')?>" class="menu-link">
+              <div data-i18n="Ticket Category"><i class="fa-solid fa-arrow-right"></i> Ticket Category</div>
+            </a>
+          </li>
+        <?php }?>
+
+        <?php if(in_array(17, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'ticket-priority')?'active':'')?>">
+            <a href="<?=url('/ticket-priority/list/')?>" class="menu-link">
+              <div data-i18n="Ticket Priority"><i class="fa-solid fa-arrow-right"></i> Ticket Priority</div>
             </a>
           </li>
         <?php }?>

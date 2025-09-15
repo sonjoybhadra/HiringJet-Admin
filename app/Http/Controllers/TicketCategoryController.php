@@ -6,56 +6,32 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\GeneralSetting;
-use App\Models\User;
+use App\Models\TicketCategory;
 use App\Models\UserActivity;
-use App\Models\ProfileComplete;
 use App\Services\SiteAuthService;
 use App\Helpers\Helper;
 use Auth;
 use Session;
 use Hash;
-use DB;
 
-class JobseekerController extends Controller
+class TicketCategoryController extends Controller
 {
     protected $siteAuthService;
     public function __construct()
     {
         $this->siteAuthService = new SiteAuthService();
         $this->data = array(
-            'title'             => 'Jobseekers',
-            'controller'        => 'JobseekerController',
-            'controller_route'  => 'jobseeker',
+            'title'             => 'Ticket Category',
+            'controller'        => 'TicketCategoryController',
+            'controller_route'  => 'ticket-category',
             'primary_key'       => 'id',
-            'table_name'        => 'users',
         );
     }
     /* list */
         public function list(){
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' List';
-            $page_name                      = 'jobseeker.list';
-            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-            return view('maincontents.' . $page_name, $data);
-        }
-        public function profileCompleteList($profile_completes_id){
-            $profile_completes_id           = Helper::decoded($profile_completes_id);
-            $get_profile_complete           = ProfileComplete::select('name')->where('id', '=', $profile_completes_id)->first();
-            $data['module']                 = $this->data;
-            $title                          = (($get_profile_complete)?$get_profile_complete->name:'') . ' : ' . $this->data['title'].' List';
-            $data['profile_completes_id']   = $profile_completes_id;
-            $page_name                      = 'jobseeker.profile-complete-list';
-            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-            return view('maincontents.' . $page_name, $data);
-        }
-        public function percentageWiseList(){
-            $data['module']                 = $this->data;
-
-            $data['is_search']              = 0;
-            
-
-            $title                          = $this->data['title'].' Percentage Wise List';
-            $page_name                      = 'jobseeker.percentage-wise-list';
+            $page_name                      = 'ticket-category.list';
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
@@ -82,10 +58,10 @@ class JobseekerController extends Controller
                         UserActivity::insert($activityData);
                     /* user activity */
                     $fields = [
-                        'name'              => strip_tags($postData['name']),
-                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                        'name'         => strip_tags($postData['name']),
+                        'slug'         => Helper::clean(strip_tags($postData['name'])),
                     ];
-                    User::insert($fields);
+                    TicketCategory::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
                 } else {
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
@@ -93,7 +69,7 @@ class JobseekerController extends Controller
             }
             $data['module']                 = $this->data;
             $title                          = $this->data['title'].' Add';
-            $page_name                      = 'jobseeker.add-edit';
+            $page_name                      = 'ticket-category.add-edit';
             $data['row']                    = [];
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
@@ -104,8 +80,9 @@ class JobseekerController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $title                          = $this->data['title'].' Update';
-            $page_name                      = 'jobseeker.add-edit';
-            $data['row']                    = User::where('id', '=', $id)->first();
+            $page_name                      = 'ticket-category.add-edit';
+            $data['row']                    = TicketCategory::where($this->data['primary_key'], '=', $id)->first();
+
             if($request->isMethod('post')){
                 $postData = $request->all();
                 $rules = [
@@ -113,10 +90,10 @@ class JobseekerController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
-                        'name'              => strip_tags($postData['name']),
-                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                        'name'                  => strip_tags($postData['name']),
+                        'slug'                  => Helper::clean(strip_tags($postData['name'])),
                     ];
-                    User::where($this->data['primary_key'], '=', $id)->update($fields);
+                    TicketCategory::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
                         $activityData = [
                             'user_email'        => session('user_data')['email'],
@@ -141,12 +118,12 @@ class JobseekerController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = User::find($id);
+            $model                          = TicketCategory::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),
             ];
-            User::where($this->data['primary_key'], '=', $id)->update($fields);
+            TicketCategory::where($this->data['primary_key'], '=', $id)->update($fields);
             /* user activity */
                 $activityData = [
                     'user_email'        => session('user_data')['email'],
@@ -165,7 +142,7 @@ class JobseekerController extends Controller
     /* change status */
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
-            $model                          = User::find($id);
+            $model                          = TicketCategory::find($id);
             if ($model->status == 1)
             {
                 $model->status  = 0;
@@ -202,24 +179,4 @@ class JobseekerController extends Controller
             return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
-    /* profile */
-        public function profile(Request $request, $id){
-            $data['module']                 = $this->data;
-            $id                             = Helper::decoded($id);
-            $page_name                      = 'jobseeker.profile';
-            $data['id']                     = $id;
-            $data['row']                    = DB::table('users')
-                                                ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-                                                ->select('users.*', 'user_profiles.*')
-                                                ->where('users.id', '=', $id)
-                                                ->first();
-
-            $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
-            $phone                          = (($data['row'])?$data['row']->phone:'');
-            $title                          = $this->data['title'].' Profile : '.$name.' ('.$phone.')';
-            
-            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
-            return view('maincontents.' . $page_name, $data);
-        }
-    /* profile */
 }

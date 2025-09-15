@@ -55,6 +55,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\EmployerHomePageController;
+use App\Http\Controllers\TicketCategoryController;
+use App\Http\Controllers\TicketPriorityController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -426,6 +428,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('jobseeker/delete/{id}', [JobseekerController::class, 'delete']);
         Route::get('jobseeker/change-status/{id}', [JobseekerController::class, 'change_status']);
         Route::match(['get', 'post'], 'jobseeker/profile/{id}', [JobseekerController::class, 'profile']);
+        Route::match(['get', 'post'], 'jobseeker/percentage-wise-list', [JobseekerController::class, 'percentageWiseList']);
     /* jobseeker */
 
     /* home page */
@@ -476,6 +479,22 @@ Route::middleware(['auth'])->group(function () {
     /* reports */
         Route::get('reports/registration-count-report', [ReportController::class, 'registrationCountReport']);
     /* reports */
+    /* CRM */
+        /* ticket category */
+            Route::get('ticket-category/list', [TicketCategoryController::class, 'list']);
+            Route::match(['get', 'post'], 'ticket-category/add', [TicketCategoryController::class, 'add']);
+            Route::match(['get', 'post'], 'ticket-category/edit/{id}', [TicketCategoryController::class, 'edit']);
+            Route::get('ticket-category/delete/{id}', [TicketCategoryController::class, 'delete']);
+            Route::get('ticket-category/change-status/{id}', [TicketCategoryController::class, 'change_status']);
+        /* ticket category */
+        /* ticket priority */
+            Route::get('ticket-priority/list', [TicketPriorityController::class, 'list']);
+            Route::match(['get', 'post'], 'ticket-priority/add', [TicketPriorityController::class, 'add']);
+            Route::match(['get', 'post'], 'ticket-priority/edit/{id}', [TicketPriorityController::class, 'edit']);
+            Route::get('ticket-priority/delete/{id}', [TicketPriorityController::class, 'delete']);
+            Route::get('ticket-priority/change-status/{id}', [TicketPriorityController::class, 'change_status']);
+        /* ticket priority */
+    /* CRM */
     /* Employer Home Page */
         Route::match(['get', 'post'], 'employer-home-page/manage', [EmployerHomePageController::class, 'manage']);
     /* Employer Home Page */
