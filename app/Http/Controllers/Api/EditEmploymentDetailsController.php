@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
-use App\Models\User;
+use App\Models\Designation;
 use App\Models\Employer;
 use App\Models\UserEmployment;
 use App\Models\UserEmploymentSkill;
+use App\Models\Keyskill;
 
 class EditEmploymentDetailsController extends BaseApiController
 {
@@ -76,8 +77,9 @@ class EditEmploymentDetailsController extends BaseApiController
             'skills' => 'required|array',
             'working_since_from_year' => 'required',
             'working_since_from_month' => 'required',
-            'salary_currency' => 'required|integer',
-            'current_salary' => 'required|integer',
+            'disclosing_last_salary' => 'required_if:currently_employed,1|boolean',
+            // 'salary_currency' => 'required|integer',
+            // 'current_salary' => 'required|integer',
             'notice_period'=> 'required|integer',
         ]);
         if($request->is_current_job == 0){
@@ -98,8 +100,12 @@ class EditEmploymentDetailsController extends BaseApiController
             }
             $employer = new Employer();
             $employer_id = is_numeric($request->employer) ? $request->employer : $employer->getEmployerId($request->employer);
+
+            $designation = new Designation();
+            $designation_id = is_numeric($request->designation) ? $request->designation : $designation->getDesignationId($request->designation);
+
             UserEmployment::where('id', $id)->update([
-                'last_designation'=> $request->designation,
+                'last_designation'=> $designation_id,
                 'employer_id'=> $employer_id,
                 'is_current_job'=> $request->is_current_job,
                 'employment_type'=> $request->employment_type,
@@ -110,16 +116,19 @@ class EditEmploymentDetailsController extends BaseApiController
                 'working_since_to_month'=> $request->working_since_to_month,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
+                'disclosing_last_salary'=> $request->disclosing_last_salary,
                 'notice_period'=> $request->notice_period,
             ]);
             $this->calculate_profile_completed_percentage(auth()->user()->id, 'employment-details'); //Employment details completes
             if(!empty($request->skills)){
+                $keyskillObj = new Keyskill();
                 UserEmploymentSkill::where('user_employment_id', $id)->delete();
                 foreach($request->skills as $skill){
+                    $keyskill_id = is_numeric($skill) ? $skill : $keyskillObj->getDesignationId($skill);
                     UserEmploymentSkill::create([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
-                        'keyskill_id'=> $skill,
+                        'keyskill_id'=> $keyskill_id,
                     ]);
                 }
             }
@@ -144,8 +153,8 @@ class EditEmploymentDetailsController extends BaseApiController
             'skills' => 'required|array',
             'working_since_from_year' => 'required',
             'working_since_from_month' => 'required',
-            'salary_currency' => 'required|integer',
-            'current_salary' => 'required|integer',
+            // 'salary_currency' => 'required|integer',
+            // 'current_salary' => 'required|integer',
             'notice_period'=> 'required|integer',
         ]);
         if($request->is_current_job == 0){
@@ -166,9 +175,13 @@ class EditEmploymentDetailsController extends BaseApiController
             }
             $employer = new Employer();
             $employer_id = is_numeric($request->employer) ? $request->employer : $employer->getEmployerId($request->employer);
+
+            $designation = new Designation();
+            $designation_id = is_numeric($request->designation) ? $request->designation : $designation->getDesignationId($request->designation);
+
             $employment_id = UserEmployment::insertGetId([
                 'user_id'=> auth()->user()->id,
-                'last_designation'=> $request->designation,
+                'last_designation'=> $designation_id,
                 'employer_id'=> $employer_id,
                 'is_current_job'=> $request->is_current_job,
                 'employment_type'=> $request->employment_type,
@@ -179,17 +192,20 @@ class EditEmploymentDetailsController extends BaseApiController
                 'working_since_to_month'=> $request->is_current_job == 0 ? $request->working_since_to_month : 0,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
+                'disclosing_last_salary'=> $request->disclosing_last_salary,
                 'notice_period'=> $request->notice_period,
                 'created_at'=> date('Y-m-d h:i:s')
             ]);
             if($employment_id){
                 $this->calculate_profile_completed_percentage(auth()->user()->id, 'employment-details'); //Employment details completes
                 if(!empty($request->skills)){
+                    $keyskillObj = new Keyskill();
                     foreach($request->skills as $skill){
+                        $keyskill_id = is_numeric($skill) ? $skill : $keyskillObj->getDesignationId($skill);
                         UserEmploymentSkill::create([
                             'user_id'=> auth()->user()->id,
                             'user_employment_id'=> $employment_id,
-                            'keyskill_id'=> $skill,
+                            'keyskill_id'=> $keyskill_id,
                         ]);
                     }
 

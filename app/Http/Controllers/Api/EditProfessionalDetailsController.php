@@ -14,7 +14,7 @@ use App\Models\UserEmployment;
 use App\Models\UserSkill;
 use App\Models\ProfileComplete;
 use App\Models\UserProfileCompletedPercentage;
-use App\Models\UserEmploymentSkill;
+use App\Models\Keyskill;
 use App\Models\UserEmploymentIndustry;
 use App\Models\UserEmploymentFunctionalArea;
 use App\Models\UserEmploymentParkBenefit;
@@ -87,11 +87,13 @@ class EditProfessionalDetailsController extends BaseApiController
         }
         try {
             if(!empty($request->keyskills)){
+                $keyskillObj = new Keyskill();
                 UserSkill::where('user_id', auth()->user()->id)->delete();
                 foreach($request->keyskills as $keyskill){
+                    $keyskill_id = is_numeric($keyskill) ? $keyskill : $keyskillObj->getDesignationId($keyskill);
                     UserSkill::create([
                         'user_id'=> auth()->user()->id,
-                        'keyskill_id'=> $keyskill,
+                        'keyskill_id'=> $keyskill_id,
                         'proficiency_level' => 'Beginner',
                         'is_primary'=> 1
                     ]);
@@ -266,8 +268,9 @@ class EditProfessionalDetailsController extends BaseApiController
             'industry' => 'required|array',
             'functional_area' => 'required|array',
             'work_level' => 'required|integer',
-            'salary_currency' => 'required|integer',
-            'current_salary' => 'required|integer',
+            'disclosing_last_salary' => 'required_if:currently_employed,1|boolean',
+            // 'salary_currency' => 'required|integer',
+            // 'current_salary' => 'required|integer',
             'perk_benefits' => 'required|array'
         ]);
 
@@ -283,6 +286,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'work_level'=> $request->work_level,
                     'currency_id'=> $request->salary_currency,
                     'current_salary'=> $request->current_salary,
+                    'disclosing_last_salary'=> $request->disclosing_last_salary,
                     'is_current_job'=> 1,
                 ]);
             }else{
@@ -293,6 +297,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'work_level'=> $request->work_level,
                     'currency_id'=> $request->salary_currency,
                     'current_salary'=> $request->current_salary,
+                    'disclosing_last_salary'=> $request->disclosing_last_salary,
                     'is_current_job'=> 1,
                     'created_at'=> date('Y-m-d h:i:s')
                 ]);

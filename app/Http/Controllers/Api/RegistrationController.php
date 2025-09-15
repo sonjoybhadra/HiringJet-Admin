@@ -32,6 +32,7 @@ use App\Models\Language;
 use App\Models\University;
 use App\Models\Course;
 use App\Models\Employer;
+use App\Models\Keyskill;
 use App\Models\Specialization;
 
 class RegistrationController extends BaseApiController
@@ -248,8 +249,9 @@ class RegistrationController extends BaseApiController
             'working_since_from_month' => 'required_if:currently_employed,1',
             'working_since_to_year' => 'required_if:currently_employed,1',
             'working_since_to_month' => 'required_if:currently_employed,1',
-            'salary_currency' => 'required_if:currently_employed,1|integer',
-            'current_salary' => 'required_if:currently_employed,1|integer',
+            'disclosing_last_salary' => 'required_if:currently_employed,1|boolean',
+            //'salary_currency' => 'required_if:currently_employed,1|integer',
+            //'current_salary' => 'required_if:currently_employed,1|integer',
 
             'keyskills'=> 'nullable|required|array',
 
@@ -320,6 +322,7 @@ class RegistrationController extends BaseApiController
                     'city_id'=> $request->employer_city,
                     'currency_id'=> $request->salary_currency,
                     'current_salary'=> $request->current_salary,
+                    'disclosing_last_salary'=> $request->disclosing_last_salary,
                     'working_since_from_year'=> $request->working_since_from_year,
                     'working_since_from_month'=> $request->working_since_from_month,
                     'working_since_to_year'=> $request->working_since_to_year,
@@ -350,11 +353,13 @@ class RegistrationController extends BaseApiController
             }
 
             if(!empty($request->keyskills)){
+                $keyskillObj = new Keyskill();
                 UserSkill::where('user_id', $user->id)->delete();
                 foreach($request->keyskills as $keyskill){
+                    $keyskill_id = is_numeric($keyskill) ? $keyskill : $keyskillObj->getDesignationId($keyskill);
                     UserSkill::create([
                         'user_id'=> $user->id,
-                        'keyskill_id'=> $keyskill,
+                        'keyskill_id'=> $keyskill_id,
                         'proficiency_level' => 'Beginner',
                         'is_primary'=> 1
                     ]);
