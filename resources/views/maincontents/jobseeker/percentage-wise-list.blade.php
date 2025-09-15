@@ -118,7 +118,9 @@ $controllerRoute = $module['controller_route'];
                                 <?php } ?>
                             </tbody>
                         </table>
-                    <?php } ?>
+                    <?php } else {?>
+                        <p style="text-align: center; color:red;">No jobseekers available !!!</p>
+                    <?php }?>
                 </div>
             </div>
         </div>
