@@ -31,7 +31,7 @@ $controllerRoute = $module['controller_route'];
             <?php } ?>
             <div class="card mb-4">
                 <div class="card-header">
-                    <form method="POST" action="">
+                    <form method="GET" action="">
                         @csrf
                         <input type="hidden" name="mode" value="search">
                         <div class="row">
