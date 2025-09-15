@@ -69,7 +69,38 @@ $controllerRoute = $module['controller_route'];
                     </form>
                 </div>
                 <div class="card-body">
-
+                    <?php if($response){?>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Country Code</th>
+                                    <th>Phone</th>
+                                    <th>Profile Complete (%)</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $sl_no = 1; foreach($response as $row){?>
+                                    <tr>
+                                        <td><?=$sl_no++?></td>
+                                        <td><?=$row['first_name']?></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                <?php }?>
+                            </tbody>
+                        </table>
+                    <?php }?>
                 </div>
             </div>
         </div>
