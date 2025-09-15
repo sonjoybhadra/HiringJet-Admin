@@ -241,7 +241,7 @@ class RegistrationController extends BaseApiController
             'currently_employed' => 'required|in:1,0',//yes/no
             'total_experience_years' => 'required_if:currently_employed,1',
             'total_experience_months' => 'required_if:currently_employed,1',
-            'last_designation' => 'required_if:currently_employed,1|string',
+            'last_designation' => 'required_if:currently_employed,1',
             'last_employer' => 'required_if:currently_employed,1|string',
             // 'last_employer_location' => 'required_if:currently_employed,1|string',
             'working_since_from_year' => 'required_if:currently_employed,1',
@@ -305,12 +305,16 @@ class RegistrationController extends BaseApiController
             if($request->currently_employed == 1){
                 $employer = new Employer();
                 $employer_id = is_numeric($request->last_employer) ? $request->last_employer : $employer->getEmployerId($request->last_employer);
+
+                $designation = new Designation();
+                $designation_id = is_numeric($request->last_designation) ? $request->last_designation : $designation->getDesignationId($request->last_designation);
+
                 UserEmployment::where('user_id', $user->id)->delete();
                 UserEmployment::create([
                     'user_id'=> $user->id,
                     'total_experience_years'=> $request->total_experience_years,
                     'total_experience_months'=> $request->total_experience_months,
-                    'last_designation'=> $request->last_designation,
+                    'last_designation'=> $designation_id,
                     'employer_id'=> $employer_id,
                     'country_id'=> $request->employer_country,
                     'city_id'=> $request->employer_city,
