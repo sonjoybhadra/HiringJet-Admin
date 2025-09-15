@@ -722,7 +722,7 @@ $role_id = (($user)?$user->role_id:0);
       <ul class="menu-sub">
         <?php if(in_array(17, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'ticket-category')?'active':'')?>">
-            <a href="<?=url('/reports/ticket-category/')?>" class="menu-link">
+            <a href="<?=url('/ticket-category/list/')?>" class="menu-link">
               <div data-i18n="Ticket Category"><i class="fa-solid fa-arrow-right"></i> Ticket Category</div>
             </a>
           </li>
@@ -730,7 +730,7 @@ $role_id = (($user)?$user->role_id:0);
 
         <?php if(in_array(17, $moduleIds)){?>
           <li class="menu-item <?=(($pageSegment == 'ticket-priority')?'active':'')?>">
-            <a href="<?=url('/reports/ticket-priority/')?>" class="menu-link">
+            <a href="<?=url('/ticket-priority/list/')?>" class="menu-link">
               <div data-i18n="Ticket Priority"><i class="fa-solid fa-arrow-right"></i> Ticket Priority</div>
             </a>
           </li>
