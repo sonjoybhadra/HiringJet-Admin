@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\JobCategory;
 use App\Models\Industry;
@@ -155,7 +157,12 @@ class CommonController extends BaseApiController
 
     public function get_country($res = '')
     {
-        $list = Country::select('id', 'name', 'country_code', 'country_flag', 'country_short_code')->where('status', 1)->get();
+        $list = Country::select('id', 'name', 'country_code', 'country_flag', 'country_short_code')
+                        ->where('status', 1)
+                        ->get()->map(function($item) {
+                            $item->name = Str::ucfirst($item->name);
+                            return $item;
+                        });
         if($res != ''){
             return $list;
         }else{
