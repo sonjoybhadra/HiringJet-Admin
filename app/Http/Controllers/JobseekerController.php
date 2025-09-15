@@ -59,7 +59,6 @@ class JobseekerController extends Controller
             if($request->isMethod('get')){
                 if($request->mode == 'search'){
                     $postData                   = $request->all();
-                    Helper::pr($postData);
                     $percentage_slot            = $postData['percentage_slot'];
                     $slots                      = explode('-', $percentage_slot);
                     $status                     = $postData['status'];
