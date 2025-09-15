@@ -89,13 +89,15 @@ $controllerRoute = $module['controller_route'];
                                     <tr>
                                         <td><?=$sl_no++?></td>
                                         <td><?=$row['first_name']?></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><?=$row['last_name']?></td>
+                                        <td><?=$row['email']?></td>
+                                        <td><?=$row['country_code']?></td>
+                                        <td><?=$row['phone']?></td>
+                                        <td><?=$row['created_at']?></td>
+                                        <td><?=$row['profile_completed_percentage']?></td>
+                                        <td>
+                                            
+                                        </td>
                                     </tr>
                                 <?php }?>
                             </tbody>
