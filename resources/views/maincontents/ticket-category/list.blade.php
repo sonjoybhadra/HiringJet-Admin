@@ -42,13 +42,13 @@ $controllerRoute = $module['controller_route'];
                 'columns' => ['name', 'created_at', 'status'],
                 'visibleColumns' => ['name', 'created_at'],    // used for rendering
                 'headers' => ['#', 'Name', 'Created At'],
-                'filename' => "Module",
+                'filename' => "TicketCategory",
                 'orderBy' => 'id',
                 'orderType' => 'desc',
                 'conditions' => [
                     ['column' => 'status', 'operator' => '!=', 'value' => 3]
                 ],
-                'routePrefix' => 'module',
+                'routePrefix' => 'ticket-category',
                 'showActions' => true, // set to false to hide actions
                 'statusColumn' => 'status' // optional, defaults to 'is_active'
                 ])
