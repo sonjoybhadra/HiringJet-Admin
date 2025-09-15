@@ -48,11 +48,68 @@ class JobseekerController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
-        public function percentageWiseList(){
+        public function percentageWiseList(Request $request){
             $data['module']                 = $this->data;
 
             $data['is_search']              = 0;
-            
+            $data['percentage_slot']        = '';
+            $data['status']                 = 'all';
+            $data['response']               = [];
+
+            if($request->isMethod('get')){
+                if($request->mode == 'search'){
+                    $postData                   = $request->all();
+                    $percentage_slot            = $postData['percentage_slot'];
+                    $slots                      = explode('-', $percentage_slot);
+                    $status                     = $postData['status'];
+
+                    $data['is_search']          = 1;
+                    $data['percentage_slot']    = $percentage_slot;
+                    $data['status']             = $status;
+
+                    $percentage_slot_start     = $slots[0];
+                    $percentage_slot_end       = $slots[1];
+
+                    $response                   = [];
+                    if($status == 'all'){
+                        $results = DB::table('users')
+                                                    ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
+                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage')
+                                                    ->where('users.status', '!=', 3)
+                                                    ->where('users.role_id', '=', 3)
+                                                    ->where('user_profiles.profile_completed_percentage', '>=', $percentage_slot_start)
+                                                    ->where('user_profiles.profile_completed_percentage', '<=', $percentage_slot_end)
+                                                    ->orderBy('users.id', 'DESC')
+                                                    ->get();
+                    } else {
+                        $results = DB::table('users')
+                                                    ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
+                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage')
+                                                    ->where('users.status', '=', $status)
+                                                    ->where('users.role_id', '=', 3)
+                                                    ->where('user_profiles.profile_completed_percentage', '>=', $percentage_slot_start)
+                                                    ->where('user_profiles.profile_completed_percentage', '<=', $percentage_slot_end)
+                                                    ->orderBy('users.id', 'DESC')
+                                                    ->get();
+                    }
+
+                    if($results){
+                        foreach($results as $result){
+                            $response[]                   = [
+                                'id'                                => $result->id,
+                                'first_name'                        => $result->first_name,
+                                'last_name'                         => $result->last_name,
+                                'email'                             => $result->email,
+                                'country_code'                      => $result->country_code,
+                                'phone'                             => $result->phone,
+                                'created_at'                        => $result->created_at,
+                                'profile_completed_percentage'      => $result->profile_completed_percentage,
+                            ];
+                        }
+                    }
+                    Helper::pr($response);
+                }
+            }
 
             $title                          = $this->data['title'].' Percentage Wise List';
             $page_name                      = 'jobseeker.percentage-wise-list';
