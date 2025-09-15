@@ -712,6 +712,33 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
 
+  <?php if(in_array(17, $moduleIds)){?>
+    <!-- CRM -->
+    <li class="menu-item active <?=(($pageSegment == 'ticket-category' || $pageSegment == 'ticket-priority')?'open':'')?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon fa-solid fa-chart-line"></i>
+        <div data-i18n="CRM">CRM</div>
+      </a>
+      <ul class="menu-sub">
+        <?php if(in_array(17, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'ticket-category')?'active':'')?>">
+            <a href="<?=url('/reports/ticket-category/')?>" class="menu-link">
+              <div data-i18n="Ticket Category"><i class="fa-solid fa-arrow-right"></i> Ticket Category</div>
+            </a>
+          </li>
+        <?php }?>
+
+        <?php if(in_array(17, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'ticket-priority')?'active':'')?>">
+            <a href="<?=url('/reports/ticket-priority/')?>" class="menu-link">
+              <div data-i18n="Ticket Priority"><i class="fa-solid fa-arrow-right"></i> Ticket Priority</div>
+            </a>
+          </li>
+        <?php }?>
+      </ul>
+    </li>
+  <?php }?>
+
   <?php if(in_array(20, $moduleIds)){?>
     <!-- Settings -->
     <li class="menu-item <?=(($pageSegment == 'settings')?'active':'')?>">
