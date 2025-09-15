@@ -73,6 +73,9 @@ $controllerRoute = $module['controller_route'];
                         <table class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th colspan="9" style="text-align: center; color:blue; font-weight: bold;"><?=count($response)?> jobseekers available</th>
+                                </tr>
+                                <tr>
                                     <th>#</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
