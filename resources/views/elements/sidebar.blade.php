@@ -571,6 +571,13 @@ $role_id = (($user)?$user->role_id:0);
             <div data-i18n="All"><i class="fa-solid fa-arrow-right"></i> All</div>
           </a>
         </li>
+
+        <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'percentage-wise-list')?'active':'')?>">
+          <a href="<?=url('/jobseeker/percentage-wise-list/')?>" class="menu-link">
+            <div data-i18n="Percentage Wise List"><i class="fa-solid fa-arrow-right"></i> Percentage Wise List</div>
+          </a>
+        </li>
+
         <?php
         if($pageFunction == 'profile-complete-list'){
           $url_break      = explode("profile-complete-list/", $url);
@@ -581,11 +588,11 @@ $role_id = (($user)?$user->role_id:0);
         $profile_completes = ProfileComplete::select('id', 'name')->where('status', '=', 1)->orderBy('id', 'ASC')->get();
         if($profile_completes){ foreach($profile_completes as $profile_complete){
         ?>
-          <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list' && $pageParam == Helper::encoded($profile_complete->id))?'active':'')?>">
+          <!-- <li class="menu-item <?=(($pageSegment == 'jobseeker' && $pageFunction == 'profile-complete-list' && $pageParam == Helper::encoded($profile_complete->id))?'active':'')?>">
             <a href="<?=url('/jobseeker/profile-complete-list/' . Helper::encoded($profile_complete->id))?>" class="menu-link">
               <div data-i18n="<?=$profile_complete->name?>"><i class="fa-solid fa-arrow-right"></i> <?=$profile_complete->name?></div>
             </a>
-          </li>
+          </li> -->
         <?php } }?>        
       </ul>
     </li>

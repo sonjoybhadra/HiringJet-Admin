@@ -48,6 +48,17 @@ class JobseekerController extends Controller
             $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
             return view('maincontents.' . $page_name, $data);
         }
+        public function percentageWiseList(){
+            $data['module']                 = $this->data;
+
+            $data['is_search']              = 0;
+            
+
+            $title                          = $this->data['title'].' Percentage Wise List';
+            $page_name                      = 'jobseeker.percentage-wise-list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
     /* list */
     /* add */
         public function add(Request $request){

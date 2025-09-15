@@ -428,6 +428,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('jobseeker/delete/{id}', [JobseekerController::class, 'delete']);
         Route::get('jobseeker/change-status/{id}', [JobseekerController::class, 'change_status']);
         Route::match(['get', 'post'], 'jobseeker/profile/{id}', [JobseekerController::class, 'profile']);
+        Route::match(['get', 'post'], 'jobseeker/percentage-wise-list', [JobseekerController::class, 'percentageWiseList']);
     /* jobseeker */
 
     /* home page */
