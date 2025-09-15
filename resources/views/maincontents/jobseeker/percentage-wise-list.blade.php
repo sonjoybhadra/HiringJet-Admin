@@ -57,7 +57,7 @@ $controllerRoute = $module['controller_route'];
                                     <option value="0">Inactive</option>
                                 </select>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-2" style="margin-top: 23px;">
                                 <button type="submit" class="btn btn-primary btn-sm me-2">Save Changes</button>
                                 <?php if ($is_search) { ?>
                                     <a href="<?= url($controllerRoute . '/percentage-wise-list/') ?>" class="btn btn-label-secondary btn-sm">Reset</a>
