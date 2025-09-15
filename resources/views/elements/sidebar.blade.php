@@ -716,7 +716,7 @@ $role_id = (($user)?$user->role_id:0);
     <!-- CRM -->
     <li class="menu-item active <?=(($pageSegment == 'ticket-category' || $pageSegment == 'ticket-priority')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class="menu-icon fa-solid fa-chart-line"></i>
+        <i class="menu-icon fa-solid fa-handshake"></i>
         <div data-i18n="CRM">CRM</div>
       </a>
       <ul class="menu-sub">
