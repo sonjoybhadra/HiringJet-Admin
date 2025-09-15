@@ -74,7 +74,7 @@ class JobseekerController extends Controller
                     if($status == 'all'){
                         $results = DB::table('users')
                                                     ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage')
+                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage', 'users.status')
                                                     ->where('users.status', '!=', 3)
                                                     ->where('users.role_id', '=', 3)
                                                     ->where('user_profiles.profile_completed_percentage', '>=', $percentage_slot_start)
@@ -84,7 +84,7 @@ class JobseekerController extends Controller
                     } else {
                         $results = DB::table('users')
                                                     ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage')
+                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage', 'users.status')
                                                     ->where('users.status', '=', $status)
                                                     ->where('users.role_id', '=', 3)
                                                     ->where('user_profiles.profile_completed_percentage', '>=', $percentage_slot_start)
