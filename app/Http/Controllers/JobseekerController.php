@@ -103,6 +103,7 @@ class JobseekerController extends Controller
                                 'country_code'                      => $result->country_code,
                                 'phone'                             => $result->phone,
                                 'created_at'                        => $result->created_at,
+                                'status'                            => $result->status,
                                 'profile_completed_percentage'      => $result->profile_completed_percentage,
                             ];
                         }
