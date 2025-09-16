@@ -124,7 +124,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 $keyskillObj = new Keyskill();
                 UserEmploymentSkill::where('user_employment_id', $id)->delete();
                 foreach($request->skills as $skill){
-                    $keyskill_id = is_numeric($skill) ? $skill : $keyskillObj->getDesignationId($skill);
+                    $keyskill_id = is_numeric($skill) ? $skill : $keyskillObj->getKeyskillsId($skill);
                     UserEmploymentSkill::create([
                         'user_id'=> auth()->user()->id,
                         'user_employment_id'=> $id,
@@ -201,7 +201,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 if(!empty($request->skills)){
                     $keyskillObj = new Keyskill();
                     foreach($request->skills as $skill){
-                        $keyskill_id = is_numeric($skill) ? $skill : $keyskillObj->getDesignationId($skill);
+                        $keyskill_id = is_numeric($skill) ? $skill : $keyskillObj->getKeyskillsId($skill);
                         UserEmploymentSkill::create([
                             'user_id'=> auth()->user()->id,
                             'user_employment_id'=> $employment_id,

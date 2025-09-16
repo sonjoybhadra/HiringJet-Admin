@@ -90,7 +90,7 @@ class EditProfessionalDetailsController extends BaseApiController
                 $keyskillObj = new Keyskill();
                 UserSkill::where('user_id', auth()->user()->id)->delete();
                 foreach($request->keyskills as $keyskill){
-                    $keyskill_id = is_numeric($keyskill) ? $keyskill : $keyskillObj->getDesignationId($keyskill);
+                    $keyskill_id = is_numeric($keyskill) ? $keyskill : $keyskillObj->getKeyskillsId($keyskill);
                     UserSkill::create([
                         'user_id'=> auth()->user()->id,
                         'keyskill_id'=> $keyskill_id,
