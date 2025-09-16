@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Mail\RegistrationSuccess;
 use App\Models\User;
 use App\Models\UserEmployer;
 use App\Models\Employer;
@@ -112,6 +113,12 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $token = JWTAuth::fromUser($user);
                 // Set guard to "api" for the current request
                 auth()->setUser($user);
+                /**
+                    * add token to check is token expired or changed
+                */
+                User::find($user_id)->update([
+                    'auth_token'=> $token
+                ]);
                 return $this->sendResponse([
                     'token_type' => 'bearer',
                     'token' => $token,
