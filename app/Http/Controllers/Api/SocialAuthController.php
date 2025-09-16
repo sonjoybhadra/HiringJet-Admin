@@ -646,6 +646,13 @@ class SocialAuthController extends BaseApiController
                 'user_email' => $user->email,
             ]);
 
+            /**
+                * add token to check is token expired or changed
+            */
+            User::find($user->id)->update([
+                'auth_token'=> $token
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => ucfirst($provider) . ' login successful',

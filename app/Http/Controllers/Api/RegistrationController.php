@@ -226,6 +226,12 @@ class RegistrationController extends BaseApiController
         $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
         Mail::to($user->email)->send(new RegistrationSuccess($user->email, $full_name, $message));
 
+        /**
+            * add token to check is token expired or changed
+        */
+        User::find($user->id)->update([
+            'auth_token'=> $token
+        ]);
         return $this->sendResponse([
             'token_type' => 'bearer',
             'token' => $token,

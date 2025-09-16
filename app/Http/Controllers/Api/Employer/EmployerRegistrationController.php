@@ -84,7 +84,7 @@ class EmployerRegistrationController extends BaseApiController
                 'status'=> 0,
                 'remember_token' => $otp_mail_hash,
                 'email_verified_at' => date('Y-m-d H:i:s', strtotime('+'.$this->otp_validation_time.' minutes')),
-                'emp_reg_type' => 1,                
+                'emp_reg_type' => 1,
                 'created_at'=> date('Y-m-d h:i:s')
             ]);
 
@@ -205,7 +205,12 @@ class EmployerRegistrationController extends BaseApiController
         $full_name = $user->first_name.' '.$user->last_name;
         $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
         Mail::to($user->email)->send(new RegistrationSuccess($user->email, $full_name, $message));
-
+        /**
+            * add token to check is token expired or changed
+        */
+        User::find($user->id)->update([
+            'auth_token'=> $token
+        ]);
         return $this->sendResponse([
             'token_type' => 'bearer',
             'token' => $token,
