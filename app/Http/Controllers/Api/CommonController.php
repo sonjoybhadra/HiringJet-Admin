@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\CountryResource;
 use App\Models\JobCategory;
 use App\Models\Industry;
 use App\Models\Designation;
@@ -159,15 +160,12 @@ class CommonController extends BaseApiController
     {
         $list = Country::select('id', 'name', 'country_code', 'country_flag', 'country_short_code')
                         ->where('status', 1)
-                        ->get()->map(function($item) {
-                            $item->name = Str::ucfirst($item->name);
-                            return $item;
-                        });
+                        ->get();
         if($res != ''){
-            return $list;
+            return CountryResource::collection($list);
         }else{
             return $this->sendResponse(
-                    $list,
+                    CountryResource::collection($list),
                     'Data list.'
                 );
         }
