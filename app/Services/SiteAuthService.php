@@ -149,6 +149,17 @@ class SiteAuthService
             return $return_array;
         }
     }
+    public function commonFileUpload($folder, $file, $type = 'image')
+    {
+        if (!$file) {
+            return null;
+        }
+
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('uploads/' . $folder), $filename);
+
+        return $filename; // returns only the filename, not full path
+    }
     // multiple files upload
     public function commonFileArrayUpload($path = '', $images = array(), $uploadType = '')
     {

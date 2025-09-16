@@ -116,34 +116,39 @@ class EmployerHomePageController extends Controller
                     /* section5_image3 */                    
 
                     /* Section 2 images */
-                        $section2_box_text = array_values(array_filter($postData['section2_box_text'], function($value) {
-                            return !(is_null($value) || $value === '');
-                        }));
-                        $section2_box_link = array_values(array_filter($postData['section2_box_link'], function($value) {
-                            return !(is_null($value) || $value === '');
-                        }));
+                        $section2_box_text = array_values(array_filter($postData['section2_box_text'], function($value) { return !(is_null($value) || $value === ''); })); $section2_box_link = array_values(array_filter($postData['section2_box_link'], function($value) { return !(is_null($value) || $value === ''); }));
 
-                        $image_array            = $request->file('section2_box_image');
-                        if(!empty($image_array)){
-                            $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array, 'image');
-                            if(!empty($uploadedFile)){
-                                $images    = $uploadedFile;
-                            } else {
-                                $images    = [];
-                            }
-                        }
+                        $image_array = $request->file('section2_box_image');
                         $image_link2 = [];
-                        if(!empty($images)){
-                            for($i=0;$i<count($images);$i++){
-                                $image_link2[] = '/uploads/'.'home-page/'.$images[$i];
-                            }
-                        } else {
 
-                            $image_link2 = array_map(function($item) {
+                        // Get existing images from DB (convert to array of strings)
+                        $existingImages = [];
+                        if (!empty($section2_db->box)) {
+                            $existingImages = array_map(function ($item) {
                                 return $item->box_image;
                             }, $section2_db->box);
                         }
+
+                        // Loop through all repeater rows (based on text/link count)
+                        $totalBoxes = max(
+                            count($postData['section2_box_name'] ?? []),
+                            count($postData['section2_box_link'] ?? []),
+                            count($image_array ?? []),
+                            count($existingImages)
+                        );
+
+                        for ($i = 0; $i < $totalBoxes; $i++) {
+                            if (!empty($image_array[$i])) {
+                                // If new image uploaded → upload & replace
+                                $uploaded = $this->siteAuthService->commonFileUpload('home-page', $image_array[$i], 'image');
+                                $image_link2[$i] = '/uploads/home-page/' . $uploaded;
+                            } else {
+                                // Otherwise keep old image (if exists) or null
+                                $image_link2[$i] = $existingImages[$i] ?? null;
+                            }
+                        }
                     /* Section 2 images */
+
                     /* Section 3 images */
                         $section3_box_text = array_values(array_filter($postData['section3_box_text'], function($value) {
                             return !(is_null($value) || $value === '');
@@ -164,25 +169,38 @@ class EmployerHomePageController extends Controller
                             return !(is_null($value) || $value === '');
                         }));
 
-                        $image_array3            = $request->file('section3_box_image');
-                        if(!empty($image_array3)){
-                            $uploadedFile       = $this->siteAuthService->commonFileArrayUpload('home-page', $image_array3, 'image');
-                            if(!empty($uploadedFile)){
-                                $images3    = $uploadedFile;
-                            } else {
-                                $images3    = [];
-                            }
-                        }
+                        $image_array = $request->file('section3_box_image');
                         $image_link3 = [];
-                        if(!empty($images3)){
-                            for($i=0;$i<count($images3);$i++){
-                                $image_link3[] = '/uploads/'.'home-page/'.$images3[$i];
-                            }
-                        } else {
 
-                            $image_link3 = array_map(function($item) {
+                        // Get existing images from DB (convert to array of strings)
+                        $existingImages = [];
+                        if (!empty($section3_db->box)) {
+                            $existingImages = array_map(function ($item) {
                                 return $item->box_image;
                             }, $section3_db->box);
+                        }
+
+                        // Loop through all repeater rows (based on text/link count)
+                        $totalBoxes = max(
+                            count($postData['section3_box_text'] ?? []),
+                            count($postData['section3_box_description'] ?? []),
+                            count($postData['section3_box_button1_text'] ?? []),
+                            count($postData['section3_box_button1_link'] ?? []),
+                            count($postData['section3_box_button2_text'] ?? []),
+                            count($postData['section3_box_button2_link'] ?? []),
+                            count($image_array ?? []),
+                            count($existingImages)
+                        );
+
+                        for ($i = 0; $i < $totalBoxes; $i++) {
+                            if (!empty($image_array[$i])) {
+                                // If new image uploaded → upload & replace
+                                $uploaded = $this->siteAuthService->commonFileUpload('home-page', $image_array[$i], 'image');
+                                $image_link3[$i] = '/uploads/home-page/' . $uploaded;
+                            } else {
+                                // Otherwise keep old image (if exists) or null
+                                $image_link3[$i] = $existingImages[$i] ?? null;
+                            }
                         }
                     /* Section 3 images */
 
