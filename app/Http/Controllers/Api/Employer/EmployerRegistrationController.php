@@ -49,7 +49,7 @@ class EmployerRegistrationController extends BaseApiController
             // 'business_id' => 'required',
             'designation_id' => 'required|integer',
             ],[
-                'email.unique'=> 'This email address is already registered.',
+                'email.unique'=> 'The email is already registered. Please try to Login or use Forgot Password to reset the password.',
                 'phone.unique'=> 'This phone is already registered.'
             ]
         );

@@ -67,7 +67,7 @@ class RegistrationController extends BaseApiController
             'is_experienced' => 'required|boolean',//yes/no
             'cv' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
             ],[
-                'email.unique'=> 'This email address is already registered.',
+                'email.unique'=> 'The email is already registered. Please try to Login or use Forgot Password to reset the password.',
                 'phone.unique'=> 'This phone is already registered.'
             ]
         );
