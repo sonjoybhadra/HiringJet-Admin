@@ -289,10 +289,10 @@ $controllerRoute = $module['controller_route'];
                                         if (!empty($row)) {
                                             $pageLink = Request::url();
                                         ?>
-                                            <a href="<?= url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image1/id/' . 1) ?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                            <!-- <a href="<?= url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image1/id/' . 1) ?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
                                                 <i class="bx bx-reset d-block d-sm-none"></i>
                                                 <span class="d-none d-sm-block">Reset</span>
-                                            </a>
+                                            </a> -->
                                         <?php } ?>
                                         <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
                                     </div>
@@ -313,10 +313,10 @@ $controllerRoute = $module['controller_route'];
                                         if (!empty($row)) {
                                             $pageLink = Request::url();
                                         ?>
-                                            <a href="<?= url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image2/id/' . 1) ?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                            <!-- <a href="<?= url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image2/id/' . 1) ?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
                                                 <i class="bx bx-reset d-block d-sm-none"></i>
                                                 <span class="d-none d-sm-block">Reset</span>
-                                            </a>
+                                            </a> -->
                                         <?php } ?>
                                         <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
                                     </div>
@@ -337,10 +337,10 @@ $controllerRoute = $module['controller_route'];
                                         if (!empty($row)) {
                                             $pageLink = Request::url();
                                         ?>
-                                            <a href="<?= url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image3/id/' . 1) ?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                            <!-- <a href="<?= url('common-delete-image/' . Helper::encoded($pageLink) . '/home_pages/section5_image3/id/' . 1) ?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
                                                 <i class="bx bx-reset d-block d-sm-none"></i>
                                                 <span class="d-none d-sm-block">Reset</span>
-                                            </a>
+                                            </a> -->
                                         <?php } ?>
                                         <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
                                     </div>
