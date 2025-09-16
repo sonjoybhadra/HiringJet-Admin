@@ -16,7 +16,7 @@ class CountryResource extends JsonResource
     {
         return [
             'id'                 => $this->id,
-            'name'               => ucwords($this->name), // Capitalize first letter of each word
+            'name'               => ucwords(strtolower($this->name)), // Capitalize first letter of each word
             'country_code'       => $this->country_code,
             'country_flag'       => $this->country_flag,
             'country_short_code' => $this->country_short_code,
