@@ -66,7 +66,11 @@ class RegistrationController extends BaseApiController
             'c_password' => 'required|same:password',
             'is_experienced' => 'required|boolean',//yes/no
             'cv' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
-        ]);
+            ],[
+                'email.unique'=> 'This email address is already registered.',
+                'phone.unique'=> 'This phone is already registered.'
+            ]
+        );
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);

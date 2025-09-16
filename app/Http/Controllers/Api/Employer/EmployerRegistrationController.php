@@ -48,7 +48,11 @@ class EmployerRegistrationController extends BaseApiController
             'c_password' => 'required|same:password',
             // 'business_id' => 'required',
             'designation_id' => 'required|integer',
-        ]);
+            ],[
+                'email.unique'=> 'This email address is already registered.',
+                'phone.unique'=> 'This phone is already registered.'
+            ]
+        );
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
