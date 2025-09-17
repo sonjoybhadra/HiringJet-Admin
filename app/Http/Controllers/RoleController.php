@@ -62,6 +62,7 @@ class RoleController extends Controller
                     $fields = [
                         'role_name'         => strip_tags($postData['role_name']),
                         'module_id'         => ((!empty($postData['module_id']))?json_encode($postData['module_id']):''),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Role::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -95,6 +96,7 @@ class RoleController extends Controller
                     $fields = [
                         'role_name'         => strip_tags($postData['role_name']),
                         'module_id'         => ((!empty($postData['module_id']))?json_encode($postData['module_id']):''),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Role::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
