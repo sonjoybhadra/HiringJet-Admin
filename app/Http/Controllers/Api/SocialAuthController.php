@@ -837,8 +837,8 @@ class SocialAuthController extends BaseApiController
             'email_verified_at' => now(), // Social provider emails are verified
             'provider' => $provider,
             'provider_id' => $providerId,
-            'country_code' => '+971',
-            'phone' => date('ymdhis'),
+            'country_code' => '+000',
+            'phone' => '00000000',
             'linkedin_email'=> $email
         ];
 
@@ -859,8 +859,8 @@ class SocialAuthController extends BaseApiController
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'country_code' => '+971',
-            'phone' => date('ymdhis'),
+            'country_code' => '+000',
+            'phone' => '00000000',
             'profile_picture' => $avatar,
             'completed_steps' => 1, // Set initial completion step
         ]);
