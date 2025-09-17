@@ -330,7 +330,7 @@ class RegistrationController extends BaseApiController
                     'employer_id'=> $employer_id,
                     'country_id'=> $request->employer_country,
                     'city_id'=> $request->employer_city,
-                    'currency_id'=> $request->salary_currency,
+                    'currency_id'=> !empty($request->salary_currency) ? $request->salary_currency : env('UNITED_ARAB_EMIRATES_ID'),
                     'current_salary'=> $request->current_salary,
                     'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                     'working_since_from_year'=> $request->working_since_from_year,
