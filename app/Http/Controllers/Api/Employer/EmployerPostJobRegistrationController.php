@@ -95,7 +95,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'phone' => $request->phone,
                     'business_id'=> 1,
                     'designation_id'=>1,
-                    'completed_steps'=> 1
+                    'completed_steps'=> 1,
+                    'hear_about_id'=> 1 //Other
                 ]);
 
                 $user = User::with('user_employer_details')->findOrFail($user_id);

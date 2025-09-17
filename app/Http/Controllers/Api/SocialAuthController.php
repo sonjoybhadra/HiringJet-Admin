@@ -863,6 +863,7 @@ class SocialAuthController extends BaseApiController
             'phone' => '00000000',
             'profile_picture' => $avatar,
             'completed_steps' => 1, // Set initial completion step
+            'hear_about_id'=> 1 //Other
         ]);
 
         \Log::info("Created new user from {$provider}", [

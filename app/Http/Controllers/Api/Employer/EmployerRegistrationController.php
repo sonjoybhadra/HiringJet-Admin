@@ -48,6 +48,7 @@ class EmployerRegistrationController extends BaseApiController
             'c_password' => 'required|same:password',
             // 'business_id' => 'required',
             'designation_id' => 'required|integer',
+            'hear_about_id' => 'required|integer',
             ],[
                 'email.unique'=> 'The email is already registered. Please try to Login or use Forgot Password to reset the password.',
                 'phone.unique'=> 'This phone is already registered.'
@@ -102,7 +103,8 @@ class EmployerRegistrationController extends BaseApiController
                     'phone' => $request->phone,
                     'business_id'=> $business_id,
                     'designation_id'=> $request->designation_id,
-                    'completed_steps'=> 0
+                    'completed_steps'=> 0,
+                    'hear_about_id'=> $request->hear_about_id
                 ]);
 
                 Employer::find($business_id)->update([

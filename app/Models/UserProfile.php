@@ -48,6 +48,7 @@ class UserProfile extends Model
         'profile_completed_percentage',
         'completed_steps',
         'is_active',
+        'hear_about_id'
     ];
     /**
      * Get the role details of associated user.
@@ -85,6 +86,11 @@ class UserProfile extends Model
     public function religion(): BelongsTo
     {
         return $this->BelongsTo(Religion::class, 'religion_id');
+    }
+
+    public function hear_about(): BelongsTo
+    {
+        return $this->BelongsTo(HearAboutMaster::class, 'hear_about_id');
     }
 
 }

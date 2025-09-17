@@ -66,6 +66,7 @@ class RegistrationController extends BaseApiController
             'c_password' => 'required|same:password',
             'is_experienced' => 'required|boolean',//yes/no
             'cv' => 'nullable|mimes:pdf,doc,docx|max:5120', // max:5120 = 5MB
+            'hear_about_id' => 'required|integer',
             ],[
                 'email.unique'=> 'The email is already registered. Please try to Login or use Forgot Password to reset the password.',
                 'phone.unique'=> 'This phone is already registered.'
@@ -111,7 +112,8 @@ class RegistrationController extends BaseApiController
                     'phone' => $request->phone,
                     'is_experienced'=> $request->is_experienced,
                     'profile_completed_percentage'=> 0,
-                    'completed_steps'=> 0
+                    'completed_steps'=> 0,
+                    'hear_about_id'=> $request->hear_about_id
                 ]);
 
                 $this->calculate_profile_completed_percentage($user_id, 'full-name'); //Full name completes

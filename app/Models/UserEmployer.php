@@ -37,7 +37,8 @@ class UserEmployer extends Model
         'completed_steps',
         'is_active',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'hear_about_id'
     ];
 
     public function designation(): BelongsTo
@@ -68,6 +69,11 @@ class UserEmployer extends Model
     public function state(): BelongsTo
     {
         return $this->BelongsTo(State::class, 'state_id');
+    }
+
+    public function hear_about(): BelongsTo
+    {
+        return $this->BelongsTo(HearAboutMaster::class, 'hear_about_id');
     }
 
 }
