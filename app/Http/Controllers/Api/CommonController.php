@@ -85,7 +85,7 @@ class CommonController extends BaseApiController
             'allusers'=> $this->get_all_users(0),
             'jobseekers'=> $this->get_all_users(1),
             'employers'=> $this->get_all_users(2),
-            'hear_about'=> $this->get_hear_about(),
+            'hear_about'=> $this->get_hear_about(1),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
