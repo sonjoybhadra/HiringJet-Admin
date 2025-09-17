@@ -43,6 +43,7 @@ use App\Models\Testimonial;
 use App\Models\PostJob;
 use App\Models\User;
 use App\Models\EmployerHomePage;
+use App\Models\HearAboutMaster;
 
 class CommonController extends BaseApiController
 {
@@ -84,6 +85,7 @@ class CommonController extends BaseApiController
             'allusers'=> $this->get_all_users(0),
             'jobseekers'=> $this->get_all_users(1),
             'employers'=> $this->get_all_users(2),
+            'hear_about'=> $this->get_hear_about(),
         ];
         if(!empty($request->params )){
             $params = explode(',', $request->params);
@@ -785,6 +787,22 @@ class CommonController extends BaseApiController
             $list,
             'Employer Home page details'
         );
+    }
+
+    public function get_hear_about($res = '')
+    {
+        $list = HearAboutMaster::select('id', 'name')
+                                ->where('status', 1)
+                                ->orderBy('order', 'ASC')
+                                ->get();
+        if($res != ''){
+            return $list;
+        }else{
+            return $this->sendResponse(
+                    $list,
+                    'Data list.'
+                );
+        }
     }
 
 

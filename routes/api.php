@@ -105,6 +105,7 @@ Route::get('/get-testimonials/{slug}', [CommonController::class, 'get_testimonia
 Route::get('/get-designation-by-param', [CommonController::class, 'get_designation_by_param']);
 Route::get('/get-industry-by-param', [CommonController::class, 'get_industry_by_param']);
 Route::get('/get-contract-type', [CommonController::class, 'get_contractType']);
+Route::get('/get-hear-about', [CommonController::class, 'get_hear_about']);
 
 Route::get('/get-jobsearch-keys', [CommonController::class, 'get_jobsearch_keys']);
 
