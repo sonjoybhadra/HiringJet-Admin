@@ -92,10 +92,10 @@ $user_type = session('type');
                                     <?php
                                     $pageLink = Request::url();
                                     ?>
-                                    <!-- <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/users/profile_image/id/' . (($user)?$user->id:0))?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
+                                    <a href="<?=url('common-delete-image/' . Helper::encoded($pageLink) . '/users/profile_image/id/' . (($user)?$user->id:0))?>" class="btn btn-label-secondary account-image-reset mb-4" onclick="return confirm('Do you want to remove this image ?');">
                                        <i class="bx bx-reset d-block d-sm-none"></i>
                                        <span class="d-none d-sm-block">Reset</span>
-                                    </a> -->
+                                    </a>
                                     <p class="mb-0">Allowed JPG, GIF, PNG, JPEG, WEBP, AVIF</p>
                                  </div>
                               </div>
@@ -103,7 +103,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -280,7 +280,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -309,7 +309,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -350,7 +350,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                      <p class="mt-3"><a href="<?=url('test-email')?>" class="btn btn-primary btn-sm"><i class="fa fa-envelope"></i>&nbsp;Send Test Email</a></p>
@@ -388,7 +388,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -429,7 +429,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -458,7 +458,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -618,7 +618,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>
@@ -647,7 +647,7 @@ $user_type = session('type');
                         </div>
                         <div class="mt-2">
                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                           <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                           <!-- <button type="reset" class="btn btn-label-secondary">Cancel</button> -->
                         </div>
                      </form>
                   </div>

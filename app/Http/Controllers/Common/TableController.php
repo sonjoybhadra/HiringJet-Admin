@@ -278,6 +278,12 @@ class TableController extends Controller
         //     return 'user_profiles.profile_completed_percentage';
         // }
 
+        if ($table === 'users' && $filename == 'Admin_User') {
+            $query->leftJoin('roles', DB::raw("CAST($table.role_id AS TEXT)"), '=', DB::raw("CAST(roles.id AS TEXT)"));
+            // 🚫 Exclude users with role_id 2 and 3
+            $query->whereNotIn("$table.role_id", [2, 3]);
+        }
+
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
                 foreach ($columns as $col) {

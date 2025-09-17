@@ -59,6 +59,7 @@ class ModuleController extends Controller
                     /* user activity */
                     $fields = [
                         'name'         => strip_tags($postData['name']),
+                        'status'       => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Module::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -89,7 +90,8 @@ class ModuleController extends Controller
                 ];
                 if($this->validate($request, $rules)){
                     $fields = [
-                        'name'                  => strip_tags($postData['name'])
+                        'name'                  => strip_tags($postData['name']),
+                        'status'                => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Module::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
