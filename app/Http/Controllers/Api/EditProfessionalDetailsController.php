@@ -242,6 +242,7 @@ class EditProfessionalDetailsController extends BaseApiController
                                 ->with('skills')
                                 ->with('functionalareas')
                                 ->with('parkbenefits')
+                                ->with('industrys')
                                 ->first();
         if($data)
             $data->functionalareas = !empty($data->functionalareas) ? $data->functionalareas : NULL;
