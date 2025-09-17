@@ -116,7 +116,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 'working_since_to_month'=> $request->working_since_to_month,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
-                'disclosing_last_salary'=> $request->disclosing_last_salary,
+                'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                 'notice_period'=> $request->notice_period,
             ]);
             $this->calculate_profile_completed_percentage(auth()->user()->id, 'employment-details'); //Employment details completes
@@ -192,7 +192,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 'working_since_to_month'=> $request->is_current_job == 0 ? $request->working_since_to_month : 0,
                 'currency_id'=> $request->salary_currency,
                 'current_salary'=> $request->current_salary,
-                'disclosing_last_salary'=> $request->disclosing_last_salary,
+                'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                 'notice_period'=> $request->notice_period,
                 'created_at'=> date('Y-m-d h:i:s')
             ]);

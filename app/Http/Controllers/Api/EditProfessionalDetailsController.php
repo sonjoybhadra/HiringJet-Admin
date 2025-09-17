@@ -286,7 +286,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'work_level'=> $request->work_level,
                     'currency_id'=> $request->salary_currency,
                     'current_salary'=> $request->current_salary,
-                    'disclosing_last_salary'=> $request->disclosing_last_salary,
+                    'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                     'is_current_job'=> 1,
                 ]);
             }else{
@@ -297,7 +297,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'work_level'=> $request->work_level,
                     'currency_id'=> $request->salary_currency,
                     'current_salary'=> $request->current_salary,
-                    'disclosing_last_salary'=> $request->disclosing_last_salary,
+                    'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                     'is_current_job'=> 1,
                     'created_at'=> date('Y-m-d h:i:s')
                 ]);
