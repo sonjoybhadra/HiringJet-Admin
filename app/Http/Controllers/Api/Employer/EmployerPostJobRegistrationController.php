@@ -21,6 +21,7 @@ use App\Models\EmployerBrand;
 use App\Mail\SignupOtp;
 use App\Models\EmployerPostJobDraft;
 use App\Mail\NewJobPost;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 
 class EmployerPostJobRegistrationController extends BaseApiController
@@ -269,8 +270,21 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $jobData['walkin_longitude'] = null;
                 $jobData['walkin_details'] = null;
             }
-            $user = User::with('user_employer_details')->findOrFail($user->id);
 
+            /**
+             * Update user first & last name
+            */
+            User::find($user->id)->update([
+                'first_name' => $cleanedRequest->get('first_name'),
+                'last_name' => $cleanedRequest->get('last_name')
+            ]);
+
+            UserEmployer::where('user_id', $user->id)->update([
+                'first_name' => $cleanedRequest->get('first_name'),
+                'last_name' => $cleanedRequest->get('last_name')
+            ]);
+
+            $user = User::with('user_employer_details')->findOrFail($user->id);
             // Call job service
             $result = $this->jobService->createJobPost(
                 $jobData,
@@ -392,6 +406,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
     {
         $rules = [
             // Required fields matching database schema
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
             'position_name' => 'required|string|max:255',
             'job_type' => 'required|string|in:walk-in-jobs,remote-jobs,on-site-jobs,temp-role-jobs',
             'location_countries' => 'required', // JSON array or single integer
