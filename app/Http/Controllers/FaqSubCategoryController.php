@@ -81,6 +81,7 @@ class FaqSubCategoryController extends Controller
                         'name'                      => strip_tags($postData['name']),
                         'description'               => strip_tags($postData['description']),
                         'image'                     => '/uploads/' . $upload_folder . '/' . $image,
+                        'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     FaqSubCategory::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -136,6 +137,7 @@ class FaqSubCategoryController extends Controller
                         'name'                      => strip_tags($postData['name']),
                         'description'               => strip_tags($postData['description']),
                         'image'                     => $faqSubImage,
+                        'status'                    => ((array_key_exists("status",$postData))?1:0),
                     ];
                     FaqSubCategory::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
@@ -162,6 +164,7 @@ class FaqSubCategoryController extends Controller
     /* delete */
         public function delete(Request $request, $id){
             $id                             = Helper::decoded($id);
+            $model                          = FaqSubCategory::find($id);
             $fields = [
                 'status'             => 3,
                 'deleted_at'         => date('Y-m-d H:i:s'),

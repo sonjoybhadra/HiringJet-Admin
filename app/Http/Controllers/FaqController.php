@@ -68,6 +68,7 @@ class FaqController extends Controller
                         'faq_sub_category_id'   => strip_tags($postData['faq_sub_category_id']),
                         'question'              => strip_tags($postData['question']),
                         'answer'                => strip_tags($postData['answer']),
+                        'status'                => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Faq::insert($fields);
                     return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
@@ -109,6 +110,7 @@ class FaqController extends Controller
                         'faq_sub_category_id'   => strip_tags($postData['faq_sub_category_id']),
                         'question'              => strip_tags($postData['question']),
                         'answer'                => strip_tags($postData['answer']),
+                        'status'                => ((array_key_exists("status",$postData))?1:0),
                     ];
                     Faq::where($this->data['primary_key'], '=', $id)->update($fields);
                     /* user activity */
