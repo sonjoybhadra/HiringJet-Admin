@@ -269,8 +269,8 @@ $controllerRoute = $module['controller_route'];
                                 <input class="form-control" type="text" id="section5_title" name="section5_title" value="<?= ((!empty($section5)) ? $section5->title : '') ?>" required placeholder="Section 5 Title" autofocus />
                             </div>
                             <div class="col-md-6">
-                                <label for="section5_description" class="form-label">Section 5 Description <small class="text-danger">*</small></label>
-                                <textarea class="form-control" id="section5_description" name="section5_description" placeholder="Section 5 Description" rows="5"><?= ((!empty($section5)) ? $section5->description : '') ?></textarea>
+                                <label for="ckeditor41" class="form-label">Section 5 Description <small class="text-danger">*</small></label>
+                                <textarea class="form-control" id="ckeditor41" name="section5_description" placeholder="Section 5 Description" rows="5"><?= ((!empty($section5)) ? $section5->description : '') ?></textarea>
                             </div>
                             <?php
                             $section5_image1 = ((!empty($section5)) ? $section5->image1 : '');

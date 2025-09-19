@@ -90,4 +90,10 @@ $controllerRoute = $module['controller_route'];
 
 @section('scripts')
 <script src="<?=config('constants.admin_assets_url')?>assets/js/table.js"></script>
+<script>
+   // Refresh page every 60 seconds
+   setInterval(function() {
+      window.location.reload();
+   }, 60000); // 60000ms = 60s
+</script>
 @endsection

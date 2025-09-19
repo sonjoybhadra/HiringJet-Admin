@@ -251,7 +251,21 @@ class TableController extends Controller
         $defaultName = $table . '_export_' . now()->format('Y-m-d_H-i-s');
         $filename = $filename ?: $defaultName;
 
-        $columns = array_filter($columns, fn($col) => strtolower($col) !== 'actions');
+        // $columns = array_filter($columns, fn($col) => strtolower($col) !== 'actions');
+        if ($table === 'employers') {
+            $transformedColumns = [];
+            foreach ($columns as $col) {
+                if ($col === 'industry_id') {
+                    $transformedColumns[] = DB::raw("industries.name as industry_name");
+                } elseif ($col === 'created_by') {
+                    $transformedColumns[] = DB::raw("users.first_name as created_by_user");
+                } else {
+                    $transformedColumns[] = $table . '.' . $col; // prefix to avoid ambiguity
+                }
+            }
+            $columns = $transformedColumns;
+        }
+        // Helper::pr($columns);
 
         if($filename != 'Jobseeker'){
             $query = DB::table($table)->select($columns);
@@ -274,14 +288,14 @@ class TableController extends Controller
             $query->whereNull('users.parent_id');
         }
 
-        // if ($table === 'users' && $col == 'profile_completed_percentage') {
-        //     return 'user_profiles.profile_completed_percentage';
-        // }
-
         if ($table === 'users' && $filename == 'Admin_User') {
             $query->leftJoin('roles', DB::raw("CAST($table.role_id AS TEXT)"), '=', DB::raw("CAST(roles.id AS TEXT)"));
-            // 🚫 Exclude users with role_id 2 and 3
             $query->whereNotIn("$table.role_id", [2, 3]);
+        }
+
+        if ($table === 'employers') {
+            $query->leftJoin('industries', DB::raw("CAST($table.industry_id AS TEXT)"), '=', DB::raw("CAST(industries.id AS TEXT)"));
+            $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
         }
 
         if ($search) {
@@ -297,17 +311,6 @@ class TableController extends Controller
 
         // Add Sl. No. to data
         $data = [];
-        // foreach ($rawData as $index => $row) {
-        //     $data[] = array_merge(['Sl. No.' => $index + 1], (array) $row);
-        //     // echo '<pre>';print_r($data);
-        //     // Loop through each row and update status
-        //     // foreach ($data as &$row_2) {
-        //     //     if (isset($row_2['status'])) {
-        //     //         $row_2['status'] = (($row_2['status'] == 1)?'Active' : 'Deactive');
-        //     //     }
-        //     // }
-        //     // echo '<pre>';print_r($data);die;
-        // }
         foreach ($rawData as $index => $row) {
             $row = (array) $row;
 
@@ -320,16 +323,13 @@ class TableController extends Controller
             $newRow = array_merge(['Sl. No.' => $index + 1], $row);
 
             $data[] = $newRow;
-        }
-        // echo '<pre>';print_r($data);die;
+        }        
 
         // Add Sl. No. to headings
         $columns = array_merge(['Sl. No.'], $columns);
         
         // Fallback to raw column names if no custom titles given
         $headers = count($titles) === count($columns) ? $titles : $columns;
-
-        
 
         switch ($format) {
             case 'csv':
@@ -339,9 +339,9 @@ class TableController extends Controller
                 return Excel::download(new \App\Exports\ArrayExport($columns, $data), 'export.xlsx');
 
             case 'pdf':
-                ini_set('memory_limit', '10240M'); // 👈 Increase memory limit
+                ini_set('memory_limit', '10240M');
                 $pdf = PDF::loadView('exports.table', ['columns' => $headers, 'data' => $data, 'titles' => $titles]);
-                // // Option 1: Stream it in browser
+                // Option 1: Stream it in browser
                 // return $pdf->stream('filename.pdf');
                 // die;
                 return $pdf->download($filename . '.pdf');
