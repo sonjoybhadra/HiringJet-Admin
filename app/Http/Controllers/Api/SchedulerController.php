@@ -185,6 +185,8 @@ class SchedulerController extends BaseApiController
                 ]);
             }
         }
+
+        echo 'Execution done.'; exit;
     }
 
 }

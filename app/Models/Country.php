@@ -9,6 +9,16 @@ class Country extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'country_code',
+        'country_flag',
+        'currency_code',
+        'country_short_code',
+        'aed_multiplier',
+        'status'
+    ];
+
     public function getCountryId ($name){
         $country = Country::whereRaw('LOWER(name) = ?', [strtolower($name)])->first();
         if($country){
