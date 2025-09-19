@@ -103,8 +103,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $user = User::with('user_employer_details')->findOrFail($user_id);
                 $full_name = $user->first_name.' '.$user->last_name;
                 $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
-                $message .= ' <p>You can login using your registered Email and password: '.$request->phone.'</p>';
-                $message .= ' <p class="text-warning"><small>You can reset your password after successfully login.</small></p>';
+                $message .= ' You can login using your registered Email and password: '.$request->phone;
+                $message .= ' You can reset your password after successfully login.';
                 try {
                     Mail::to($user->email)->send(
                         new RegistrationSuccess($user->email, $full_name, $message)
