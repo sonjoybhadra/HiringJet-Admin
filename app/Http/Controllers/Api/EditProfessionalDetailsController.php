@@ -18,6 +18,7 @@ use App\Models\Keyskill;
 use App\Models\UserEmploymentIndustry;
 use App\Models\UserEmploymentFunctionalArea;
 use App\Models\UserEmploymentParkBenefit;
+use App\Models\Country;
 
 class EditProfessionalDetailsController extends BaseApiController
 {
@@ -279,6 +280,11 @@ class EditProfessionalDetailsController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         try {
+            /**
+                * Conver salary to AED
+            */
+            $countryObj = new Country();
+            $salary_aed = $countryObj->convertSalary($request->salary_currency, $request->current_salary);
             if(!empty($request->professional_id)){
                 $id = $request->professional_id;
                 UserEmployment::where('id', $id)->update([
@@ -289,6 +295,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'current_salary'=> $request->current_salary,
                     'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                     'is_current_job'=> 1,
+                    'salary_aed'=> $salary_aed
                 ]);
             }else{
                 $id = UserEmployment::insertGetId([
@@ -300,6 +307,7 @@ class EditProfessionalDetailsController extends BaseApiController
                     'current_salary'=> $request->current_salary,
                     'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                     'is_current_job'=> 1,
+                    'salary_aed'=> $salary_aed,
                     'created_at'=> date('Y-m-d h:i:s')
                 ]);
             }

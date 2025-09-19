@@ -12,6 +12,7 @@ use App\Models\Employer;
 use App\Models\UserEmployment;
 use App\Models\UserEmploymentSkill;
 use App\Models\Keyskill;
+use App\Models\Country;
 
 class EditEmploymentDetailsController extends BaseApiController
 {
@@ -103,7 +104,10 @@ class EditEmploymentDetailsController extends BaseApiController
 
             $designation = new Designation();
             $designation_id = is_numeric($request->designation) ? $request->designation : $designation->getDesignationId($request->designation);
-
+            /**
+                * Conver salary to AED
+            */
+            $countryObj = new Country();
             UserEmployment::where('id', $id)->update([
                 'last_designation'=> $designation_id,
                 'employer_id'=> $employer_id,
@@ -118,6 +122,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 'current_salary'=> $request->current_salary,
                 'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                 'notice_period'=> $request->notice_period,
+                'salary_aed'=> $countryObj->convertSalary($request->salary_currency, $request->current_salary)
             ]);
             $this->calculate_profile_completed_percentage(auth()->user()->id, 'employment-details'); //Employment details completes
             if(!empty($request->skills)){
@@ -178,7 +183,10 @@ class EditEmploymentDetailsController extends BaseApiController
 
             $designation = new Designation();
             $designation_id = is_numeric($request->designation) ? $request->designation : $designation->getDesignationId($request->designation);
-
+            /**
+                * Conver salary to AED
+            */
+            $countryObj = new Country();
             $employment_id = UserEmployment::insertGetId([
                 'user_id'=> auth()->user()->id,
                 'last_designation'=> $designation_id,
@@ -194,6 +202,7 @@ class EditEmploymentDetailsController extends BaseApiController
                 'current_salary'=> $request->current_salary,
                 'disclosing_last_salary'=> !empty($request->disclosing_last_salary) ? true : false,
                 'notice_period'=> $request->notice_period,
+                'salary_aed'=> $countryObj->convertSalary($request->salary_currency, $request->current_salary),
                 'created_at'=> date('Y-m-d h:i:s')
             ]);
             if($employment_id){

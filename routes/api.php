@@ -34,6 +34,8 @@ use App\Http\Controllers\Api\CandidateSearchController;
 
 use App\Http\Controllers\Api\SocialAuthController;
 
+use App\Http\Controllers\Api\SchedulerController;
+
 Route::post('/login', [AuthController::class, 'login']);
 // LinkedIn routes
 Route::post('/auth/linkedin/redirect', [SocialAuthController::class, 'redirectToLinkedIn']);
@@ -110,6 +112,8 @@ Route::get('/get-hear-about', [CommonController::class, 'get_hear_about']);
 Route::get('/get-jobsearch-keys', [CommonController::class, 'get_jobsearch_keys']);
 
 Route::get('/get-employer-homepage', [CommonController::class, 'get_employer_homepage']);
+
+Route::get('/sync/aed-multiplier', [SchedulerController::class, 'syncCurrencyConverter']);
 
 
 Route::get('/get-faq-category/{slug}', [FaqController::class, 'getFaqCategory']);

@@ -23,4 +23,25 @@ class Country extends Model
                 ]);
     }
 
+    /**
+     * Convert salary to AED for search and filter
+     * @request Courrency ID, salary
+     * return multiplier int.
+    */
+    public function convertSalary($currency_id, $salary)
+    {
+        if(empty($currency_id) || empty($salary)){
+            $return = 0.0;
+        }else{
+            $currency = Country::find($currency_id);
+            if($currency){
+                $return = round($salary * $currency->aed_multiplier, 3);
+            }else{
+                $return = 0.0;
+            }
+        }
+
+        return $return;
+    }
+
 }

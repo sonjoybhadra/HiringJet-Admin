@@ -57,7 +57,9 @@ class PostJob extends Model
         'status',
         'created_by',
         'updated_by',
-        'user_id'
+        'user_id',
+        'min_salary_aed',
+        'max_salary_aed',
     ];
 
     protected $casts = [

@@ -322,7 +322,10 @@ class RegistrationController extends BaseApiController
 
                 $designation = new Designation();
                 $designation_id = is_numeric($request->last_designation) ? $request->last_designation : $designation->getDesignationId($request->last_designation);
-
+                /**
+                    * Conver salary to AED
+                */
+                $countryObj = new Country();
                 UserEmployment::where('user_id', $user->id)->delete();
                 UserEmployment::create([
                     'user_id'=> $user->id,
@@ -340,6 +343,7 @@ class RegistrationController extends BaseApiController
                     'working_since_to_year'=> $request->working_since_to_year,
                     'working_since_to_month'=> $request->working_since_to_month,
                     'is_current_job'=> 1,
+                    'salary_aed' => $countryObj->convertSalary($request->salary_currency, $request->current_salary)
                 ]);
 
                 $this->calculate_profile_completed_percentage($user->id, 'employment-details'); //Employment details completes

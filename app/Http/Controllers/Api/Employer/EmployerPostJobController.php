@@ -202,7 +202,10 @@ class EmployerPostJobController extends BaseApiController
 
             // Handle currency - use directly from request
             $currency = $cleanedRequest->get('currency') ?: '';
-
+            /**
+                * Conver salary to AED
+            */
+            $countryObj = new Country();
             // Prepare job data matching the database schema
             $jobData = [
                 'employer_id' => auth()->user()->user_employer_details->business_id,
@@ -234,6 +237,8 @@ class EmployerPostJobController extends BaseApiController
                 'application_through' => $applicationThrough, // Keep as STRING
                 'apply_on_email' => $cleanedRequest->get('apply_on_email'),
                 'apply_on_link' => $cleanedRequest->get('apply_on_link'),
+                'min_salary_aed' => $countryObj->convertSalary($currency, $cleanedRequest->get('min_salary')),
+                'max_salary_aed' => $countryObj->convertSalary($currency, $cleanedRequest->get('max_salary'))
             ];
 
             //Override expected closed date by adding 1 month from today.

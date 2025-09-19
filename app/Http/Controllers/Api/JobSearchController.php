@@ -321,7 +321,7 @@ class JobSearchController extends BaseApiController
             if (!empty($job->designation)) {
                 if (!isset($data_count_designation_array[$job->designation])) {
                     $data = Designation::find($job->designation);
-                    $data_count_designation_array[$job->designation] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data->id];
+                    $data_count_designation_array[$job->designation] = ['name'=> $data ? $data->name : '', 'count'=> 0, 'id'=> $data ? $data->id : $job->designation];
                 }
                 $data_count_designation_array[$job->designation]['count'] = $data_count_designation_array[$job->designation]['count']+1;
             }
@@ -329,7 +329,7 @@ class JobSearchController extends BaseApiController
             // get gender list
             if (!empty($job->gender)) {
                 if (!isset($data_count_gender_array[$job->gender])) {
-                    $data_count_gender_array[$job->gender] = ['name'=> $job->gender, 'count'=> 0, 'id'=> $data->id];
+                    $data_count_gender_array[$job->gender] = ['name'=> $job->gender, 'count'=> 0, 'id'=> $job->gender];
                 }
                 $data_count_gender_array[$job->gender]['count'] = $data_count_gender_array[$job->gender]['count']+1;
             }
