@@ -103,11 +103,10 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 $user = User::with('user_employer_details')->findOrFail($user_id);
                 $full_name = $user->first_name.' '.$user->last_name;
                 $message = 'Your account verification has successfully completed. Now you can continue and complete your profile.';
-                $message .= ' You can login using your registered Email and password: '.$request->phone;
                 $message .= ' You can reset your password after successfully login.';
                 try {
                     Mail::to($user->email)->send(
-                        new RegistrationSuccess($user->email, $full_name, $message)
+                        new RegistrationSuccess($user->email, $full_name, $message, $request->phone)
                     );
                 } catch (\Throwable $e) {
                     // Silently bypass mail error (do nothing)
