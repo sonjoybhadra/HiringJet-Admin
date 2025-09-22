@@ -239,8 +239,8 @@ class JobSearchController extends BaseApiController
             $limit = 25;
             $offset = 0;
             if($request->page && $request->page > 1){
-                $limit += 10;
-                //$offset = 25 + (($request->page - 2) * $limit);
+                $limit = 10;
+                $offset = 25 + (($request->page - 2) * $limit);
             }
             $all_jobs_count = (clone $pagination_sql)->count(); // Total without pagination
             $filter_data_array = $this->getFilterParametersArray((clone $pagination_sql)->get());
