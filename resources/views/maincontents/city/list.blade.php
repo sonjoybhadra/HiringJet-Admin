@@ -32,14 +32,18 @@ $controllerRoute = $module['controller_route'];
                 <a href="<?=url($controllerRoute . '/add/')?>" class="btn btn-outline-success btn-sm float-end">Add <?=$module['title']?></a>
             </div>
             <div class="card-body">
-               <div id="table-overlay-loader" class="text-loader">
-                  Fetching data. Please wait <span id="dot-animation">.</span>
+               <div id="table-overlay-loader">
+                  <!-- Fetching data. Please wait <span id="dot-animation">.</span> -->
+                  <!-- Loader -->
+                  <div id="loader-wrapper">
+                     <div class="loader"></div>
+                  </div>
                </div>
                 @include('components.table', [
                   'containerId' => 'table1',
                   'searchId' => 'search1',
                   'table' => 'cities',
-                  'columns' => ['country_id', 'name', 'created_at', 'cities.status'],
+                  'columns' => ['country_id', 'name', 'created_at', 'status'],
                   'visibleColumns' => ['country_name', 'name', 'created_at'],    // used for rendering
                   'headers' => ['#', 'Country Name', 'City Name', 'Created At'],
                   'filename' => "City",

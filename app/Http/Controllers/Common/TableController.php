@@ -237,7 +237,8 @@ class TableController extends Controller
 
     public function export(Request $request)
     {
-        // echo '<pre>';print_r($request->all());die;
+        // echo '<pre>';print_r($request->all());
+        ini_set('memory_limit', '10240M');
 
         $table = $request->input('table');
         $columns = explode(',', $request->input('columns'));
@@ -259,6 +260,17 @@ class TableController extends Controller
                     $transformedColumns[] = DB::raw("industries.name as industry_name");
                 } elseif ($col === 'created_by') {
                     $transformedColumns[] = DB::raw("users.first_name as created_by_user");
+                } else {
+                    $transformedColumns[] = $table . '.' . $col; // prefix to avoid ambiguity
+                }
+            }
+            $columns = $transformedColumns;
+        }
+        if ($table === 'cities') {
+            $transformedColumns = [];
+            foreach ($columns as $col) {
+                if ($col === 'country_id') {
+                    $transformedColumns[] = DB::raw("countries.name as country_name");
                 } else {
                     $transformedColumns[] = $table . '.' . $col; // prefix to avoid ambiguity
                 }
@@ -298,6 +310,10 @@ class TableController extends Controller
             $query->leftJoin('users', DB::raw("CAST($table.created_by AS TEXT)"), '=', DB::raw("CAST(users.id AS TEXT)"));
         }
 
+        if ($table === 'cities') {
+            $query->leftJoin('countries', DB::raw("CAST($table.country_id AS TEXT)"), '=', DB::raw("CAST(countries.id AS TEXT)"));
+        }
+
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
                 foreach ($columns as $col) {
@@ -330,6 +346,10 @@ class TableController extends Controller
         
         // Fallback to raw column names if no custom titles given
         $headers = count($titles) === count($columns) ? $titles : $columns;
+
+        /* customize file name */
+            $filename = $filename . '-' . date('Y-m-d_H-i-s');
+        /* customize file name */
 
         switch ($format) {
             case 'csv':

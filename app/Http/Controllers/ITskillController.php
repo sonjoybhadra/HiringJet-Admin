@@ -43,9 +43,10 @@ class ITskillController extends Controller
             $data['module']           = $this->data;
             if($request->isMethod('post')){
                 $postData = $request->all();
+                // Helper::pr($postData);
                 $rules = [
                     'name'                      => 'required',
-                    'version'                   => 'required',
+                    // 'version'                   => 'required',
                     // 'publishing_year'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
