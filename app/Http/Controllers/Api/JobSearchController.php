@@ -509,6 +509,7 @@ class JobSearchController extends BaseApiController
             $job_ids = PostJobUserApplied::select('job_id')->where('user_id', auth()->user()->id)
                                             ->get()->pluck('job_id')->toArray();
             $data = [];
+            $data_count_jobtype_array = $data_count_job_status = array();
             if(count($job_ids)){
                 $data = PostJob::whereIn('id', $job_ids)
                             ->with('employer')
@@ -520,10 +521,45 @@ class JobSearchController extends BaseApiController
                             ->with('functionalArea')
                             ->latest()->get();
             }
-            return $this->sendResponse(
-                $data,
+            if(!empty($request->get_filter) && $request->get_filter == 'yes'){
+                if($data->count() > 0){
+                    foreach ($data as $job) {
+                        if (!isset($data_count_jobtype_array[$job->job_type])) {
+                            $data_count_jobtype_array[$job->job_type] = ['name'=> ucwords(str_replace("-", " ",$job->job_type)), 'count'=> 0, 'id'=> $job->job_type];
+                        }
+                        $data_count_jobtype_array[$job->job_type]['count'] = $data_count_jobtype_array[$job->job_type]['count']+1;
+
+                        if($job->posting_close_date >= date('Y-m-d H:i:s') ){
+                            if (!isset($data_count_job_status['active'])) {
+                                $data_count_job_status['active'] = ['name'=> 'active', 'count'=> 0, 'id'=> 'active'];
+                            }
+                            $data_count_job_status['active']['count'] = $data_count_job_status['active']['count']+1;
+                        }else{
+                            if (!isset($data_count_job_status['active'])) {
+                                $data_count_job_status['expired'] = ['name'=> 'expired', 'count'=> 0, 'id'=> 'expired'];
+                            }
+                            $data_count_job_status['expired']['count'] = $data_count_job_status['expired']['count']+1;
+                        }
+
+                        $data_count_job_status['all']['count'] = $data_count_job_status[$job->job_type]['count']+1;
+                    }
+                }
+                return $this->sendResponse([
+                    'jobs'=> $data,
+                    'filter_array'=> [
+                        'status'=> $data_count_job_status,
+                        'jobtype'=> $data_count_jobtype_array,
+                    ],
+                ],
                 'Applied Jobs list'
-            );
+                );
+            }else{
+                return $this->sendResponse(
+                    $data,
+                    'Applied Jobs list'
+                );
+            }
+
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
