@@ -182,11 +182,14 @@ function loadTable(config) {
                                     <i class="fa-solid fa-info-circle" style="margin-right:3px;"></i>View Profile
                                 </a>`;
                     }
-                    if(status == 0){
-                        html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
-                                    <i class="fa-solid fa-key" style="margin-right:3px;"></i>Verify OTP
-                                </a>`;
-                    } else if(status == 1){
+
+                    // if(status == 0){
+                    //     html += `<br><br><a href="${base}/verify-otp/${encodedId}" class="btn btn-sm btn-warning btn-sm" title="Verify OTP">
+                    //                 <i class="fa-solid fa-key" style="margin-right:3px;"></i>Verify OTP
+                    //             </a>`;
+                    // } else
+                    
+                    if(status <= 1){
                         html += `<br><br><a href="${base}/change-status/${encodedId}/4" class="btn btn-success btn-sm me-1" title="Click Verify">
                                     <i class="fa-solid fa-check" style="margin-right:3px;"></i> Click Verify
                                 </a>`;
