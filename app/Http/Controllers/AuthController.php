@@ -1051,4 +1051,8 @@ class AuthController extends Controller
         $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);
         return view('maincontents.' . $page_name, $data);
     }
+    public function postjobOtherDesignationUpdate(Request $request){
+        $getJobs                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->get();
+        Helper::pr($getJobs);
+    }
 }
