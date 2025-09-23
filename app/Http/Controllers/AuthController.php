@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\GeneralSetting;
 use App\Models\UserActivity;
 use App\Models\PostJob;
+use App\Models\Designation;
 use App\Models\Page;
 
 use App\Helpers\Helper;
@@ -1050,5 +1051,35 @@ class AuthController extends Controller
         $page_name                      = 'page-content';
         $data = $this->siteAuthService->admin_before_login_layout($title, $page_name, $data);
         return view('maincontents.' . $page_name, $data);
+    }
+    public function postjobOtherDesignationUpdate(){
+        $getJobs                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->get();
+        if($getJobs){
+            foreach($getJobs as $getJob){
+                $id             = $getJob->id;
+                $position_name  = $getJob->position_name;
+                $designation    = $getJob->designation;
+                /* check designation */
+                    $getDesignation           = Designation::select('id')->where('status', '!=', 3)->where('name', '=', $position_name)->first();
+                    if($getDesignation){
+                        // update
+                        $designation_id = $getDesignation->id;
+                    } else {
+                        // insert
+                        $designation_fields = [
+                            'name' => $position_name,
+                            'status' => 1,
+                        ];
+                        $designation_id = Designation::insertGetId($designation_fields);
+                    }
+                /* check designation */
+
+                $fields = [
+                    'designation'               => $designation_id,
+                ];
+                PostJob::where('id', '=', $id)->update($fields);
+            }
+        }
+        Helper::pr($getJobs);
     }
 }

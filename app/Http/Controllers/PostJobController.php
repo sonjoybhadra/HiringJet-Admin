@@ -120,7 +120,7 @@ class PostJobController extends Controller
             $data['module']           = $this->data;
             if($request->isMethod('post')){
                 $postData = $request->all();
-                // Helper::pr($postData,0);
+                // Helper::pr($postData,0);die;
                 $rules = [
                     // 'position_name'             => 'required',
                     'employer_id'               => 'required',
@@ -139,8 +139,23 @@ class PostJobController extends Controller
                     $getDesignation = Designation::select('name')->where('id', $postData['designation'])->first();
                     if($postData['designation'] == 7037){
                         $position_name = $postData['position_name'];
+                        /* check designation */
+                            $getDesignation           = Designation::select('id')->where('status', '!=', 3)->where('name', '=', $position_name)->first();
+                            if($getDesignation){
+                                // update
+                                $designation_id = $getDesignation->id;
+                            } else {
+                                // insert
+                                $designation_fields = [
+                                    'name' => $position_name,
+                                    'status' => 1,
+                                ];
+                                $designation_id = Designation::insertGetId($designation_fields);
+                            }
+                        /* check designation */
                     } else {
                         $position_name = (($getDesignation)?$getDesignation->name:'');
+                        $designation_id = $postData['designation'];
                     }
 
                     /* user activity */
@@ -224,7 +239,7 @@ class PostJobController extends Controller
                         'gender'                    => $postData['gender'],
                         'open_position_number'      => strip_tags($postData['open_position_number']),
                         'contract_type'             => strip_tags($postData['contract_type']),
-                        'designation'               => $postData['designation'],
+                        'designation'               => $designation_id,
                         'functional_area'           => $postData['functional_area'],
                         'min_exp_year'              => $postData['min_exp_year'],
                         'max_exp_year'              => $postData['max_exp_year'],
@@ -336,8 +351,23 @@ class PostJobController extends Controller
                     $getDesignation = Designation::select('name')->where('id', $postData['designation'])->first();
                     if($postData['designation'] == 7037){
                         $position_name = $postData['position_name'];
+                        /* check designation */
+                            $getDesignation           = Designation::select('id')->where('status', '!=', 3)->where('name', '=', $position_name)->first();
+                            if($getDesignation){
+                                // update
+                                $designation_id = $getDesignation->id;
+                            } else {
+                                // insert
+                                $designation_fields = [
+                                    'name' => $position_name,
+                                    'status' => 1,
+                                ];
+                                $designation_id = Designation::insertGetId($designation_fields);
+                            }
+                        /* check designation */
                     } else {
                         $position_name = (($getDesignation)?$getDesignation->name:'');
+                        $designation_id = $postData['designation'];
                     }
 
                     /* user activity */
@@ -406,7 +436,7 @@ class PostJobController extends Controller
                         'gender'                    => $postData['gender'],
                         'open_position_number'      => strip_tags($postData['open_position_number']),
                         'contract_type'             => strip_tags($postData['contract_type']),
-                        'designation'               => $postData['designation'],
+                        'designation'               => $designation_id,
                         'functional_area'           => $postData['functional_area'],
                         'min_exp_year'              => $postData['min_exp_year'],
                         'max_exp_year'              => $postData['max_exp_year'],
@@ -495,7 +525,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
+            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
         }
     /* delete */
     /* cancel */
@@ -519,7 +549,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Cancelled Successfully !!!');
+            return redirect("job/reject-list")->with('success_message', $this->data['title'].' Cancelled Successfully !!!');
         }
     /* cancel */
     /* approve */
@@ -543,7 +573,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Approved Successfully !!!');
+            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' Approved Successfully !!!');
         }
     /* approve */
     /* reject */
@@ -607,7 +637,7 @@ class PostJobController extends Controller
                 /* user activity */
             }            
             $model->save();
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
+            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
     /* get country wise city */
