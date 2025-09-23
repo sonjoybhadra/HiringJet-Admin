@@ -53,8 +53,12 @@ $controllerRoute = $module['controller_route'];
                   </li>
                </ul>
                <div class="tab-content">
-                  <div id="table-overlay-loader" class="text-loader">
-                     Fetching data. Please wait <span id="dot-animation">.</span>
+                  <div id="table-overlay-loader">
+                     <!-- Fetching data. Please wait <span id="dot-animation">.</span> -->
+                     <!-- Loader -->
+                     <div id="loader-wrapper">
+                        <div class="loader"></div>
+                     </div>
                   </div>
                   @include('components.table', [
                   'containerId' => 'table1',

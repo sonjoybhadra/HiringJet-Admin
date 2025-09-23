@@ -1,4 +1,5 @@
 <?php
+
 use App\Helpers\Helper;
 ?>
 <meta charset="utf-8" />
@@ -6,15 +7,15 @@ use App\Helpers\Helper;
   name="viewport"
   content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-<title><?=$title?></title>
+<title><?= $title ?></title>
 
-<meta name="title" content="<?=Helper::getSettingValue('meta_title')?>" />
-<meta name="description" content="<?=Helper::getSettingValue('meta_description')?>" />
-<meta name="keywords" content="<?=Helper::getSettingValue('meta_keywords')?>">
-<meta name="base-url" content="<?=url('public/')?>">
+<meta name="title" content="<?= Helper::getSettingValue('meta_title') ?>" />
+<meta name="description" content="<?= Helper::getSettingValue('meta_description') ?>" />
+<meta name="keywords" content="<?= Helper::getSettingValue('meta_keywords') ?>">
+<meta name="base-url" content="<?= url('public/') ?>">
 <meta name="front-url" content="{{ config('constants.front_url') }}">
 <!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="<?=((Helper::getSettingValue('site_favicon') != '')?config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_favicon'):config('constants.no_image'))?>" />
+<link rel="icon" type="image/x-icon" href="<?= ((Helper::getSettingValue('site_favicon') != '') ? config('constants.app_url') . config('constants.uploads_url_path') . Helper::getSettingValue('site_favicon') : config('constants.no_image')) ?>" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -69,25 +70,30 @@ use App\Helpers\Helper;
 <link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css" rel="stylesheet">
 
 <style>
-  .pagination{
+  .pagination {
     float: right;
   }
-  .pagination .page-btn{
+
+  .pagination .page-btn {
     margin-right: 5px;
     border: 1px solid #092b61;
     background-color: #092b61;
     color: #FFF;
   }
+
   tbody tr td {
     font-size: 12px;
     padding: 5px;
   }
+
   .text-loader {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -96,7 +102,43 @@ use App\Helpers\Helper;
     font-size: 1.5rem;
     font-weight: bold;
     backdrop-filter: blur(3px);
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     font-family: 'Segoe UI', sans-serif;
+  }
+
+  /* Loader spinner */
+  .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Fullscreen wrapper */
+  #loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    /* or rgba(255,255,255,0.8) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  /* Animation keyframes */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>
