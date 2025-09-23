@@ -406,7 +406,7 @@ use App\Models\Designation;
                                     <div class="col-12 d-flex justify-content-between">
                                         <a href="<?=url('post-job/cancel/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-danger me-1">Cancel</a>
                                         <a href="<?=url('post-job/edit/' . (($row)?Helper::encoded($row->id):''))?>" class="btn btn-primary me-1">Edit</a>
-                                        <a href="<?=url('post-job/list/')?>" class="btn btn-success">Final Submit</a>
+                                        <a href="<?=url('post-job/internal-employer-approve-job/')?>" class="btn btn-success">Final Submit</a>
                                     </div>
                                 </div>
                             </div>

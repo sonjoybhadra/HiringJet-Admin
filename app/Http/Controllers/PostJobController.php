@@ -510,7 +510,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
+            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
         }
     /* delete */
     /* cancel */
@@ -534,7 +534,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Cancelled Successfully !!!');
+            return redirect("job/reject-list")->with('success_message', $this->data['title'].' Cancelled Successfully !!!');
         }
     /* cancel */
     /* approve */
@@ -558,7 +558,7 @@ class PostJobController extends Controller
                 ];
                 UserActivity::insert($activityData);
             /* user activity */
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Approved Successfully !!!');
+            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' Approved Successfully !!!');
         }
     /* approve */
     /* reject */
@@ -622,7 +622,7 @@ class PostJobController extends Controller
                 /* user activity */
             }            
             $model->save();
-            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
+            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
     /* get country wise city */
