@@ -69,7 +69,7 @@ Route::get('/test-email-function', [AuthController::class, 'showEmailTestPage'])
 Route::post('/test-email-function', [AuthController::class, 'testEmailFunction']);
 
 // post jobs designation update
-Route::post('/postjob-other-designation-update', [AuthController::class, 'postjobOtherDesignationUpdate']);
+Route::get('/postjob-other-designation-update', [AuthController::class, 'postjobOtherDesignationUpdate']);
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('signin', [AuthController::class, 'login'])->name('signin');
