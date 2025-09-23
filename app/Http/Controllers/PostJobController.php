@@ -120,7 +120,7 @@ class PostJobController extends Controller
             $data['module']           = $this->data;
             if($request->isMethod('post')){
                 $postData = $request->all();
-                // Helper::pr($postData,0);
+                Helper::pr($postData,0);die;
                 $rules = [
                     // 'position_name'             => 'required',
                     'employer_id'               => 'required',

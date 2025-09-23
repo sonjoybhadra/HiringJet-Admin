@@ -364,16 +364,16 @@ $controllerRoute = $module['controller_route'];
                                                     </select>
                                                 </div>
                                                 <!-- <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="designation">Designation</label>
-                                        <select class="select2" id="designation" name="designation">
-                                            <option label="" value="" selected disabled>Select an option</option>
-                                            <?php if ($designations) {
-                                                foreach ($designations as $select_row) { ?>
-                                                <option value="<?= $select_row->id ?>" <?= (($designation == $select_row->id) ? 'selected' : '') ?>><?= $select_row->name ?></option>
-                                            <?php }
-                                            } ?>
-                                        </select>
-                                    </div> -->
+                                                    <label class="form-label" for="designation">Designation</label>
+                                                    <select class="select2" id="designation" name="designation">
+                                                        <option label="" value="" selected disabled>Select an option</option>
+                                                        <?php if ($designations) {
+                                                            foreach ($designations as $select_row) { ?>
+                                                            <option value="<?= $select_row->id ?>" <?= (($designation == $select_row->id) ? 'selected' : '') ?>><?= $select_row->name ?></option>
+                                                        <?php }
+                                                        } ?>
+                                                    </select>
+                                                </div> -->
                                                 <div class="col-sm-6 mb-3">
                                                     <label class="form-label" for="functional_area">Functional Area</label>
                                                     <select class="select2" id="functional_area" name="functional_area">
@@ -445,9 +445,9 @@ $controllerRoute = $module['controller_route'];
                                                 </div>
 
                                                 <!-- <div class="col-sm-6 mb-3">
-                                        <label class="form-label" for="expected_close_date">Expected Close Date</label>
-                                        <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" min="<?= date('Y-m-d') ?>" />
-                                    </div> -->
+                                                    <label class="form-label" for="expected_close_date">Expected Close Date</label>
+                                                    <input type="date" name="expected_close_date" id="expected_close_date" class="form-control" placeholder="Expected Close Date" value="<?= !empty($expected_close_date) ? date('Y-m-d', strtotime($expected_close_date)) : '' ?>" min="<?= date('Y-m-d') ?>" />
+                                                </div> -->
 
                                                 <div class="col-sm-12 mb-3">
                                                     <label for="is_salary_negotiable" class="form-label d-block">Mark salary is negotiable</label>
@@ -625,7 +625,7 @@ $controllerRoute = $module['controller_route'];
             $('#apply_on_link_row').hide();
             $('#apply_on_email').attr('required', true);
             $('#apply_on_link').attr('required', false);
-            if(apply_on_email == ''){
+            if (apply_on_email == '') {
                 $('#btn-submit').attr('disabled', true);
             } else {
                 $('#btn-submit').attr('disabled', false);
@@ -635,7 +635,7 @@ $controllerRoute = $module['controller_route'];
             $('#apply_on_link_row').show();
             $('#apply_on_email').attr('required', false);
             $('#apply_on_link').attr('required', true);
-            if(apply_on_link == ''){
+            if (apply_on_link == '') {
                 $('#btn-submit').attr('disabled', true);
             } else {
                 $('#btn-submit').attr('disabled', false);
@@ -657,7 +657,7 @@ $controllerRoute = $module['controller_route'];
                 $('#apply_on_link_row').hide();
                 $('#apply_on_email').attr('required', true);
                 $('#apply_on_link').attr('required', false);
-                if(apply_on_email == ''){
+                if (apply_on_email == '') {
                     $('#btn-submit').attr('disabled', true);
                 } else {
                     $('#btn-submit').attr('disabled', false);
@@ -667,7 +667,7 @@ $controllerRoute = $module['controller_route'];
                 $('#apply_on_link_row').show();
                 $('#apply_on_email').attr('required', false);
                 $('#apply_on_link').attr('required', true);
-                if(apply_on_link == ''){
+                if (apply_on_link == '') {
                     $('#btn-submit').attr('disabled', true);
                 } else {
                     $('#btn-submit').attr('disabled', false);
@@ -676,14 +676,14 @@ $controllerRoute = $module['controller_route'];
         });
 
         $('#apply_on_email').on('blur', function() {
-            if($('#apply_on_email').val() == ''){
+            if ($('#apply_on_email').val() == '') {
                 $('#btn-submit').attr('disabled', true);
             } else {
                 $('#btn-submit').attr('disabled', false);
             }
         });
         $('#apply_on_link').on('blur', function() {
-            if($('#apply_on_link').val() == ''){
+            if ($('#apply_on_link').val() == '') {
                 $('#btn-submit').attr('disabled', true);
             } else {
                 $('#btn-submit').attr('disabled', false);
