@@ -18,6 +18,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\Employer;
 use App\Models\EmployerBrand;
+use App\Models\Designation;
 
 use App\Mail\SignupOtp;
 use App\Mail\RegistrationSuccess;
@@ -94,6 +95,8 @@ class EmployerRegistrationController extends BaseApiController
             ]);
 
             if($user_id){
+                $designation = new Designation();
+                $designation_id = is_numeric($request->designation_id) ? $request->designation_id : $designation->getDesignationId($request->designation_id);
                 UserEmployer::create([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
@@ -102,7 +105,7 @@ class EmployerRegistrationController extends BaseApiController
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
                     'business_id'=> $business_id,
-                    'designation_id'=> $request->designation_id,
+                    'designation_id'=> $designation_id,
                     'completed_steps'=> 0,
                     'hear_about_id'=> $request->hear_about_id
                 ]);

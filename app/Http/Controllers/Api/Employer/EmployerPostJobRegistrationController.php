@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BaseApiController as BaseApiController;
 use App\Services\JobPostingService;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -18,11 +19,10 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\EmployerBrand;
-use App\Mail\SignupOtp;
 use App\Models\EmployerPostJobDraft;
 use App\Mail\NewJobPost;
-use App\Models\UserProfile;
-use Illuminate\Http\Request;
+use App\Models\Designation;
+
 
 class EmployerPostJobRegistrationController extends BaseApiController
 {
@@ -220,6 +220,9 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 * Conver salary to AED
             */
             $countryObj = new Country();
+            $designation = new Designation();
+            $designation_id = is_numeric($request->get('designation')) ? $request->get('designation') : $designation->getDesignationId($request->get('designation'));
+
             // Prepare job data matching the database schema
             $jobData = [
                 'employer_id' => $userEmployer->business_id,
@@ -233,7 +236,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                 'gender' => $cleanedRequest->get('gender'),
                 'open_position_number' => (int) $cleanedRequest->get('open_position_number'),
                 'contract_type' => (int) $cleanedRequest->get('contract_type'),
-                'designation' => (int) $cleanedRequest->get('designation'),
+                'designation' => $designation_id,
                 'functional_area' => $cleanedRequest->get('functional_area') ? (int) $cleanedRequest->get('functional_area') : null,
                 'min_exp_year' => (int) $cleanedRequest->get('min_exp_year'),
                 'max_exp_year' => (int) $cleanedRequest->get('max_exp_year'),
@@ -425,7 +428,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             'gender' => 'required|string|in:Male,Female,No Preference',
             'open_position_number' => 'required|integer|min:1|max:999',
             'contract_type' => 'required|integer|in:1,2,3,4,5,6',
-            'designation' => 'required|integer|min:1',
+            'designation' => 'required',
             'functional_area' => 'required|integer|min:1',
             'min_exp_year' => 'required|integer|min:0|max:50',
             'max_exp_year' => 'required|integer|min:0|max:50|gte:min_exp_year',
@@ -545,6 +548,8 @@ class EmployerPostJobRegistrationController extends BaseApiController
             $employer->save();
 
             if ($employer && $employer->id) {
+                $designation = new Designation();
+                $designation_id = is_numeric($request->get('designation')) ? $request->get('designation') : $designation->getDesignationId($request->get('designation'));
                 $updateData = [
                     'country_id' => $country_id,
                     'city_id' => $city_id,
@@ -554,7 +559,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
                     'pincode' => $request->get('pincode') ?: '',
                     'landline' => $request->get('landline') ?: '',
                     'industrie_id' => $request->get('industrie_id'),
-                    'designation_id' => $request->get('designation'),
+                    'designation_id' => $designation_id,
                     'description' => $request->get('description') ?: '',
                     'business_id' => $employer->id,
                     'web_url' => $request->get('web_url') ?: '',
