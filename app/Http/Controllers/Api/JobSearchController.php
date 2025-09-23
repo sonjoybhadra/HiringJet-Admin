@@ -540,8 +540,10 @@ class JobSearchController extends BaseApiController
                             }
                             $data_count_job_status['expired']['count'] = $data_count_job_status['expired']['count']+1;
                         }
-
-                        $data_count_job_status['all']['count'] = $data_count_job_status[$job->job_type]['count']+1;
+                        if (!isset($data_count_job_status['all'])) {
+                            $data_count_job_status['all'] = ['name'=> 'all', 'count'=> 0, 'id'=> 'all'];
+                        }
+                        $data_count_job_status['all']['count'] = $data_count_job_status['all']['count']+1;
                     }
                 }
                 return $this->sendResponse([
