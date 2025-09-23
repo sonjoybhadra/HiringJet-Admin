@@ -14,7 +14,7 @@ class NewsletterSubscribersController extends BaseApiController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:newsletter_subscribers',
+            'email' => 'required|email',
         ]);
 
         if($validator->fails()){

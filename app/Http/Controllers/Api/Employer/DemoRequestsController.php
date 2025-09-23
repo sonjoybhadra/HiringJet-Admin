@@ -16,8 +16,8 @@ class DemoRequestsController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string',
             'country_code' => 'required',
-            'phone' => 'required|unique:demo_requests',
-            'email' => 'required|string|email|unique:demo_requests',
+            'phone' => 'required',
+            'email' => 'required|string|email',
             'city' => 'required|string',
             'organization' => 'required|string',
             'interested_in' => 'required|string'
