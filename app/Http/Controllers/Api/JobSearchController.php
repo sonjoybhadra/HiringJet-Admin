@@ -749,7 +749,7 @@ class JobSearchController extends BaseApiController
             ]);
 
             return $this->sendResponse([],
-                        'You have successfully posted job employer.'
+                        'You have successfully posted job reminder.'
                     );
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong.', Response::HTTP_INTERNAL_SERVER_ERROR);
