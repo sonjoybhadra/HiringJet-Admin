@@ -14,6 +14,7 @@ use App\Models\EmployerPostJobDraft;
 use App\Models\PostJobEmployerSharing;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Designation;
 
 class EmployerPostJobController extends BaseApiController
 {
@@ -206,6 +207,9 @@ class EmployerPostJobController extends BaseApiController
                 * Conver salary to AED
             */
             $countryObj = new Country();
+            $designation = new Designation();
+            $designation_id = is_numeric($cleanedRequest->get('designation')) ? $cleanedRequest->get('designation') : $designation->getDesignationId($cleanedRequest->get('designation'));
+
             // Prepare job data matching the database schema
             $jobData = [
                 'employer_id' => auth()->user()->user_employer_details->business_id,
@@ -220,7 +224,7 @@ class EmployerPostJobController extends BaseApiController
                 'gender' => $cleanedRequest->get('gender'),
                 'open_position_number' => (int) $cleanedRequest->get('open_position_number'),
                 'contract_type' => (int) $cleanedRequest->get('contract_type'),
-                'designation' => (int) $cleanedRequest->get('designation'),
+                'designation' => (int) $designation_id,
                 'functional_area' => $cleanedRequest->get('functional_area') ? (int) $cleanedRequest->get('functional_area') : null,
                 'min_exp_year' => (int) $cleanedRequest->get('min_exp_year'),
                 'max_exp_year' => (int) $cleanedRequest->get('max_exp_year'),
@@ -365,7 +369,7 @@ class EmployerPostJobController extends BaseApiController
             'gender' => 'required|string|in:Male,Female,Others,No Preference',
             'open_position_number' => 'required|integer|min:1|max:999',
             'contract_type' => 'required|integer|in:1,2,3,4,5,6',
-            'designation' => 'required|integer|min:1',
+            'designation' => 'required',
             'functional_area' => 'nullable|integer|min:1',
             'min_exp_year' => 'required|integer|min:0|max:50',
             'max_exp_year' => 'required|integer|min:0|max:50|gte:min_exp_year',
@@ -488,6 +492,8 @@ class EmployerPostJobController extends BaseApiController
             // Handle currency - use directly from request
             $currency = $cleanedRequest->get('currency') ?: '';
 
+            $designation = new Designation();
+            $designation_id = is_numeric($cleanedRequest->get('designation')) ? $cleanedRequest->get('designation') : $designation->getDesignationId($cleanedRequest->get('designation'));
             // Prepare job data matching the database schema
             $jobData = [
                 'employer_id' => auth()->user()->user_employer_details->business_id,
@@ -502,7 +508,7 @@ class EmployerPostJobController extends BaseApiController
                 'gender' => $cleanedRequest->get('gender'),
                 'open_position_number' => (int) $cleanedRequest->get('open_position_number'),
                 'contract_type' => (int) $cleanedRequest->get('contract_type'),
-                'designation' => (int) $cleanedRequest->get('designation'),
+                'designation' => (int) $designation_id,
                 'functional_area' => $cleanedRequest->get('functional_area') ? (int) $cleanedRequest->get('functional_area') : null,
                 'min_exp_year' => (int) $cleanedRequest->get('min_exp_year'),
                 'max_exp_year' => (int) $cleanedRequest->get('max_exp_year'),
