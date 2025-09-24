@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Mail\NotificationEmail;
 use App\Models\User;
 use App\Models\UserEmployer;
+use App\Models\Designation;
 
 class EditEmployerProfileController extends BaseApiController
 {
@@ -30,7 +31,7 @@ class EditEmployerProfileController extends BaseApiController
             /* 'password' => 'required|min:6',
             'c_password' => 'required|same:password', */
             // 'business_id' => 'required|integer',
-            'designation_id' => 'required|integer',
+            'designation_id' => 'required',
         ]);
 
         if($validator->fails()){
@@ -52,13 +53,15 @@ class EditEmployerProfileController extends BaseApiController
                 'phone'=> $request->phone,
             ]);
 
+            $designation = new Designation();
+            $designation_id = is_numeric($request->designation_id) ? $request->designation_id : $designation->getDesignationId($request->designation_id);
             $update_data = [
                 'first_name'=> $request->first_name,
                 'last_name'=> $request->last_name,
                 // 'email'=> $request->email,
                 'country_code'=> $request->country_code,
                 'phone' => $request->phone,
-                'designation_id'=> $request->designation_id,
+                'designation_id'=> $designation_id,
                 'profile_image'=> $image_path
             ];
             if(!empty($request->business_id)){
