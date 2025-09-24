@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Validator;
 use App\Models\User;
 use App\Models\UserEmployer;
+use App\Models\Designation;
 
 use App\Mail\RegistrationSuccess;
 /**-------------------------- SME -------------------------------- */
@@ -51,7 +52,7 @@ class EmployerUserController extends BaseApiController
             'email' => 'required|email|max:150|unique:users',
             'country_code' => 'required|max:5',
             'phone' => 'required|max:15|unique:users',
-            'designation_id' => 'required|integer',
+            'designation_id' => 'required',
         ]);
 
         if($validator->fails()){
@@ -78,6 +79,8 @@ class EmployerUserController extends BaseApiController
             ]);
 
             if($user_id){
+                $designation = new Designation();
+                $designation_id = is_numeric($request->designation_id) ? $request->designation_id : $designation->getDesignationId($request->designation_id);
                 UserEmployer::create([
                     'user_id'=> $user_id,
                     'first_name'=> $request->first_name,
@@ -86,7 +89,7 @@ class EmployerUserController extends BaseApiController
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
                     'business_id'=> auth()->user()->user_employer_details->business_id,
-                    'designation_id'=> $request->designation_id,
+                    'designation_id'=> $designation_id,
                     'completed_steps'=> 2,
                     'created_at'=> date('Y-m-d h:i:s')
                 ]);
@@ -135,7 +138,7 @@ class EmployerUserController extends BaseApiController
             'email' => 'required|email|max:150|unique:users,email,'.$id,
             'country_code' => 'required|max:5',
             'phone' => 'required|max:15|unique:users,phone,'.$id,
-            'designation_id' => 'required|integer',
+            'designation_id' => 'required',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -156,13 +159,15 @@ class EmployerUserController extends BaseApiController
             } */
             $data->save();
 
+            $designation = new Designation();
+            $designation_id = is_numeric($request->designation_id) ? $request->designation_id : $designation->getDesignationId($request->designation_id);
             UserEmployer::where('user_id', $id)->update([
                     'first_name'=> $request->first_name,
                     'last_name'=> $request->last_name,
                     'email'=> $request->email,
                     'country_code'=> $request->country_code,
                     'phone' => $request->phone,
-                    'designation_id'=> $request->designation_id,
+                    'designation_id'=> $designation_id,
                     'completed_steps'=> 2
                 ]);
 
