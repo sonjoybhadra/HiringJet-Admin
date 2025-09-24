@@ -52,6 +52,7 @@ class JobSearchController extends BaseApiController
 
             $sql = PostJob::select('post_jobs.*');
             $sql->where('status', 1);
+            $sql->where('posting_close_date', '>=', date('Y-m-d'));
             if(strtolower($job_type) != 'all-jobs'){
                 $sql->where('job_type', $job_type);
             }
@@ -521,9 +522,9 @@ class JobSearchController extends BaseApiController
                             ->with('functionalArea');
                 if(!empty($request->status)){
                     if($request->status == 'active'){
-                        $sql->where('posting_close_date', '>=', date('Y-m-d H:i:s'));
+                        $sql->where('posting_close_date', '>=', date('Y-m-d'));
                     }else if($request->status == 'expired'){
-                        $sql->where('posting_close_date', '<', date('Y-m-d H:i:s'));
+                        $sql->where('posting_close_date', '<', date('Y-m-d'));
                     }
                 }
                 if(!empty($request->job_type)){
@@ -541,7 +542,7 @@ class JobSearchController extends BaseApiController
                         }
                         $data_count_jobtype_array[$job->job_type]['count'] = $data_count_jobtype_array[$job->job_type]['count']+1;
 
-                        if($job->posting_close_date >= date('Y-m-d H:i:s') ){
+                        if($job->posting_close_date >= date('Y-m-d') ){
                             if (!isset($data_count_job_status['active'])) {
                                 $data_count_job_status['active'] = ['name'=> 'active', 'count'=> 0, 'id'=> 'active'];
                             }
