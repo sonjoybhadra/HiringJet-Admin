@@ -24,6 +24,7 @@ use App\Models\City;
 use App\Models\Employer;
 use App\Models\Nationality;
 use App\Models\UserJobSearchHistory;
+use App\Models\JobJobseekerReminder;
 
 class JobSearchController extends BaseApiController
 {
@@ -512,7 +513,9 @@ class JobSearchController extends BaseApiController
             $data = [];
             $data_count_jobtype_array = $data_count_job_status = array();
             if(count($job_ids)){
-                $sql = PostJob::whereIn('id', $job_ids)
+                $sql = PostJob::select('post_jobs.*')
+                            ->addSelect(DB::raw('(SELECT created_at FROM job_jobseeker_reminders WHERE job_jobseeker_reminders.job_id = post_jobs.id order by id desc limit 1) AS latest_reminder_at'))
+                            ->whereIn('id', $job_ids)
                             ->with('employer')
                             ->with('industryRelation')
                             ->with('jobCategory')
@@ -537,6 +540,7 @@ class JobSearchController extends BaseApiController
             if(!empty($request->get_filter) && $request->get_filter == 'yes'){
                 if($data->count() > 0){
                     foreach ($data as $job) {
+                        $has_reminder = JobJobseekerReminder::where('job_id', $job->id)->latest()->first();
                         if (!isset($data_count_jobtype_array[$job->job_type])) {
                             $data_count_jobtype_array[$job->job_type] = ['name'=> ucwords(str_replace("-", " ",$job->job_type)), 'count'=> 0, 'id'=> $job->job_type];
                         }
