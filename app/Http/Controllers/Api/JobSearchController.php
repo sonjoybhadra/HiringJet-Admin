@@ -514,7 +514,7 @@ class JobSearchController extends BaseApiController
             $data_count_jobtype_array = $data_count_job_status = array();
             if(count($job_ids)){
                 $sql = PostJob::select('post_jobs.*')
-                            ->addSelect(DB::raw('(SELECT created_at FROM job_jobseeker_reminders WHERE job_jobseeker_reminders.job_id = post_jobs.id order by id desc limit 1) AS latest_reminder_at'))
+                            // ->addSelect(DB::raw('(SELECT created_at FROM job_jobseeker_reminders WHERE job_jobseeker_reminders.job_id = post_jobs.id order by id desc limit 1) AS latest_reminder_at'))
                             ->whereIn('id', $job_ids)
                             ->with('employer')
                             ->with('industryRelation')
@@ -539,8 +539,8 @@ class JobSearchController extends BaseApiController
             }
             if(!empty($request->get_filter) && $request->get_filter == 'yes'){
                 if($data->count() > 0){
-                    foreach ($data as $job) {
-                        $has_reminder = JobJobseekerReminder::where('job_id', $job->id)->latest()->first();
+                    foreach ($data as $key => $job) {
+                        $data[$key]->reminder = JobJobseekerReminder::select('reminder_count', 'created_at')->where('job_id', $job->id)->latest()->first();
                         if (!isset($data_count_jobtype_array[$job->job_type])) {
                             $data_count_jobtype_array[$job->job_type] = ['name'=> ucwords(str_replace("-", " ",$job->job_type)), 'count'=> 0, 'id'=> $job->job_type];
                         }
@@ -723,6 +723,36 @@ class JobSearchController extends BaseApiController
             );
         }catch (\Exception $e) {
             return $this->sendError('Error', $e->getMessage());
+        }
+    }
+
+    public function postJobReminder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|integer'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try{
+            $has_reminder = JobJobseekerReminder::where('job_id', $request->job_id)
+                                                ->where('jobseeker_id', auth()->user()->id)
+                                                ->get();
+            $job_details = PostJob::find($request->job_id);
+            JobJobseekerReminder::create([
+                'job_id'=> $request->job_id,
+                'jobseeker_id'=> auth()->user()->id,
+                'employer_id'=> $job_details->employer_id,
+                'reminder_count'=> $has_reminder->count() + 1,
+            ]);
+
+            return $this->sendResponse([],
+                        'You have successfully posted job employer.'
+                    );
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

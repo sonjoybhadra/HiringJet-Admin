@@ -206,6 +206,7 @@ Route::group([
     Route::post('/shortlisted-jobs', [JobSearchController::class, 'shortlistedJob']);
     Route::get('/get-shortlisted-jobs', [JobSearchController::class, 'getShortlistedJob']);
     Route::get('/get-matched-jobs', [JobSearchController::class, 'getMatchedJobsForJobseeker']);
+    Route::post('/post-reminder', [JobSearchController::class, 'postJobReminder']);
 
     // Google Account Linking
     Route::post('/auth/google/connect', [SocialAuthController::class, 'initiateGoogleConnect']);
