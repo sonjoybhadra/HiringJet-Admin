@@ -511,15 +511,27 @@ class JobSearchController extends BaseApiController
             $data = [];
             $data_count_jobtype_array = $data_count_job_status = array();
             if(count($job_ids)){
-                $data = PostJob::whereIn('id', $job_ids)
+                $sql = PostJob::whereIn('id', $job_ids)
                             ->with('employer')
                             ->with('industryRelation')
                             ->with('jobCategory')
                             ->with('nationalityRelation')
                             ->with('contractType')
                             ->with('designationRelation')
-                            ->with('functionalArea')
-                            ->latest()->get();
+                            ->with('functionalArea');
+                if(!empty($request->status)){
+                    if($request->status == 'active'){
+                        $sql->where('posting_close_date', '>=', date('Y-m-d H:i:s'));
+                    }else if($request->status == 'expired'){
+                        $sql->where('posting_close_date', '<', date('Y-m-d H:i:s'));
+                    }
+                }
+                if(!empty($request->job_type)){
+                    if(strtolower($request->job_type) != 'all-jobs'){
+                        $sql->where('job_type', $request->job_type);
+                    }
+                }
+                $data = $sql->latest()->get();
             }
             if(!empty($request->get_filter) && $request->get_filter == 'yes'){
                 if($data->count() > 0){
