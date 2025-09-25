@@ -71,7 +71,7 @@ function loadTable(config) {
                 const val = row[col] ?? '';
 
                 if (config.imageColumns && config.imageColumns.includes(col)) {
-                    const imageUrl = ((val != '')?baseUrl + val:'https://hjadmin.itiffyconsultants.xyz/public/uploads/no-image.jpg');
+                    const imageUrl = ((val != '')?baseUrl + val:'https://hjadmin.hiringjet.com/public/uploads/no-image.jpg');
                     html += `<td>
                         <a href="${imageUrl}" data-lightbox="table-images" data-title="${row.name ?? ''}">
                             <img src="${imageUrl}" alt="Image" class="img-thumbnail mt-3" style="width: 75px; height: 50px; cursor: zoom-in;">
@@ -107,32 +107,32 @@ function loadTable(config) {
                 
                 if(config.routePrefix != 'jobseeker' && config.routePrefix != 'employer-user'){
                     html += `<a href="${base}/edit/${encodedId}" class="btn btn-primary btn-sm me-1" title="Edit">
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i>&nbsp;&nbsp;Edit
                         </a>`;
 
                     if (status == 1) {
-                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-success btn-sm me-1" title="Deactivate">
-                            <i class="fa-solid fa-check"></i>
+                        html += `<br><br><a href="${base}/change-status/${encodedId}" class="btn btn-success btn-sm me-1" title="Deactivate">
+                            <i class="fa-solid fa-check"></i>&nbsp;&nbsp;Active
                         </a>`;
                     } else {
-                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-warning btn-sm me-1" title="Activate">
-                            <i class="fas fa-times"></i>
+                        html += `<br><br><a href="${base}/change-status/${encodedId}" class="btn btn-warning btn-sm me-1" title="Activate">
+                            <i class="fas fa-times"></i>&nbsp;&nbsp;Deactive
                         </a>`;
                     }
 
-                    html += `<a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
-                        <i class="fa-solid fa-trash"></i>
+                    html += `<br><br><a href="${base}/delete/${encodedId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')" title="Delete">
+                        <i class="fa-solid fa-trash"></i>&nbsp;&nbsp;Delete
                     </a>`;
                 }
 
                 if(config.routePrefix == 'jobseeker'){
                     if (status == 1) {
-                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-success btn-sm me-1" title="Deactivate">
-                            <i class="fa-solid fa-check"></i>
+                        html += `<br><br><a href="${base}/change-status/${encodedId}" class="btn btn-success btn-sm me-1" title="Deactivate">
+                            <i class="fa-solid fa-check"></i>&nbsp;&nbsp;Active
                         </a>`;
                     } else {
-                        html += `<a href="${base}/change-status/${encodedId}" class="btn btn-warning btn-sm me-1" title="Activate">
-                            <i class="fas fa-times"></i>
+                        html += `<br><br><a href="${base}/change-status/${encodedId}" class="btn btn-warning btn-sm me-1" title="Activate">
+                            <i class="fas fa-times"></i>&nbsp;&nbsp;Deactive
                         </a>`;
                     }
                     html += `<br><br><a href="${base}/profile/${encodedId}" class="btn btn-info btn-sm" title="Profile" target="_blank">

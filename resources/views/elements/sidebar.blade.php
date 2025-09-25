@@ -453,6 +453,15 @@ $role_id = (($user)?$user->role_id:0);
         <div data-i18n="Jobs">Jobs</div>
       </a>
       <ul class="menu-sub">
+        <!-- add new job -->
+        <?php if(in_array(12, $moduleIds)){?>
+          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'add')?'active':'')?>">
+            <a href="<?=url('/post-job/add')?>" class="menu-link">
+              <div data-i18n="Add New Job"><i class="fa-solid fa-arrow-right"></i> Add New Job</div>
+            </a>
+          </li>
+        <?php }?>
+
         <!-- approved job list -->
           <?php if(in_array(12, $moduleIds)){?>
             <li class="menu-item <?=(($pageSegment == 'post-job' && ($pageFunction == 'verified-employer-approve-job' || $pageFunction == 'non-verified-employer-approve-job' || $pageFunction == 'internal-employer-approve-job'))?'active':'')?>">
@@ -490,15 +499,6 @@ $role_id = (($user)?$user->role_id:0);
           <li class="menu-item <?=(($pageSegment == 'job' && $pageFunction == 'reject-list')?'active':'')?>">
             <a href="<?=url('/job/reject-list')?>" class="menu-link">
               <div data-i18n="Rejected Job List"><i class="fa-solid fa-arrow-right"></i> Rejected Job List</div>
-            </a>
-          </li>
-        <?php }?>
-
-        <!-- add new job -->
-        <?php if(in_array(12, $moduleIds)){?>
-          <li class="menu-item <?=(($pageSegment == 'post-job' && $pageFunction == 'add')?'active':'')?>">
-            <a href="<?=url('/post-job/add')?>" class="menu-link">
-              <div data-i18n="Add New Job"><i class="fa-solid fa-arrow-right"></i> Add New Job</div>
             </a>
           </li>
         <?php }?>
