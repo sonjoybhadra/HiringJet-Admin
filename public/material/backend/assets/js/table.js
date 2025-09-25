@@ -8,7 +8,7 @@ function loadTable(config) {
 
     function fetchData(page = 1, search = '', perPageOverride = null) {
         $('#table-overlay-loader').fadeIn();
-        startDotAnimation();
+        // startDotAnimation();
 
         const perPage = perPageOverride || $(`select[id$='-perPage']`).val() || 50;
 
@@ -36,7 +36,7 @@ function loadTable(config) {
                 console.error('Fetch failed:', err);
             },
             complete: function () {
-                stopDotAnimation();
+                // stopDotAnimation();
                 $('#table-overlay-loader').fadeOut();
             }
         });
@@ -264,7 +264,12 @@ function loadTable(config) {
     });
 
     searchInput.on('keyup', function () {
-        fetchData(1, $(this).val());
+        var count = $(this).val().length;
+        if(count >= 2){
+            fetchData(1, $(this).val());
+        } else if(count == 0){
+            fetchData(1, $(this).val());
+        }
     });
 
     $(document).on('change', `select[id$='-perPage']`, function () {

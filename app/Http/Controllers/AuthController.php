@@ -1053,7 +1053,8 @@ class AuthController extends Controller
         return view('maincontents.' . $page_name, $data);
     }
     public function postjobOtherDesignationUpdate(){
-        $getJobs                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->get();
+        $getJobs                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->orderBy('id', 'ASC')->get();
+        // Helper::pr($getJobs);
         if($getJobs){
             foreach($getJobs as $getJob){
                 $id             = $getJob->id;
@@ -1080,6 +1081,7 @@ class AuthController extends Controller
                 PostJob::where('id', '=', $id)->update($fields);
             }
         }
-        Helper::pr($getJobs);
+        $getJobCount                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->count();
+        echo $getJobCount;
     }
 }
