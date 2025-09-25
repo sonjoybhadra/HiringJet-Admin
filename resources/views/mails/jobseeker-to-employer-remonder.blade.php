@@ -2,7 +2,7 @@
 <html lang="en">
    <head>
       <meta charset="UTF-8">
-      <title>Registration Success</title>
+      <title>Following Up on My Job Application</title>
       <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap"
          rel="stylesheet">
       <style>
@@ -43,12 +43,7 @@
                         ">
                         <img class="logo-img" src="{{ asset('public/uploads/hiringjet-white-logo.png') }}" alt="logo" style="width: 180px;object-fit: contain;">
                      </div>
-                     <div class="text" style="
-                        width: 50%;
-                        float: right;
-                        text-align: end;
-                        color: #fff;
-                        ">
+                     <div class="text" style="width: 50%;float: right;text-align: end;color: #fff;">
                         <p style="text-align: right"><?= date('M d, Y') ?></p>
                      </div>
                   </td>
@@ -58,14 +53,15 @@
                <tr>
                   <td
                      style="">
-                     <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 5px;padding-top:10px;">Registration Completion With {{ env('APP_NAME') }}
+                     <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 5px;padding-top:10px;">
+                        Following Up on My Job Application
                      </p>
                   </td>
                </tr>
                <tr>
                   <td
                      style="">
-                     <p style="color: #4a4a4aba;font-size: 16px;font-weight: 400;margin-top: 5px;">Hello, {{ $full_name }}.
+                     <p style="color: #4a4a4aba;font-size: 16px;font-weight: 400;margin-top: 5px;">Dear, {{ $employer }}.
                      </p>
                   </td>
                </tr>
@@ -73,12 +69,17 @@
                   <td>
                      <div class="job-banner" style="width: 400px;border-radius: 15px;padding: 30px 20px;text-align: center;margin: 0 auto;border: 1px solid #ededed;margin-bottom: 50px;margin-top:20px;">
                         {{-- <div class="rounded" style="height: 100px;width: 100px;border-radius: 50px;background: #f1f5f8;margin: 0 auto;"></div> --}}
-                        <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">{{ $content }}
-                        </h3>
-                        <h4 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">Registered Username: {{ $email }}
+                        <h4 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">
+                            {{ $content }}
                         </h4>
-                        <h4 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">Login Password: {{ !empty($pwd) ? $pwd : 'Password enter in registration step 1.'}}
-                        </h4>
+                        <br/>
+                        <br/>
+                        <h5 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">
+                            Thanks & regards,
+                        </h5>
+                        <p style="margin: 5px 0 20px;font-size: 12px;color: #333;">
+                            {{$jobseeker}}
+                        </p>
                      </div>
                   </td>
                </tr>
@@ -95,3 +96,5 @@
       </div>
    </body>
 </html>
+
+

@@ -43,13 +43,8 @@
                         ">
                         <img class="logo-img" src="{{ asset('public/uploads/hiringjet-white-logo.png') }}" alt="logo" style="width: 180px;object-fit: contain;">
                      </div>
-                     <div class="text" style="
-                        width: 50%;
-                        float: right;
-                        text-align: end;
-                        color: #fff;
-                        ">
-                        <p><?= date('M d, Y') ?></p>
+                     <div class="text" style="width: 50%;float: right;text-align: end;color: #fff;">
+                        <p style="text-align: right"><?= date('M d, Y') ?></p>
                      </div>
                   </td>
                </tr>
@@ -58,7 +53,8 @@
                <tr>
                   <td
                      style="">
-                     <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 5px;padding-top:10px;">OTP With {{ env('APP_NAME') }} (OTP Verification)
+                     <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 5px;padding-top:10px;">
+                        One Time Passode from {{ env('APP_NAME') }} for verification
                      </p>
                   </td>
                </tr>
@@ -72,12 +68,16 @@
                <tr>
                   <td>
                      <div class="job-banner" style="width: 400px;border-radius: 15px;padding: 30px 20px;text-align: center;margin: 0 auto;border: 1px solid #ededed;margin-bottom: 50px;margin-top:20px;">
-                        <div class="rounded" style="height: 100px;width: 100px;border-radius: 50px;background: #f1f5f8;margin: 0 auto;"></div>
+                        {{-- <div class="rounded" style="height: 100px;width: 100px;border-radius: 50px;background: #f1f5f8;margin: 0 auto;"></div> --}}
                         <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">{{ $content }}
                         </h3>
                         <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">OTP:{{ $otp }}
                         </h3>
-                        <p style="margin: 5px 0 20px;font-size: 12px;color: #333;">Please note that the OTP will be valid for next 10 Minutes.</p>
+                        <p style="margin: 5px 0 20px;font-size: 12px;color: #333;">Please note that the OTP will be valid for the next 10 minutes only.</p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p style="margin: 5px 0 20px;font-size: 12px;color: #333;">If you did not request this OTP then please reach out to our support team.</p>
                      </div>
                   </td>
                </tr>

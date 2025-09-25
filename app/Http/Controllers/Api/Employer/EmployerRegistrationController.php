@@ -115,7 +115,7 @@ class EmployerRegistrationController extends BaseApiController
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
-                $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
+                $message = 'Registration step 1 has successfully done. Please input this OTP for verfication.';
                 Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
 
                 return $this->sendResponse([

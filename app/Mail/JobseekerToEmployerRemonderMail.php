@@ -15,10 +15,13 @@ class JobseekerToEmployerRemonderMail extends Mailable
 
     /**
      * Create a new message instance.
-     */
-    public function __construct()
+    */
+    public $employer, $content, $jobseeker;
+    public function __construct($employer, $content, $jobseeker)
     {
-        //
+        $this->employer = $employer;
+        $this->content = $content;
+        $this->jobseeker = $jobseeker;
     }
 
     /**
@@ -27,7 +30,7 @@ class JobseekerToEmployerRemonderMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Jobseeker To Employer Remonder Mail',
+            subject: 'Following Up on My Job Application',
         );
     }
 
@@ -37,7 +40,12 @@ class JobseekerToEmployerRemonderMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mails.jobseeker-to-employer-remonder',
+            with: [
+                'name' => $this->employer,
+                'otp' => $this->content,
+                'content' => $this->jobseeker,
+            ],
         );
     }
 

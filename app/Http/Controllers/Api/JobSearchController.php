@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Validator;
 use App\Mail\NotificationEmail;
+use App\Mail\JobseekerToEmployerRemonderMail;
 
 use App\Models\PostJob;
 use App\Models\PostJobUserApplied;
@@ -747,6 +748,11 @@ class JobSearchController extends BaseApiController
                 'employer_id'=> $job_details->employer_id,
                 'reminder_count'=> $has_reminder->count() + 1,
             ]);
+            $employer = Employer::find($job_details->employer_id);
+            $employer_name = $employer?$employer->name:'';
+            $jobseeker = auth()->user()->first_name.' '.auth()->user()->last_name;
+            $message = 'I hope this message finds you well. I recently applied for the '.$job_details->position_name.' position at '.$employer_name.' and wanted to kindly follow up regarding my application. I remain very interested in the role and would be glad to provide any additional details if needed.';
+            Mail::to($request->email)->send(new JobseekerToEmployerRemonderMail($employer_name, $message, $jobseeker));
 
             return $this->sendResponse([],
                         'You have successfully posted job reminder.'

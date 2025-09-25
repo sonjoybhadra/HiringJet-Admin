@@ -49,7 +49,7 @@
                         text-align: end;
                         color: #fff;
                         ">
-                        <p><?= date('M d, Y') ?></p>
+                        <p style="text-align: right"><?= date('M d, Y') ?></p>
                      </div>
                   </td>
                </tr>
@@ -72,7 +72,7 @@
                <tr>
                   <td>
                      <div class="job-banner" style="width: 400px;border-radius: 15px;padding: 30px 20px;text-align: center;margin: 0 auto;border: 1px solid #ededed;margin-bottom: 50px;margin-top:20px;">
-                        <div class="rounded" style="height: 100px;width: 100px;border-radius: 50px;background: #f1f5f8;margin: 0 auto;"></div>
+                        {{-- <div class="rounded" style="height: 100px;width: 100px;border-radius: 50px;background: #f1f5f8;margin: 0 auto;"></div> --}}
                         <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">Your password updated successfully.
                         </h3>
                      </div>
