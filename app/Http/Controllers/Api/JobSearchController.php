@@ -738,7 +738,7 @@ class JobSearchController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // try{
+        try{
             $has_reminder = JobJobseekerReminder::where('job_id', $request->job_id)
                                                 ->where('jobseeker_id', auth()->user()->id)
                                                 ->get();
@@ -764,9 +764,9 @@ class JobSearchController extends BaseApiController
             return $this->sendResponse([],
                         'You have successfully posted job reminder.'
                     );
-        // }catch (\Exception $exception) {
-        //     return $this->sendError('Error', 'Sorry!! Something went wrong.', Response::HTTP_INTERNAL_SERVER_ERROR);
-        // }
+        }catch (\Exception $exception) {
+            return $this->sendError('Error', 'Sorry!! Something went wrong.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
