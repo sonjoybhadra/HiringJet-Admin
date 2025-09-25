@@ -141,4 +141,9 @@ use App\Helpers\Helper;
       transform: rotate(360deg);
     }
   }
+
+  .btn {
+    font-size: 10px;
+    padding: 3px;
+  }
 </style>

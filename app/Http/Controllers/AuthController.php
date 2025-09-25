@@ -17,6 +17,7 @@ use App\Models\UserActivity;
 use App\Models\PostJob;
 use App\Models\Designation;
 use App\Models\Page;
+use App\Models\UserEmployer;
 
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -269,8 +270,12 @@ class AuthController extends Controller
         public function dashboard()
         {
             $data['total_jobseeker']            = User::where('status', '!=', 3)->where('role_id', '=', 3)->count();
+            $data['total_employer']             = UserEmployer::where('is_active', '=', 1)->count();
             $data['total_job_posted']           = PostJob::where('status', '!=', 3)->count();
             $data['active_jobseeker_30_days']   = User::where('status', 1)
+                                                    ->where('created_at', '>=', now()->subDays(30))
+                                                    ->count();
+            $data['active_employer_30_days']   = UserEmployer::where('completed_steps', '>', 0)
                                                     ->where('created_at', '>=', now()->subDays(30))
                                                     ->count();
             $data['active_jobs_30_days']        = PostJob::where('status', 1)
@@ -287,6 +292,16 @@ class AuthController extends Controller
                                     ->get();
                 $data['top5_country_most_jobseeker']        = $topCountryJobseeker;
             /* top 5 countries with most jobseekers */
+            /* top 5 countries with most employers */
+                $topCountryEmployer = DB::table('user_employers as up')
+                                    ->join('countries as i', 'up.country_id', '=', 'i.id')
+                                    ->select('i.name as country_name', DB::raw('COUNT(*) as user_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('user_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_country_most_employer']        = $topCountryEmployer;
+            /* top 5 countries with most employers */
             /* top 5 countries with most jobs */
                 $jobs = DB::table('post_jobs')->pluck('location_countries');
                 // Flatten all country IDs from all jobs
@@ -324,6 +339,16 @@ class AuthController extends Controller
                                     ->get();
                 $data['top5_city_most_jobseekers']        = $topCityJobseeker;
             /* top 5 cities with most jobseekers */
+            /* top 5 cities with most employers */
+                $topCityEmployer = DB::table('user_employers as up')
+                                    ->join('cities as i', 'up.city_id', '=', 'i.id')
+                                    ->select('i.name as city_name', DB::raw('COUNT(*) as user_count'))
+                                    ->groupBy('i.id', 'i.name')
+                                    ->orderByDesc('user_count')
+                                    ->limit(5)
+                                    ->get();
+                $data['top5_city_most_employers']        = $topCityEmployer;
+            /* top 5 cities with most employers */
             /* top 5 cities with most jobs */
                 $jobs = DB::table('post_jobs')->pluck('location_cities');
                 // Flatten all country IDs from all jobs
@@ -361,6 +386,16 @@ class AuthController extends Controller
                                                 ->get();
                 $data['top5_industry_most_jobseekers']        = $topIndustryJobseeker;
             /* top 5 industries with most jobseekers */
+            /* top 5 industries with most employers */
+                $topIndustryEmployer = DB::table('user_employers as uei')
+                                                ->join('industries as i', 'uei.industrie_id', '=', 'i.id')
+                                                ->select('i.name as industry_name', DB::raw('COUNT(*) as user_count'))
+                                                ->groupBy('i.id', 'i.name')
+                                                ->orderByDesc('user_count')
+                                                ->limit(5)
+                                                ->get();
+                $data['top5_industry_most_employer']        = $topIndustryEmployer;
+            /* top 5 industries with most employers */
             /* top 5 industries with most jobs */
                 $topIndustries = DB::table('post_jobs as pj')
                                     ->join('industries as i', 'pj.industry', '=', 'i.id')
@@ -1053,7 +1088,8 @@ class AuthController extends Controller
         return view('maincontents.' . $page_name, $data);
     }
     public function postjobOtherDesignationUpdate(){
-        $getJobs                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->get();
+        $getJobs                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->orderBy('id', 'ASC')->get();
+        // Helper::pr($getJobs);
         if($getJobs){
             foreach($getJobs as $getJob){
                 $id             = $getJob->id;
@@ -1080,6 +1116,7 @@ class AuthController extends Controller
                 PostJob::where('id', '=', $id)->update($fields);
             }
         }
-        Helper::pr($getJobs);
+        $getJobCount                      = PostJob::select('id', 'position_name', 'designation')->where('designation', '=', 7037)->count();
+        echo $getJobCount;
     }
 }

@@ -30,7 +30,7 @@ use App\Helpers\Helper;
             <h6 class="card-title">Total Employers</h6>
           </div>
           <div class="card-body">
-            <h4 style="bottom: 0;position: absolute;">0</h4>
+            <h4 style="bottom: 0;position: absolute;"><?=$total_employer?></h4>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ use App\Helpers\Helper;
             <h6 class="card-title">Active Employers in last 30 Days</h6>
           </div>
           <div class="card-body">
-            <h4 style="bottom: 0;position: absolute;">0</h4>
+            <h4 style="bottom: 0;position: absolute;"><?=$active_employer_30_days?></h4>
           </div>
         </div>
       </div>
@@ -108,17 +108,17 @@ use App\Helpers\Helper;
           </div>
           <div class="card-body">
             <ul class="p-0 m-0">
-
-              <li class="mb-6 d-flex justify-content-between align-items-center">
-                <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-                <div class="d-flex justify-content-between w-100 flex-wrap">
-                  <h6 class="mb-0 ms-4">Emails</h6>
-                  <div class="d-flex">
-                    <p class="ms-4 text-success mb-0">0.3%</p>
+              <?php if(!empty($top5_country_most_employer)){ foreach($top5_country_most_employer as $row){?>
+                <li class="mb-6 d-flex justify-content-between align-items-center">
+                  <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
+                  <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <h6 class="mb-0 ms-4"><?=$row->country_name?></h6>
+                    <div class="d-flex">
+                      <p class="ms-4 text-success mb-0"><?=$row->user_count?></p>
+                    </div>
                   </div>
-                </div>
-              </li>
-              
+                </li>
+              <?php } }?>
             </ul>
           </div>
         </div>
@@ -179,17 +179,17 @@ use App\Helpers\Helper;
           </div>
           <div class="card-body">
             <ul class="p-0 m-0">
-
-              <li class="mb-6 d-flex justify-content-between align-items-center">
-                <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-                <div class="d-flex justify-content-between w-100 flex-wrap">
-                  <h6 class="mb-0 ms-4">Emails</h6>
-                  <div class="d-flex">
-                    <p class="ms-4 text-success mb-0">0.3%</p>
+              <?php if(!empty($top5_city_most_employers)){ foreach($top5_city_most_employers as $row){?>
+                <li class="mb-6 d-flex justify-content-between align-items-center">
+                  <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
+                  <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <h6 class="mb-0 ms-4"><?=$row->city_name?></h6>
+                    <div class="d-flex">
+                      <p class="ms-4 text-success mb-0"><?=$row->user_count?></p>
+                    </div>
                   </div>
-                </div>
-              </li>
-              
+                </li>
+              <?php } }?>
             </ul>
           </div>
         </div>
@@ -248,17 +248,17 @@ use App\Helpers\Helper;
           </div>
           <div class="card-body">
             <ul class="p-0 m-0">
-
-              <li class="mb-6 d-flex justify-content-between align-items-center">
-                <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-                <div class="d-flex justify-content-between w-100 flex-wrap">
-                  <h6 class="mb-0 ms-4">Emails</h6>
-                  <div class="d-flex">
-                    <p class="ms-4 text-success mb-0">0.3%</p>
+              <?php if(!empty($top5_industry_most_employer)){ foreach($top5_industry_most_employer as $row){?>
+                <li class="mb-6 d-flex justify-content-between align-items-center">
+                  <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
+                  <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <h6 class="mb-0 ms-4"><?=$row->industry_name?></h6>
+                    <div class="d-flex">
+                      <p class="ms-4 text-success mb-0"><?=$row->user_count?></p>
+                    </div>
                   </div>
-                </div>
-              </li>
-              
+                </li>
+              <?php } }?>
             </ul>
           </div>
         </div>

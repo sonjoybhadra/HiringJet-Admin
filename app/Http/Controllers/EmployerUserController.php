@@ -122,7 +122,7 @@ class EmployerUserController extends Controller
                                         'phone'                     => strip_tags($postData['phone']),
                                         'password'                  => Hash::make($request->password),
                                         // 'confirm_password'          => Hash::make($request->confirm_password),
-                                        'status'                    => 0,
+                                        'status'                    => 1,
                                         'remember_token'            => $otp_mail_hash,
                                         'email_verified_at'         => date('Y-m-d H:i:s'),
                                         'created_at'                => date('Y-m-d H:i:s'),
@@ -342,7 +342,7 @@ class EmployerUserController extends Controller
 
                 $full_name = $user->first_name.' '.$user->last_name;
                 $message = 'Registration step 1 has successfully done. Please verify activation OTP.';
-                Mail::to($request->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
+                Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Signup OTP'));
 
                 return redirect($this->data['controller_route'] . "/verify-otp/" . Helper::encoded($id))->with(['success_message' => 'OTP resend successfully. Please verify OTP already send in your registered email.']);
             }
@@ -353,7 +353,7 @@ class EmployerUserController extends Controller
             $data['module']                 = $this->data;
             $id                             = Helper::decoded($id);
             $page_name                      = 'employer-user.verify-otp';
-            $data['row']                    = UserEmployer::where('id', '=', $id)->first();
+            $data['row']                    = UserEmployer::where('user_id', '=', $id)->first();
             $business_id                    = (($data['row'])?$data['row']->business_id:0);
             $user_id                        = (($data['row'])?$data['row']->user_id:0);
             $data['id']                     = $id;
@@ -365,13 +365,14 @@ class EmployerUserController extends Controller
                     'otp'            => 'required',
                 ];
                 if($this->validate($request, $rules)){
-                    $user_employer              = UserEmployer::where('id', '=', $id)->first();
+                    $user_employer              = UserEmployer::where('user_id', '=', $id)->first();
                     $user_id                    = (($user_employer)?$user_employer->user_id:0);
                     $business_id                = (($user_employer)?$user_employer->business_id:0);
 
                     $user                       = User::where('id', '=', $user_id)->first();
+                    
                     $remember_token             = (($user)?base64_decode($user->remember_token):'');
-
+                    
                     if($remember_token == $postData['otp']){
                         $user_obj = User::where('id', '=', $user_id)->first();
                         $user_obj->status = 1;
@@ -398,8 +399,9 @@ class EmployerUserController extends Controller
                     return redirect()->back()->with('error_message', 'All Fields Required !!!');
                 }
             }
-
+            
             $user                           = User::where('id', '=', $user_id)->first();
+            
             if(!$user->status){
                 /* otp send again when verify otp button clicked */
                     

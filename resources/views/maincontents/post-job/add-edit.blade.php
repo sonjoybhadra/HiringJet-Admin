@@ -781,51 +781,36 @@ $controllerRoute = $module['controller_route'];
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const openDate = document.getElementById('posting_open_date');
-        const closeDate = document.getElementById('posting_close_date');
+document.addEventListener('DOMContentLoaded', function() {
+    const openDate = document.getElementById('posting_open_date');
+    const closeDate = document.getElementById('posting_close_date');
 
-        // Function to format date to YYYY-MM-DD
-        function formatDate(date) {
-            const d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
-            return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
-        }
+    // Format date YYYY-MM-DD
+    function formatDate(date) {
+        const d = new Date(date);
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        const year = d.getFullYear();
+        return [year, month, day].join('-');
+    }
 
-        // Set initial min/max for close date on page load
-        const today = new Date();
-        const todayStr = formatDate(today);
-        const plus7 = new Date(today);
-        plus7.setDate(plus7.getDate() + 30);
-        const plus7Str = formatDate(plus7);
+    // When open date changes
+    openDate.addEventListener('change', function() {
+        const selectedOpenDate = new Date(this.value);
+        if (isNaN(selectedOpenDate)) return;
 
-        openDate.min = todayStr;
-        closeDate.min = todayStr;
-        closeDate.max = plus7Str;
+        // Calculate +30 days
+        const newCloseDate = new Date(selectedOpenDate);
+        newCloseDate.setDate(newCloseDate.getDate() + 30);
 
-        // When open date changes
-        openDate.addEventListener('change', function() {
-            const selectedOpenDate = new Date(this.value);
-            if (isNaN(selectedOpenDate)) return;
+        // Set close date value
+        closeDate.value = formatDate(newCloseDate);
 
-            const newMin = formatDate(selectedOpenDate);
-            const newMaxDate = new Date(selectedOpenDate);
-            newMaxDate.setDate(newMaxDate.getDate() + 30);
-            const newMax = formatDate(newMaxDate);
-
-            closeDate.min = newMin;
-            closeDate.max = newMax;
-
-            // Optional: If current close date is out of new range, reset it
-            if (closeDate.value < newMin || closeDate.value > newMax) {
-                closeDate.value = newMax;
-            }
-        });
-
-
+        // Also update min/max if you want to restrict selection
+        closeDate.min = formatDate(selectedOpenDate);
+        closeDate.max = formatDate(newCloseDate);
     });
+});
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
