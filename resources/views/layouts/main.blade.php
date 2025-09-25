@@ -93,20 +93,20 @@ use App\Helpers\Helper; ?>
     });
     let dotInterval;
 
-    function startDotAnimation() {
-      const dotElement = document.getElementById('dot-animation');
-      let dotCount = 1;
+    // function startDotAnimation() {
+    //   const dotElement = document.getElementById('dot-animation');
+    //   let dotCount = 1;
 
-      dotInterval = setInterval(() => {
-        dotCount = (dotCount % 3) + 1;
-        dotElement.textContent = '.'.repeat(dotCount);
-      }, 500);
-    }
+    //   dotInterval = setInterval(() => {
+    //     dotCount = (dotCount % 3) + 1;
+    //     dotElement.textContent = '.'.repeat(dotCount);
+    //   }, 500);
+    // }
 
-    function stopDotAnimation() {
-      clearInterval(dotInterval);
-      document.getElementById('dot-animation').textContent = '.'; // reset
-    }
+    // function stopDotAnimation() {
+    //   clearInterval(dotInterval);
+    //   document.getElementById('dot-animation').textContent = '.'; // reset
+    // }
   </script>
   <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css" />
   <script type="importmap">

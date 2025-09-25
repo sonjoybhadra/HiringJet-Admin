@@ -48,10 +48,11 @@ $controllerRoute = $module['controller_route'];
             <div class="card-body">
                 <form id="formAccountSettings" action="" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <span class="text-danger">Star (*) marks fields are mandatory</span>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="faq_category_id" class="form-label">User Type</label>
-                            <select class="form-control" name="to_users" id="to_users">
+                            <label for="faq_category_id" class="form-label">User Type <span class="text-danger">*</span></label>
+                            <select class="form-control" name="to_users" id="to_users" required>
                                 <option value="" selected>Select User Type</option>
                                 <option value="0" <?=(($to_users == 0)?'selected':'')?>>All</option>
                                 <option value="1" <?=(($to_users == 1)?'selected':'')?>>Jobseeker</option>
@@ -59,7 +60,7 @@ $controllerRoute = $module['controller_route'];
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="users" class="form-label">Users</label>
+                            <label for="users" class="form-label">Users <span class="text-danger">*</span></label>
                             <div id="all_users_wrapper" style="display:none;">
                                 <select class="select2" id="all_users" name="all_users[]" multiple>
                                     <?php if($all_users){ foreach($all_users as $all_user){?>
@@ -84,7 +85,7 @@ $controllerRoute = $module['controller_route'];
                         </div>
 
                         <div class="col-md-6">
-                            <label for="title" class="form-label">Title</label>
+                            <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
                             <textarea name="title" class="form-control" id="title" rows="5" required><?=$title?></textarea>
                         </div>
                         <div class="col-md-6">

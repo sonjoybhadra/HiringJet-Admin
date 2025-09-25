@@ -604,6 +604,23 @@ class PostJobController extends Controller
         public function change_status(Request $request, $id){
             $id                             = Helper::decoded($id);
             $model                          = PostJob::find($id);
+            $employer_id                    = (($model)?$model->employer_id:0);
+            $getEmployer                    = Employer::select('status')->where('id', '=', $employer_id)->first();
+            
+            if(!empty($getEmployer)){
+                if($getEmployer->status == 0){
+                    $redirectURL = 'non-verified-employer-approve-job';
+                } elseif($getEmployer->status == 1){
+                    $redirectURL = 'internal-employer-approve-job';
+                } elseif($getEmployer->status == 4){
+                    $redirectURL = 'verified-employer-approve-job';
+                } else {
+                    $redirectURL = 'internal-employer-approve-job';
+                }
+            } else {
+                $redirectURL = 'internal-employer-approve-job';
+            }
+
             if ($model->status == 1)
             {
                 $model->status  = 0;
@@ -637,7 +654,8 @@ class PostJobController extends Controller
                 /* user activity */
             }            
             $model->save();
-            return redirect($this->data['controller_route'] . "/internal-employer-approve-job")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
+            
+            return redirect($this->data['controller_route'] . "/" . $redirectURL)->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
         }
     /* change status */
     /* get country wise city */

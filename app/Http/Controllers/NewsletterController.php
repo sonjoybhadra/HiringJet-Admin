@@ -50,7 +50,7 @@ class NewsletterController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'title'                 => 'required',
-                    'description'           => 'required',
+                    // 'description'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     /* user activity */
@@ -112,7 +112,7 @@ class NewsletterController extends Controller
                 $postData = $request->all();
                 $rules = [
                     'title'                 => 'required',
-                    'description'           => 'required',
+                    // 'description'           => 'required',
                 ];
                 if($this->validate($request, $rules)){
                     if($postData['to_users'] == 0){
