@@ -2,7 +2,7 @@
 <html lang="en">
    <head>
       <meta charset="UTF-8">
-      <title>OTP Verification</title>
+      <title>HR Job Section</title>
       <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap"
          rel="stylesheet">
       <style>
@@ -41,7 +41,7 @@
                         width: 50%;
                         float: left;
                         ">
-                        <img class="logo-img" src="{{ asset('public/uploads/hiringjet-white-logo.png') }}" alt="logo" style="width: 180px;object-fit: contain;">
+                        <img class="logo-img" src="https://hjadmin.hiringjet.com/public/uploads/email-template-new/logo.svg" alt="logo" style="width: 180px;object-fit: contain;">
                      </div>
                      <div class="text" style="
                         width: 50%;
@@ -49,23 +49,23 @@
                         text-align: end;
                         color: #fff;
                         ">
-                        <p><?= date('M d, Y') ?></p>
+                        <p>Sep 20, 2025</p>
                      </div>
                   </td>
                </tr>
             </thead>
             <tbody>
                <tr>
-                  <td
+                  <td 
                      style="">
-                     <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 5px;padding-top:10px;">OTP With {{ env('APP_NAME') }} (OTP Verification)
+                     <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 5px;padding-top:10px;">Rajan Benipuri has shared following candidate's CV with you.
                      </p>
                   </td>
                </tr>
                <tr>
-                  <td
+                  <td 
                      style="">
-                     <p style="color: #4a4a4aba;font-size: 16px;font-weight: 400;margin-top: 5px;">Hello, {{ $name }}.
+                     <p style="color: #4a4a4aba;font-size: 16px;font-weight: 400;margin-top: 5px;">Hello Rajan, check this CV and let me know what do you think.
                      </p>
                   </td>
                </tr>
@@ -73,11 +73,10 @@
                   <td>
                      <div class="job-banner" style="width: 400px;border-radius: 15px;padding: 30px 20px;text-align: center;margin: 0 auto;border: 1px solid #ededed;margin-bottom: 50px;margin-top:20px;">
                         <div class="rounded" style="height: 100px;width: 100px;border-radius: 50px;background: #f1f5f8;margin: 0 auto;"></div>
-                        <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">{{ $content }}
+                        <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">Jobseeker Chayan - Account Sales Manager
                         </h3>
-                        <h3 style="margin: 20px 0 0;font-size: 16px;color: #0d2531;letter-spacing: 1px;">OTP:{{ $otp }}
-                        </h3>
-                        <p style="margin: 5px 0 20px;font-size: 12px;color: #333;">Please note that the OTP will be valid for next 10 Minutes.</p>
+                        <p style="margin: 5px 0 20px;font-size: 12px;color: #333;">Sr. PHP backend developer and system analysist</p>
+                        <a href="#" class="apply-btn" style="background-color: #113775;color: white;padding: 4px 66px;text-decoration: none;border-radius: 8px;font-weight: 500;display: inline-block;font-size: 15px;line-height: 30px;">VIEW CV</a>
                      </div>
                   </td>
                </tr>
@@ -85,7 +84,7 @@
             <tfoot>
                <tr>
                   <td style="background: #f1f5f8;text-align: center;padding: 40px 0;">
-                     <p style="color: #7d8286;font-size: 15px;font-weight: 500;margin: 0;">All Rights Reserved | © <?= date('Y')?> {{ env('APP_NAME') }}
+                     <p style="color: #7d8286;font-size: 15px;font-weight: 500;margin: 0;">All Rights Reserved | © 2025 HiringJet
                      </p>
                   </td>
                </tr>
@@ -94,5 +93,3 @@
       </div>
    </body>
 </html>
-
-
