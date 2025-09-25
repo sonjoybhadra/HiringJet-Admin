@@ -738,7 +738,7 @@ class JobSearchController extends BaseApiController
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try{
+        // try{
             $has_reminder = JobJobseekerReminder::where('job_id', $request->job_id)
                                                 ->where('jobseeker_id', auth()->user()->id)
                                                 ->get();
@@ -753,18 +753,20 @@ class JobSearchController extends BaseApiController
             $company_name = $company?$company->name:'';
 
             $employer = UserEmployer::where('business_id', $job_details->employer_id)->first();
-            $employer_name = $employer?($employer->first_name.' '.$employer->last_name):'';
+            if($employer){
+                $employer_name = $employer?($employer->first_name.' '.$employer->last_name):'';
 
-            $jobseeker = auth()->user()->first_name.' '.auth()->user()->last_name;
-            $message = 'I hope this message finds you well. I recently applied for the '.$job_details->position_name.' position at '.$company_name.' and wanted to kindly follow up regarding my application. I remain very interested in the role and would be glad to provide any additional details if needed.';
-            Mail::to($request->email)->send(new JobseekerToEmployerRemonderMail($employer_name, $message, $jobseeker));
+                $jobseeker = auth()->user()->first_name.' '.auth()->user()->last_name;
+                $message = 'I hope this message finds you well. I recently applied for the '.$job_details->position_name.' position at '.$company_name.' and wanted to kindly follow up regarding my application. I remain very interested in the role and would be glad to provide any additional details if needed.';
+                Mail::to($employer->email)->send(new JobseekerToEmployerRemonderMail($employer_name, $message, $jobseeker));
+            }
 
             return $this->sendResponse([],
                         'You have successfully posted job reminder.'
                     );
-        }catch (\Exception $exception) {
-            return $this->sendError('Error', 'Sorry!! Something went wrong.', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        // }catch (\Exception $exception) {
+        //     return $this->sendError('Error', 'Sorry!! Something went wrong.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        // }
     }
 
 }
