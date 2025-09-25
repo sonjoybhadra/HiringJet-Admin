@@ -25,6 +25,7 @@ use App\Models\City;
 use App\Models\Employer;
 use App\Models\Nationality;
 use App\Models\UserJobSearchHistory;
+use App\Models\UserEmployer;
 use App\Models\JobJobseekerReminder;
 
 class JobSearchController extends BaseApiController
@@ -748,10 +749,14 @@ class JobSearchController extends BaseApiController
                 'employer_id'=> $job_details->employer_id,
                 'reminder_count'=> $has_reminder->count() + 1,
             ]);
-            $employer = Employer::find($job_details->employer_id);
-            $employer_name = $employer?$employer->name:'';
+            $company = Employer::find($job_details->employer_id);
+            $company_name = $company?$company->name:'';
+
+            $employer = UserEmployer::where('business_id', $job_details->employer_id)->first();
+            $employer_name = $employer?($employer->first_name.' '.$employer->last_name):'';
+
             $jobseeker = auth()->user()->first_name.' '.auth()->user()->last_name;
-            $message = 'I hope this message finds you well. I recently applied for the '.$job_details->position_name.' position at '.$employer_name.' and wanted to kindly follow up regarding my application. I remain very interested in the role and would be glad to provide any additional details if needed.';
+            $message = 'I hope this message finds you well. I recently applied for the '.$job_details->position_name.' position at '.$company_name.' and wanted to kindly follow up regarding my application. I remain very interested in the role and would be glad to provide any additional details if needed.';
             Mail::to($request->email)->send(new JobseekerToEmployerRemonderMail($employer_name, $message, $jobseeker));
 
             return $this->sendResponse([],
