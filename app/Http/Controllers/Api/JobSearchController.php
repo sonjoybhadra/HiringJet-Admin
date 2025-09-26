@@ -516,7 +516,7 @@ class JobSearchController extends BaseApiController
             $data_count_jobtype_array = $data_count_job_status = array();
             if(count($job_ids)){
                 $sql = PostJob::select('post_jobs.*')
-                            // ->addSelect(DB::raw('(SELECT created_at FROM job_jobseeker_reminders WHERE job_jobseeker_reminders.job_id = post_jobs.id order by id desc limit 1) AS latest_reminder_at'))
+                            ->addSelect(DB::raw('(SELECT created_at FROM post_job_user_applieds x WHERE x.job_id = post_jobs.id) AS job_applied_on'))
                             ->whereIn('id', $job_ids)
                             ->with('employer')
                             ->with('industryRelation')
