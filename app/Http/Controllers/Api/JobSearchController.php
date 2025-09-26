@@ -509,7 +509,7 @@ class JobSearchController extends BaseApiController
 
     public function jobseekerAppliedJobs(Request $request)
     {
-        try{
+        // try{
             $job_ids = PostJobUserApplied::select('job_id')->where('user_id', auth()->user()->id)
                                             ->get()->pluck('job_id')->toArray();
             $data = [];
@@ -581,9 +581,9 @@ class JobSearchController extends BaseApiController
                 );
             }
 
-        }catch (\Exception $exception) {
-            return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        // }catch (\Exception $exception) {
+        //     return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        // }
     }
 
     public function shortlistedJob(Request $request)
