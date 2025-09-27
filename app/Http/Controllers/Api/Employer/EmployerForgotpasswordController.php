@@ -48,7 +48,7 @@ class ForgotpasswordController extends BaseApiController
         // $email = 'work.chayan2020@gmail.com';
         // Mail::to($request->input('email'))->send(new ForgotPassword($otp));
         $full_name = $user->first_name.' '.$user->last_name;
-        $message = 'A OTP has sent successfully to your register email. Please verify OTP and reset your password.';
+        $message = 'An OTP has been sent to your registered email. Please enter OTP and reset your password.';
         Mail::to($user->email)->send(new SignupOtp($full_name, $otp, $message, 'Forgot Password OTP'));
 
         return $this->sendResponse([
