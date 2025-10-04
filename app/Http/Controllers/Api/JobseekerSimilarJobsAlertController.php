@@ -50,7 +50,7 @@ class JobseekerSimilarJobsAlertController extends BaseApiController
                 'created_at'=> date('Y-m-d h:i:s')
             ]);
 
-            return $this->sendResponse($this->getList(), 'CV folder created successfully.');
+            return $this->sendResponse($this->getList(), 'Job alert created successfully.');
         }catch (\Exception $exception) {
             return $this->sendError('Error', 'Sorry!! Something went wrong. Unable to process right now.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
