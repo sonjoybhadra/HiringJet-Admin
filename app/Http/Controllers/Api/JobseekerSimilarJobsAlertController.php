@@ -24,14 +24,14 @@ class JobseekerSimilarJobsAlertController extends BaseApiController
     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            // 'title' => 'required|string',
+        /* $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
             'search_string' => 'required|string'
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        } */
 
         try{
             $has_data = JobJobseekerSimilarJobsAlert::where('user_id', auth()->user()->id)->count();
