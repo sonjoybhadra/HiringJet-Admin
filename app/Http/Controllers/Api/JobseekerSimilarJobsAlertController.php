@@ -25,7 +25,7 @@ class JobseekerSimilarJobsAlertController extends BaseApiController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
+            // 'title' => 'required|string',
             'search_string' => 'required|string'
         ]);
 
@@ -42,7 +42,7 @@ class JobseekerSimilarJobsAlertController extends BaseApiController
 
             JobJobseekerSimilarJobsAlert::create([
                 'user_id'=> auth()->user()->id,
-                'title'=> time(),
+                'title'=> $request->title??time(),
                 'search_string'=> json_encode($request->all()),
                 'alert_start_date' => date('Y-m-d H:i:s'),
                 'alert_till_date' => date('Y-m-d H:i:s', strtotime('+12 months')),
