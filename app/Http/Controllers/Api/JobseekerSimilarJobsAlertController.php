@@ -42,8 +42,8 @@ class JobseekerSimilarJobsAlertController extends BaseApiController
 
             JobJobseekerSimilarJobsAlert::create([
                 'user_id'=> auth()->user()->id,
-                'title'=> $request->search_string,
-                'search_string'=> json_encode($request->search_string),
+                'title'=> time(),
+                'search_string'=> json_encode($request->all()),
                 'alert_start_date' => date('Y-m-d H:i:s'),
                 'alert_till_date' => date('Y-m-d H:i:s', strtotime('+12 months')),
                 'status'=> 1,
