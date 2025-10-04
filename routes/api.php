@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\CandidateSearchController;
 use App\Http\Controllers\Api\SocialAuthController;
 
 use App\Http\Controllers\Api\SchedulerController;
+use App\Http\Controllers\Api\JobseekerSimilarJobsAlertController;
 
 Route::post('/login', [AuthController::class, 'login']);
 // LinkedIn routes
@@ -217,6 +218,9 @@ Route::group([
     Route::post('/auth/linkedin/connect', [SocialAuthController::class, 'initiateLinkedInConnect']);
     Route::post('/auth/linkedin/link', [SocialAuthController::class, 'linkLinkedInAccount']);
     Route::post('/auth/linkedin/disconnect', [SocialAuthController::class, 'disconnectLinkedInAccount']);
+
+    Route::post('/jobs-alert/delete/{id}', [JobseekerSimilarJobsAlertController::class, 'destroy']);
+    Route::resource('/jobs-alert', JobseekerSimilarJobsAlertController::class);
 
     // Test configuration (optional - for debugging)
     Route::get('/auth/test-config', [SocialAuthController::class, 'testConfig']);
