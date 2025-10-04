@@ -90,6 +90,9 @@ class TableController extends Controller
                 }
                 if($col === 'created_by'){
                     return 'users.first_name as created_by_user';
+                    // return 'CONCAT(users.first_name, " ", users.last_name) as created_by_user';
+                    // return DB::raw("CONCAT(users.first_name, ' ', users.last_name) as created_by_user");
+                    // return DB::raw("(users.first_name || ' ' || users.last_name) as created_by_user");
                 }
             }
             if ($table === 'faq_sub_categories' && $col === 'faq_category_id') {
@@ -195,7 +198,18 @@ class TableController extends Controller
         if ($search) {
             $query->where(function ($q) use ($columns, $search) {
                 foreach ($columns as $col) {
-                    $baseCol = explode(' as ', $col)[0];
+
+                    if ($col instanceof \Illuminate\Database\Query\Expression) {
+                        // Convert Expression object to SQL string
+                        $colStr = (string) $col->getValue(DB::connection()->getQueryGrammar());
+                    } else {
+                        $colStr = $col;
+                    }
+
+                    $parts = explode(' as ', $colStr);
+                    $baseCol = $parts[0];
+
+                    // $baseCol = explode(' as ', $col)[0];
                     $q->orWhere($baseCol, 'ILIKE', "%{$search}%");
                 }
             });
