@@ -385,6 +385,7 @@ class EmployerUserController extends Controller
                         ]);
                         Employer::where('id', $business_id)->update([
                             'status'=> 1,
+                            'created_by' => $user_id
                         ]);
 
                         $full_name  = $user->first_name.' '.$user->last_name;
@@ -610,6 +611,7 @@ class EmployerUserController extends Controller
                         'description'       => $request->description,
                         'web_url'           => $request->web_url,
                         'employe_type'      => 'company',
+                        'created_by'        => (($data['row'])?$data['row']->user_id:''),
                     ]);
 
                     return redirect($this->data['controller_route'] . "/create-business/" . Helper::encoded($id))->with(['success_message' => 'Setup company profile has successfully done.']);
