@@ -34,6 +34,8 @@ class EmployerComposeMail extends Model
     */
     public function recepients(): HasOne
     {
-        return $this->hasOne(EmployerComposeMailRecepients::class, 'compose_email_id');
+        return $this->hasOne(EmployerComposeMailRecepients::class, 'compose_email_id')
+                    ->with(['jobseeker:id,first_name,last_name,email,country_code,phone']);
+
     }
 }
