@@ -249,6 +249,8 @@ use App\Http\Controllers\Api\Employer\DemoRequestsController;
 use App\Http\Controllers\Api\Employer\EmployerJobseekerCommentsController;
 use App\Http\Controllers\Api\Employer\EmployerSaveCvSearchController;
 
+use App\Http\Controllers\Api\Employer\EmployerComposeMailController;
+
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -327,6 +329,8 @@ Route::group([
 
     Route::resource('/jobseeker-comments', EmployerJobseekerCommentsController::class);
     Route::resource('/save-cv-search', EmployerSaveCvSearchController::class);
+
+    Route::resource('/compose-email', EmployerComposeMailController::class);
 
 });
 

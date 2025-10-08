@@ -84,7 +84,7 @@ class JobseekerSimilarJobsAlertController extends BaseApiController
     }
 
     private function getList($id = ''){
-        $sql = JobJobseekerSimilarJobsAlert::select('title','search_string')
+        $sql = JobJobseekerSimilarJobsAlert::select('id', 'title','search_string')
                                 ->where('user_id', auth()->user()->id);
         if($id != ''){
             return $sql->where('id', $id)->first();
