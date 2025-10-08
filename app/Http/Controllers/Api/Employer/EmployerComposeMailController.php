@@ -53,7 +53,7 @@ class EmployerComposeMailController extends BaseApiController
         }
 
         try{
-            $has_duplicate = EmployerEmailtemplate::where('user_id', auth()->user()->id)
+            /* $has_duplicate = EmployerComposeMail::where('user_id', auth()->user()->id)
                                             ->where('template_name', 'ilike', '%'.$request->template_name.'%')
                                             ->where('from_email_user_id', $request->from_email_user_id)
                                             ->get()->count();
@@ -67,16 +67,16 @@ class EmployerComposeMailController extends BaseApiController
             $city_id = $city->getCityId($request->city, $country_id);
 
             $designation = new Designation();
-            $designation_id = $designation->getDesignationId($request->designation);
+            $designation_id = $designation->getDesignationId($request->designation); */
             $compose_email = EmployerComposeMail::create([
                 'user_id'=> auth()->user()->id,
                 // 'template_name'=> $request->template_name,
                 'from_email'=> $request->from_email,
-                'designation_id'=> $designation_id,
+                'designation_id'=> $request->designation,
                 'experience_max'=> $request->experience_max,
                 'experience_min'=> $request->experience_min,
-                'country_id'=> $country_id,
-                'city_id' => $city_id,
+                'country_id'=> $request->country,
+                'city_id' => $request->city,
                 'currency_id' => $request->currency_id,
                 'salary_max' => $request->salary_max,
                 'salary_min' => $request->salary_min,
