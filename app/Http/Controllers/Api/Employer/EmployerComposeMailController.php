@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
+use App\Models\Country;
+use App\Models\City;
+use App\Models\Designation;
 use App\Models\EmployerComposeMail;
 use App\Models\EmployerComposeMailRecepients;
 
@@ -59,7 +62,7 @@ class EmployerComposeMailController extends BaseApiController
                                             ->get()->count();
             if($has_duplicate > 0){
                 return $this->sendError('Duplicate Error', 'Duplicate found.', Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
+            } */
 
             $country = new Country();
             $country_id = $country->getCountryId($request->country);
@@ -67,16 +70,16 @@ class EmployerComposeMailController extends BaseApiController
             $city_id = $city->getCityId($request->city, $country_id);
 
             $designation = new Designation();
-            $designation_id = $designation->getDesignationId($request->designation); */
+            $designation_id = $designation->getDesignationId($request->designation);
             $compose_email = EmployerComposeMail::create([
                 'user_id'=> auth()->user()->id,
                 // 'template_name'=> $request->template_name,
                 'from_email'=> $request->from_email,
-                'designation_id'=> $request->designation,
+                'designation_id'=> $designation_id,
                 'experience_max'=> $request->experience_max,
                 'experience_min'=> $request->experience_min,
-                'country_id'=> $request->country,
-                'city_id' => $request->city,
+                'country_id'=> $country_id,
+                'city_id' => $city_id,
                 'currency_id' => $request->currency_id,
                 'salary_max' => $request->salary_max,
                 'salary_min' => $request->salary_min,
@@ -157,15 +160,21 @@ class EmployerComposeMailController extends BaseApiController
             if($has_duplicate > 0){
                 return $this->sendError('Duplicate Error', 'Duplicate found.', Response::HTTP_UNPROCESSABLE_ENTITY);
             } */
+            $country = new Country();
+            $country_id = $country->getCountryId($request->country);
+            $city = new City();
+            $city_id = $city->getCityId($request->city, $country_id);
 
+            $designation = new Designation();
+            $designation_id = $designation->getDesignationId($request->designation);
             EmployerComposeMail::find($id)->update([
                 'from_email'=> $request->from_email,
                 // 'from_email_user_id'=> $request->from_email_user_id,
-                'designation_id'=> $request->designation_id,
+                'designation_id'=> $designation_id,
                 'experience_max'=> $request->experience_max,
                 'experience_min'=> $request->experience_min,
-                'country_id'=> $request->country_id,
-                'city_id' => $request->city_id,
+                'country_id'=> $country_id,
+                'city_id' => $city_id,
                 'currency_id' => $request->currency_id,
                 'salary_max' => $request->salary_max,
                 'salary_min' => $request->salary_min,
