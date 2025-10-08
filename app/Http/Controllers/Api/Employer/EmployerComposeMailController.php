@@ -64,13 +64,19 @@ class EmployerComposeMailController extends BaseApiController
                 return $this->sendError('Duplicate Error', 'Duplicate found.', Response::HTTP_UNPROCESSABLE_ENTITY);
             } */
 
-            $country = new Country();
-            $country_id = $country->getCountryId($request->country);
-            $city = new City();
-            $city_id = $city->getCityId($request->city, $country_id);
-
-            $designation = new Designation();
-            $designation_id = $designation->getDesignationId($request->designation);
+            $country_id = $city_id = $designation_id = NULL;
+            if(!empty($request->country)){
+                $country = new Country();
+                $country_id = $country->getCountryId($request->country);
+            }
+            if(!empty($request->city)){
+                $city = new City();
+                $city_id = $city->getCityId($request->city, $country_id);
+            }
+            if(!empty($request->designation)){
+                $designation = new Designation();
+                $designation_id = $designation->getDesignationId($request->designation);
+            }
             $compose_email = EmployerComposeMail::create([
                 'user_id'=> auth()->user()->id,
                 // 'template_name'=> $request->template_name,
@@ -160,13 +166,19 @@ class EmployerComposeMailController extends BaseApiController
             if($has_duplicate > 0){
                 return $this->sendError('Duplicate Error', 'Duplicate found.', Response::HTTP_UNPROCESSABLE_ENTITY);
             } */
-            $country = new Country();
-            $country_id = $country->getCountryId($request->country);
-            $city = new City();
-            $city_id = $city->getCityId($request->city, $country_id);
-
-            $designation = new Designation();
-            $designation_id = $designation->getDesignationId($request->designation);
+            $country_id = $city_id = $designation_id = NULL;
+            if(!empty($request->country)){
+                $country = new Country();
+                $country_id = $country->getCountryId($request->country);
+            }
+            if(!empty($request->city)){
+                $city = new City();
+                $city_id = $city->getCityId($request->city, $country_id);
+            }
+            if(!empty($request->designation)){
+                $designation = new Designation();
+                $designation_id = $designation->getDesignationId($request->designation);
+            }
             EmployerComposeMail::find($id)->update([
                 'from_email'=> $request->from_email,
                 // 'from_email_user_id'=> $request->from_email_user_id,
