@@ -45,7 +45,7 @@ class EmployerComposeMailController extends BaseApiController
             'salary_min' => 'required|integer', */
             'subject' => 'required|string',
             'message' => 'required|string',
-            'recepients' => 'required|string',
+            'recepients' => 'required|array',
         ]);
 
         if($validator->fails()){
@@ -141,7 +141,7 @@ class EmployerComposeMailController extends BaseApiController
             'salary_min' => 'required|integer', */
             'subject' => 'required|string',
             'message' => 'required|string',
-            'recepients' => 'required|string',
+            'recepients' => 'required|array',
         ]);
 
         if($validator->fails()){
