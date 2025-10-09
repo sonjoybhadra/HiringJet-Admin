@@ -57,6 +57,7 @@ use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\EmployerHomePageController;
 use App\Http\Controllers\TicketCategoryController;
 use App\Http\Controllers\TicketPriorityController;
+use App\Http\Controllers\CronSchedularController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -64,6 +65,8 @@ use App\Http\Controllers\TicketPriorityController;
 
 // GET route – to display the page
 Route::get('/test-email-function', [AuthController::class, 'showEmailTestPage']);
+
+Route::get('/send-similar-jobs-alert', [CronSchedularController::class, 'sendSimilarJobsAlert']);
 
 // POST route – to send the email
 Route::post('/test-email-function', [AuthController::class, 'testEmailFunction']);
@@ -370,7 +373,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('seo-page/delete/{id}', [SEOPageController::class, 'delete']);
         Route::get('seo-page/change-status/{id}', [SEOPageController::class, 'change_status']);
     /* page */
-    
+
     /* post job */
         Route::get('post-job/list', [PostJobController::class, 'list']);
         Route::get('post-job/verified-employer-approve-job', [PostJobController::class, 'verified_employer_approve_job']);
@@ -382,7 +385,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('job/non-verified-employer-pending-job', [PostJobController::class, 'non_verified_employer_pending_job']);
         Route::get('job/internal-employer-pending-job', [PostJobController::class, 'internal_employer_pending_job']);
         Route::get('job/reject-list', [PostJobController::class, 'rejectList']);
-        
+
         Route::match(['get', 'post'], 'post-job/add', [PostJobController::class, 'add']);
         Route::match(['get', 'post'], 'post-job/edit/{id}', [PostJobController::class, 'edit']);
         Route::get('post-job/delete/{id}', [PostJobController::class, 'delete']);

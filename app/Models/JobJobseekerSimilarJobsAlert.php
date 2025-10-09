@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class JobJobseekerSimilarJobsAlert extends Model
 {
@@ -18,4 +19,9 @@ class JobJobseekerSimilarJobsAlert extends Model
         'last_send_date',
         'status',
     ];
+
+    public function jobseeker(): BelongsTo
+    {
+        return $this->BelongsTo(User::class, 'user_id');
+    }
 }
