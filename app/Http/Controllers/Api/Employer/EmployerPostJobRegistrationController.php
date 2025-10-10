@@ -545,6 +545,7 @@ class EmployerPostJobRegistrationController extends BaseApiController
             $employer->web_url = $request->get('web_url') ?: '';
             $employer->no_of_employee = $request->get('no_of_employee') ?: 1;
             $employer->status = 0;
+            $employer->created_by = $user->id;
             $employer->save();
 
             if ($employer && $employer->id) {

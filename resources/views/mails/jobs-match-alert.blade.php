@@ -69,74 +69,92 @@
                 <thead>
                     <tr style=>
                         <td style="padding: 20px 0;border-bottom:1px solid#0000002b;padding-bottom:10px;">
-                            <div class="logo" style="
-                                width: 50%;
-                                float: left;
-                                ">
+                            <div class="logo" style="width: 50%;float: left;">
                                 <img class="logo-img" src="{{asset('public/uploads/email-template-new/logo.svg')}}" alt="logo" style="width: 180px;object-fit: contain;">
                             </div>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    {{-- <tr>
                         <td
                             style="">
                             <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 10px;padding-top:5px;">Rajan Benipuri has shared following candidate's CV with you.
                             </p>
                         </td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <td
                             style="">
                             <a href="#" class="apply-btn" style="background-color: #113775;color: white;padding: 4px 30px;text-decoration: none;border-radius: 8px;font-weight: 500;display: inline-block;font-size: 15px;line-height: 30px;">View All Jobs</a>
                         </td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td
                             style="">
                             <p style="color: #484f6d;font-size: 16px;font-weight: 500;margin: 0px;padding-top:0px;margin-bottom: 15px;">Rajan Benipuri has shared following candidate's CV with you.
                             </p>
                         </td>
-                    </tr>
-                    <tr>
-                        <td style="">
-                            <div class="job-tuple layout-wrapper" style="position: relative; background: #ffffff; border-radius: 20px; margin-bottom: 16px; padding: 24px 24px 20px; transition: box-shadow .2s linear; border: 1px solid#d4dbe3;">
-                                <div class="row1" style="padding-bottom:5px;">
-                                    <h2 style="margin:0;">
-                                        <a class="title " title="Web Designer" href="#" target="_blank" rel="noopener noreferrer" style="line-height: 22px; color: #275df5; max-width: 100%; display: block; font-size: 18px;
-                                        font-weight: 700; text-decoration: none;">Web Designer</a>
-                                    </h2>
-                                    <span class="imagewrap " style="float: none; position: absolute; right: 24px;top: 24px; width: 50px; height: 50px;">
-                                        <img style="height: 50px; width: 50px; border-radius: 14px; border: 1px solid #e5e5f2;" src="https://img.naukimg.com/logo_images/groups/v1/7300147.gif" class="logoImage" loading="lazy">
-                                    </span>
-                                </div>
-                                <div class=" row2" style="padding-bottom:5px;">
-                                    <span class=" comp-dtls">
-                                        <a class=" comp-name"  href="#" target="_blank" style="font-weight: 500; font-size: 14px; line-height: 18px; color: #494f6d;text-decoration:none;">Mediboost</a>
-                                    </span>
-                                </div>
-                                <div class=" row3" style="padding-bottom:5px;">
-                                    <div class="job-details ">
-                                        <span class="exp" style="font-weight: 500; font-size: 14px; line-height: 18px; color: #494f6d;">1-4 Yrs</span>
+                    </tr> --}}
+                    @foreach ($jobs as $job)
+                        <tr>
+                            <td style="">
+                                <div class="job-tuple layout-wrapper" style="position: relative; background: #ffffff; border-radius: 20px; margin-bottom: 16px; padding: 24px 24px 20px; transition: box-shadow .2s linear; border: 1px solid#d4dbe3;">
+                                    <div class="row1" style="padding-bottom:5px;">
+                                        <h2 style="margin:0;">
+                                            <a class="title " title="{{$job['position_name']}}" href="#" target="_blank" rel="noopener noreferrer" style="line-height: 22px; color: #275df5; max-width: 100%; display: block; font-size: 18px;
+                                            font-weight: 700; text-decoration: none;">{{$job['position_name']}}</a>
+                                        </h2>
+                                        {{-- <span class="imagewrap " style="float: none; position: absolute; right: 24px;top: 24px; width: 50px; height: 50px;">
+                                            <img style="height: 50px; width: 50px; border-radius: 14px; border: 1px solid #e5e5f2;" src="https://img.naukimg.com/logo_images/groups/v1/7300147.gif" class="logoImage" loading="lazy">
+                                        </span> --}}
                                     </div>
-                                </div>
-                                <div class=" row4" style="padding-bottom:5px;">
-                                    <div class="job-location ">
-                                        <span class="location-icon" style=" font-weight: 500; font-size: 14px; line-height: 18px; color: #494f6d;">Naihati, Navi Mumbai, Kolkata</span>
-                                    </div>
-                                </div>
-                                <div class=" row5" style="padding-bottom:5px;">
-                                    <div class="job-location ">
-                                        <span class="job-post-day " style="font-weight: 500;font-size: 14px;line-height: 18px; color: #494f6d;">3+ weeks ago</span>
-                                        <span class="appaly-btn ">
-                                            <a href="#" target="_blank" style="font-weight: 700;font-size: 14px;line-height: 18px;color: #494f6d;color: #275df5;text-decoration: none;padding-left: 8px;">Apply Now</a>
+                                    <div class=" row2" style="padding-bottom:5px;">
+                                        <span class="comp-dtls">
+                                            <a class="comp-name"  href="#" target="_blank" style="font-weight: 500; font-size: 14px; line-height: 18px; color: #494f6d;text-decoration:none;">
+                                                {{$job['employer']['name']??'N/A'}}
+                                            </a>
                                         </span>
                                     </div>
+                                    <div class=" row3" style="padding-bottom:5px;">
+                                        <div class="job-details ">
+                                            <span class="exp" style="font-weight: 500; font-size: 14px; line-height: 18px; color: #494f6d;">{{$job['min_exp_year'].'-'.$job['max_exp_year']}} Yrs</span>
+                                        </div>
+                                    </div>
+                                    <div class=" row4" style="padding-bottom:5px;">
+                                        <div class="job-location ">
+                                            <span class="location-icon" style=" font-weight: 500; font-size: 14px; line-height: 18px; color: #494f6d;">{{json_decode($job['location_city_names'], 0)[0]}}, {{json_decode($job['location_country_names'], 0)[0]}}</span>
+                                        </div>
+                                    </div>
+                                    <div class=" row5" style="padding-bottom:5px;">
+                                        <div class="job-location ">
+                                            <?php
+                                                // Define the two dates
+                                                $date1 = new DateTime(date('Y-m-d', strtotime($job['posting_open_date'])));
+                                                $date2 = new DateTime(date('Y-m-d'));
+
+                                                // Calculate the difference
+                                                $interval = $date1->diff($date2);
+
+                                                // Get the number of days
+                                                $days = $interval->days;
+                                                $x = $days.' days ago';
+                                                if($days > 7){
+                                                    // Calculate the number of weeks (integer division)
+                                                    $weeks = floor($days / 7);
+                                                    $x = $weeks.' weeks ago';
+                                                }
+                                            ?>
+                                            <span class="job-post-day " style="font-weight: 500;font-size: 14px;line-height: 18px; color: #494f6d;">{{ $x }}</span>
+                                            <span class="appaly-btn ">
+                                                <a href="#" target="_blank" style="font-weight: 700;font-size: 14px;line-height: 18px;color: #494f6d;color: #275df5;text-decoration: none;padding-left: 8px;">Apply Now</a>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td style="background: #f1f5f8;text-align: center;padding: 20px;border-radius: 10px;">
                             <table style="width: 100%;">
@@ -149,12 +167,14 @@
                                     <td>
                                         <ul style="list-style:none;margin:0">
                                             <li style="width:50%;float:left">
-                                            <a href="#"><img style="width:50px;" src="icon1.png" alt="image"></a>
-
+                                                <a href="#">
+                                                    <img style="width:50px;" src="{{asset('public/uploads/email-template-new/icon1.png')}}" alt="image">
+                                                </a>
                                             </li>
                                             <li style="width:50%;float:left">
-                                            <a href="#"><img  style="width:50px;" src="icon2.png" alt="image"></a>
-
+                                                <a href="#">
+                                                    <img  style="width:50px;" src="{{asset('public/uploads/email-template-new/icon2.png')}}" alt="image">
+                                                </a>
                                             </li>
                                         </ul>
                                     </td>
@@ -167,7 +187,7 @@
                             <a href="#" class="apply-btn" style="background-color: #113775;color: white;padding: 4px 30px;text-decoration: none;border-radius: 8px;font-weight: 500;display: inline-block;font-size: 15px;line-height: 30px;margin-top:30px;">View All Jobs</a>
                         </td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td style="">
                             <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 15px;padding-top:5px;">
                                 Rajan Benipuri has shared following candidate's CV with you.
@@ -211,15 +231,15 @@
                         <td align="center" >
                             <a href="#" class="apply-btn" style="color: #113775;text-decoration: none;border-radius: 8px;font-weight: 700;display: inline-block;font-size: 17px;line-height: 30px;margin-bottom: 25px;margin-top: 10px;">View All Jobs</a>
                         </td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <td align="center" style="background: #f1f5f8;padding:40px 0px 0px "  >
-                            <p style="color: #032946;font-size: 18px;font-weight: 500;margin-bottom: 15px;padding:0px;margin-top:0;">Rajan Benipuri has shared following candidate's CV with you.</p>
+                            {{-- <p style="color: #032946;font-size: 18px;font-weight: 500;margin-bottom: 15px;padding:0px;margin-top:0;">Rajan Benipuri has shared following candidate's CV with you.</p> --}}
                             <a href="#" target="_blank" class="store_icon me-2" style="display: inline-block;padding-right:8px">
-                                <img src="{{asset('public/uploads/home-page/1750170344playstore_icon-CnrTSDfj.png')}}">
+                                <img src="{{asset('public/uploads/email-template-new/playstore.png')}}">
                             </a>
                             <a href="#" target="_blank" class="store_icon" style="display: inline-block;">
-                                <img src="{{asset('public/uploads/home-page/1750170344appstore_icon-CO-IEEOc.png')}}">
+                                <img src="{{asset('public/uploads/email-template-new/applestore.png')}}">
                             </a>
                             <p style="border-bottom: 1px solid #d4dbe3;"></p>
                             <p style="font-weight: 500;font-size: 14px;line-height: 20px;color: #494f6d;padding: 10px 0;">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh viverra non semper suscipit posuere a pede.</p>

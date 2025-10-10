@@ -111,7 +111,8 @@ class EmployerRegistrationController extends BaseApiController
                 ]);
 
                 Employer::find($business_id)->update([
-                    'status'=> 1    // Waiting for admin approval
+                    'status'=> 0,    // Waiting for admin approval
+                    'created_by'=> $user_id
                 ]);
 
                 $full_name = $request->first_name.' '.$request->last_name;
@@ -324,6 +325,7 @@ class EmployerRegistrationController extends BaseApiController
                 'description'=> $request->description,
                 'web_url'=> $request->web_url,
                 'employe_type'=> $request->employe_type,
+                'created_by'=> $user->id,
                 'status'=> 0    // Unverified employer
             ]);
             /**
