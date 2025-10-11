@@ -251,6 +251,9 @@ use App\Http\Controllers\Api\Employer\EmployerSaveCvSearchController;
 
 use App\Http\Controllers\Api\Employer\EmployerComposeMailController;
 
+use App\Http\Controllers\Api\Employer\RequestCallbackExperttalkController;
+use App\Http\Controllers\Api\Employer\EmployerJobseekerProfileViewController;
+
 
 Route::post('/employer/signup', [EmployerRegistrationController::class, 'registration']);
 Route::post('/employer/signup/resend-otp', [EmployerRegistrationController::class, 'resendOtp']);
@@ -331,6 +334,12 @@ Route::group([
     Route::resource('/save-cv-search', EmployerSaveCvSearchController::class);
 
     Route::resource('/compose-email', EmployerComposeMailController::class);
+
+    Route::get('/request-callback/{particular}', [RequestCallbackExperttalkController::class, 'index']);
+    Route::post('/request-callback/{particular}', [RequestCallbackExperttalkController::class, 'store']);
+
+    Route::get('/profile-view', [EmployerJobseekerProfileViewController::class, 'index']);
+    Route::post('/profile-view', [EmployerJobseekerProfileViewController::class, 'store']);
 
 });
 

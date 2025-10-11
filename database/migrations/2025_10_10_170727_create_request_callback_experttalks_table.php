@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('country_code', 10)->nullable();
             $table->string('phone', 20)->nullable();
             $table->dateTime('preferred_time')->nullable();
+            $table->string('particulars', 20)->nullable(); //request-callback, talk-to-experts
+            $table->foreignId('created_by')->constrained('users');
             $table->softDeletes();
             $table->timestamps();
         });

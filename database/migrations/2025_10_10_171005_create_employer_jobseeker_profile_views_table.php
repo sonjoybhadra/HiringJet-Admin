@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('jobseeker_id')->constrained('users');
             $table->foreignId('employer_id')->constrained('users');
             $table->string('action_type', 50)->nullable();
+            $table->integer('year')->nullable();
+            $table->integer('month')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
