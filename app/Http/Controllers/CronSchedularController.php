@@ -214,7 +214,7 @@ class CronSchedularController extends Controller
                 // dd($value->jobseeker);
                 $jobseeket_name = $value->jobseeker->first_name.' '.$value->jobseeker->last_name;
                 $email = $value->jobseeker->email;
-                Mail::to('work.chayan2020@gmail.com')->send(new SendSimilarJobsAlert($jobseeket_name, $jobs));
+                Mail::to('test_email_hj@yopmail.com')->send(new SendSimilarJobsAlert($jobseeket_name, $jobs));
             }
         }
     }
