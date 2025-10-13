@@ -102,7 +102,7 @@
                                 <div class="job-tuple layout-wrapper" style="position: relative; background: #ffffff; border-radius: 20px; margin-bottom: 16px; padding: 24px 24px 20px; transition: box-shadow .2s linear; border: 1px solid#d4dbe3;">
                                     <div class="row1" style="padding-bottom:5px;">
                                         <h2 style="margin:0;">
-                                            <a class="title " title="{{$job['position_name']}}" href="#" target="_blank" rel="noopener noreferrer" style="line-height: 22px; color: #275df5; max-width: 100%; display: block; font-size: 18px;
+                                            <a class="title " title="{{$job['position_name']}}" href="{{env('FRONTEND_URL').'job-details/'.$job['job_no']}}" target="_blank" rel="noopener noreferrer" style="line-height: 22px; color: #275df5; max-width: 100%; display: block; font-size: 18px;
                                             font-weight: 700; text-decoration: none;">{{$job['position_name']}}</a>
                                         </h2>
                                         {{-- <span class="imagewrap " style="float: none; position: absolute; right: 24px;top: 24px; width: 50px; height: 50px;">
