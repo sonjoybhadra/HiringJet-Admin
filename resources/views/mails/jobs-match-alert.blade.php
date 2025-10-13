@@ -89,13 +89,12 @@
                             <a href="#" class="apply-btn" style="background-color: #113775;color: white;padding: 4px 30px;text-decoration: none;border-radius: 8px;font-weight: 500;display: inline-block;font-size: 15px;line-height: 30px;">View All Jobs</a>
                         </td>
                     </tr>
-                    {{-- <tr>
+                    <tr>
                         <td
                             style="">
-                            <p style="color: #484f6d;font-size: 16px;font-weight: 500;margin: 0px;padding-top:0px;margin-bottom: 15px;">Rajan Benipuri has shared following candidate's CV with you.
-                            </p>
+                            <p style="color: #484f6d;font-size: 16px;font-weight: 500;margin: 0px;padding-top:0px;margin-bottom: 15px;">&nbsp;</p>
                         </td>
-                    </tr> --}}
+                    </tr>
                     @foreach ($jobs as $job)
                         <tr>
                             <td style="">
