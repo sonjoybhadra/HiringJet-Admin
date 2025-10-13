@@ -76,13 +76,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- <tr>
+                    <tr>
                         <td
                             style="">
-                            <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 10px;padding-top:5px;">Rajan Benipuri has shared following candidate's CV with you.
+                            <p style="color: #000;font-size: 18px;font-weight: bold;margin-bottom: 10px;padding-top:5px;">
+                                {{$name}}, here are the list of matched jobs according to your saved criteria.
                             </p>
                         </td>
-                    </tr> --}}
+                    </tr>
                     <tr>
                         <td
                             style="">
