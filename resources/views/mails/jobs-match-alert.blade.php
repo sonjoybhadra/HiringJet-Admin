@@ -184,7 +184,7 @@
                     </tr>
                     <tr>
                         <td align="center" >
-                            <a href="#" class="apply-btn" style="background-color: #113775;color: white;padding: 4px 30px;text-decoration: none;border-radius: 8px;font-weight: 500;display: inline-block;font-size: 15px;line-height: 30px;margin-top:30px;">View All Jobs</a>
+                            <a href="#" class="apply-btn" style="background-color: #113775;color: white;padding: 4px 30px;text-decoration: none;border-radius: 8px;font-weight: 500;display: inline-block;font-size: 15px;line-height: 30px;margin-top:30px; margin-bottom:30px;">View All Jobs</a>
                         </td>
                     </tr>
                     {{-- <tr>
