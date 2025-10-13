@@ -147,7 +147,7 @@
                                             ?>
                                             <span class="job-post-day " style="font-weight: 500;font-size: 14px;line-height: 18px; color: #494f6d;">{{ $x }}</span>
                                             <span class="appaly-btn ">
-                                                <a href="#" target="_blank" style="font-weight: 700;font-size: 14px;line-height: 18px;color: #494f6d;color: #275df5;text-decoration: none;padding-left: 8px;">Apply Now</a>
+                                                <a href="{{env('FRONTEND_URL').'job-details/'.$job['job_no']}}" target="_blank" style="font-weight: 700;font-size: 14px;line-height: 18px;color: #494f6d;color: #275df5;text-decoration: none;padding-left: 8px;">Apply Now</a>
                                             </span>
                                         </div>
                                     </div>
