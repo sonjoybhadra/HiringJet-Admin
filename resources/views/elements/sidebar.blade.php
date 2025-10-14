@@ -68,8 +68,8 @@ $role_id = (($user)?$user->role_id:0);
     </li>
   <?php }?>
   
-  <?php //if(in_array(2, $moduleIds) || in_array(3, $moduleIds) || in_array(4, $moduleIds)){?>
-  <?php if($role_id == 1){?>
+  <?php if(in_array(2, $moduleIds) || in_array(3, $moduleIds) || in_array(4, $moduleIds)){?>
+  <?php //if($role_id == 1){?>
     <!-- Access & Permission -->
     <li class="menu-item active <?=(($pageSegment == 'module' || $pageSegment == 'role' || $pageSegment == 'admin-user')?'open':'')?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -103,8 +103,8 @@ $role_id = (($user)?$user->role_id:0);
 
       </ul>
     </li>
-  <?php }?>
   <?php //}?>
+  <?php }?>
   
   <?php if(in_array(21, $moduleIds) || in_array(22, $moduleIds) || in_array(23, $moduleIds) || in_array(24, $moduleIds) || in_array(25, $moduleIds) || in_array(26, $moduleIds) || in_array(27, $moduleIds) || in_array(28, $moduleIds) || in_array(29, $moduleIds) || in_array(30, $moduleIds) || in_array(31, $moduleIds) || in_array(32, $moduleIds) || in_array(33, $moduleIds) || in_array(34, $moduleIds) || in_array(35, $moduleIds) || in_array(36, $moduleIds) || in_array(37, $moduleIds) || in_array(38, $moduleIds) || in_array(39, $moduleIds) || in_array(40, $moduleIds) || in_array(41, $moduleIds) || in_array(42, $moduleIds) || in_array(43, $moduleIds) || in_array(44, $moduleIds) || in_array(45, $moduleIds) || in_array(46, $moduleIds)){?>
     <!-- Masters -->
