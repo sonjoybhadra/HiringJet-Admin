@@ -16,10 +16,9 @@ class CVJobEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public $name, $otp, $content, $sub;
-    public function __construct($name = '', $otp = '', $content = '', $sub = '')
+    public $content, $sub;
+    public function __construct($content = '', $sub = '')
     {
-        $this->name = $name;
         $this->content = $content;
         $this->sub = $sub;
     }
@@ -30,7 +29,7 @@ class CVJobEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: !empty($this->sub) ? $this->sub : 'OTP',
+            subject: !empty($this->sub) ? $this->sub : 'CV Forwarded',
         );
     }
 
@@ -42,7 +41,6 @@ class CVJobEmail extends Mailable
         return new Content(
             view: 'mails.cv-mail',
             with: [
-                'name' => $this->name,
                 'content' => $this->content,
             ],
         );
