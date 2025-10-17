@@ -26,4 +26,9 @@ class EmployerComposeMailRecepients extends Model
         return $this->BelongsTo(User::class, 'jobseeker_id');
     }
 
+    public function composeEmail()
+    {
+        return $this->belongsTo(EmployerComposeMail::class, 'compose_email_id');
+    }
+
 }

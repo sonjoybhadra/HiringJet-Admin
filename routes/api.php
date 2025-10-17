@@ -37,6 +37,8 @@ use App\Http\Controllers\Api\SocialAuthController;
 use App\Http\Controllers\Api\SchedulerController;
 use App\Http\Controllers\Api\JobseekerSimilarJobsAlertController;
 
+use App\Http\Controllers\Api\JobseekerComposeMailController;
+
 Route::post('/login', [AuthController::class, 'login']);
 // LinkedIn routes
 Route::post('/auth/linkedin/redirect', [SocialAuthController::class, 'redirectToLinkedIn']);
@@ -221,6 +223,11 @@ Route::group([
 
     Route::post('/jobs-alert/delete/{id}', [JobseekerSimilarJobsAlertController::class, 'destroy']);
     Route::resource('/jobs-alert', JobseekerSimilarJobsAlertController::class);
+
+
+    Route::get('jobseeker/inbox', [JobseekerComposeMailController::class, 'inbox']);
+    Route::get('jobseeker/mail/{id}', [JobseekerComposeMailController::class, 'viewMail']);
+    Route::post('jobseeker/mail/{compose_email_id}/reply', [JobseekerComposeMailController::class, 'reply']);
 
     // Test configuration (optional - for debugging)
     Route::get('/auth/test-config', [SocialAuthController::class, 'testConfig']);

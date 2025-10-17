@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EmployerComposeMail extends Model
 {
@@ -29,13 +30,31 @@ class EmployerComposeMail extends Model
         'created_at',
         'updated_at'
     ];
-    /**
-     * Get the profile details of associated user.
-    */
-    public function recepients(): HasOne
-    {
-        return $this->hasOne(EmployerComposeMailRecepients::class, 'compose_email_id')
-                    ->with(['jobseeker:id,first_name,last_name,email,country_code,phone']);
 
+    /**
+     * The employer who sent the mail.
+     */
+    public function employer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')
+                    ->select('id', 'first_name', 'last_name', 'email', 'country_code', 'phone');
+    }
+
+    /**
+     * All recipients of this composed mail.
+     */
+    public function recepients(): HasMany
+    {
+        return $this->hasMany(EmployerComposeMailRecepients::class, 'compose_email_id')
+                    ->with(['jobseeker:id,first_name,last_name,email,country_code,phone']);
+    }
+
+    /**
+     * All replies to this composed mail.
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(EmployerComposeMailReply::class, 'compose_email_id')
+                    ->with(['jobseeker:id,first_name,last_name,email']);
     }
 }
