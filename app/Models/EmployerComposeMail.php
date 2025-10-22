@@ -57,4 +57,9 @@ class EmployerComposeMail extends Model
         return $this->hasMany(EmployerComposeMailReply::class, 'compose_email_id')
                     ->with(['jobseeker:id,first_name,last_name,email']);
     }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')
+                    ->select('id', 'first_name', 'last_name', 'email', 'country_code', 'phone');
+    }
 }
