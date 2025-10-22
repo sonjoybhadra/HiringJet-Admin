@@ -47,7 +47,7 @@ class JobseekerComposeMailController extends BaseApiController
     public function viewMail($id)
     {
         try {
-            $userId = Auth::id();
+            $jobseekerId = Auth::id();
 
             $mail = EmployerComposeMailRecepients::where('id', $id)
                ->with([
