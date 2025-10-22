@@ -14,4 +14,20 @@ class EmployerComposeMailReply extends Model
         'reply_message',
     ];
 
+    /**
+     * Get the jobseeker that owns the reply
+     */
+    public function jobseeker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'jobseeker_id')
+                    ->select('id', 'first_name', 'last_name', 'email', 'country_code', 'phone');
+    }
+
+    /**
+     * Get the compose email that owns the reply
+     */
+    public function composeEmail()
+    {
+        return $this->belongsTo(EmployerComposeMail::class, 'compose_email_id');
+    }
 }
