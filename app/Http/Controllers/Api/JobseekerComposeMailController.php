@@ -29,7 +29,7 @@ class JobseekerComposeMailController extends BaseApiController
                 ->with([
                     'composeEmail' => function ($query) {
                         $query->select('id', 'user_id', 'from_email', 'subject', 'message', 'created_at')
-                              ->with(['user:id,name,email']);
+                              ->with(['user:id,first_name,last_name,email,country_code,phone']);
                     }
                 ])
                 ->orderBy('id', 'desc')
@@ -53,7 +53,7 @@ class JobseekerComposeMailController extends BaseApiController
                 ->where('jobseeker_id', $jobseekerId)
                 ->with([
                     'composeEmail' => function ($query) {
-                        $query->with(['user:id,name,email']);
+                        $query->with(['user:id,first_name,last_name,email,country_code,phone']);
                     },
                     'composeEmail.replies' => function ($query) use ($jobseekerId) {
                         $query->where('jobseeker_id', $jobseekerId)
