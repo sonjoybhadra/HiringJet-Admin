@@ -52,11 +52,11 @@ class EmployerComposeMail extends Model
     /**
      * All replies to this composed mail.
      */
-    public function replies(): HasMany
+   public function replies()
     {
-        return $this->hasMany(EmployerComposeMailReply::class, 'compose_email_id')
-                    ->with(['jobseeker:id,first_name,last_name,email']);
+        return $this->hasMany(EmployerComposeMailReply::class, 'compose_email_id');
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id')

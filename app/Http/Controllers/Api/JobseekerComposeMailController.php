@@ -50,16 +50,19 @@ class JobseekerComposeMailController extends BaseApiController
             $userId = Auth::id();
 
             $mail = EmployerComposeMailRecepients::where('id', $id)
-                ->with([
-                    'composeEmail' => function ($query) {
-                        $query->with(['user:id,first_name,last_name,email']);
-                    },
-                    'composeEmail.replies' => function ($query) use ($userId) {
-                        $query->where('sender_id', $userId)
-                              ->orWhere('receiver_id', $userId)
-                              ->orderBy('id', 'asc');
-                    }
-                ])
+               ->with([
+                        'composeEmail' => function ($query) {
+                            $query->with(['user:id,first_name,last_name,email']);
+                        },
+                        'composeEmail.replies' => function ($query) use ($jobseekerId) {
+                            $query->where('sender_id', $jobseekerId)
+                                ->orWhere('receiver_id', $jobseekerId)
+                                ->orderBy('id', 'asc');
+                        },
+                        'composeEmail.replies.sender:id,first_name,last_name,email',
+                        'composeEmail.replies.receiver:id,first_name,last_name,email'
+                    ])
+
                 ->firstOrFail();
 
             // Optional: mark as viewed
