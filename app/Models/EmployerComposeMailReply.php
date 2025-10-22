@@ -17,11 +17,10 @@ class EmployerComposeMailReply extends Model
     /**
      * Get the jobseeker that owns the reply
      */
-    public function jobseeker(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'jobseeker_id')
-                    ->select('id', 'first_name', 'last_name', 'email', 'country_code', 'phone');
-    }
+    public function jobseeker()
+{
+    return $this->belongsTo(User::class, 'jobseeker_id');
+}
 
     /**
      * Get the compose email that owns the reply
