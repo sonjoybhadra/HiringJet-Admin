@@ -1,0 +1,283 @@
+<?php
+namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use App\Models\GeneralSetting;
+use App\Models\User;
+use App\Models\UserActivity;
+use App\Models\ProfileComplete;
+use App\Services\SiteAuthService;
+use App\Helpers\Helper;
+use Auth;
+use Session;
+use Hash;
+use DB;
+
+class JobseekerController extends Controller
+{
+    protected $siteAuthService;
+    public function __construct()
+    {
+        $this->siteAuthService = new SiteAuthService();
+        $this->data = array(
+            'title'             => 'Jobseekers',
+            'controller'        => 'JobseekerController',
+            'controller_route'  => 'jobseeker',
+            'primary_key'       => 'id',
+            'table_name'        => 'users',
+        );
+    }
+    /* list */
+        public function list(){
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' List';
+            $page_name                      = 'jobseeker.list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function profileCompleteList($profile_completes_id){
+            $profile_completes_id           = Helper::decoded($profile_completes_id);
+            $get_profile_complete           = ProfileComplete::select('name')->where('id', '=', $profile_completes_id)->first();
+            $data['module']                 = $this->data;
+            $title                          = (($get_profile_complete)?$get_profile_complete->name:'') . ' : ' . $this->data['title'].' List';
+            $data['profile_completes_id']   = $profile_completes_id;
+            $page_name                      = 'jobseeker.profile-complete-list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+        public function percentageWiseList(Request $request){
+            $data['module']                 = $this->data;
+
+            $data['is_search']              = 0;
+            $data['percentage_slot']        = '';
+            $data['status']                 = 'all';
+            $data['response']               = [];
+
+            if($request->isMethod('get')){
+                if($request->mode == 'search'){
+                    $postData                   = $request->all();
+                    $percentage_slot            = $postData['percentage_slot'];
+                    $slots                      = explode('-', $percentage_slot);
+                    $status                     = $postData['status'];
+
+                    $data['is_search']          = 1;
+                    $data['percentage_slot']    = $percentage_slot;
+                    $data['status']             = $status;
+
+                    $percentage_slot_start     = $slots[0];
+                    $percentage_slot_end       = $slots[1];
+
+                    $response                   = [];
+                    if($status == 'all'){
+                        $results = DB::table('users')
+                                                    ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
+                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage', 'users.status')
+                                                    ->where('users.status', '!=', 3)
+                                                    ->where('users.role_id', '=', 3)
+                                                    ->where('user_profiles.profile_completed_percentage', '>=', $percentage_slot_start)
+                                                    ->where('user_profiles.profile_completed_percentage', '<=', $percentage_slot_end)
+                                                    ->orderBy('users.id', 'DESC')
+                                                    ->get();
+                    } else {
+                        $results = DB::table('users')
+                                                    ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
+                                                    ->select('users.first_name', 'users.last_name', 'users.email', 'users.country_code', 'users.phone', 'users.created_at', 'users.id', 'user_profiles.profile_completed_percentage', 'users.status')
+                                                    ->where('users.status', '=', $status)
+                                                    ->where('users.role_id', '=', 3)
+                                                    ->where('user_profiles.profile_completed_percentage', '>=', $percentage_slot_start)
+                                                    ->where('user_profiles.profile_completed_percentage', '<=', $percentage_slot_end)
+                                                    ->orderBy('users.id', 'DESC')
+                                                    ->get();
+                    }
+
+                    if($results){
+                        foreach($results as $result){
+                            $response[]                   = [
+                                'id'                                => $result->id,
+                                'first_name'                        => $result->first_name,
+                                'last_name'                         => $result->last_name,
+                                'email'                             => $result->email,
+                                'country_code'                      => $result->country_code,
+                                'phone'                             => $result->phone,
+                                'created_at'                        => $result->created_at,
+                                'status'                            => $result->status,
+                                'profile_completed_percentage'      => $result->profile_completed_percentage,
+                            ];
+                        }
+                    }
+                    $data['response']               = $response;
+                }
+            }
+
+            $title                          = $this->data['title'].' Percentage Wise List';
+            $page_name                      = 'jobseeker.percentage-wise-list';
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* list */
+    /* add */
+        public function add(Request $request){
+            $data['module']           = $this->data;
+            if($request->isMethod('post')){
+                $postData = $request->all();
+                $rules = [
+                    'name'           => 'required',
+                ];
+                if($this->validate($request, $rules)){
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Added',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
+                    $fields = [
+                        'name'              => strip_tags($postData['name']),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                    ];
+                    User::insert($fields);
+                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Inserted Successfully !!!');
+                } else {
+                    return redirect()->back()->with('error_message', 'All Fields Required !!!');
+                }
+            }
+            $data['module']                 = $this->data;
+            $title                          = $this->data['title'].' Add';
+            $page_name                      = 'jobseeker.add-edit';
+            $data['row']                    = [];
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* add */
+    /* edit */
+        public function edit(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $title                          = $this->data['title'].' Update';
+            $page_name                      = 'jobseeker.add-edit';
+            $data['row']                    = User::where('id', '=', $id)->first();
+            if($request->isMethod('post')){
+                $postData = $request->all();
+                $rules = [
+                    'name'           => 'required',
+                ];
+                if($this->validate($request, $rules)){
+                    $fields = [
+                        'name'              => strip_tags($postData['name']),
+                        'status'            => ((array_key_exists("status",$postData))?1:0),
+                    ];
+                    User::where($this->data['primary_key'], '=', $id)->update($fields);
+                    /* user activity */
+                        $activityData = [
+                            'user_email'        => session('user_data')['email'],
+                            'user_name'         => session('user_data')['name'],
+                            'user_type'         => 'ADMIN',
+                            'ip_address'        => $request->ip(),
+                            'activity_type'     => 3,
+                            'activity_details'  => $postData['name'] . ' ' . $this->data['title'] . ' Updated',
+                            'platform_type'     => 'WEB',
+                        ];
+                        UserActivity::insert($activityData);
+                    /* user activity */
+                    return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Updated Successfully !!!');
+                } else {
+                    return redirect()->back()->with('error_message', 'All Fields Required !!!');
+                }
+            }
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* edit */
+    /* delete */
+        public function delete(Request $request, $id){
+            $id                             = Helper::decoded($id);
+            $model                          = User::find($id);
+            $fields = [
+                'status'             => 3,
+                'deleted_at'         => date('Y-m-d H:i:s'),
+            ];
+            User::where($this->data['primary_key'], '=', $id)->update($fields);
+            /* user activity */
+                $activityData = [
+                    'user_email'        => session('user_data')['email'],
+                    'user_name'         => session('user_data')['name'],
+                    'user_type'         => 'ADMIN',
+                    'ip_address'        => $request->ip(),
+                    'activity_type'     => 3,
+                    'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deleted',
+                    'platform_type'     => 'WEB',
+                ];
+                UserActivity::insert($activityData);
+            /* user activity */
+            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' Deleted Successfully !!!');
+        }
+    /* delete */
+    /* change status */
+        public function change_status(Request $request, $id){
+            $id                             = Helper::decoded($id);
+            $model                          = User::find($id);
+            if ($model->status == 1)
+            {
+                $model->status  = 0;
+                $msg            = 'Deactivated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Deactivated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
+            } else {
+                $model->status  = 1;
+                $msg            = 'Activated';
+                /* user activity */
+                    $activityData = [
+                        'user_email'        => session('user_data')['email'],
+                        'user_name'         => session('user_data')['name'],
+                        'user_type'         => 'ADMIN',
+                        'ip_address'        => $request->ip(),
+                        'activity_type'     => 3,
+                        'activity_details'  => $model->name . ' ' . $this->data['title'] . ' Activated',
+                        'platform_type'     => 'WEB',
+                    ];
+                    UserActivity::insert($activityData);
+                /* user activity */
+            }            
+            $model->save();
+            return redirect($this->data['controller_route'] . "/list")->with('success_message', $this->data['title'].' '.$msg.' Successfully !!!');
+        }
+    /* change status */
+    /* profile */
+        public function profile(Request $request, $id){
+            $data['module']                 = $this->data;
+            $id                             = Helper::decoded($id);
+            $page_name                      = 'jobseeker.profile';
+            $data['id']                     = $id;
+            $data['row']                    = DB::table('users')
+                                                ->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
+                                                ->select('users.*', 'user_profiles.*')
+                                                ->where('users.id', '=', $id)
+                                                ->first();
+
+            $name                           = (($data['row'])?$data['row']->first_name.' '.$data['row']->last_name:'');
+            $phone                          = (($data['row'])?$data['row']->phone:'');
+            $title                          = $this->data['title'].' Profile : '.$name.' ('.$phone.')';
+            
+            $data                           = $this->siteAuthService ->admin_after_login_layout($title,$page_name,$data);
+            return view('maincontents.' . $page_name, $data);
+        }
+    /* profile */
+}
